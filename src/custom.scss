@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+body,
+html {
+    height: 100%;
+}
+
+.left-sidebar {
+    position: fixed;
+    left: 0;
+    width: 200px;
+    top: 60px;
+    max-height: 100vh;
+    min-height: 100vh;
+    background: #343a40;
+    li {
+        margin-bottom: 5px;
+        a {
+            padding: 10px 15px;
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            position: relative;
+            &:hover {
+                background: #ed8a22;
+                color: #000;
+                position: relative;
+                &::after {
+                    right: 0;
+                    top: 50%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: rgba(136, 183, 213, 0);
+                    border-right-color: #ffffff;
+                    border-width: 16px;
+                    margin-top: -16px;
+                }
+            }
+            &.active {
+                background: #ed8a22;
+                color: #000;
+                position: relative;
+                &::after {
+                    right: 0;
+                    top: 50%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: rgba(136, 183, 213, 0);
+                    border-right-color: #ffffff;
+                    border-width: 16px;
+                    margin-top: -16px;
+                }
+            }
+            i{
+                margin-right: 5px;
+                min-width: 18px;
+            }
+        }
+    }
+}
+.breadcrumb {
+    li{
+        color: #fff;
+        a{
+            color: #007bff;
+        }
+    }
+}
+.navbar {
+    padding: 0 15px;
+}
+
+.content-block {
+    margin-left: 200px;
+    padding-top: 56px;
+}
+
+@media(max-width:991.85px) {
+    .content-block {
+        margin-left: 0;
+    }
+    .left-sidebar {
+        width: 100%;
+        z-index: 9;
+    }
+}
