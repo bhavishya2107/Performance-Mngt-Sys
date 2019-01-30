@@ -35,12 +35,22 @@ $(document).ready(function () {
         $('.navbar-collapse').css('height', '0');
     });
     $(document).on("click", ".confirm", function(e) {
-        bootbox.confirm({ 
-            size: "small",
-            title: "Your Title",
-            message: "Your message here…", 
-            callback: function(){ /* your callback code */ }
-          })
+        bootbox.confirm({
+            message: "This is a confirm with custom button text and color! Do you like it?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-info'
+                }
+            },
+            callback: function (result) {
+                console.log('This was logged in the callback: ' + result);
+            }
+        });
     });
 })
 $(window).resize(function () {

@@ -62,32 +62,32 @@ class demo extends Component {
                     </div>
                     <div className="col-md-4">
                         <h3>List</h3>
-                        <ul class="list-group">
-                            <li class="list-group-item">Cras justo odio</li>
-                            <li class="list-group-item">Dapibus ac facilisis in</li>
-                            <li class="list-group-item">Morbi leo risus</li>
-                            <li class="list-group-item">Porta ac consectetur ac</li>
-                            <li class="list-group-item">Vestibulum at eros</li>
+                        <ul className="list-group">
+                            <li className="list-group-item">Cras justo odio</li>
+                            <li className="list-group-item">Dapibus ac facilisis in</li>
+                            <li className="list-group-item">Morbi leo risus</li>
+                            <li className="list-group-item">Porta ac consectetur ac</li>
+                            <li className="list-group-item">Vestibulum at eros</li>
                         </ul>
                     </div>
                     <div className="col-md-4">
                         <h3>Modal</h3>
                         <a href="#basicModal" data-toggle="modal" className="btn btn-primary btn-sm">Modal</a>
-                        <div id="basicModal" class="modal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <div id="basicModal" className="modal"  role="dialog">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Modal title</h5>
+                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body">
+                                    <div className="modal-body">
                                         <p>Modal body text goes here.</p>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-primary">Save changes</button>
+                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -99,12 +99,12 @@ class demo extends Component {
                         <h3>Form Center Align</h3>
                         <form>
                             <div className="form-group">
-                                <label htmlFor="formGroupExampleInput">Example label</label>
-                                <input type="text" className="form-control" id="formGroupExampleInput" placeholder="Example input" />
+                                <label>Example label</label>
+                                <input type="text" className="form-control" placeholder="Example input" />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="formGroupExampleInput2">Another label</label>
-                                <input type="text" className="form-control" id="formGroupExampleInput2" placeholder="Another input" />
+                                <label>Another label</label>
+                                <input type="text" className="form-control" placeholder="Another input" />
                             </div>
                         </form>
                     </div>
