@@ -34,6 +34,14 @@ $(document).ready(function () {
 
         $('.navbar-collapse').css('height', '0');
     });
+    $(document).on("click", ".confirm", function(e) {
+        bootbox.confirm({ 
+            size: "small",
+            title: "Your Title",
+            message: "Your message here…", 
+            callback: function(){ /* your callback code */ }
+          })
+    });
 })
 $(window).resize(function () {
     navigation();

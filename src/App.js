@@ -8,6 +8,7 @@ import Sidebar from './common/sidebar';
 import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
+import Demo from './pages/demo';
 
 
 class App extends Component {
@@ -52,6 +53,10 @@ class App extends Component {
                         <Route
                           path="/innerpage"
                           component={innerpage}
+                        />
+                        <Route
+                          path="/demo"
+                          component={Demo}
                         />
                       </Switch>
                     </div>

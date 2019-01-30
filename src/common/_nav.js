@@ -10,11 +10,11 @@ export default {
             url: '/innerpage',
             icon: 'fa fa-plus',
         },
-        // {
-        //     name: 'Lalji',
-        //     url: '/lalji',
-        //     icon: 'fa fa-plus',
-        // },
+        {
+            name: 'UI Control',
+            url: '/demo',
+            icon: 'fa fa-cogs',
+        },
 
     ]
 };

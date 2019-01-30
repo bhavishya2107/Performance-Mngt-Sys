@@ -1,6 +1,6 @@
 const routes = {
     '/': 'Home',
     '/innerpage': 'Inner Page',
-    //'/lalji': 'Lalji',
+    '/demo': 'UI Design Control',
   };
   export default routes;
