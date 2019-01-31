@@ -9,6 +9,7 @@ import $ from 'jquery';
 import bootbox from 'bootbox';
 
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 window.jQuery = $;
 window.$ = $;
