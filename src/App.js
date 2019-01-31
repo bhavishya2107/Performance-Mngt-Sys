@@ -10,6 +10,10 @@ import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
+import kraHome from './kraHome';
+import kraListPage from './kraListPage';
+import UserRolePMS from './pages/userRolePMS';
+import UserRoleForm from './pages/userRoleForm';
 
 
 class App extends Component {
@@ -61,6 +65,12 @@ class App extends Component {
                           path="/demo"
                           component={Demo}
                         />
+                        <Route path="/innerpage" component={innerpage} />
+                        <Route  path="/kraHome" component={kraHome}></Route>  
+                        <Route  path="/kraListPage" component={kraListPage}></Route>  
+                        <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
+                        <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
+                        
                       </Switch>
                     </div>
                   </div>

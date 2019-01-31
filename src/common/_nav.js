@@ -15,6 +15,27 @@ export default {
             url: '/demo',
             icon: 'fa fa-cogs',
         },
+        // {
+        //     name:'KRA',
+        //     url:'/kraHome',
+        //     icon:'fa fa-plus',
+        // },
+        {
+            name:'KRA',
+            url:'/kraListPage',
+            icon:'fa fa-plus',
+        },
+        {
+            name:'Role',
+            url:'/userRolePMS',
+            icon:'fa fa-plus',
+        }
+
+        // {
+        //     name: 'Lalji',
+        //     url: '/lalji',
+        //     icon: 'fa fa-plus',
+        // },
 
     ]
 };
