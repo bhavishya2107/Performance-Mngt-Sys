@@ -4,6 +4,10 @@ const routes = {
     '/demo': 'UI Design Control',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
+    //'/lalji': 'Lalji',
+    '/UserManagement':'User Management',
+    '/Department':'Department'
+    
   };
   {
   }

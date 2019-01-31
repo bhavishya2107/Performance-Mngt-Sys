@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //import logo from './logo.svg';
 //import './app.css';
-
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import PrimaryHeader from './common/header';
 import Sidebar from './common/sidebar';
 import Breadcrumb from './common/breadcrumb';
@@ -11,6 +11,10 @@ import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
 
+import UserManagement from './pages/UserManagement';
+import AddUser from './pages/AddUser'
+import Department from './pages/Department';
+import AddDept from './pages/AddDept'
 
 import KPI from './KPI';
 import AddKpi from './AddKpi';
@@ -29,6 +33,7 @@ class App extends Component {
               <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
                 <Switch>
                   <Route exact path="/" component={Login} />
+                               
                 </Switch>
               </div>
             </div>
@@ -79,6 +84,23 @@ class App extends Component {
                         <Route
                           path="/AddProjectComplexity"
                           component={AddProjectComplexity}
+                          component={Demo}/>
+                          <Route
+                          path="/UserManagement"
+                          component={UserManagement}
+                        />
+                      
+                      <Route
+                          path="/AddUser"
+                          component={AddUser}
+                        />
+                        <Route
+                          path="/Department"
+                          component={Department}
+                        />
+                        <Route
+                          path="/AddDept"
+                          component={AddDept}
                         />
                       </Switch>
                     </div>

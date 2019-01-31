@@ -15,6 +15,21 @@ export default {
             url: '/demo',
             icon: 'fa fa-cogs',
         },
+        // {
+        //     name: 'Lalji',
+        //     url: '/lalji',
+        //     icon: 'fa fa-plus',
+        // },
+        {
+            name:'UserManagement',
+            url:'/UserManagement',
+            icon:'fa fa-plus'
+        },
+        {
+            name:"Department",
+            url:'/Department',
+            icon:'fa fa-plus'
+        }
 
         {
 
