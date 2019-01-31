@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 // import {Redirect} from "react-router-dom";
 const $ = require('jquery');
-$.DataTable = require('datatables.net');
+$.DataTable = require('datatables.net-bs4');
 
 class KPI extends Component {
     constructor(props) {

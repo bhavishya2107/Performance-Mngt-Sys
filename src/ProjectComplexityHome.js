@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 const $ = require('jquery');
-$.DataTable = require('datatables.net');
+$.DataTable = require('datatables.net-bs4');
 
 class ProjectComplexityHome extends Component {
     constructor(props) {
