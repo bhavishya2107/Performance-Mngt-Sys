@@ -25,6 +25,10 @@ import AddKpi from './AddKpi';
 import ProjectComplexityHome from './ProjectComplexityHome';
 import AddProjectComplexity from './AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import Scaleset from './pages/scaleset';
+import Scalesetlist from './pages/scalesetlist';
+import Jobtitlelist from './pages/jobtitlelist';
+import Jobtitle from './pages/jobtitle'
 class App extends Component {
  
   render() {
@@ -112,6 +116,10 @@ class App extends Component {
                         <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
                         <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
                         
+                         <Route exact path="/scaleset" component={Scaleset} />
+                         <Route exact path="/scalesetlist" component={Scalesetlist} />
+                         <Route exact path="/jobtitlelist" component={Jobtitlelist} />
+                         <Route exact path="/jobtitle" component={Jobtitle} />
                       </Switch>
                     </div>
                   </div>

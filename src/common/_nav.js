@@ -62,5 +62,21 @@ export default {
             url: '/ProjectComplexityHome',
             icon: 'fa fa-plus',
         },
+        // {
+        //     name: 'Add Scale Set',
+        //     url: '/scaleset',
+        //     icon: 'fa fa-plus',
+        // },
+        {
+            name: 'Scale Set',
+            url: '/scalesetlist',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Job Title',
+            url: '/jobtitlelist',
+            icon: 'fa fa-plus',
+        },
+
     ]
 };
