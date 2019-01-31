@@ -16,5 +16,16 @@ export default {
             icon: 'fa fa-cogs',
         },
 
+        {
+
+            name: 'KPI',
+            url: '/KPI',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Project Complexity',
+            url: '/ProjectComplexityHome',
+            icon: 'fa fa-plus',
+        },
     ]
 };

@@ -12,6 +12,11 @@ import Login from './pages/login';
 import Demo from './pages/demo';
 
 
+import KPI from './KPI';
+import AddKpi from './AddKpi';
+import ProjectComplexityHome from './ProjectComplexityHome';
+import AddProjectComplexity from './AddProjectComplexity';
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 class App extends Component {
  
   render() {
@@ -60,6 +65,20 @@ class App extends Component {
                         <Route
                           path="/demo"
                           component={Demo}
+                          path="/KPI"
+                          component={KPI}
+                        />
+                        <Route
+                          path="/AddKpi"
+                          component={AddKpi}
+                        />
+                        <Route
+                          path="/ProjectComplexityHome"
+                          component={ProjectComplexityHome}
+                        />
+                        <Route
+                          path="/AddProjectComplexity"
+                          component={AddProjectComplexity}
                         />
                       </Switch>
                     </div>
