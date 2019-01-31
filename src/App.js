@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //import logo from './logo.svg';
 //import './app.css';
-
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import PrimaryHeader from './common/header';
 import Sidebar from './common/sidebar';
 import Breadcrumb from './common/breadcrumb';
@@ -15,7 +15,16 @@ import kraListPage from './kraListPage';
 import UserRolePMS from './pages/userRolePMS';
 import UserRoleForm from './pages/userRoleForm';
 
+import UserManagement from './pages/UserManagement';
+import AddUser from './pages/AddUser'
+import Department from './pages/Department';
+import AddDept from './pages/AddDept'
 
+import KPI from './KPI';
+import AddKpi from './AddKpi';
+import ProjectComplexityHome from './ProjectComplexityHome';
+import AddProjectComplexity from './AddProjectComplexity';
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 class App extends Component {
  
   render() {
@@ -28,6 +37,7 @@ class App extends Component {
               <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
                 <Switch>
                   <Route exact path="/" component={Login} />
+                               
                 </Switch>
               </div>
             </div>
@@ -64,6 +74,37 @@ class App extends Component {
                         <Route
                           path="/demo"
                           component={Demo}
+                          path="/KPI"
+                          component={KPI}
+                        />
+                        <Route
+                          path="/AddKpi"
+                          component={AddKpi}
+                        />
+                        <Route
+                          path="/ProjectComplexityHome"
+                          component={ProjectComplexityHome}
+                        />
+                        <Route
+                          path="/AddProjectComplexity"
+                          component={AddProjectComplexity}
+                          component={Demo}/>
+                          <Route
+                          path="/UserManagement"
+                          component={UserManagement}
+                        />
+                      
+                      <Route
+                          path="/AddUser"
+                          component={AddUser}
+                        />
+                        <Route
+                          path="/Department"
+                          component={Department}
+                        />
+                        <Route
+                          path="/AddDept"
+                          component={AddDept}
                         />
                         <Route path="/innerpage" component={innerpage} />
                         <Route  path="/kraHome" component={kraHome}></Route>  
