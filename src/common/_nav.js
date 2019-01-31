@@ -64,7 +64,7 @@ export default {
         // {
         //     name: 'Add Scale Set',
         //     url: '/scaleset',
-        //     icon: 'fa fa-plus',
+        //     icon: 'fsa fa-plus',
         // },
         {
             name: 'Scale Set',
