@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import '../../node_modules/react-toastify/dist/ReactToastify.css';
+
 //import logo from './logo.svg';
 //import './app.css';
 

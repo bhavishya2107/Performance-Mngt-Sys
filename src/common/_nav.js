@@ -52,7 +52,6 @@ export default {
         },
 
         {
-
             name: 'KPI',
             url: '/KPI',
             icon: 'fa fa-plus',
@@ -78,5 +77,10 @@ export default {
             icon: 'fa fa-plus',
         },
 
+        {
+            name:'Projects',
+            url:'/Projects',
+            icon: 'fa fa-plus',
+        }
     ]
 };

@@ -81,7 +81,7 @@ class AddUser extends Component {
                 <Form>
                     <FormGroup >
                         <Label for="firstName" sm={2}>FirstName</Label>
-                        <Input type="text" name="firstName" id="firstName" placeholder="Enter the Name" value={this.state.firstName}
+                        <Input type="text" name="firstName" id="firstName" class="form-control" placeholder="Enter the Name" value={this.state.firstName}
                             onChange={(event) => {
                                 this.setState({
                                     firstName: event.target.value
@@ -92,7 +92,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="lastName" sm={2}>LastName</Label>
-                        <Input type="text" name="lastName" id="lastName" placeholder="Enter the Name" value={this.state.lastName}
+                        <Input type="text" name="lastName" id="lastName" class="form-control" placeholder="Enter the Name" value={this.state.lastName}
                             onChange={(event) => {
                                 this.setState({
                                     lastName: event.target.value
@@ -102,7 +102,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="UserName" sm={2}>userName</Label>
-                        <Input type="text" name="UserName" id="UserName" value={this.state.UserName}
+                        <Input type="text" name="UserName" id="UserName"class="form-control" value={this.state.UserName}
                             onChange={(event) => {
                                 this.setState({
                                     UserName: event.target.value
@@ -112,7 +112,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="EmailID" sm={2}>EmailID</Label>
-                        <Input type="text" name="EmailID" id="EmailID" value={this.state.EmailID}
+                        <Input type="text" name="EmailID" id="EmailID" class="form-control"value={this.state.EmailID}
                             onChange={(event) => {
                                 this.setState({
                                     EmailID: event.target.value
@@ -122,7 +122,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="Address" sm={2}>AddresslID</Label>
-                        <Input type="textarea" name="Address" id="Address" value={this.state.Address}
+                        <Input type="textarea" name="Address" id="Address"class="form-control" value={this.state.Address}
                             onChange={(event) => {
                                 this.setState({
                                     Address: event.target.value
@@ -132,7 +132,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="Image" sm={2}>Image</Label>
-                        <Input type="text" name="Image" id="Image" value={this.state.Image}
+                        <Input type="text" name="Image" id="Image"class="form-control" value={this.state.Image}
                             onChange={(event) => {
                                 this.setState({
                                     Image: event.target.value
@@ -142,7 +142,7 @@ class AddUser extends Component {
 
                     <FormGroup >
                         <Label for="MobileNo" sm={2}>MobileNo</Label>
-                        <Input type="number" name="MobileNo" id="MobileNo" value={this.state.MobileNo}
+                        <Input type="number" name="MobileNo" id="MobileNo"class="form-control" value={this.state.MobileNo}
                             onChange={(event) => {
                                 this.setState({
                                     MobileNo: event.target.value

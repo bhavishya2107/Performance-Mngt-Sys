@@ -38,38 +38,34 @@ class UserManagement extends Component {
 
             },
             columns: [
-
+            
                 {
                     data: "firstName",
-                    target: 1,
+                    targets: 1,
                     className: "text-center",
-                    // render: function (data, type, row) {
-                    //     return (
-                    //         '<a href="/edit/' + row.id + '">' + 'Edit' + "</a>"
-                    //     )
-                    // }
+                    
                 },
                 {
                     data: "lastName",
-                    target: 2,
+                    targets: 2,
                     className: "text-center"
                 },
                 {
                     data: "emailAddress",
-                    target: 3,
+                    targets: 3,
                     className: "text-center"
 
                 },
-                // {
-                //     data: "id",
-                //     target: 4,
-                //     render: function (data, type, row) {
-                //         return (
-                //             '<a href="/edit/' + row.id + '">' + 'Edit' + "</a>" + "/" +
-                //             '<a href="/delete/' + row.id + '">' + 'Delete' + "</a>"
-                //         )
-                //     }
-                // }
+                {
+                    data: "userId",
+                    targets: 4,
+                    render: function (data, type, row) {
+                        return (
+                            '<a href="/edit/' + row.userId + '">' + 'Edit' + "</a>" + "/" +
+                            '<a href="/delete/' + row.userId + '">' + 'Delete' + "</a>"
+                        )
+                    }
+                }
             ]
         })
     }
@@ -95,6 +91,7 @@ class UserManagement extends Component {
 
                             <th>firstName</th>
                             <th>lastName</th>
+                            <th>emailAddress</th>
                             <th>Action</th>
                         </tr>
                     </thead>

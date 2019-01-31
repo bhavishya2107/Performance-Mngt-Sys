@@ -1,36 +1,33 @@
-import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
 $.DataTable = require('datatables.net-bs4');
 
-class Department extends Component {
+class Projects extends Component {
     constructor(props) {
         super(props);
         this.setState = {
-            depName: "",
+            projectName: "",
             description: ""
         }
     }
-
 
     componentDidMount() {
 
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/department_master/?_size=1000",
+                url: "http://192.168.10.109:3000/api/project_master/?_size=1000",
                 type: "get",
                 dataSrc: "",
                 error: function (xhr, status, error) {
 
                 },
-
             },
+
             columns: [
 
                 {
-                    data: "depName",
+                    data: "projectName",
                     targets: 1,
                     className: "text-center"
                 },
@@ -40,26 +37,24 @@ class Department extends Component {
                     className: "text-center"
                 },
                 {
-                    data: "depId",
-                    targets: 4,
+                    data: "projectId",
+                    targets: 3,
+                    className: "text-center",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/edit/' + row.depId + '">' + 'Edit' + "</a>" + "/" +
-                            '<a href="/delete/' + row.depId + '">' + 'Delete' + "</a>"
+                            '<a href="/edit/' + row.projectId + '">' + 'Edit' + "</a>" + "/" +
+                            '<a href="/delete/' + row.projectId + '">' + 'Delete' + "</a>"
+
                         )
                     }
                 }
             ]
         })
     }
+
     render() {
         return (
-
             <div>
-                {
-                    this.props.location.state === "2"
-
-                }
                 <table className="table table-striped table-bordered table-hover"
                     ref={el => (this.el = el)}>
                     <thead>
@@ -70,11 +65,11 @@ class Department extends Component {
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <ToastContainer />
                 </table>
-                {/* <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-success mr-2" >Add Department</Link> */}
+                {/* <Link to={{ pathname: '/AddProjects' }} className="btn btn-sm btn-success mr-2" >Add Project</Link> */}
+
             </div >
         )
     }
 }
-export default Department;
+export default Projects;

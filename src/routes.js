@@ -14,7 +14,8 @@ const routes = {
     '/ProjectComplexityHome':'Project Complexity',
     //'/lalji': 'Lalji',
     '/UserManagement':'User Management',
-    '/Department':'Department'
+    '/Department':'Department',
+    '/Projects':'Projects'
     
   };
   {

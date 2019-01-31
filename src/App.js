@@ -19,6 +19,7 @@ import UserManagement from './pages/UserManagement';
 import AddUser from './pages/AddUser'
 import Department from './pages/Department';
 import AddDept from './pages/AddDept'
+import Projects from './pages/Projects';
 
 import KPI from './KPI';
 import AddKpi from './AddKpi';
@@ -75,9 +76,13 @@ class App extends Component {
                           path="/innerpage"
                           component={innerpage}
                         />
+                        
                         <Route
                           path="/demo"
                           component={Demo}
+                         
+                        />
+                        <Route
                           path="/KPI"
                           component={KPI}
                         />
@@ -92,8 +97,10 @@ class App extends Component {
                         <Route
                           path="/AddProjectComplexity"
                           component={AddProjectComplexity}
-                          component={Demo}/>
-                          <Route
+                          
+                          
+                        />
+                        <Route
                           path="/UserManagement"
                           component={UserManagement}
                         />
@@ -110,6 +117,12 @@ class App extends Component {
                           path="/AddDept"
                           component={AddDept}
                         />
+                        <Route
+                          path="/Projects"
+                          component={Projects}
+                        />
+
+
                         <Route path="/innerpage" component={innerpage} />
                         <Route  path="/kraHome" component={kraHome}></Route>  
                         <Route  path="/kraListPage" component={kraListPage}></Route>  
