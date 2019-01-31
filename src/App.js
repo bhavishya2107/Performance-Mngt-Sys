@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 //import logo from './logo.svg';
 //import './app.css';
 
@@ -12,6 +13,7 @@ import Demo from './pages/demo';
 
 
 class App extends Component {
+ 
   render() {
     var urlData = window.location.pathname;
     if (urlData === "/") {
@@ -25,6 +27,7 @@ class App extends Component {
                 </Switch>
               </div>
             </div>
+            
           </div>
         </Router>
       );

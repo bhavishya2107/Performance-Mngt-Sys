@@ -44,7 +44,7 @@ $(document).ready(function () {
                 },
                 cancel: {
                     label: 'No',
-                    className: 'btn-info'
+                    className: 'btn-danger'
                 }
             },
             callback: function (result) {

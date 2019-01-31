@@ -1,9 +1,32 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import '../../node_modules/react-toastify/dist/ReactToastify.css';
 //import logo from './logo.svg';
 //import './app.css';
 
 
 class demo extends Component {
+    success = () => {
+        toast.success("Success Notification !", {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+    error = () => {
+        toast.error("Error Notification !", {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+    warn = () => {
+        toast.warn("Warning Notification !", {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+    info = () => {
+        toast.info("Info Notification !", {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
+
     render() {
         return (
             <div className="clearfix">
@@ -73,7 +96,7 @@ class demo extends Component {
                     <div className="col-md-4">
                         <h3>Modal</h3>
                         <a href="#basicModal" data-toggle="modal" className="btn btn-primary btn-sm">Modal</a>
-                        <div id="basicModal" className="modal"  role="dialog">
+                        <div id="basicModal" className="modal" role="dialog">
                             <div className="modal-dialog" role="document">
                                 <div className="modal-content">
                                     <div className="modal-header">
@@ -131,15 +154,18 @@ class demo extends Component {
                         <p>fdsfsdaf</p>
                     </div>
                 </div>
-           <div className="d-flex justify-content-between">
-            <div className="col">1</div>
-            
-            
-            <div className="col">2</div>
-            <div className="col">
-            <a href="javascript:void(0);" className="btn btn-danger confirm">confirm</a>
-            </div>
-           </div>
+                <div className="d-flex justify-content-between mb-5">
+                    <div className="col">1</div>
+                    <div className="col">2</div>
+                    <div className="col">
+                        <a href="javascript:void(0);" className="btn btn-danger confirm">confirm</a>
+                        <button onClick={this.success} className="btn btn-success ml-2">Success</button>
+                        <button onClick={this.error} className="btn btn-danger ml-2">Error</button>
+                        <button onClick={this.warn} className="btn btn-warning ml-2">Warning</button>
+                        <button onClick={this.info} className="btn btn-info ml-2">Info</button>
+                        <ToastContainer />
+                    </div>
+                </div>
             </div>
         )
     }
