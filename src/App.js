@@ -25,7 +25,6 @@ import KPI from './KPI';
 import AddKpi from './AddKpi';
 import ProjectComplexityHome from './ProjectComplexityHome';
 import AddProjectComplexity from './AddProjectComplexity';
-import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import Scaleset from './pages/scaleset';
 import Scalesetlist from './pages/scalesetlist';
 import Jobtitlelist from './pages/jobtitlelist';

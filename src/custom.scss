@@ -14,6 +14,9 @@ body,
 html {
     height: 100%;
 }
+.navbar{
+    padding: 0 15px !important;
+}
 
 .left-sidebar {
     position: fixed;
@@ -100,5 +103,48 @@ html {
     .left-sidebar {
         width: 100%;
         z-index: 9;
+    }
+}
+
+
+@media screen and (max-width: 640px) {
+    table.customDataTable caption {
+        background-image: none;
+    }
+
+    table.customDataTable thead {
+        display: none;
+    }
+
+    table.customDataTable tbody td {
+        display: block;
+        padding: .6rem;
+        box-sizing: border-box;
+    }
+
+    table.customDataTable tbody tr td:first-child {
+        background: #666;
+        color: #fff;
+    }
+
+        table.customDataTable tbody tr td:first-child a {
+            color: #fff;
+        }
+
+        table.customDataTable tbody tr td:first-child:before {
+            color: rgb(225,181,71);
+        }
+
+    table.customDataTable tbody td:before {
+        content: attr(data-th);
+        font-weight: bold;
+        display: inline-block;
+        width: 10rem;
+    }
+
+    table.customDataTable tr th:last-child, table.customDataTable tr td:last-child {
+        max-width: 100% !important;
+        min-width: 100px !important;
+        width: 100% !important;
     }
 }

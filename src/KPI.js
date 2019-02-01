@@ -10,15 +10,16 @@ class KPI extends Component {
         this.state = {
             data: [],
             KpiId: "",
-            Target:"",
+            Target: "",
             kpiTitle: "",
-            KpiDataDetails:"",
-            Redirect:false,
+            KpiDataDetails: "",
+            Redirect: false,
         };
     }
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
                 url: "http://192.168.10.109:3000/api/kpi_master/?_size=100",
                 type: "GET",
@@ -29,56 +30,63 @@ class KPI extends Component {
             columns: [
                 {
                     data: "kpiTitle",
-                    className: "text-center",
+                    
                     targets: 0
                 },
                 {
                     data: "target",
-                    className: "text-center",
+                    
                     targets: 1
                 },
                 {
                     data: "",
-                    className: "text-center",
+                    
                     targets: 2,
                     render: function (data, type, row) {
                         return (
                             '<a href="/' + row.KpiId + '">' +
                             'Edit' +
                             "</a>" + " / " +
-                            '<a href="/' + row.KpiId+ '">' +
+                            '<a href="/' + row.KpiId + '">' +
                             'Delete' +
                             "</a>"
                         )
-                    }
+                    },
+                    "orderable": false
                 }
             ]
+            ,
+            "drawCallback": function (settings) {
+                window.smallTable();
+            }
         });
+
     }
     render() {
-                return (
+        return (
 
             <div>
-            {
-                this.props.location.state=="" && 
-                <div className="alert alert-success" role="alert">
-                <strong>Well done!</strong> You successfully read this important alert message.
+                {
+                    this.props.location.state == "" &&
+                    <div className="alert alert-success" role="alert">
+                        <strong>Well done!</strong> You successfully read this important alert message.
                 </div>
                 }
                 <div>
                     <Link to={{ pathname: '/AddKpi', }} className="btn btn-sm btn-success" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add KPI</Link>
                 </div>
                 <div className="page-header">
-                    <table className="table table-striped table-bordered table-hover"
+                    <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblKPI"
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Actions</th>
+                                <th width="90">Actions</th>
                             </tr>
                         </thead>
+                        <tbody></tbody>
                     </table>
 
                 </div>
