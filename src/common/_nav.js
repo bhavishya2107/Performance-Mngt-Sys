@@ -58,7 +58,7 @@ export default {
         },
         {
             name: 'Project Complexity',
-            url: '/ProjectComplexityHome',
+            url: '/ProjectComplexity',
             icon: 'fa fa-plus',
         },
         // {
