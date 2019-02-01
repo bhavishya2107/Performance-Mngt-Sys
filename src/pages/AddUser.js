@@ -67,6 +67,24 @@ class AddUser extends Component {
         });
     }
 
+    componentWillMount() {
+        $.ajax = (
+            {
+                url: "http://192.168.10.109:3000/api/user_master",
+                type: "POST",
+                data: DataList,
+                success: function (resultData) {
+                    _this.setState({ RedirecttouserManagement: true });
+                    toast.success("Success  Notification !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+
+                }
+            });
+
+    }
+
+
     render() {
         if (this.state.RedirecttouserManagement) {
 
@@ -150,16 +168,27 @@ class AddUser extends Component {
                             </FormGroup>
                         </div>
                     </div>
-                    <div className="row" row-sm-2>
+                    <div className="row">
                         <div className="col">
                             <FormGroup >
                                 <Label for="MobileNo" >MobileNo</Label>
-                                <Input type="number" name="MobileNo" id="MobileNo" className="form-control col-sm-3" value={this.state.MobileNo}
+                                <Input type="number" name="MobileNo" id="MobileNo" className="form-control col-sm-5" value={this.state.MobileNo}
                                     onChange={(event) => {
                                         this.setState({
                                             MobileNo: event.target.value
                                         })
                                     }} />
+                            </FormGroup>
+                        </div>
+                        <div className="col">
+                            <FormGroup >
+                                <Label for="Department" >Department</Label>
+                                <select Dept="dropdown" value={this.state.Dept} onChange={(event) => {
+                                    this.setState({
+                                        Dept: event.target.value
+                                    })
+                                }} >
+                                    /></select>
                             </FormGroup>
                         </div>
                     </div>
