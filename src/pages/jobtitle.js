@@ -1,66 +1,70 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
+import { environment } from './Environment'
 const $ = require('jquery');
 class Jobtitle extends Component {
+     
     constructor(props) {
         super(props);
         this.state = {
-            Jobtitle:"",
-            Description:"",
+            Jobtitle: "",
+            Description: "",
             redirectToList: false
         }
+        
     }
+   
     savejobtitle() {
 
-        var _this=this;
-        
-        var formData ={
-            "jobtitleName" : this.state.Jobtitle,
-            "description":this.state.Description
-           
-          }
-       $.ajax({
-            url: "http://192.168.10.109:3000/api/jobtitle_master",
+        var _this = this;
+
+        var formData = {
+            "jobtitleName": this.state.Jobtitle,
+            "description": this.state.Description
+
+        }
+        var url = environment.apiUrl + 'jobtitle_master';
+        $.ajax({
+            url: url,
             type: "POST",
-            data: formData,           
-            success:function(resultData)
-            { 
+            data: formData,
+            success: function (resultData) {
                 _this.setState({ redirectToList: true });
             }
         });
- }
+    }
 
-    render(){
+    render() {
         if (this.state.redirectToList) {
 
             return <Redirect to={{ pathname: "/jobtitlelist", state: "2222" }} />
         }
-        return(
+        return (
             <div className="row">
-                    <form id="formjobtitle" className="col-6">
+                <form id="formjobtitle" className="col-6">
                     <div className="form-group">
                         <label>Name</label>
                         <input type="text" className="form-control" value={this.state.Jobtitle}
-                         onChange={(event) => {
-                            this.setState({
-                                Jobtitle: event.target.value
-                            })
-                        }} />
+                            onChange={(event) => {
+                                this.setState({
+                                    Jobtitle: event.target.value
+                                })
+                            }} />
                     </div>
                     <div className="form-group">
                         <label>Description</label> <textarea className="form-control" rows="4" value={this.state.Description}
-                        onChange={(event) => {
-                            this.setState({
-                                Description: event.target.value
-                            })
-                        }} ></textarea>
+                            onChange={(event) => {
+                                this.setState({
+                                    Description: event.target.value
+                                })
+                            }} ></textarea>
                     </div>
                     <button onClick={() => this.savejobtitle()} type="button" className="btn btn-success mr-5" >
                         Save
                     </button>
                     <button className="btn btn-danger">Clear</button>
-                 
+
                 </form>
             </div>
         )

@@ -92,10 +92,7 @@ class AddDept extends Component {
 
 
                     <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => { this.save(); }}>Save</button>
-                    {/* <ToastContainer /> */}
-
                     <button className="btn btn-sm btn-success mr-2">Clear</button>
-                    {/* <button type="button" onClick={() => { this.clear(); }}>Clear</button> */}
                 </Form>
 
             </div >
