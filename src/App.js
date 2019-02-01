@@ -30,7 +30,7 @@ import Scalesetlist from './pages/scalesetlist';
 import Jobtitlelist from './pages/jobtitlelist';
 import Jobtitle from './pages/jobtitle'
 class App extends Component {
- 
+
   render() {
     var urlData = window.location.pathname;
     if (urlData === "/") {
@@ -41,11 +41,11 @@ class App extends Component {
               <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
                 <Switch>
                   <Route exact path="/" component={Login} />
-                               
+
                 </Switch>
               </div>
             </div>
-            
+
           </div>
         </Router>
       );
@@ -75,11 +75,11 @@ class App extends Component {
                           path="/innerpage"
                           component={innerpage}
                         />
-                        
+
                         <Route
                           path="/demo"
                           component={Demo}
-                         
+
                         />
                         <Route
                           path="/KPI"
@@ -96,42 +96,26 @@ class App extends Component {
                         <Route
                           path="/AddProjectComplexity"
                           component={AddProjectComplexity}
-                          
-                          
+
+
                         />
-                        <Route
-                          path="/UserManagement"
-                          component={UserManagement}
-                        />
-                      
-                      <Route
-                          path="/AddUser"
-                          component={AddUser}
-                        />
-                        <Route
-                          path="/Department"
-                          component={Department}
-                        />
-                        <Route
-                          path="/AddDept"
-                          component={AddDept}
-                        />
-                        <Route
-                          path="/Projects"
-                          component={Projects}
-                        />
+                        <Route path="/UserManagement" component={UserManagement} />
+                        <Route path="/AddUser" component={AddUser} />
+                        <Route path="/Department" component={Department} />
+                        <Route path="/AddDept" component={AddDept} />
+                        <Route path="/Projects" component={Projects} />
 
 
                         <Route path="/innerpage" component={innerpage} />
-                        <Route  path="/kraHome" component={kraHome}></Route>  
-                        <Route  path="/kraListPage" component={kraListPage}></Route>  
-                        <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
-                        <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
-                        
-                         <Route exact path="/scaleset" component={Scaleset} />
-                         <Route exact path="/scalesetlist" component={Scalesetlist} />
-                         <Route exact path="/jobtitlelist" component={Jobtitlelist} />
-                         <Route exact path="/jobtitle" component={Jobtitle} />
+                        <Route path="/kraHome" component={kraHome}></Route>
+                        <Route path="/kraListPage" component={kraListPage}></Route>
+                        <Route path="/userRolePMS" component={UserRolePMS}></Route>
+                        <Route path="/userRoleForm" component={UserRoleForm}></Route>
+
+                        <Route exact path="/scaleset" component={Scaleset} />
+                        <Route exact path="/scalesetlist" component={Scalesetlist} />
+                        <Route exact path="/jobtitlelist" component={Jobtitlelist} />
+                        <Route exact path="/jobtitle" component={Jobtitle} />
                       </Switch>
                     </div>
                   </div>

@@ -66,7 +66,7 @@ class Projects extends Component {
                         </tr>
                     </thead>
                 </table>
-                {/* <Link to={{ pathname: '/AddProjects' }} className="btn btn-sm btn-success mr-2" >Add Project</Link> */}
+                
 
             </div >
         )
