@@ -1,4 +1,6 @@
+import {Link} from 'react-router-dom'
 import React, { Component } from 'react';
+
 import $ from 'jquery';
 $.DataTable = require('datatables.net-bs4');
 
@@ -55,6 +57,10 @@ class Projects extends Component {
     render() {
         return (
             <div>
+                 <div className="text-right mb-3">
+                    <Link to={{ pathname: '/AddProject' }} className="btn btn-sm btn-success mr-2" role="submit">Add Project</Link>
+
+                </div>
                 <table className="table table-striped table-bordered table-hover"
                     ref={el => (this.el = el)}>
                     <thead>
@@ -66,8 +72,7 @@ class Projects extends Component {
                         </tr>
                     </thead>
                 </table>
-                
-
+                    
             </div >
         )
     }
