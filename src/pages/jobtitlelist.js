@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { environment } from './Environment'
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -8,13 +9,16 @@ class Jobtitlelist extends Component {
     constructor(props) {
         super(props);
         this.state = { }
+        var apiUrl = environment.apiUrl;
     }
 componentDidMount() {
 
         this.$el = $(this.el);
+        var url = environment.apiUrl + 'jobtitle_master/?_size=1000';
+        
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/jobtitle_master/?_size=1000",
+                url: url,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
