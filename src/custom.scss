@@ -21,6 +21,7 @@ html {
 .left-sidebar {
     position: fixed;
     left: 0;
+    box-shadow: 0 -5px 20px 5px inset rgba(0,0,0, .5);
     width: 200px;
     top: 60px;
     max-height: 100vh;
@@ -89,6 +90,7 @@ html {
 }
 .navbar {
     padding: 0 15px;
+    box-shadow: 0 -5px 10px 7px rgba(0,0,0, .5);
 }
 
 .content-block {
