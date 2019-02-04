@@ -22,14 +22,16 @@ import AddDept from './pages/AddDept'
 import Projects from './pages/Projects';
 import AddProject from './pages/AddProject';
 
-import KPI from './pages/KPI';
-import AddKpi from './pages/AddKpi';
-import ProjectComplexity from './pages/ProjectComplexity';
-import AddProjectComplexity from './pages/AddProjectComplexity';
-import Scaleset from './pages/scaleset';
-import Scalesetlist from './pages/scalesetlist';
-import Jobtitlelist from './pages/jobtitlelist';
-import Jobtitle from './pages/jobtitle'
+import KPI from './KPI';
+import AddKpi from './AddKpi';
+import ProjectComplexityHome from './ProjectComplexityHome';
+import AddProjectComplexity from './AddProjectComplexity';
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import Scaleset from './pages/addscaleset';
+import Scalesetlist from './pages/scaleset';
+import Jobtitlelist from './pages/jobtitle';
+import Jobtitle from './pages/addjobtitle';
+import Addtemplate from './pages/addtemplate'
 class App extends Component {
 
   render() {
@@ -98,6 +100,27 @@ class App extends Component {
                         <Route
                           path="/AddProjectComplexity"
                           component={AddProjectComplexity}
+                          />
+                          <Route
+                          path="/UserManagement"
+                          component={UserManagement}
+                        />
+                         <Route
+                          path="/demo"
+                          component={Demo}
+                        />
+                      
+                      <Route
+                          path="/AddUser"
+                          component={AddUser}
+                        />
+                        <Route
+                          path="/Department"
+                          component={Department}
+                        />
+                        <Route
+                          path="/AddDept"
+                          component={AddDept}
                         />
                         <Route path="/UserManagement" component={UserManagement} />
                         <Route path="/AddUser" component={AddUser} />
@@ -106,14 +129,18 @@ class App extends Component {
                         <Route path="/Projects" component={Projects} />
                         <Route path="/AddProject" component={AddProject} />
                         <Route path="/innerpage" component={innerpage} />
-                        <Route path="/kraHome" component={kraHome}></Route>
-                        <Route path="/kraListPage" component={kraListPage}></Route>
-                        <Route path="/userRolePMS" component={UserRolePMS}></Route>
-                        <Route path="/userRoleForm" component={UserRoleForm}></Route>
-                        <Route exact path="/scaleset" component={Scaleset} />
-                        <Route exact path="/scalesetlist" component={Scalesetlist} />
-                        <Route exact path="/jobtitlelist" component={Jobtitlelist} />
-                        <Route exact path="/jobtitle" component={Jobtitle} />
+                        <Route  path="/kraHome" component={kraHome}></Route>  
+                        <Route  path="/kraListPage" component={kraListPage}></Route>  
+                        <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
+                        <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
+                        
+                         <Route exact path="/addscaleset" component={Scaleset} />
+                         <Route exact path="/scaleset" component={Scalesetlist} />
+                         <Route exact path="/jobtitle" component={Jobtitlelist} />
+                         <Route exact path="/addjobtitle" component={Jobtitle} />
+                         <Route exact path="/addtemplate" component={Addtemplate} />
+                         <Route exact path="/Edit/id=:id" component={Scaleset} />
+                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
                       </Switch>
                     </div>
                   </div>

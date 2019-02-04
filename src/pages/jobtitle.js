@@ -1,73 +1,123 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
-import { environment } from './Environment'
+import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
-class Jobtitle extends Component {
-     
+$.DataTable = require('datatables.net-bs4');
+
+class Jobtitlelist extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            Jobtitle: "",
-            Description: "",
-            redirectToList: false
-        }
-        
+        this.state = { }
     }
-   
-    savejobtitle() {
+    SingleDelete(jobtitleId) {
+        var res = this.DeletescalesetApi(jobtitleId);
+        res.done(response => {
+          if (response === 200) {
+            alert("Data deleted");
+            window.location.reload("")
+          }this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+          alert("error");
+        });
+      }
+      DeletescalesetApi(jobtitleId) {
+        const endpoint = `http://192.168.10.109:3000/api/jobtitle_master/${jobtitleId}`;
+    
+        return $.ajax({
+          url: endpoint,
+          type: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+       }
+        });
+      }
+componentDidMount() {
 
-        var _this = this;
+        this.$el = $(this.el);
+        this.$el.DataTable({
+            ajax: {
+                url: "http://192.168.10.109:3000/api/jobtitle_master/?_size=1000",
+                type: "GET",
+                dataSrc: "",
+                error: function (xhr, status, error) {
+                },
+            },
+            columns: [
+                {
+                    data: "jobtitleName",
+                    targets: 0
+                },
+                {
+                    data: "description",
+                    targets: 1
 
-        var formData = {
-            "jobtitleName": this.state.Jobtitle,
-            "description": this.state.Description
+                },
 
-        }
-        var url = environment.apiUrl + 'jobtitle_master';
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: formData,
-            success: function (resultData) {
-                _this.setState({ redirectToList: true });
-            }
+                {
+                    data: "scaleSetId",
+                    className: "text-right",
+                    targets: 3,
+                    render: function (data, type, row) {
+                        return (
+                            '<a href="/Editjobtitle/id=' + row.jobtitleId + '"class="mr-3">' +
+                            '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '&nbsp' +
+                            '<a href="#" id="' + row.jobtitleId + '"class="btnDelete" >' +
+                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                            "</a>"
+                        )
+                    }
+                },
+            ],
+            initComplete: (settings, json) => {
+                // alert("DataTables has finished its initialisation.");
+                 $(".btnDelete").on("click", e => {
+                   debugger;
+                   this.SingleDelete(e.currentTarget.id);
+                 });
+               },
+               drawCallback: ( settings ) =>{
+                 $(".btnDelete").on("click", e => {
+                     debugger;
+                     this.SingleDelete(e.currentTarget.id);
+                   });
+             }
         });
     }
-
     render() {
-        if (this.state.redirectToList) {
 
-            return <Redirect to={{ pathname: "/jobtitlelist", state: "2222" }} />
-        }
         return (
-            <div className="row">
-                <form id="formjobtitle" className="col-6">
-                    <div className="form-group">
-                        <label>Name</label>
-                        <input type="text" className="form-control" value={this.state.Jobtitle}
-                            onChange={(event) => {
-                                this.setState({
-                                    Jobtitle: event.target.value
-                                })
-                            }} />
-                    </div>
-                    <div className="form-group">
-                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.Description}
-                            onChange={(event) => {
-                                this.setState({
-                                    Description: event.target.value
-                                })
-                            }} ></textarea>
-                    </div>
-                    <button onClick={() => this.savejobtitle()} type="button" className="btn btn-success mr-5" >
-                        Save
-                    </button>
-                    <button className="btn btn-danger">Clear</button>
+            <div>
 
-                </form>
+                {
+                    this.props.location.state === "2222" 
+//                   &&  <div className="alert alert-success" role="alert">
+//                         <strong>Well done!</strong> You added successfully .
+// </div>
+                }
+                <div className="clearfix text-right mb-2">
+                <Link to="/addjobtitle"className="btn btn-primary mr-5 "><i className="fa fa-plus"></i>Add</Link>
+                </div>
+                
+
+
+                <table className="table table-striped table-bordered table-hover"
+
+                    ref={el => (this.el = el)}>
+                    <thead>
+                        <tr>
+
+                            <th>Job Title</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <ToastContainer />
+                </table>
             </div>
         )
     }
 }
-export default Jobtitle;
+export default Jobtitlelist;
