@@ -5,17 +5,18 @@ const routes = {
     '/kraHome' : 'KRA HOME',
     '/kraListPage' : 'KRA LIST',
     '/userRolePMS' : 'USER ROLE',
-    '/scaleset' : 'Add Scale Set',
-    '/scalesetlist': 'Scale Set',
-    '/jobtitlelist':'Job Title',
-    '/jobtitle':"Add Job title",
+    '/addscaleset' : 'Add Scale Set',
+    '/scaleset': 'Scale Set',
+    '/jobtitle':'Job Title',
+    '/addjobtitle':"Add Job title",
     //'/lalji': 'Lalji',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
     //'/lalji': 'Lalji',
     '/UserManagement':'User Management',
-    '/Department':'Department'
-    
+    '/Department':'Department',
+    '/addtemplate':'Add Template',
+    '/Edit':"Edit"
   };
   {
   }

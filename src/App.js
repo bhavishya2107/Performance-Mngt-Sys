@@ -25,10 +25,11 @@ import AddKpi from './AddKpi';
 import ProjectComplexityHome from './ProjectComplexityHome';
 import AddProjectComplexity from './AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
-import Scaleset from './pages/scaleset';
-import Scalesetlist from './pages/scalesetlist';
-import Jobtitlelist from './pages/jobtitlelist';
-import Jobtitle from './pages/jobtitle'
+import Scaleset from './pages/addscaleset';
+import Scalesetlist from './pages/scaleset';
+import Jobtitlelist from './pages/jobtitle';
+import Jobtitle from './pages/addjobtitle';
+import Addtemplate from './pages/addtemplate'
 class App extends Component {
  
   render() {
@@ -76,8 +77,6 @@ class App extends Component {
                           component={innerpage}
                         />
                         <Route
-                          path="/demo"
-                          component={Demo}
                           path="/KPI"
                           component={KPI}
                         />
@@ -92,10 +91,14 @@ class App extends Component {
                         <Route
                           path="/AddProjectComplexity"
                           component={AddProjectComplexity}
-                          component={Demo}/>
+                          />
                           <Route
                           path="/UserManagement"
                           component={UserManagement}
+                        />
+                         <Route
+                          path="/demo"
+                          component={Demo}
                         />
                       
                       <Route
@@ -116,10 +119,13 @@ class App extends Component {
                         <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
                         <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
                         
-                         <Route exact path="/scaleset" component={Scaleset} />
-                         <Route exact path="/scalesetlist" component={Scalesetlist} />
-                         <Route exact path="/jobtitlelist" component={Jobtitlelist} />
-                         <Route exact path="/jobtitle" component={Jobtitle} />
+                         <Route exact path="/addscaleset" component={Scaleset} />
+                         <Route exact path="/scaleset" component={Scalesetlist} />
+                         <Route exact path="/jobtitle" component={Jobtitlelist} />
+                         <Route exact path="/addjobtitle" component={Jobtitle} />
+                         <Route exact path="/addtemplate" component={Addtemplate} />
+                         <Route exact path="/Edit/id=:id" component={Scaleset} />
+                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
                       </Switch>
                     </div>
                   </div>

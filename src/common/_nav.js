@@ -69,12 +69,17 @@ export default {
         // },
         {
             name: 'Scale Set',
-            url: '/scalesetlist',
+            url: '/scaleset',
             icon: 'fa fa-plus',
         },
         {
             name: 'Job Title',
-            url: '/jobtitlelist',
+            url: '/jobtitle',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Add template',
+            url: '/addtemplate',
             icon: 'fa fa-plus',
         },
 
