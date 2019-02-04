@@ -52,20 +52,19 @@ export default {
         },
 
         {
-
             name: 'KPI',
             url: '/KPI',
             icon: 'fa fa-plus',
         },
         {
             name: 'Project Complexity',
-            url: '/ProjectComplexityHome',
+            url: '/ProjectComplexity',
             icon: 'fa fa-plus',
         },
-        // {
+        // {k
         //     name: 'Add Scale Set',
         //     url: '/scaleset',
-        //     icon: 'fa fa-plus',
+        //     icon: 'fsa fa-plus',
         // },
         {
             name: 'Scale Set',
@@ -82,6 +81,10 @@ export default {
             url: '/addtemplate',
             icon: 'fa fa-plus',
         },
-
+        {
+            name:'Projects',
+            url:'/Projects',
+            icon: 'fa fa-plus',
+        }
     ]
 };

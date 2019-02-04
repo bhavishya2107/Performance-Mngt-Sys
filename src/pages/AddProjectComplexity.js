@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 const $ = require('jquery');
 class AddProjectComplexity extends Component {
@@ -19,7 +20,6 @@ class AddProjectComplexity extends Component {
         var _this = this;
         var ProjectComplexityData =
         {  
-            
             "projectTypeId": this.state.projectTypeId,
             "ProjectName": this.state.projectTypeName,
             "Description": this.state.description,
@@ -36,16 +36,13 @@ class AddProjectComplexity extends Component {
             data: ProjectComplexityData,
             // dataType:"text", 
             success: function (resultData) {
-                alert("Succesfully added");
-                 _this.setState({ redirectToList: true });
-            }
-    
+                _this.setState({ RedirecttouserManagement: true });
+                toast.success("Success  Notification !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+        }
         });
-
-
     }
-
-
     render() {
         {
             if (this.state.Redirect) {
@@ -83,7 +80,7 @@ class AddProjectComplexity extends Component {
                     </FormGroup>            
                     <FormGroup check row>
                         <Col sm={{ size: 10, offset: 2 }}>
-                            <Link to={{ pathname: '/ProjectComplexityHome' }} onClick={(event) => { this.save(event) }} class="btn btn-success mr-2" role="submit" input ty style={{ textDecoration: "none", float: "center" }}>Save</Link>
+                            <Link to={{ pathname: '/ProjectComplexity' }} onClick={(event) => { this.save(event) }} class="btn btn-success mr-2" role="submit" input ty style={{ textDecoration: "none", float: "center" }}>Save</Link>
                             <button type="button" id="btnClr" class="btn btn-success" onClick={(event) => { this.clearfields(event) }} style={{ float: "center" }}>Clear</button>
                         </Col>
                     </FormGroup >

@@ -1,3 +1,5 @@
+import { ToastContainer, toast } from 'react-toastify';
+
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import $ from 'jquery';
@@ -41,35 +43,31 @@ class UserManagement extends Component {
 
                 {
                     data: "firstName",
-                    target: 1,
+                    targets: 1,
                     className: "text-center",
-                    // render: function (data, type, row) {
-                    //     return (
-                    //         '<a href="/edit/' + row.id + '">' + 'Edit' + "</a>"
-                    //     )
-                    // }
+
                 },
                 {
                     data: "lastName",
-                    target: 2,
+                    targets: 2,
                     className: "text-center"
                 },
                 {
                     data: "emailAddress",
-                    target: 3,
+                    targets: 3,
                     className: "text-center"
 
                 },
-                // {
-                //     data: "id",
-                //     target: 4,
-                //     render: function (data, type, row) {
-                //         return (
-                //             '<a href="/edit/' + row.id + '">' + 'Edit' + "</a>" + "/" +
-                //             '<a href="/delete/' + row.id + '">' + 'Delete' + "</a>"
-                //         )
-                //     }
-                // }
+                {
+                    data: "userId",
+                    targets: 4,
+                    render: function (data, type, row) {
+                        return (
+                            '<a href="/edit/' + row.userId + '">' + 'Edit' + "</a>" + "/" +
+                            '<a href="/delete/' + row.userId + '">' + 'Delete' + "</a>"
+                        )
+                    }
+                }
             ]
         })
     }
@@ -78,10 +76,10 @@ class UserManagement extends Component {
             //to add the data to the table 
             <div>
                 {
-                    this.props.location.state === "2" &&
-                    <div className="alert alert-success" role="alert">
-                        <strong>Well done!</strong> You added successfully .
-          </div>
+                    this.props.location.state === "2"
+                    //             <div className="alert alert-success" role="alert">
+                    //                 <strong>Well done!</strong> You added successfully .
+                    //   </div>
                 }
                 <div className="text-right mb-3">
                     <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-success mr-2" role="submit">Add User</Link>
@@ -95,11 +93,12 @@ class UserManagement extends Component {
 
                             <th>firstName</th>
                             <th>lastName</th>
+                            <th>emailAddress</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                 </table>
-
+                <ToastContainer/>
             </div>
         )
     }

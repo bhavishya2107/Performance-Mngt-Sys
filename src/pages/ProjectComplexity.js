@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
-$.DataTable = require('datatables.net-bs4');
+$.DataTable = require('datatables.net');
 
-class ProjectComplexityHome extends Component {
+class ProjectComplexity extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            projectTypeId: "",
             projectTypeName:"",
             description: "",
             Redirect:false,
@@ -21,15 +21,10 @@ class ProjectComplexityHome extends Component {
                 url: "http://192.168.10.109:3000/api/project_type_master",
                 type: "GET",
                 dataSrc: "",
-                error: function (xhr, status, error) {
-                },
+                
+                
             },
             columns: [
-                {
-                    data: "projectTypeId",
-                    className: "text-center",
-                    targets: 0
-                },
                 {
                     data: "projectTypeName",
                     className: "text-center",
@@ -46,12 +41,12 @@ class ProjectComplexityHome extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/' + row.id + '">' +
-                            'Edit' +
-                            "</a>" + " / " +
-                            '<a href="/' + row.id+ '">' +
-                            'Delete' +
-                            "</a>"
+                                '<a href="/edit/' + row.id + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                                '&nbsp' +
+                                '<a href="/edit/' + row.Id + '">' +
+                                '<i class="fa fa-trash" aria-hidden="true"></i>' +
+
+                                "</a>"
                         )
                     }
                 }
@@ -63,15 +58,15 @@ class ProjectComplexityHome extends Component {
         return (
 
     <div>
-    {
+    {/* {
         this.props.location.state=="" && 
         <div className="alert alert-success" role="alert">
         <strong>Well done!</strong> You successfully read this important alert message.
         </div>
-        }
+        } */}
            
         <div>
-            <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-success" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
+            <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
 
         </div>
         <div className="page-header">
@@ -80,12 +75,13 @@ class ProjectComplexityHome extends Component {
                 ref={el => (this.el = el)}>
                 <thead>
                     <tr>
-                        <th>Project Id</th>
+
                         <th>Project Name</th>
                         <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
+                <ToastContainer />
             </table>
 
         </div>
@@ -94,4 +90,4 @@ class ProjectComplexityHome extends Component {
 
 }
 }
-export default ProjectComplexityHome;
+export default ProjectComplexity;

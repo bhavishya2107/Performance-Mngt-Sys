@@ -16,7 +16,10 @@ const routes = {
     '/UserManagement':'User Management',
     '/Department':'Department',
     '/addtemplate':'Add Template',
-    '/Edit':"Edit"
+    '/Edit':"Edit",
+    '/Projects':'Projects',
+    '/EditKpi':'EditKpi'
+    
   };
   {
   }
