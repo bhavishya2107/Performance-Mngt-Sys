@@ -81,7 +81,6 @@ class AddKpi extends Component {
     //             });
     //         }
     //     });
-    
         componentDidMount() {
        // console.log('out',this.state.kpiId);
        alert('did')

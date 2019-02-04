@@ -85,12 +85,10 @@ class KPI extends Component {
                     data: "kpiId",
                     targets: 0
                 },
-
                 {
                     data: "kpiTitle",
                     targets: 1
                 },
-
                 {
                     data: "target",
                     targets: 2
@@ -107,16 +105,12 @@ class KPI extends Component {
                             '<a href="#" kpiId=' + row.kpiId + ' class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             '</a>'
-
-
                         )
                     },
                     "orderable": false
                 }
-            ]
-            ,
+            ],
             initComplete: (settings, json) => {
-               
                 $(".btnDelete").on("click", e => {
                     debugger;
                     this.SingleDelete(e.currentTarget.kpiId);

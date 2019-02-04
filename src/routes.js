@@ -16,8 +16,6 @@ const routes = {
     '/UserManagement':'User Management',
     '/Department':'Department',
     '/Projects':'Projects',
-    '/EditKpi':'EditKpi'
-    
   };
   {
   }
