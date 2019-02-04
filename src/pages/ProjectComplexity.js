@@ -22,6 +22,7 @@ class ProjectComplexity extends Component {
                 type: "GET",
                 dataSrc: "",
                 
+                
             },
             columns: [
                 {
@@ -40,12 +41,12 @@ class ProjectComplexity extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/edit/' + row.id + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '&nbsp' +
-                            '<a href="/edit/' + row.Id + '">' +
-                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                                '<a href="/edit/' + row.id + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                                '&nbsp' +
+                                '<a href="/edit/' + row.Id + '">' +
+                                '<i class="fa fa-trash" aria-hidden="true"></i>' +
 
-                            "</a>"
+                                "</a>"
                         )
                     }
                 }
@@ -65,7 +66,7 @@ class ProjectComplexity extends Component {
         } */}
            
         <div>
-            <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-success" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
+            <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
 
         </div>
         <div className="page-header">

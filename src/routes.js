@@ -15,7 +15,8 @@ const routes = {
     //'/lalji': 'Lalji',
     '/UserManagement':'User Management',
     '/Department':'Department',
-    '/Projects':'Projects'
+    '/Projects':'Projects',
+    '/EditKpi':'EditKpi'
     
   };
   {

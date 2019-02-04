@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom'
 import React, { Component } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
 $.DataTable = require('datatables.net-bs4');
 
@@ -18,7 +18,7 @@ class Projects extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/project_master/?_size=1000",
+                url: "http://192.168.10.109:3000/api/project_master/",
                 type: "get",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -58,19 +58,18 @@ class Projects extends Component {
         return (
             <div>
                  <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddProject' }} className="btn btn-sm btn-success mr-2" role="submit">Add Project</Link>
-
+                 <Link to={{ pathname: '/AddProject', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add Project</Link>
                 </div>
                 <table className="table table-striped table-bordered table-hover"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-
                             <th>depName</th>
                             <th>description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
+                    <ToastContainer/>
                 </table>
                     
             </div >
