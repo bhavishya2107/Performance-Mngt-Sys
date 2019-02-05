@@ -4,13 +4,15 @@ const routes = {
     '/demo': 'UI Design Control',
     '/kraHome' : 'KRA HOME',
     '/kraListPage' : 'KRA LIST',
-    '/userRolePMS' : 'USER ROLE',
-    //'/lalji': 'Lalji',
+    '/userRolePMS' : 'ROLE',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
-    //'/lalji': 'Lalji',
     '/UserManagement':'User Management',
-    '/Department':'Department'
+    '/Department':'Department',
+    '/templateList':'Template List',
+    '/Edit' : 'Edit',
+  
+
     
   };
   {

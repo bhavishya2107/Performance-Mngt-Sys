@@ -15,11 +15,7 @@ export default {
             url: '/demo',
             icon: 'fa fa-cogs',
         },
-        // {
-        //     name:'KRA',
-        //     url:'/kraHome',
-        //     icon:'fa fa-plus',
-        // },
+     
         {
             name:'KRA',
             url:'/kraListPage',
@@ -31,15 +27,6 @@ export default {
             icon:'fa fa-plus',
         },
 
-        // {
-        //     name: 'Lalji',
-        //     url: '/lalji',
-        //     icon: 'fa fa-plus',
-        // },
-        //     name: 'Lalji',
-        //     url: '/lalji',
-        //     icon: 'fa fa-plus',
-        // },
         {
             name:'UserManagement',
             url:'/UserManagement',
@@ -62,5 +49,11 @@ export default {
             url: '/ProjectComplexityHome',
             icon: 'fa fa-plus',
         },
+        {
+            name: 'Template List',
+            url: '/templateList',
+            icon: 'fa fa-plus',
+        }
+
     ]
 };

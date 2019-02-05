@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
+
 
 
 
@@ -10,7 +12,7 @@ class kraListPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            submitDataFromKra: ""
+            submitDataFromKra: "",
 
         };
 
@@ -19,32 +21,30 @@ class kraListPage extends Component {
 
 
     componentDidMount() {
+        debugger;
         this.$el = $(this.el);
 
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/kra_master/?_size=1000",
-                type: "GET",
-                dataSrc: "",
-                error: function (xhr, status, error) {
-
-                },
+                url: "192.168.10.109:3000/dynamic",
+                type: "POST",
+                dataSrc:  {
+                    "query": "SELECT TM.templateName,KM.KRAname FROM template_kra_kpi_assignment as TKKA JOIN template_master as TM   ON TKKA.templateId= TM.templateId JOIN kra_master as KM ON  TKKA.kraid = KM.kraid ",
+            
+             },
 
             },
             columns: [
                 {
-                    data: "kraId",
+                    data: "templateName",
                     targets: 0
 
                 },
                 {
-                    data: "kraName",
+                    data: "KRAname",
                     targets: 1
                 },
-                {
-                    data: "description",
-                    targets: 2
-                },
+             
 
                 {
                     data: "",
@@ -66,15 +66,16 @@ class kraListPage extends Component {
     }
     render() {
         return (<div>
-            <h1>KRA LIST</h1>
+            <h1>KRA</h1>
               
      
-               {
-                    this.props.location.state === "2222" &&
-                    <div className="alert alert-success" role="alert">
-                        <strong>Well done!</strong> You added successfully .
-      </div>
-                }
+               {/* {
+                    this.props.location.state === "2222"
+                  
+    //                 <div className="alert alert-success" role="alert">
+    //                     <strong>Well done!</strong> You added successfully .
+    //   </div>
+                } */}
             <div className="clearfix text-right mb-2">
                 <Link to={{ pathname: '/kraHome', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
             </div>
@@ -89,15 +90,17 @@ class kraListPage extends Component {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Description</th>
                         <th>Action</th>
 
 
                     </tr>
                 </thead>
+                <tbody></tbody>
+      
             </table>
         </div>);
     }
 }
 
 export default kraListPage;
+

@@ -4,14 +4,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 //import logo from './logo.svg';
 //import './app.css';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import '../node_modules/react-toastify/dist/ReactToastify.css';
 import PrimaryHeader from './common/header';
 import Sidebar from './common/sidebar';
 import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
-import kraHome from './kraHome';
-import kraListPage from './kraListPage';
+import kraHome from './pages/kraHome';
+import kraListPage from './pages/kraListPage';
 import UserRolePMS from './pages/userRolePMS';
 import UserRoleForm from './pages/userRoleForm';
 
@@ -25,6 +26,11 @@ import AddKpi from './AddKpi';
 import ProjectComplexityHome from './ProjectComplexityHome';
 import AddProjectComplexity from './AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import TemplateList from './pages/templateList';
+
+
+
+
 class App extends Component {
  
   render() {
@@ -74,8 +80,7 @@ class App extends Component {
                         <Route
                           path="/demo"
                           component={Demo}
-                          path="/KPI"
-                          component={KPI}
+                         
                         />
                         <Route
                           path="/AddKpi"
@@ -111,6 +116,10 @@ class App extends Component {
                         <Route  path="/kraListPage" component={kraListPage}></Route>  
                         <Route  path="/userRolePMS" component={UserRolePMS}></Route>  
                         <Route  path="/userRoleForm" component={UserRoleForm}></Route>  
+                        <Route  path="/templateList" component={TemplateList}></Route>  
+                        <Route  path="/Edit/id=:id" component={kraHome}></Route>
+                        <Route  path="/EditForm/id=:id" component={UserRoleForm}></Route>
+
                         
                       </Switch>
                     </div>
