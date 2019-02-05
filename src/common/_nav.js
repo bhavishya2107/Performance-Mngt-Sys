@@ -78,6 +78,11 @@ export default {
             name: 'Projects',
             url: '/Projects',
             icon: 'fa fa-plus',
+        },
+        {
+            name: 'My Profile',
+            url: '/myProfile',
+            icon: 'fa fa-plus',
         }
     ]
 };

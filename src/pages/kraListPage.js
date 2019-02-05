@@ -17,33 +17,32 @@ class kraListPage extends Component {
     }
     //delete record on click delete icon
     SingleDelete(kraId) {
-        var res = this.DeleteAlbumApi(kraId);
+        var res = this.DeletescalesetApi(kraId);
         res.done(response => {
-            debugger;
-            if (response.data === 200) {
-            
-                toast.warn("Deleted !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            }
+          if (response === 200) {
+          
+            window.location.reload("")
+          }this.$el.DataTable().ajax.reload();
+        });
+        toast.error("Record Deleted !", {
+            position: toast.POSITION.TOP_RIGHT
         });
         res.fail(error => {
-            alert("");
+          alert("error");
         });
-    }
-    DeleteAlbumApi(kraId) {
-        const endpoint= `http://192.168.10.109:3000/api/kra_master/${kraId}`;
+      }
+      DeletescalesetApi(kraId) {
+        const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
+    
         return $.ajax({
-            url:endpoint ,
-            type: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-          
+          url: endpoint,
+          type: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+       }
         });
-    }
+      }
 
 
 
@@ -95,15 +94,14 @@ class kraListPage extends Component {
                 // alert("DataTables has finished its initialisation.");
                 $(".btnDelete").on("click", e => {
                     debugger;
-                    alert();
+               
                     this.SingleDelete(e.currentTarget.id);
                     
                 });
             },
             drawCallback:( settings )=> {
                 $(".btnDelete").on("click", e => {
-                    debugger;
-                    alert();
+                
                     this.SingleDelete(e.currentTarget.id);
                     
                 });
