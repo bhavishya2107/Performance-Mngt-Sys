@@ -10,32 +10,36 @@ class KPI extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            kpiId:"",
-            Target: "",
-            kpiTitle: "",
-            KpiDataDetails: "",
-            Redirect: false,
+            saveKpiDetails: "",
             selectedIds: []
         };
     }
-    // SingleDelete(kpiId) {
-    //     var res = this.DeleteKpiApi(kpiId);
-    //     res.done(response => {
-    //         if (response.data === true) {
-    //             alert("Data deleted");
-    //         }
-    //     });
-    //     res.fail(error => {
-    //         alert("");
-    //     });
-    // }
-    // DeleteKpiApi(KpiId) {
-    //     return $.ajax({
-    //         url: "http://192.168.10.109:3000/api/kpi_master/${KPiId}",
-    //         type: "DELETE",
-    //     });
-    // }
+    saveKpiDetails() {
+        alert("hi")
+    }
+    SingleDelete(kpiId) {
+        var res = this.DeleteKpiApi(kpiId);
+        res.done(response => {
+            if (response === 200) {
+                alert("Data deleted");
+                window.location.reload("")
+            } this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+            alert("error");
+        });
+    }
+    DeleteKpiApi(KpiId) {
+        const endpoint = `http://192.168.10.109:3000/api/kpi_master/${KpiId}`;
+        return $.ajax({
+            url: endpoint,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+            }
+        });
+    }
     // DeleteAlbum() {
     //     $("#tblKpi input:checkbox:checked").each((e, item) => {
     //         this.state.selectedIds.push(item.value);
@@ -65,52 +69,47 @@ class KPI extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/kpi_master/",
+                url: "http://192.168.10.109:3000/api/kpi_master",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },
             },
             columns: [
-                    // {
-                    //     data: "kpiId",
-                    //     targets: 0,
-                    //     render: function (data, type, row) {
-                    //         return (
-                    //             '<input type="checkbox" name=" KpiId" value=' + row.kpiId + ">"
-                    //         );
-                    //     }
-                    // },
                 {
-                    data: "kpiId",
+                    data: "kpiTitle",
                     targets: 0
                 },
                 {
-                    data: "kpiTitle",
+                    data: "target",
                     targets: 1
                 },
+
                 {
-                    data: "target",
-                    targets: 2
-                },
-                {
-                    data: "",
+                    data: "KpiId",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditKpi/kpiid=' + row.kpiId  +'">' +
+                            '<a href="/EditKpi/kpiid=' + row.KpiId + '"class="mr-3">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '</a>' +
-                            "  " +
-                            '<a href="#" kpiId=' + row.kpiId + ' class="btnDelete">' +
+                            "</a>" +
+                            '<a href="#" kpiid="' + row.KpiId + '"class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                            '</a>'
+                            "</a>"
                         )
                     },
+
                     "orderable": false
                 }
             ],
+
             initComplete: (settings, json) => {
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    this.SingleDelete(e.currentTarget.kpiId);
+                });
+            },
+            drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
                     debugger;
                     this.SingleDelete(e.currentTarget.kpiId);
@@ -122,10 +121,9 @@ class KPI extends Component {
         return (
 
             <div>
+                {this.props.location.state === "2222"}
                 <div>
                     <Link to={{ pathname: '/AddKpi', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add KPI</Link>
-                    <button onClick={() => {this.DeleteAlbum();}}>Delete</button>
-       
                 </div>
                 <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
@@ -133,7 +131,6 @@ class KPI extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Action</th>

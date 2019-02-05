@@ -21,11 +21,11 @@ import Department from './pages/Department';
 import AddDept from './pages/AddDept'
 import Projects from './pages/Projects';
 import AddProject from './pages/AddProject';
+import AddKpi from './pages/AddKpi';
+import KPI from './pages/KPI';
 
-import KPI from './KPI';
-import AddKpi from './AddKpi';
-import ProjectComplexityHome from './ProjectComplexityHome';
-import AddProjectComplexity from './AddProjectComplexity';
+import ProjectComplexity from './pages/ProjectComplexity';
+import AddProjectComplexity from './pages/AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import Scaleset from './pages/addscaleset';
 import Scalesetlist from './pages/scaleset';

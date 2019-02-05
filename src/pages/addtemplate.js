@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 var templateData = []
@@ -113,8 +112,7 @@ class Addtemplate extends Component {
        this.getKRAData();
      
     }
-    render() {
-       
+    render() {  
         // const{templateData}=this.state;
         return (
             <div>
@@ -132,11 +130,9 @@ class Addtemplate extends Component {
                         {this.state.displayDatakpi}
                     </select>
                 </div>
-                <br />
+                <br/>
                 <button onClick={() => this.addtemplate(this.state)} type="button" className="btn btn-primary mr-5"><i className="fa fa-plus"></i> Add</button>
-                <br />
-
-
+                <br/>
                 <table className="table table-striped table-bordered table-hover"
                     ref={el => (this.el = el)}>
                     <thead>

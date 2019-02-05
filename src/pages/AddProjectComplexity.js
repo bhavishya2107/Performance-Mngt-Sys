@@ -8,12 +8,12 @@ class AddProjectComplexity extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            projectTypeId: props.match.params.projectTypeId,
             projectTypeId: "",
             projectTypeName: "",
             description: "",
             ProjectComplexityData:"",
-            Redirect: false,
+            isUpdate: false
         };
     }
     save() {
@@ -23,12 +23,7 @@ class AddProjectComplexity extends Component {
             "projectTypeId": this.state.projectTypeId,
             "ProjectName": this.state.projectTypeName,
             "Description": this.state.description,
-            "createdBy": 1,
-           // "createdOn": null,
-            "modifiedBy": 1,
-            //"modifiedOn": null
-        }
-
+         }
         $.ajax({
 
             url: "http://192.168.10.109:3000/api/project_type_master",

@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
-import { Col, Form, FormGroup, Label, Input } from 'reactstrap';
 const $ = require('jquery');
-
 class AddKpi extends Component {
-    
+
     constructor(props) {
         debugger;
-        alert();
         super(props);
         this.state = {
             kpiId: props.match.params.kpiId,
@@ -23,13 +20,32 @@ class AddKpi extends Component {
         }
     }
 
-    getDetailsApi() {
+    saveApiDetails() {
+        var _this = this;
+        var Kpidata = {
+            "KpiTitle": this.state.kpiTitle,
+            "target": this.state.target
+        }
+        $.ajax({
+            url: "http://192.168.10.109:3000/api/kpi_master",
+            type: "POST",
+            data: Kpidata,   
+            success: function (resultData) {
+                alert("Save Complete");
+                _this.setState({ redirectToList: true });
+                toast.success("Success Notification !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+        });
+    }
+    getKpiDetailsApi() {
+        const endpoint = `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`;
         return $.ajax({
-            url: `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`,
+            url: endpoint,
             type: "GET",
         })
     }
-
     updateDetailsApi(data) {
         var body =
         {
@@ -40,23 +56,29 @@ class AddKpi extends Component {
         return $.ajax({
             url: `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`,
             type: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest"
+            },
             data: JSON.stringify(body)
         });
     }
-
     UpdateKpiDetails(data) {
         debugger;
-        var res = this.updateDetailsApi(this.state);
+        var res = this.updateDetailsApi(data);
         res.done((response) => {
             debugger;
             this.setState({
-                isUpdate: true
+                redirectToList: true
             })
+            toast.info("Updated!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
         });
         res.fail((error) => {
         })
     }
-    
+
     // var _this = this;
     //     var KpiData =
     //     {
@@ -81,18 +103,18 @@ class AddKpi extends Component {
     //             });
     //         }
     //     });
-        componentDidMount() {
-       // console.log('out',this.state.kpiId);
-       alert('did')
-       debugger
+
+
+    componentDidMount() {
+        debugger;
         if (this.state.kpiId !== undefined) {
-            var res = this.getDetailsApi();
+            var res = this.getKpiDetailsApi();
             res.done((response) => {
                 debugger;
                 this.setState({
                     kpiTitle: response[0].kpiTitle,
                     target: response[0].target,
-                    weightage : response[0].weightage
+                    weightage: response[0].weightage
                 })
             });
             res.fail((error) => {
@@ -100,83 +122,45 @@ class AddKpi extends Component {
         } else {
         }
     }
-   
     render() {
-        {
-            
-            // if (this.state.Redirect) {
-            //     return (
-            //         <Redirect to={{ pathname: "/KPI", state: "" }} />
-            //     )
-            // }
-            return (
-                <div>
-                      {this.state.kpiId!== undefined ? <div>Edit</div> : <div>ADD</div>}
-                    <Form className="addKpi" data-toggle="validator">
-                        <FormGroup row>
-                            <Label for="KpiTitle" sm={2}>KPI title</Label>
-                            <Col sm={10}>
-                                <Input type="text" id="kpiTitle" placeholder="Enter Your KPI title Here"
-                               value={this.state.kpiTitle} onChange={(e) => {
-                                    this.setState({
-                                        kpiTitle: e.currentTarget.value
-                                    })
-                                }}required />
-                        </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="target" sm={2}>Target</Label>
-                            <Col sm={10}>
-                                <Input type="textarea" id="target" placeholder="Enter Your Target Here"
-                                     value={this.state.target} onChange={(e) => {
-                                        this.setState({
-                                            target: e.currentTarget.value
-                                        })
-                                    }}required />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="weight" sm={2}>Weight</Label>
-                            <Col sm={10}>
-                                <Input type="number" id="Weightage" placeholder="Enter Your Weightage Here"
-                                     value={this.state.weightage} onChange={(e) => {
-                                        this.setState({
-                                            weightage: e.currentTarget.value
-                                        })
-                                    }}required />
-                            </Col>
-                        </FormGroup>
-                        <FormGroup row>
-                            <Label for="dropdown" sm={2}>Scale Select</Label>
-                            <Col sm={10}>
-                                <select className="form-control">
-                                    <option value="select">Select Scale</option>
-                                    <option value="select">One</option>
-                                    <option value="select">Two</option>
-                                    <option value="select">Three</option>
-                                </select>
-                            </Col>
-                        </FormGroup>
-                        <FormGroup check row>
-                            <Col sm={{ size: 10, offset: 2 }}>
-                                <Link to={{ pathname: '/KPI' }} onClick={(event) => { this.UpdateKpiDetails(event) }} class="btn btn-success mr-2" role="submit" input ty style={{ textDecoration: "none", float: "center" }}>Save</Link>
-                                <button type="button" id="btnClr" class="btn btn-success" onClick={(event) => { this.clearfields(event) }} style={{ float: "center" }}>Clear</button>
-                            </Col>
-                        </FormGroup >
-                    </Form>
-                        <br />
-                        {/* {this.state.kpiId !== undefined ?
-                            <button onClick={() => {
-                                this.UpdateKpiDetails(this.state);
-                            }}>Save</button>
-                            : <button onClick={() => {
-                                this.UpdateKpiDetails(this.state);
-                            }}>ADD</button>} */}
+        if (this.state.redirectToList == true) {
 
-                </div>
-
-            );
+            return <Redirect to={{ pathname: "/KPI" }} />
         }
+        return (
+            <div>
+                {this.state.kpiId !== undefined ? <div>Edit</div> : <div>ADD</div>}
+                <form id="kpiform" className="col-12">
+                    <div className="form-group">
+                        <label>KPI title</label>
+                        <input className="form-control" value={this.state.KpiTitle}
+                            onChange={(event) => {
+                                this.setState({
+                                    kpiTitle: event.target.value
+                                })
+                            }} />
+                    </div>
+                    <div className="form-group">
+                        <label>Target</label> <textarea className="form-control" rows="4" value={this.state.target}
+                            onChange={(event) => {
+                                this.setState({
+                                    target: event.target.value
+                                })
+                            }} ></textarea>
+                    </div>
+                <br />
+                {this.state.kpiId !== undefined ?
+                    <button type="button" class="btn btn-success mr-2" onClick={() => {
+                        this.UpdateKpiDetails(this.state);
+                    }}>Save</button>
+                    : <button type="button" class="btn btn-success mr-2" onClick={() => {
+                        this.UpdateKpiDetails(this.state);
+                    }}>ADD</button>}
+                <button className="btn btn-info">Clear</button>
+                </form>
+
+            </div>
+        );
     }
 }
 export default AddKpi;

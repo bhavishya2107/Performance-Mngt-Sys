@@ -28,8 +28,7 @@ class Scalesetlist extends Component {
         });
       }
       DeletescalesetApi(scaleSetId) {
-        const endpoint = `http://192.168.10.109:3000/api/scale_set_master/${scaleSetId}`;
-    
+        const endpoint = `http://192.168.10.109:3000/api/scale_set_master/${scaleSetId}`; 
         return $.ajax({
           url: endpoint,
           type: "DELETE",
@@ -39,13 +38,11 @@ class Scalesetlist extends Component {
        }
         });
       }
-   
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
                 url: "http://192.168.10.109:3000/api/scale_set_master/?_size=1000",
-
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -80,11 +77,9 @@ class Scalesetlist extends Component {
                             "</a>" +                           
                             '<a href="#" id="' + row.scaleSetId +'"class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                          "</a>"
-                           
+                          "</a>"                           
                         )
                     }
-           
                 },
             ],
             initComplete: (settings, json) => {
