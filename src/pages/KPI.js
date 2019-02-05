@@ -14,32 +14,31 @@ class KPI extends Component {
             selectedIds: []
         };
     }
-    saveKpiDetails() {
-        alert("hi")
-    }
-    SingleDelete(kpiId) {
-        var res = this.DeleteKpiApi(kpiId);
+    
+    SingleDelete(KpiId) {
+        var res = this.DeleteKpiApi(KpiId);
         res.done(response => {
-            if (response === 200) {
-                alert("Data deleted");
-                window.location.reload("")
-            } this.$el.DataTable().ajax.reload();
+          if (response === 200) {
+            alert("Data deleted");
+            window.location.reload("")
+          }this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
-            alert("error");
+          alert("error");
         });
-    }
-    DeleteKpiApi(KpiId) {
-        const endpoint = `http://192.168.10.109:3000/api/kpi_master/${KpiId}`;
+      }
+      DeleteKpiApi  (KpiId) {
+        const endpoint = `http://192.168.10.109:3000/api/kpi_master/${KpiId}`; 
         return $.ajax({
-            url: endpoint,
-            type: "DELETE",
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest",
-            }
+          url: endpoint,
+          type: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+       }
         });
-    }
+      }
+  
     // DeleteAlbum() {
     //     $("#tblKpi input:checkbox:checked").each((e, item) => {
     //         this.state.selectedIds.push(item.value);
@@ -86,33 +85,31 @@ class KPI extends Component {
                 },
 
                 {
-                    data: "KpiId",
+                    data: "kpiId",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditKpi/kpiid=' + row.KpiId + '"class="mr-3">' +
+                            '<a href="/EditKpi/id=' + row.kpiId + '"class="mr-3">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" kpiid="' + row.KpiId + '"class="btnDelete">' +
+                            '<a href="#" id="' + row.kpiId + '"class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
                     },
-
-                    "orderable": false
+                    orderable: false
                 }
             ],
-
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
                     debugger;
-                    this.SingleDelete(e.currentTarget.kpiId);
+                    this.SingleDelete(e.currentTarget.id);
                 });
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
                     debugger;
-                    this.SingleDelete(e.currentTarget.kpiId);
+                    this.SingleDelete(e.currentTarget.id);
                 });
             }
         });

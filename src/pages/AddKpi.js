@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
@@ -9,27 +8,24 @@ class AddKpi extends Component {
         debugger;
         super(props);
         this.state = {
-            kpiId: props.match.params.kpiId,
-            scalesetId: "",
-            KpiData: "",
+            kpiId: props.match.params.id,
             kpiTitle: "",
             target: "",
             weightage: "",
-            KpiDataDetails: "",
-            isUpdate: false
+            redirectToList: false
         }
     }
-
     saveApiDetails() {
         var _this = this;
         var Kpidata = {
             "KpiTitle": this.state.kpiTitle,
-            "target": this.state.target
+            "target": this.state.target,
+            "scalesetId": 5
         }
         $.ajax({
             url: "http://192.168.10.109:3000/api/kpi_master",
             type: "POST",
-            data: Kpidata,   
+            data: Kpidata,
             success: function (resultData) {
                 alert("Save Complete");
                 _this.setState({ redirectToList: true });
@@ -39,7 +35,7 @@ class AddKpi extends Component {
             }
         });
     }
-    getKpiDetailsApi() {
+    getKpiDetailsApi(KpiId) {
         const endpoint = `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`;
         return $.ajax({
             url: endpoint,
@@ -104,17 +100,15 @@ class AddKpi extends Component {
     //         }
     //     });
 
-
     componentDidMount() {
-        debugger;
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
+            console.log(res);
             res.done((response) => {
                 debugger;
                 this.setState({
                     kpiTitle: response[0].kpiTitle,
-                    target: response[0].target,
-                    weightage: response[0].weightage
+                    target: response[0].target
                 })
             });
             res.fail((error) => {
@@ -128,12 +122,13 @@ class AddKpi extends Component {
             return <Redirect to={{ pathname: "/KPI" }} />
         }
         return (
-            <div>
+            <div className="row">
                 {this.state.kpiId !== undefined ? <div>Edit</div> : <div>ADD</div>}
+
                 <form id="kpiform" className="col-12">
                     <div className="form-group">
                         <label>KPI title</label>
-                        <input className="form-control" value={this.state.KpiTitle}
+                        <input className="form-control" value={this.state.kpiTitle}
                             onChange={(event) => {
                                 this.setState({
                                     kpiTitle: event.target.value
@@ -148,17 +143,16 @@ class AddKpi extends Component {
                                 })
                             }} ></textarea>
                     </div>
-                <br />
-                {this.state.kpiId !== undefined ?
-                    <button type="button" class="btn btn-success mr-2" onClick={() => {
-                        this.UpdateKpiDetails(this.state);
-                    }}>Save</button>
-                    : <button type="button" class="btn btn-success mr-2" onClick={() => {
-                        this.UpdateKpiDetails(this.state);
-                    }}>ADD</button>}
-                <button className="btn btn-info">Clear</button>
+                    <br />
+                    {this.state.kpiId !== undefined ?
+                        <button type="button" class="btn btn-success mr-2" onClick={() => {
+                            this.UpdateKpiDetails(this.state);
+                        }}>Save</button>
+                        : <button type="button" onClick={() => {
+                            this.saveApiDetails(this.state);
+                        }}>ADD</button>}
+                    <button className="btn btn-info">Clear</button>
                 </form>
-
             </div>
         );
     }
