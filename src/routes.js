@@ -5,7 +5,7 @@ const routes = {
     '/kraHome' : 'KRA HOME',
     '/kraListPage' : 'KRA LIST',
     '/userRolePMS' : 'ROLE',
-    '/userRolePMS' : 'USER ROLE',
+    
     '/addscaleset' : 'Add Scale Set',
     '/scaleset': 'Scale Set',
     '/jobtitle':'Job Title',

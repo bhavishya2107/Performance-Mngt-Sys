@@ -26,12 +26,37 @@ class UserManagement extends Component {
     //         //     Data: this.state.Data.filter((i) => i.Name !== this.state.selectedName)
     //     })
     // }
+    SingleDelete(userId) {
+        var res = this.DeleteUserApi(userId);
+        res.done(response => {
+            debugger;
+            if (response.affectedRows > 0) {
+                alert("Data deleted successfully");
+                this.$el.DataTable().ajax.reload(null, false)
+            }
+        });
+        res.fail(error => {
+            alert("Data is not deleted!");
+        });
+    }
+    DeleteUserApi(userId) {
+       return $.ajax({
+            url: "http://192.168.10.109:3000/api/user_master/" + userId,
+            type: "DELETE",
+            dataSrc: "",
+            error: function (xhr, status, error) {
+
+            },
+        });
+    }
+
     componentDidMount() {
 
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/user_master/?_size=1000",
+                url: "http://192.168.10.109:3000/api/user_master/",
                 type: "get",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -44,32 +69,43 @@ class UserManagement extends Component {
                 {
                     data: "firstName",
                     targets: 1,
-                    className: "text-center",
 
                 },
                 {
                     data: "lastName",
                     targets: 2,
-                    className: "text-center"
                 },
                 {
                     data: "emailAddress",
                     targets: 3,
-                    className: "text-center"
-
                 },
                 {
                     data: "userId",
                     targets: 4,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/edit/' + row.userId + '">' + 'Edit' + "</a>" + "/" +
-                            '<a href="/delete/' + row.userId + '">' + 'Delete' + "</a>"
+                            '<a href="/Edit/userId=' + row.userId + '">' + "Edit" + "</a>" + " " +
+                            '<a href="#" id="' + row.userId + '" class="btnDelete">' + "Delete" + '</a>'
+                     
+
                         )
-                    }
+                    },
+                    "orderable": false
                 }
-            ]
-        })
+            ],
+            initComplete: (settings, json) => {
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    this.SingleDelete(e.currentTarget.id);
+                });
+            },
+            "drawCallback": function (settings) {
+                window.smallTable();
+                // $(".btnDelete").on("click", e => {
+                //     this.SingleDelete(e.currentTarget.id);
+                // });
+            }
+        });
     }
     render() {
         return (
@@ -77,16 +113,13 @@ class UserManagement extends Component {
             <div>
                 {
                     this.props.location.state === "2"
-                    //             <div className="alert alert-success" role="alert">
-                    //                 <strong>Well done!</strong> You added successfully .
-                    //   </div>
                 }
                 <div className="text-right mb-3">
                     <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-success mr-2" role="submit">Add User</Link>
 
                 </div>
 
-                <table className="table table-striped table-bordered table-hover"
+                <table className="table table-striped table-bordered table-hover customDataTable"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
@@ -94,11 +127,11 @@ class UserManagement extends Component {
                             <th>firstName</th>
                             <th>lastName</th>
                             <th>emailAddress</th>
-                            <th>Action</th>
+                            <th width="90">Action</th>
                         </tr>
                     </thead>
                 </table>
-                <ToastContainer/>
+                <ToastContainer />
             </div>
         )
     }

@@ -52,7 +52,7 @@ export default {
             name: 'Template List',
             url: '/templateList',
             icon: 'fa fa-plus',
-        }
+        },
 
         // {k
         //     name: 'Add Scale Set',
