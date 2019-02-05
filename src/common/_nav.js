@@ -54,7 +54,7 @@ export default {
             icon: 'fa fa-plus',
         },
 
-        // {k
+        // {
         //     name: 'Add Scale Set',
         //     url: '/scaleset',
         //     icon: 'fsa fa-plus',
@@ -69,11 +69,11 @@ export default {
             url: '/jobtitle',
             icon: 'fa fa-plus',
         },
-        {
-            name: 'Add template',
-            url: '/addtemplate',
-            icon: 'fa fa-plus',
-        },
+        // {
+        //     name: 'Add template',
+        //     url: '/addtemplate',
+        //     icon: 'fa fa-plus',
+        // },
         {
             name: 'Projects',
             url: '/Projects',

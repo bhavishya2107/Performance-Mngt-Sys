@@ -12,7 +12,8 @@ class Addtemplate extends Component {
             selectkra: "",
             selectkpi: "",
             templateDataTable: [],
-            templateName: ""
+            templateName: "",
+            id:""
 
         };
     }
@@ -129,7 +130,9 @@ class Addtemplate extends Component {
         // const{templateData}=this.state;
         return (
             <div>
-                {this.state.id !== undefined ? <div>Edit
+                {/* {this.state.id !== undefined ? <div>edit</div> :
+              <div>Add</div>} */}
+<div>Edit
                 <div className="dropdown">
                         <label className="mr-2">Kra:</label>
                         <select onChange={(e) => { this.onChangekra(e) }} className="btn btn-info dropdown-toggle md mr-3">
@@ -156,25 +159,24 @@ class Addtemplate extends Component {
                         <tbody></tbody>
                     </table>
                     <button onClick={() => this.savetemplateApi()} type="button" className="btn btn-primary">SAVE</button>
-                </div> :
-                    <div>
-                        <h1>Add</h1>
-                        <form id="formtemplate" className="col-6">
-                            <div className="form-group">
-                                <label>Template Name</label>
-                                <input className="form-control" value={this.state.templateName}
-                                    onChange={(event) => {
-                                        this.setState({
-                                            templateName: event.target.value
-                                        })
-                                    }} />
-                            </div>
-                            <button onClick={() => this.savetemplatenameApi()} type="button" className="btn btn-primary">SAVE</button>
+                </div>
+                <div>
+<h1>Add</h1>
+<form id="formtemplate" className="col-6">
+    <div className="form-group">
+        <label>Template Name</label>
+        <input className="form-control" value={this.state.templateName}
+            onChange={(event) => {
+                this.setState({
+                    templateName: event.target.value
+                })
+            }} />
+    </div>
+    <button onClick={() => this.savetemplatenameApi()} type="button" className="btn btn-primary">SAVE</button>
 
-                        </form>
+</form>
 
-                    </div>}
-
+</div>
             </div>
         )
     }
@@ -182,3 +184,5 @@ class Addtemplate extends Component {
 
 }
 export default Addtemplate;
+
+
