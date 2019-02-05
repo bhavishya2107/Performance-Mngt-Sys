@@ -17,16 +17,28 @@ class AddUser extends Component {
             firstName: "",
             lastName: "",
             emailAddress: "",
-            roleId: 7,
+            roleId: 11,
             isUpdate: false,
             selectDept: "",
             selectJobTitle: "",
-            selectRole: ""
-
+            selectRole: "",
+            optionsOfTeamLeader: "",
+            filterRole: [],
+            displayDataReturn:"",
         }
     }
     //clear all the fields
-   
+    clear() {
+        this.setState = {
+
+            userName: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            emailAddress: "",
+
+        }
+    }
 
     //bind the dropdown list
     onChangeDepartment(event) {
@@ -36,6 +48,8 @@ class AddUser extends Component {
         })
     }
     onChangeJob(event) {
+        var filter_By_Role = event.filter(item => { return item.TeamLeader === event.target.value });
+        console.log(filter_By_Role);
         this.setState({
             selectJobTitle: event.target.value
 
@@ -48,7 +62,11 @@ class AddUser extends Component {
         })
     }
 
-
+    onChangeTeamLeader(event) {
+        this.setState({
+            optionsOfTeamLeader: event.target.value
+        })
+    }
     save() {
         debugger;
         var _this = this;
@@ -163,9 +181,7 @@ class AddUser extends Component {
                 this.setState({
                     displayDeptData: displayDataReturn
                 })
-
             },
-
         });
     }
     getJobData() {
@@ -198,14 +214,19 @@ class AddUser extends Component {
             url: url,
 
             success: (tempRole) => {
-
-                console.log(tempRole);
+                // if (this.state.roleName == "TeamLeader"){
+                //     return(
+                    
+                //     )
+                // }
+                    console.log(tempRole);
                 var displayDataReturn = tempRole.map(function (item) {
                     return (
                         <option value={item.roleId}>{item.roleId}</option> ,
                         <option value={item.roleName}>{item.roleName}</option>
                     )
                 });
+
                 this.setState({
                     displayRoleData: displayDataReturn
                 })
@@ -220,6 +241,30 @@ class AddUser extends Component {
         this.getRoleData();
 
     }
+    getTeamLeader() {
+        var url = environment.apiUrl + 'user_master/'
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: (temp) => {
+                console.log(temp);
+                var displayDataReturn = temp.map(function (item) {
+
+                    return (
+
+                        <option value={item.userId}>{item.userId}</option> ,
+                        <option value={item.userName}>{item.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayTeamLeaderData: displayDataReturn
+                })
+
+            },
+
+        });
+    }
+
     render() {
         if (this.state.RedirecttouserManagement) {
 
@@ -228,6 +273,12 @@ class AddUser extends Component {
         if (this.state.isUpdate == true) {
             return <Redirect to={{ pathname: "/UserManagement" }} />
         }
+        if (this.state.displayDataReturn == 15) {
+            var optionsOfTeamLeader = this.state.filterRole.map(function (options) {
+                return <option value={options.TeamLeader}>{options.TeamLeader}</option>
+            });
+        }
+
         return (
             <div>
                 <div>
@@ -265,7 +316,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="col">
                             <FormGroup >
-                                <Label for="UserName" sm={2}>userName</Label>
+                                <Label for="UserName" sm={2}>UserName</Label>
                                 <Input type="text" name="UserName" id="UserName" className="form-control col-sm-5" value={this.state.UserName}
                                     onChange={(event) => {
                                         this.setState({
@@ -276,7 +327,7 @@ class AddUser extends Component {
                         </div>
                         <div className="col">
                             <FormGroup >
-                                <Label for="EmailID" sm={2}>EmailID</Label>
+                                <Label for="EmailID" sm={2}>Email ID</Label>
                                 <Input type="text" name="EmailID" id="EmailID" className="form-control col-sm-5" value={this.state.EmailID}
                                     onChange={(event) => {
                                         this.setState({
@@ -290,7 +341,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="col">
                             <FormGroup >
-                                <Label for="Address" sm={2}>AddresslID</Label>
+                                <Label for="Address" sm={2}>Address</Label>
                                 <Input type="textarea" name="Address" id="Address" className="form-control col-sm-5" value={this.state.Address}
                                     onChange={(event) => {
                                         this.setState({
@@ -314,7 +365,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="col">
                             <FormGroup >
-                                <Label for="MobileNo" >MobileNo</Label>
+                                <Label for="MobileNo" >Mobile No</Label>
                                 <Input type="number" name="MobileNo" id="MobileNo" className="form-control col-sm-5" value={this.state.MobileNo}
                                     onChange={(event) => {
                                         this.setState({
@@ -352,6 +403,15 @@ class AddUser extends Component {
                             </select>
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="dropdown" >
+                            <label className="mr-2">Team Leader:</label>
+                            <select onChange={(e) => { this.onChangeTeamLeader(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                                <option>select</option>
+                                {this.state.displayJobData}
+                            </select>
+                        </div>
+                    </div>
                     {this.state.userId !== undefined ?
                         <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
                             this.UpdateUserDetails(this.state);
@@ -360,7 +420,7 @@ class AddUser extends Component {
                             this.save(this.state);
                         }}>Save</button>}
 
-                        <button type="button" onClick={()=>{this.clear();}}></button>
+                    <button type="button" onClick={() => { this.clear(); }}>Clear</button>
 
                 </Form>
             </div>
