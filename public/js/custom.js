@@ -16,6 +16,16 @@ function navigation() {
     }
 
 }
+
+//...For Form validation
+function formValidation(form) {
+    jQuery.validator.setDefaults({
+      debug: true,
+      success: "valid"
+    });
+    $(form).validate();
+    return $(form).valid();
+  }
 function smallTable(){
     var headertext = [],
     headers = document.querySelectorAll(".customDataTable th"),

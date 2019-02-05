@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -12,6 +13,30 @@ class UserRolePMS extends Component{
 
         };
     }
+    SingleDelete(roleId) {
+        var res = this.DeletescalesetApi(roleId);
+        res.done(response => {
+          if (response === 200) {
+            alert("Data deleted");
+            window.location.reload("")
+          }this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+          alert("error");
+        });
+      }
+      DeletescalesetApi(roleId) {
+        const endpoint = `http://192.168.10.109:3000/api/role_master/${roleId}`;
+    
+        return $.ajax({
+          url: endpoint,
+          type: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+       }
+        });
+      }
     componentDidMount() {
         this.$el = $(this.el);
 
@@ -37,21 +62,36 @@ class UserRolePMS extends Component{
                 },
 
                 {
-                    data: "",
+                    data: "action",
                     targets: 3,
+                    className:"text-right",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/edit/' + row.kraId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/EditForm/id=' + row.roleId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             '&nbsp' +
-                            '<a href="/edit/' + row.firstname + '">' +
+                            '<a href="#" id="' + row.roleId +'"class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-
-                            "</a>"
+                          "</a>"
                         )
                     },
 
                 },
-            ]
+            ],
+            
+            initComplete: (settings, json) => {
+                // alert("DataTables has finished its initialisation.");
+                 $(".btnDelete").on("click", e => {
+                   debugger;
+                   this.SingleDelete(e.currentTarget.id);
+                 });
+               },
+               drawCallback: ( settings ) =>{
+                 $(".btnDelete").on("click", e => {
+                     debugger;
+                     this.SingleDelete(e.currentTarget.id);
+                   });
+             }
+
         });
     }
 
@@ -60,10 +100,10 @@ class UserRolePMS extends Component{
             <div>
                 <h1>ROLE</h1>
                 {
-                    this.props.location.state === "2222" &&
-                    <div className="alert alert-success" role="alert">
-                        <strong>Well done!</strong> You added successfully .
-      </div>
+                    this.props.location.state === "2222"
+    //                 <div className="alert alert-success" role="alert">
+    //                     <strong>Well done!</strong> You added successfully .
+    //   </div>
                 }
             <div className="clearfix text-right mb-2">
                 <Link to={{ pathname: '/userRoleForm', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
@@ -84,6 +124,7 @@ class UserRolePMS extends Component{
 
                     </tr>
                 </thead>
+                <ToastContainer />
             </table>
             </div>
         )

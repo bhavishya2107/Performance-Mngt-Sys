@@ -4,6 +4,7 @@ const routes = {
     '/demo': 'UI Design Control',
     '/kraHome' : 'KRA HOME',
     '/kraListPage' : 'KRA LIST',
+    // '/userRolePMS' : 'ROLE',
     '/userRolePMS' : 'USER ROLE',
     '/addscaleset' : 'Add Scale Set',
     '/scaleset': 'Scale Set',
@@ -12,12 +13,13 @@ const routes = {
     //'/lalji': 'Lalji',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
-    //'/lalji': 'Lalji',
     '/UserManagement':'User Management',
     '/Department':'Department',
+    '/templatelist':'Template List',
     '/addtemplate':'Add Template',
     '/Edit':"Edit",
     '/Projects':'Projects',
+    '/myProfile':'Profile',
   };
   {
   }

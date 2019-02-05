@@ -15,40 +15,27 @@ export default {
             url: '/demo',
             icon: 'fa fa-cogs',
         },
-        // {
-        //     name:'KRA',
-        //     url:'/kraHome',
-        //     icon:'fa fa-plus',
-        // },
+
         {
-            name:'KRA',
-            url:'/kraListPage',
-            icon:'fa fa-plus',
+            name: 'KRA',
+            url: '/kraListPage',
+            icon: 'fa fa-plus',
         },
         {
-            name:'Role',
-            url:'/userRolePMS',
-            icon:'fa fa-plus',
+            name: 'Role',
+            url: '/userRolePMS',
+            icon: 'fa fa-plus',
         },
 
-        // {
-        //     name: 'Lalji',
-        //     url: '/lalji',
-        //     icon: 'fa fa-plus',
-        // },
-        //     name: 'Lalji',
-        //     url: '/lalji',
-        //     icon: 'fa fa-plus',
-        // },
         {
-            name:'UserManagement',
-            url:'/UserManagement',
-            icon:'fa fa-plus'
+            name: 'UserManagement',
+            url: '/UserManagement',
+            icon: 'fa fa-plus'
         },
         {
-            name:"Department",
-            url:'/Department',
-            icon:'fa fa-plus'
+            name: "Department",
+            url: '/Department',
+            icon: 'fa fa-plus'
         },
 
         {
@@ -61,7 +48,13 @@ export default {
             url: '/ProjectComplexity',
             icon: 'fa fa-plus',
         },
-        // {k
+        {
+            name: 'Template List',
+            url: '/templateList',
+            icon: 'fa fa-plus',
+        },
+
+        // {
         //     name: 'Add Scale Set',
         //     url: '/scaleset',
         //     icon: 'fsa fa-plus',
@@ -76,14 +69,19 @@ export default {
             url: '/jobtitle',
             icon: 'fa fa-plus',
         },
+        // {
+        //     name: 'Add template',
+        //     url: '/addtemplate',
+        //     icon: 'fa fa-plus',
+        // },
         {
-            name: 'Add template',
-            url: '/addtemplate',
+            name: 'Projects',
+            url: '/Projects',
             icon: 'fa fa-plus',
         },
         {
-            name:'Projects',
-            url:'/Projects',
+            name: 'My Profile',
+            url: '/myProfile',
             icon: 'fa fa-plus',
         }
     ]

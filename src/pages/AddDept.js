@@ -3,20 +3,21 @@ import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
 import { Redirect } from 'react-router-dom'
+import { environment } from './Environment'
 
 class AddDept extends Component {
     constructor(props) {
         super(props);
+
+        console.log(props.match.params, 'ppp')
         this.state = {
             RedirectToDept: false,
-            depId: 1,
+            depId: props.match.params.depId,
+            // depId:
             depName: "",
             description: "",
-            // createdBy: 2,
-            // createdOn: "null",
-            // modifiedBy: 2,
-            // modifiedOn: "null"
-        }
+            isUpdate: false,
+             }
     }
     // clear(){
     //     this.setState={
@@ -25,7 +26,8 @@ class AddDept extends Component {
     //     }
     // }
 
-
+    
+   
     save() {
 
         var _this = this
@@ -34,13 +36,10 @@ class AddDept extends Component {
 
             "depName": this.state.depName,
             "description": this.state.description,
-            // "createdBy": 2,
-            // "createdOn": 1,
-            // "modifiedBy": 2,
-            // "modifiedOn": 1
         }
+        var url = environment.apiUrl + 'department_master';
         $.ajax({
-            url: "http://192.168.10.109:3000/api/department_master",
+            url: url,
             type: "POST",
             data: deptList,
             success: function (result) {
@@ -49,23 +48,94 @@ class AddDept extends Component {
                 toast.success("Success  Notification !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
-
-
             }
-
         });
-
-
     }
 
+    //Edit the details
+    getDepApi() {
+        console.log('dep', this.state.depId)
+        var url = environment.apiUrl + 'department_master/' + `${this.state.depId}`
+        return $.ajax({
+            url: url,
+            type: "GET",
+
+        })
+    }
+    updateDetailsApi(data) {
+        var _this = this;
+        var deptList =
+        {
+            "depName": data.depName,
+            "description": data.description
+        }
+        return $.ajax({
+            url: `http://192.168.10.109:3000/api/department_master/${data.depId}`,
+            type: "PATCH",
+
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: JSON.stringify(deptList),
+
+        });
+    }
+
+    UpdateDeptDetails(data) {
+        var res = this.updateDetailsApi(data);
+        res.done((response) => {
+            console.log('sucesss')
+            this.setState({
+                isUpdate: true
+            })
+
+        });
+        res.fail((error) => {
+
+            console.log('error', error);
+        })
+    }
+    componentDidMount() {
+        // console.log('out', this.state.depId);
+        // this.state.depId = 27
+
+        if (this.state.depId !== undefined) {
+            var res = this.getDepApi();
+            res.done((response) => {
+                console.log(response, 'res');
+                var res = response[0];
+
+                this.setState({
+                    depName: res.depName,
+                    description: res.description
+                })
+            });
+            res.fail((error) => {
+
+            })
+        } else {
+
+        }
+
+    }
     render() {
         if (this.state.RedirectToDept) {
 
             return <Redirect to={{ pathname: "/Department", state: "2" }} />
         }
+        if (this.state.isUpdate == true) {
+            return <Redirect to="/Department" />
+        }
 
         return (
             <div>
+                <div>
+                    {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
+
+                </div>
                 <Form>
                     <div>
 
@@ -89,9 +159,16 @@ class AddDept extends Component {
                                 }} />
                         </FormGroup>
                     </div>
+                    {this.state.depId !== undefined ?
+                        <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                            this.UpdateDeptDetails(this.state);
+                        }}>Edit</button>
+                        : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                            this.save(this.state);
+                        }}>Save</button>}
 
 
-                    <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => { this.save(); }}>Save</button>
+                    {/* <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => { this.UpdateDepDetails(); }}>Save</button> */}
                     <button className="btn btn-sm btn-success mr-2">Clear</button>
                 </Form>
 
