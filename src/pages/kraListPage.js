@@ -4,17 +4,20 @@ import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
-class UserRolePMS extends Component{
-    constructor(props){
+class kraListPage extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            
-           submitEntryFromRole:"",
+            id: props.match.params.id,
+            kraId:"",
 
         };
+
+
     }
-    SingleDelete(roleId) {
-        var res = this.DeletescalesetApi(roleId);
+    //delete record on click delete icon
+    SingleDelete(kraId) {
+        var res = this.DeletescalesetApi(kraId);
         res.done(response => {
           if (response === 200) {
             alert("Data deleted");
@@ -25,8 +28,8 @@ class UserRolePMS extends Component{
           alert("error");
         });
       }
-      DeletescalesetApi(roleId) {
-        const endpoint = `http://192.168.10.109:3000/api/role_master/${roleId}`;
+      DeletescalesetApi(kraId) {
+        const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
     
         return $.ajax({
           url: endpoint,
@@ -37,12 +40,16 @@ class UserRolePMS extends Component{
        }
         });
       }
+
+
+
     componentDidMount() {
+    
         this.$el = $(this.el);
 
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                url: "http://192.168.10.109:3000/api/kra_master/?_size=1000",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -52,64 +59,70 @@ class UserRolePMS extends Component{
             },
             columns: [
                 {
-                    data: "roleId",
+                    data: "kraId",
                     targets: 0
 
                 },
                 {
-                    data: "roleName",
+                    data: "kraName",
                     targets: 1
                 },
+                {
+                    data: "description",
+                    targets: 2
+                },
 
                 {
-                    data: "action",
+                    data: "",
                     targets: 3,
-                    className:"text-right",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditForm/id=' + row.roleId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/Edit/id=' + row.kraId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             '&nbsp' +
-                            '<a href="#" id="' + row.roleId +'"class="btnDelete">' +
+                            '<a href="#" id="' + row.kraId + '" class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                          "</a>"
-                        )
-                    },
+                            "</a>"
+                        );
+                    }
 
-                },
+                }
             ],
-            
             initComplete: (settings, json) => {
                 // alert("DataTables has finished its initialisation.");
-                 $(".btnDelete").on("click", e => {
-                   debugger;
-                   this.SingleDelete(e.currentTarget.id);
-                 });
-               },
-               drawCallback: ( settings ) =>{
-                 $(".btnDelete").on("click", e => {
-                     debugger;
-                     this.SingleDelete(e.currentTarget.id);
-                   });
-             }
-
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    alert();
+                    this.SingleDelete(e.currentTarget.id);
+                    
+                });
+            },
+            drawCallback:( settings )=> {
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    alert();
+                    this.SingleDelete(e.currentTarget.id);
+                    
+                });
+            }
         });
     }
+    render() {
+        return (<div>
+            <h1>KRA</h1>
 
-    render(){
-        return(
-            <div>
-                <h1>ROLE</h1>
-                {
-                    this.props.location.state === "2222"
-    //                 <div className="alert alert-success" role="alert">
-    //                     <strong>Well done!</strong> You added successfully .
-    //   </div>
-                }
+
+            {
+                this.props.location.state === "2222"
+
+                //                 <div className="alert alert-success" role="alert">
+                //                     <strong>Well done!</strong> You added successfully .
+                //   </div>
+            }
             <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/userRoleForm', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
+                <Link to={{ pathname: '/kraHome', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
             </div>
-         
-     
+
+
 
 
             <table className="table table-striped table-bordered table-hover"
@@ -119,6 +132,7 @@ class UserRolePMS extends Component{
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>Description</th>
                         <th>Action</th>
 
 
@@ -126,10 +140,8 @@ class UserRolePMS extends Component{
                 </thead>
                 <ToastContainer />
             </table>
-            </div>
-        )
+        </div>);
     }
-
-
 }
-export default UserRolePMS;
+
+export default kraListPage;

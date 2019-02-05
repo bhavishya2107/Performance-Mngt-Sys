@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import $ from 'jquery';
+import bootbox from 'bootbox';
+
+const baseURL = 'http://192.168.10.109:3000/api/department_master/';
 
 //import logo from './logo.svg';
 //import './app.css';
@@ -27,9 +31,263 @@ class demo extends Component {
         });
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            RedirectToDept: false,
+            depId: 0,
+            depName: "",
+            description: "",
+            isAdd: false
+            // createdBy: 2,
+            // createdOn: "null",
+            // modifiedBy: 2,
+            // modifiedOn: "null"
+        }
+    }
+    replaceModelItem(id) {
+        this.setState({
+            isAdd: false,
+        
+        })
+        $.ajax({
+            url: baseURL + id,
+            type: "get",
+            success: (resultData) => {
+                this.setState({
+                    depId: resultData[0].depId,
+                    depName: resultData[0].depName,
+                    description: resultData[0].description
+                })
+            },
+            error: function (error) {
+                debugger
+            },
+        });
+
+    }
+    editData(data) {
+        var deptList =
+        {
+            "depId": data.depId,
+            "depName": data.depName,
+            "description": data.description,
+        }
+        $.ajax({
+            url: baseURL + data.depId,
+            type: "post",
+            data: JSON.stringify(deptList),
+            success: (data) => {
+                toast.success("Data Update Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                $('.modal').modal('hide')
+                this.$el.DataTable().ajax.reload()
+            },
+            error: function (error) {
+                console.log(error)
+                toast.error("Error !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+
+            },
+        });
+    }
+    deleteData(Id) {
+        $.ajax({
+            url: baseURL + Id,
+            type: "DELETE",
+            success: (data) => {
+                toast.info("Data Delete Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload()
+            },
+            error: function (error) {
+                console.log(error)
+                toast.error("Error !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+
+            },
+        });
+    }
+
+    addData(data) {
+        var deptList =
+        {
+            "depName": data.depName,
+            "description": data.description,
+        }
+        $.ajax({
+            url: baseURL,
+            type: "POST",
+            data: deptList,
+            success: (result) => {
+                $('.modal').modal('hide')
+                toast.success("Data Add Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload()
+            }
+
+        });
+
+
+
+    }
+    componentDidMount() {
+
+        $(document).on("click", ".confirmDelete", (e) => {
+            var id = e.currentTarget.id;
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.deleteData(id);
+                    }
+                    else {
+
+                    }
+                }
+            });
+        });
+
+        this.$el = $(this.el);
+        this.$el.DataTable({
+            "autoWidth": false,
+            aaSorting: [[1, 'asc']],
+            ajax: {
+                url: baseURL,
+                type: "get",
+                dataSrc: "",
+                error: function (xhr, status, error) {
+
+                },
+
+            },
+            columns: [
+                {
+                    data: "",
+                    "orderable": false, "targets": 0,
+                    render: (data, type, row) => {
+                        return (
+                            '<input type="checkbox" id="' + row.depId + '" />'
+                        )
+                    },
+                },
+                {
+                    data: "depName",
+                    targets: 1,
+                },
+
+                {
+                    data: "description",
+                    targets: 2,
+                },
+                {
+                    data: "depId",
+                    "orderable": false,
+                    targets: 3,
+                    render: (data, type, row) => {
+                        return (
+                            '<button data-toggle="modal" class="btn mr-2 btn-edit btn-info btn-sm" data-target="#editModal" id="' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</button>" +
+                            '<a class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);" id="' + row.depId + '">' + '<i class="fa fa-trash" aria-hidden="true"></i>' + "</a>"
+                        )
+
+                    },
+                }
+            ],
+            // "infoCallback": ( settings, json ) =>{
+            //     $('.btn-edit').on('click', (e) => {
+            //         this.replaceModelItem(e.currentTarget.id);
+            //     })
+            //   },
+            "initComplete": (settings, json) => {
+                $('.btn-edit').on('click', (e) => {
+                    this.replaceModelItem(e.currentTarget.id);
+                })
+            },
+
+        })
+
+    }
     render() {
         return (
             <div className="clearfix">
+                <div className="text-right mb-2">
+                    <a href="#editModal" data-toggle="modal" onClick={() => {
+                        this.setState({
+                            isAdd: true,
+                            depName: "",
+                            description: "",
+                        })
+                    }} className="btn btn-primary btn-sm">Add</a>
+                </div>
+                <div className="row mb-3">
+                    <div className="col-md-12">
+
+                        <table className="table table-striped table-bordered table-hover"
+                            ref={el => (this.el = el)}>
+                            <thead>
+                                <tr>
+                                    <th width="25"><input type="checkbox" id="deleteAll" /></th>
+                                    <th>Department Name</th>
+                                    <th>description</th>
+                                    <th width="90">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="editModal" className="modal" role="dialog">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    {this.state.isAdd ? <h5 className="modal-title">Add model</h5> : <h5 className="modal-title">Edit modal</h5>}
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="form-group">
+                                        <label>Department Name</label>
+                                        <input className="form-control" type="text" value={this.state.depName} onChange={(e) => {
+                                            this.setState({
+                                                depName: e.currentTarget.value
+                                            })
+                                        }} />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Description</label>
+                                        <textarea className="form-control" cols="3" value={this.state.description} onChange={(e) => {
+                                            this.setState({
+                                                description: e.currentTarget.value
+                                            })
+                                        }}></textarea>
+                                    </div>
+                                </div>
+                                <div className="modal-footer">
+                                    {this.state.isAdd ? <button type="button" className="btn btn-primary" onClick={() => { this.addData(this.state) }}>Save changes</button> :
+                                        <button type="button" className="btn btn-primary" onClick={() => { this.editData(this.state) }}>Edit changes</button>}
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="row mb-3">
                     <div className="col-md-3">
                         <h3>Form Group</h3>
@@ -95,26 +353,7 @@ class demo extends Component {
                     </div>
                     <div className="col-md-4">
                         <h3>Modal</h3>
-                        <a href="#basicModal" data-toggle="modal" className="btn btn-primary btn-sm">Modal</a>
-                        <div id="basicModal" className="modal" role="dialog">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Modal title</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p>Modal body text goes here.</p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-primary">Save changes</button>
-                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="#editModal" data-toggle="modal" className="btn btn-primary btn-sm">Modal</a>
                     </div>
                 </div>
                 <div className="d-flex justify-content-center">
@@ -158,7 +397,7 @@ class demo extends Component {
                     <div className="col">1</div>
                     <div className="col">2</div>
                     <div className="col">
-                        <a href="javascript:void(0);" className="btn btn-danger confirm">confirm</a>
+                        <button className="btn btn-danger confirm">confirm</button>
                         <button onClick={this.success} className="btn btn-success ml-2">Success</button>
                         <button onClick={this.error} className="btn btn-danger ml-2">Error</button>
                         <button onClick={this.warn} className="btn btn-warning ml-2">Warning</button>
