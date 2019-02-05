@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import {environment} from './Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -21,8 +22,9 @@ class Jobtitlelist extends Component {
           alert("error");
         });
       }
-      DeletescalesetApi(jobtitleId) {
-        const endpoint = `http://192.168.10.109:3000/api/jobtitle_master/${jobtitleId}`;
+      DeletejobtitleApi(jobtitleId) {
+        
+        const endpoint = environment.apiUrl + 'jobtitle_master/' + `${jobtitleId}`
     
         return $.ajax({
           url: endpoint,
