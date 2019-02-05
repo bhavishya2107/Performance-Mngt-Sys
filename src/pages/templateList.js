@@ -66,7 +66,7 @@ class kraListPage extends Component {
     }
     render() {
         return (<div>
-            <h1>KRA</h1>
+          
               
      
                {/* {
@@ -91,9 +91,7 @@ class kraListPage extends Component {
                         <th>ID</th>
                         <th>Name</th>
                         <th>Action</th>
-
-
-                    </tr>
+                         </tr>
                 </thead>
                 <tbody></tbody>
       

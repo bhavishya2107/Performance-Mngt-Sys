@@ -16,71 +16,123 @@ class MyProfile extends Component {
                         </div>
                         <div className="col-md-9 order-md-first">
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
+                                        <label className="" for="userFirstName">First Name</label>
                                         <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
+                                            <input id="userFirstName" type="text" className="form-control "
+                                                value="Bhavishya"
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
+                                        <label className="" for="userLastName">Last Name</label>
                                         <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
+                                            <input id="userLastName" type="text" className="form-control "
+                                                value="Negi"
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
-                                    <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
-                                        <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                 
                             </div>
 
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
+                                        <label className="" for="userName">User Name</label>
                                         <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
+                                            <input id="userName" type="text" className="form-control "
+                                                value="trainee32"
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
+                                        <label className="" for="userEmail">Email</label>
                                         <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
+                                            <input id="userEmail" type="email" className="form-control"
+                                                value="email@email.com"
+                                            required/>
+                                        </div>
+                                    </div>
+                                </div>
+                      
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" for="userAddress">Address</label>
+                                        <div>
+                                            <input id="userAddress" type="text" className="form-control "
+                                                value="Address"
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="kraName">Name</label>
+                                        <label className="" for="userImage">Image</label>
                                         <div>
-                                            <input id="kraName" type="text" className="form-control px-5 "
-                                                value=""
+                                            <input id="userLastName" type="text" className="form-control "
+                                                value="Image"
                                             />
                                         </div>
                                     </div>
                                 </div>
+                 
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" for="userFirstName">Mobile No.</label>
+                                        <div>
+                                            <input id="userFirstName" type="text" className="form-control "
+                                                value="number"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" for="userLastName">Department</label>
+                                        <div>
+                                            <input id="userLastName" type="text" className="form-control "
+                                                value="Department"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                 
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" for="userFirstName">Job Title</label>
+                                        <div>
+                                            <input id="userFirstName" type="text" className="form-control "
+                                                value="jobtitle"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" for="userLastName">Team Leader</label>
+                                        <div>
+                                            <input id="userLastName" type="text" className="form-control "
+                                                value="Team leader"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                 
                             </div>
                         </div>
+
                         
                     </div>
                 </form >
