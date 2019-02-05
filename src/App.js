@@ -105,36 +105,21 @@ class App extends Component {
                           component={AddProjectComplexity}
                         />
                         <Route
-                          path="/UserManagement"
-                          component={UserManagement}
-                        />
-                        <Route
                           path="/demo"
                           component={Demo}
                         />
 
-                        <Route
-                          path="/AddUser"
-                          component={AddUser}
-                        />
-                        <Route
-                          path="/Department"
-                          component={Department}
-                        />
-                        <Route
-                          path="/AddDept"
-                          component={AddDept}
-                        />
+                        
                         <Route path="/UserManagement" component={UserManagement} />
                         <Route path="/AddUser" component={AddUser} />
                         <Route path="/Edit/userId=:userId" component={AddUser} />
-                        
                         <Route path="/Department" component={Department} />
-                       
                         <Route path="/Edit/depId=:depId" component={AddDept} />
                         <Route path="/AddDept" component={AddDept} />
                         <Route path="/Projects" component={Projects} />
                         <Route path="/AddProject" component={AddProject} />
+                        
+                        
                         <Route path="/innerpage" component={innerpage} />
                         <Route path="/kraHome" component={kraHome}></Route>
                         <Route path="/kraListPage" component={kraListPage}></Route>

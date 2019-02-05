@@ -16,8 +16,8 @@ class AddDept extends Component {
             // depId:
             depName: "",
             description: "",
-            isUpdate: false
-        }
+            isUpdate: false,
+             }
     }
     // clear(){
     //     this.setState={
@@ -26,7 +26,8 @@ class AddDept extends Component {
     //     }
     // }
 
-
+    
+   
     save() {
 
         var _this = this

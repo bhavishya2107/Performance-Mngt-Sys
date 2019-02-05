@@ -39,7 +39,7 @@ class kraHome extends Component {
             success: function (resultData) {
                
                 _this.setState({ RedirectToSample: true });
-                toast.success("Saved Successfully!", {
+                toast.success("Added Record Successfully!", {
                     position: toast.POSITION.TOP_RIGHT
                 })
             },
