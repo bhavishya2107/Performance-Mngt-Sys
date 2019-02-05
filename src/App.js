@@ -33,7 +33,8 @@ import Scaleset from './pages/addscaleset';
 import Scalesetlist from './pages/scaleset';
 import Jobtitlelist from './pages/jobtitle';
 import Jobtitle from './pages/addjobtitle';
-import Addtemplate from './pages/addtemplate'
+import Addtemplate from './pages/addtemplate';
+import MyProfile from './pages/myProfile';
 class App extends Component {
 
   render() {
@@ -146,6 +147,8 @@ class App extends Component {
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/Edit/id=:id" component={Scaleset} />
                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
+                        <Route exact path="/myProfile" component={MyProfile} />
+
                       </Switch>
                     </div>
                   </div>
