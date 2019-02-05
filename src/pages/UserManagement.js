@@ -13,19 +13,11 @@ class UserManagement extends Component {
         this.setState = {
             firstName: "",
             lastName: "",
-            emailAddress: ""
+            emailAddress: "",
+           
         }
     }
-    // remove() {
-    //     console.log("remove")
-    //     this.setState({
-    //         Data: this.state.Data.slice(0, -1)
-    //         // console.log(this.state.selected)
-
-    //         // this.setState({
-    //         //     Data: this.state.Data.filter((i) => i.Name !== this.state.selectedName)
-    //     })
-    // }
+   //Delete single element
     SingleDelete(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
@@ -40,7 +32,7 @@ class UserManagement extends Component {
         });
     }
     DeleteUserApi(userId) {
-       return $.ajax({
+        return $.ajax({
             url: "http://192.168.10.109:3000/api/user_master/" + userId,
             type: "DELETE",
             dataSrc: "",
@@ -86,27 +78,28 @@ class UserManagement extends Component {
                         return (
                             '<a href="/Edit/userId=' + row.userId + '">' + "Edit" + "</a>" + " " +
                             '<a href="#" id="' + row.userId + '" class="btnDelete">' + "Delete" + '</a>'
-                     
-
                         )
                     },
                     "orderable": false
                 }
             ],
             initComplete: (settings, json) => {
+                
                 $(".btnDelete").on("click", e => {
-                    debugger;
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
-            "drawCallback": function (settings) {
+
+            "drawCallback":  (settings) =>  {
                 window.smallTable();
-                // $(".btnDelete").on("click", e => {
-                //     this.SingleDelete(e.currentTarget.id);
-                // });
+                $(".btnDelete").on("click", e => {                 
+                    this.SingleDelete(e.currentTarget.id);
+                });
             }
         });
     }
+
+    //bind the dropdown list
     render() {
         return (
             //to add the data to the table 
@@ -124,9 +117,9 @@ class UserManagement extends Component {
                     <thead>
                         <tr>
 
-                            <th>firstName</th>
-                            <th>lastName</th>
-                            <th>emailAddress</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email Address</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>

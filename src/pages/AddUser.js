@@ -17,23 +17,49 @@ class AddUser extends Component {
             firstName: "",
             lastName: "",
             emailAddress: "",
-            roleId:6,
-            isUpdate: false
+            roleId: 7,
+            isUpdate: false,
+            selectDept: "",
+            selectJobTitle: "",
+            selectRole: ""
+
         }
+    }
+    //clear all the fields
+   
 
+    //bind the dropdown list
+    onChangeDepartment(event) {
+        this.setState({
+            selectDept: event.target.value
 
+        })
+    }
+    onChangeJob(event) {
+        this.setState({
+            selectJobTitle: event.target.value
+
+        })
+    }
+    onChangeRole(event) {
+        this.setState({
+            selectRole: event.target.value
+
+        })
     }
 
+
     save() {
+        debugger;
         var _this = this;
         var DataList =
         {
-            "userName":this.state.userName,
-            "password":this.state.password,
+            "userName": this.state.userName,
+            "password": this.state.password,
             "firstName": this.state.firstName,
             "lastName": this.state.lastName,
             "emailAddress": this.state.emailAddress,
-            "roleId":this.state.roleId
+            "roleId": this.state.roleId
         }
         var url = environment.apiUrl + 'user_master';
         $.ajax({
@@ -45,32 +71,10 @@ class AddUser extends Component {
                 toast.success("Save Successfully !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
-
             }
         });
     }
-
-    //bind the droplist
-    // componentWillMount() {
-    //     var self = this
-    //     var url = environment.apiUrl + 'user_master';
-
-    //     $.ajax = (
-    //         {
-    //             url: url,
-    //             type: "GET",
-    //             data: "DataList",
-    //             success: function (response) {
-    //                 console.log(response)
-    //                 // self.setState({ firstName: response })
-    //                 {
-
-    //                 }
-    //             }
-    //         })
-    // }
-
-    // //Edit the user details
+    //Edit the user details
     getUserApi() {
         console.log('user', this.state.userId)
         var url = environment.apiUrl + 'user_master/' + `${this.state.userId}`
@@ -86,7 +90,7 @@ class AddUser extends Component {
         {
             "firstName": data.firstName,
             "lastName": data.lastName,
-            "emailAddress":data.emailAddress
+            "emailAddress": data.emailAddress
         }
         var url = environment.apiUrl + 'user_master/' + `${data.userId}`
         return $.ajax({
@@ -100,12 +104,11 @@ class AddUser extends Component {
                 "Access-Control-Allow-Origin": "*"
             },
             data: JSON.stringify(userList),
-
         });
     }
 
     UpdateUserDetails(data) {
-        console.log(data,'data')
+        console.log(data, 'data')
         var res = this.updateDetailsApi(data);
         res.done((response) => {
             console.log('sucesss')
@@ -120,7 +123,7 @@ class AddUser extends Component {
         })
     }
     componentDidMount() {
-        
+
 
         if (this.state.userId !== undefined) {
             var res = this.getUserApi();
@@ -131,7 +134,8 @@ class AddUser extends Component {
                 this.setState({
                     firstName: res.firstName,
                     lastName: res.lastName,
-                    emailAddress:res.emailAddress
+                    emailAddress: res.emailAddress,
+                    roleId: res.roleId
                 })
             });
             res.fail((error) => {
@@ -142,7 +146,80 @@ class AddUser extends Component {
         }
 
     }
+    //get dept,job,role records through api
+    getDeptData() {
+        var url = environment.apiUrl + 'department_master/'
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: (temp) => {
+                console.log(temp);
+                var displayDataReturn = temp.map(function (item) {
+                    return (
+                        <option value={item.depId}>{item.depId}</option> ,
+                        <option value={item.depName}>{item.depName}</option>
+                    )
+                });
+                this.setState({
+                    displayDeptData: displayDataReturn
+                })
 
+            },
+
+        });
+    }
+    getJobData() {
+        var url = environment.apiUrl + 'jobtitle_master/'
+        $.ajax({
+            type: 'GET',
+            url: url,
+
+            success: (tempJob) => {
+                debugger
+                console.log(tempJob);
+                var displayDataReturn = tempJob.map(function (i) {
+                    return (
+                        <option value={i.jobtitleId}>{i.jobtitleId}</option> ,
+                        <option value={i.jobtitleName}>{i.jobtitleName}</option>
+                    )
+                });
+                this.setState({
+                    displayJobData: displayDataReturn
+                })
+
+            },
+
+        });
+    }
+    getRoleData() {
+        var url = environment.apiUrl + 'role_master/'
+        $.ajax({
+            type: 'GET',
+            url: url,
+
+            success: (tempRole) => {
+
+                console.log(tempRole);
+                var displayDataReturn = tempRole.map(function (item) {
+                    return (
+                        <option value={item.roleId}>{item.roleId}</option> ,
+                        <option value={item.roleName}>{item.roleName}</option>
+                    )
+                });
+                this.setState({
+                    displayRoleData: displayDataReturn
+                })
+
+            },
+
+        });
+    }
+    componentWillMount() {
+        this.getDeptData();
+        this.getJobData();
+        this.getRoleData();
+
+    }
     render() {
         if (this.state.RedirecttouserManagement) {
 
@@ -184,6 +261,7 @@ class AddUser extends Component {
                             </FormGroup>
                         </div>
                     </div>
+
                     <div className="row">
                         <div className="col">
                             <FormGroup >
@@ -208,6 +286,7 @@ class AddUser extends Component {
                             </FormGroup>
                         </div>
                     </div>
+
                     <div className="row">
                         <div className="col">
                             <FormGroup >
@@ -244,30 +323,33 @@ class AddUser extends Component {
                                     }} />
                             </FormGroup>
                         </div>
-                        <div className="col">
-                            <FormGroup >
-                                <Label for="Department" >Department</Label>
-                                <select onChange={(e) => { this.onChangeDepartment(e) }}>
-
-                                </select>
-                            </FormGroup>
+                        <div className="dropdown" >
+                            <label className="mr-2">Department:</label>
+                            <select onChange={(e) => { this.onChangeDepartment(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                                <option>select</option>
+                                {this.state.displayDeptData}
+                            </select>
                         </div>
                     </div>
+
                     <div className="row">
-                        <div className="col">
-                            <FormGroup >
-                                <Label for="jobTitle" >Job Title</Label>
-                                <select>
-                                    {}
-                                </select>
-                            </FormGroup>
+                        <div className="dropdown" >
+                            <label className="mr-2">Job Title:</label>
+                            <select onChange={(e) => { this.onChangeJob(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                                <option>select</option>
+                                {this.state.displayJobData}
+                            </select>
                         </div>
-                        <div className="col">
-                            <FormGroup >
-                                <Label for="TeamLeader" >Team Leader</Label>
-                                <select Dept="dropdown" onClick={(event) => { this.addDept(); }} >
-                                    /></select>
-                            </FormGroup>
+
+                    </div>
+
+                    <div className="row">
+                        <div className="dropdown" >
+                            <label className="mr-2">Role:</label>
+                            <select onChange={(e) => { this.onChangeRole(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                                <option>select</option>
+                                {this.state.displayRoleData}
+                            </select>
                         </div>
                     </div>
                     {this.state.userId !== undefined ?
@@ -278,14 +360,10 @@ class AddUser extends Component {
                             this.save(this.state);
                         }}>Save</button>}
 
-
-
-
+                        <button type="button" onClick={()=>{this.clear();}}></button>
 
                 </Form>
             </div>
-
-
         )
     }
 }
