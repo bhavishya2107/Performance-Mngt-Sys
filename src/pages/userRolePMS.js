@@ -17,9 +17,12 @@ class UserRolePMS extends Component{
         var res = this.DeletescalesetApi(roleId);
         res.done(response => {
           if (response === 200) {
-            alert("Data deleted");
+        
             window.location.reload("")
           }this.$el.DataTable().ajax.reload();
+        });
+        toast.error("Record Deleted", {
+            position: toast.POSITION.TOP_RIGHT
         });
         res.fail(error => {
           alert("error");

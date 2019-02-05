@@ -134,12 +134,12 @@ class UserRoleForm extends Component {
 
                         {/* <button type="button" className="btn btn-success btn-sm" onClick={() => this.submitDataFromRoleform()}>Save</button>&nbsp; */}
                         {this.state.id !== undefined ?
-                            <button type="button" onClick={() => {
+                            <button className="btn btn-success btn-sm" type="button" onClick={() => {
                                 this.UpdateRoleDetails(this.state);
                             }}>Save</button>
-                            : <button type="button" onClick={() => {
+                            : <button className="btn btn-success btn-sm" type="button" onClick={() => {
                                 this.submitDataFromRoleform(this.state);
-                            }}>ADD</button>}
+                            }}>ADD</button>}&nbsp;
                 <button className="btn btn-success btn-sm">Clear</button>
                         <br />
                       

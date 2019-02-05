@@ -19,7 +19,7 @@ class Header extends Component {
                 <img src={user} className="rounded-circle" /> Lalji Tadhani
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="/myProfile">Profile</a>
                 <a class="dropdown-item" href="/">LogOut</a>
               </div>
             </li>

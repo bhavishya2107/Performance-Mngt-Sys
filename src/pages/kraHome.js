@@ -142,7 +142,7 @@ class kraHome extends Component {
                 <div className="form-group row">
                 <label className="col-sm-2 col-form-label" for="kraName">Name</label>
                 <div className="col-sm-10">
-                    <input id="kraName" type="text" className="form-control px-5 "
+                    <input id="kraName" type="text" className="form-control"
                         value={this.state.kraName}
                         onChange={(event) => {
                             this.setState(
@@ -169,10 +169,10 @@ class kraHome extends Component {
                     </div>
                     {/* <button type="button" className="btn btn-success btn-sm" onClick={() =>  this.submitDataFromKra() }>Save</button>&nbsp; */}
                     {this.state.id !== undefined ?
-          <button type="button" onClick={() => {
+          <button className="btn btn-success btn-sm" type="button" onClick={() => {
             this.UpdateKraDetails(this.state);
           }}>Save</button>
-          : <button type="button" onClick={() => {
+          : <button className="btn btn-success btn-sm" type="button" onClick={() => {
             this.submitDataFromKra(this.state);
           }}>ADD</button>}&nbsp;
                 <button className="btn btn-success btn-sm">Clear</button>
