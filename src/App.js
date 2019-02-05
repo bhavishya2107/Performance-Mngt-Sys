@@ -28,13 +28,14 @@ import KPI from './pages/KPI';
 import ProjectComplexity from './pages/ProjectComplexity';
 import AddProjectComplexity from './pages/AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
-import TemplateList from './pages/templateList';
+import Templatelist from './pages/templateList';
 import Scaleset from './pages/addscaleset';
 import Scalesetlist from './pages/scaleset';
 import Jobtitlelist from './pages/jobtitle';
 import Jobtitle from './pages/addjobtitle';
 import Addtemplate from './pages/addtemplate';
 import MyProfile from './pages/myProfile';
+
 class App extends Component {
 
   render() {
@@ -139,7 +140,7 @@ class App extends Component {
                         <Route path="/kraListPage" component={kraListPage}></Route>
                         <Route path="/userRolePMS" component={UserRolePMS}></Route>
                         <Route path="/userRoleForm" component={UserRoleForm}></Route>
-                        <Route path="/templateList" component={TemplateList}></Route>
+                        <Route path="/templateList" component={Templatelist}></Route>
                         <Route path="/Edit/id=:id" component={kraHome}></Route>
                         <Route path="/EditForm/id=:id" component={UserRoleForm}></Route>
 
@@ -151,6 +152,7 @@ class App extends Component {
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/Edit/id=:id" component={Scaleset} />
                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
+                        <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
                         <Route exact path="/myProfile" component={MyProfile} />
 
                       </Switch>

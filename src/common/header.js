@@ -13,14 +13,14 @@ class Header extends Component {
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
-          <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-            <li class="nav-item dropdown">
-              <a class="nav-item nav-link dropdown-toggle mr-md-2 text-white" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <ul className="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            <li className="nav-item dropdown">
+              <a className="nav-item nav-link dropdown-toggle mr-md-2 text-white" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src={user} className="rounded-circle" /> Lalji Tadhani
               </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                <a class="dropdown-item" href="#">Profile</a>
-                <a class="dropdown-item" href="/">LogOut</a>
+              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+                <a className="dropdown-item" href="#">Profile</a>
+                <a className="dropdown-item" href="/">LogOut</a>
               </div>
             </li>
           </ul>

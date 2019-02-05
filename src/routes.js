@@ -15,7 +15,7 @@ const routes = {
     '/ProjectComplexityHome':'Project Complexity',
     '/UserManagement':'User Management',
     '/Department':'Department',
-    '/templateList':'Template List',
+    '/templatelist':'Template List',
     '/addtemplate':'Add Template',
     '/Edit':"Edit",
     '/Projects':'Projects',
