@@ -20,9 +20,12 @@ class kraListPage extends Component {
         var res = this.DeletescalesetApi(kraId);
         res.done(response => {
           if (response === 200) {
-            alert("Data deleted");
+          
             window.location.reload("")
           }this.$el.DataTable().ajax.reload();
+        });
+        toast.error("Record Deleted !", {
+            position: toast.POSITION.TOP_RIGHT
         });
         res.fail(error => {
           alert("error");
@@ -91,15 +94,14 @@ class kraListPage extends Component {
                 // alert("DataTables has finished its initialisation.");
                 $(".btnDelete").on("click", e => {
                     debugger;
-                    alert();
+               
                     this.SingleDelete(e.currentTarget.id);
                     
                 });
             },
             drawCallback:( settings )=> {
                 $(".btnDelete").on("click", e => {
-                    debugger;
-                    alert();
+                
                     this.SingleDelete(e.currentTarget.id);
                     
                 });
