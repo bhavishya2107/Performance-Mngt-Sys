@@ -5,15 +5,20 @@ const routes = {
     '/kraHome' : 'KRA HOME',
     '/kraListPage' : 'KRA LIST',
     '/userRolePMS' : 'ROLE',
+    '/userRolePMS' : 'USER ROLE',
+    '/addscaleset' : 'Add Scale Set',
+    '/scaleset': 'Scale Set',
+    '/jobtitle':'Job Title',
+    '/addjobtitle':"Add Job title",
+    //'/lalji': 'Lalji',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
     '/UserManagement':'User Management',
     '/Department':'Department',
     '/templateList':'Template List',
-    '/Edit' : 'Edit',
-  
-
-    
+    '/addtemplate':'Add Template',
+    '/Edit':"Edit",
+    '/Projects':'Projects',
   };
   {
   }

@@ -15,38 +15,37 @@ export default {
             url: '/demo',
             icon: 'fa fa-cogs',
         },
-     
+
         {
-            name:'KRA',
-            url:'/kraListPage',
-            icon:'fa fa-plus',
+            name: 'KRA',
+            url: '/kraListPage',
+            icon: 'fa fa-plus',
         },
         {
-            name:'Role',
-            url:'/userRolePMS',
-            icon:'fa fa-plus',
+            name: 'Role',
+            url: '/userRolePMS',
+            icon: 'fa fa-plus',
         },
 
         {
-            name:'UserManagement',
-            url:'/UserManagement',
-            icon:'fa fa-plus'
+            name: 'UserManagement',
+            url: '/UserManagement',
+            icon: 'fa fa-plus'
         },
         {
-            name:"Department",
-            url:'/Department',
-            icon:'fa fa-plus'
+            name: "Department",
+            url: '/Department',
+            icon: 'fa fa-plus'
         },
 
         {
-
             name: 'KPI',
             url: '/KPI',
             icon: 'fa fa-plus',
         },
         {
             name: 'Project Complexity',
-            url: '/ProjectComplexityHome',
+            url: '/ProjectComplexity',
             icon: 'fa fa-plus',
         },
         {
@@ -55,5 +54,30 @@ export default {
             icon: 'fa fa-plus',
         }
 
+        // {k
+        //     name: 'Add Scale Set',
+        //     url: '/scaleset',
+        //     icon: 'fsa fa-plus',
+        // },
+        {
+            name: 'Scale Set',
+            url: '/scaleset',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Job Title',
+            url: '/jobtitle',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Add template',
+            url: '/addtemplate',
+            icon: 'fa fa-plus',
+        },
+        {
+            name: 'Projects',
+            url: '/Projects',
+            icon: 'fa fa-plus',
+        }
     ]
 };
