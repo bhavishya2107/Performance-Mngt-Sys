@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+var kpiData = []
+
 const $ = require('jquery');
+
 class AddKpi extends Component {
 
     constructor(props) {
@@ -9,19 +12,36 @@ class AddKpi extends Component {
         super(props);
         this.state = {
             kpiId: props.match.params.id,
+            displayScaleSetName: "",
+            selectScaleSetName: "",
+            displayScaleSetId: "",
+            selectScaleSetId: "",
             kpiTitle: "",
             target: "",
             weightage: "",
+            scaleSetId: "",
+            scaleSetName:"",
             redirectToList: false
         }
     }
+
     saveApiDetails() {
         var _this = this;
         var Kpidata = {
             "KpiTitle": this.state.kpiTitle,
             "target": this.state.target,
-            "scalesetId": 5
+            "scaleSetId": 5,
+            "weightage": this.state.weightage,
+            "scaleSetName": this.state.scaleSetName,
+            "scaleSetId": this.state.scaleSetId,
         }
+        // var re = window.formValidation("#kpiform");
+        // if (re) {
+        //     alert("Success")
+        // } else {
+
+        //     return false;
+        // }
         $.ajax({
             url: "http://192.168.10.109:3000/api/kpi_master",
             type: "POST",
@@ -35,6 +55,9 @@ class AddKpi extends Component {
             }
         });
     }
+    SaveData() {
+
+    }
     getKpiDetailsApi(KpiId) {
         const endpoint = `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`;
         return $.ajax({
@@ -42,11 +65,81 @@ class AddKpi extends Component {
             type: "GET",
         })
     }
+
+    onChangeScaleSetName(event) {
+        debugger;
+        this.setState({
+            selectScaleSetName: event.target.value
+        })
+    }
+    onChangeScaleSetId(event) {
+        debugger;
+        this.setState({
+            selectScaleSetId: event.target.value
+        })
+    }
+    addKpi() {
+        debugger;
+        var kpiDataapi = {
+            "scaleSetId": this.state.scaleSetId,
+            "scaleSetName": this.state.selectScaleSetName,
+        }
+        kpiData.push(kpiDataapi)
+        this.setState({
+            kpiDataTable: kpiData
+        })
+        this.$el = $(this.el);
+        this.$el.DataTable({
+            datasrc: kpiData,
+            data: kpiData,
+            columns: [
+                {
+                    data: "scaleSetId",
+                    target: 0
+                },
+                {
+                    data: "scaleSetName",
+                    target: 1
+                }
+            ]
+        })
+    }
+
+
+
+   
+    getscaleSetIdData() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://192.168.10.109:3000/api/scale_set_master',
+            complete: (temp) => {
+                console.log(temp);
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option value={i.scaleSetId}>{i.scaleSetId}</option>,
+                        <option value={i.scaleSetName}>{i.scaleSetName}</option>
+                    )
+                });
+                this.setState({
+                    displayScaleSetId: displayDataReturn
+                })
+            },
+        });
+    }
+
+    componentWillMount() {
+        this.getscaleSetIdData();
+
+    }
+
     updateDetailsApi(data) {
         var body =
         {
             "KpiTitle": data.kpiTitle,
             "target": data.target,
+            "weightage": data.weightage,
+            "scaleSetName": data.scaleSetName
         }
         debugger;
         return $.ajax({
@@ -108,7 +201,10 @@ class AddKpi extends Component {
                 debugger;
                 this.setState({
                     kpiTitle: response[0].kpiTitle,
-                    target: response[0].target
+                    target: response[0].target,
+                    weightage: response[0].weightage,
+                    scaleSetName: response[0].scaleSetName,
+                    scaleSetId: response[0].scaleSetId
                 })
             });
             res.fail((error) => {
@@ -127,28 +223,55 @@ class AddKpi extends Component {
 
                 <form id="kpiform" className="col-12">
                     <div className="form-group">
-                        <label>KPI title</label>
-                        <input className="form-control" value={this.state.kpiTitle}
+                        <label for="kpititle">KPI title (required, at least 3 characters)</label>
+                        <input id="kpititle" className="form-control" minlength="2" type="text" value={this.state.kpiTitle}
                             onChange={(event) => {
                                 this.setState({
                                     kpiTitle: event.target.value
                                 })
-                            }} />
+                            }} required />
                     </div>
                     <div className="form-group">
-                        <label>Target</label> <textarea className="form-control" rows="4" value={this.state.target}
+                        <label for="target">Target(required, at least 50 characters)</label>
+                        <textarea className="form-control" rows="4" minlength="50" type="text" value={this.state.target}
                             onChange={(event) => {
                                 this.setState({
                                     target: event.target.value
                                 })
                             }} ></textarea>
                     </div>
+                    <div className="form-group">
+                        <label for="weightage">Weight(required)</label>
+                        <input className="form-control" rows="4" minlength="5" maxlength="5" type="text" value={this.state.weightage}
+                            onChange={(event) => {
+                                this.setState({
+                                    weightage: event.target.value
+                                })
+                            }} />
+                    </div>
+                    <div className="dropdown">
+                        {/* <label className="mr-2">Scale set</label>
+                        <select onChange={(e) => { this.onChangeScaleSetName(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                            <option>select</option>
+                            {this.state.displayScaleSetName}
+                        </select> */}
+                        <br /><br />
+                        <label className="mr-2">Scale Set</label>
+                        <select onChange={(e) => { this.onChangeScaleSetId(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                            <option>select</option>
+                            {this.state.displayScaleSetId}
+                        </select>
+                    </div>
                     <br />
                     {this.state.kpiId !== undefined ?
                         <button type="button" class="btn btn-success mr-2" onClick={() => {
                             this.UpdateKpiDetails(this.state);
                         }}>Save</button>
-                        : <button type="button" onClick={() => {
+
+                        // <input  type="button" value="Submit" onClick={()=>{
+                        //     this.SaveData();
+                        // }}/>
+                        : <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
                             this.saveApiDetails(this.state);
                         }}>ADD</button>}
                     <button className="btn btn-info">Clear</button>

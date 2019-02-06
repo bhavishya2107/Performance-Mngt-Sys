@@ -13,11 +13,14 @@ class UserManagement extends Component {
         this.setState = {
             firstName: "",
             lastName: "",
+            userName: "",
             emailAddress: "",
-           
+            mobileNo: "",
+
+
         }
     }
-   //Delete single element
+    //Delete single element
     SingleDelete(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
@@ -60,20 +63,29 @@ class UserManagement extends Component {
 
                 {
                     data: "firstName",
-                    targets: 1,
+                    targets: 0,
 
                 },
                 {
                     data: "lastName",
+                    targets: 1,
+                },
+                {
+                    data: "userName",
                     targets: 2,
                 },
                 {
                     data: "emailAddress",
                     targets: 3,
                 },
+
+                {
+                    data: "mobileNo",
+                    targets: 4,
+                },
                 {
                     data: "userId",
-                    targets: 4,
+                    targets: 5,
                     render: function (data, type, row) {
                         return (
                             '<a href="/Edit/userId=' + row.userId + '">' + "Edit" + "</a>" + " " +
@@ -84,15 +96,15 @@ class UserManagement extends Component {
                 }
             ],
             initComplete: (settings, json) => {
-                
+
                 $(".btnDelete").on("click", e => {
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
 
-            "drawCallback":  (settings) =>  {
+            "drawCallback": (settings) => {
                 window.smallTable();
-                $(".btnDelete").on("click", e => {                 
+                $(".btnDelete").on("click", e => {
                     this.SingleDelete(e.currentTarget.id);
                 });
             }
@@ -119,7 +131,9 @@ class UserManagement extends Component {
 
                             <th>First Name</th>
                             <th>Last Name</th>
+                            <th>User Name</th>
                             <th>Email Address</th>
+                            <th>Mobile No</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>

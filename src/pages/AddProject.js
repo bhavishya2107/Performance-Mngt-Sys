@@ -77,7 +77,6 @@ class AddProject extends Component {
         res.fail((error) => {
         })
     }
-
     componentDidMount() {
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
@@ -107,7 +106,7 @@ class AddProject extends Component {
             selectProjectStatus: event.target.value
         })
     }
-    addtemplate() {
+    addProject() {
         debugger;
         var templateDataapi = {
             "projectName": this.state.selectProjectComplexity,
@@ -132,7 +131,6 @@ class AddProject extends Component {
                     target: 1
                 },
             ]
-
         })
     }
     getProjectComplexityData() {

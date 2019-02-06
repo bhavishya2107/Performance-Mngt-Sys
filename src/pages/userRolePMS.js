@@ -17,9 +17,12 @@ class UserRolePMS extends Component{
         var res = this.DeletescalesetApi(roleId);
         res.done(response => {
           if (response === 200) {
-            alert("Data deleted");
+        
             window.location.reload("")
           }this.$el.DataTable().ajax.reload();
+        });
+        toast.error("Record Deleted", {
+            position: toast.POSITION.TOP_RIGHT
         });
         res.fail(error => {
           alert("error");
@@ -42,7 +45,8 @@ class UserRolePMS extends Component{
 
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                // url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                url: "http://180.211.103.189:3000/api/role_master/",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {

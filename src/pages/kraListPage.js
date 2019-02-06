@@ -20,9 +20,9 @@ class kraListPage extends Component {
         var res = this.DeletescalesetApi(kraId);
         res.done(response => {
           if (response === 200) {
-          
-            window.location.reload("")
-          }this.$el.DataTable().ajax.reload();
+          window.location.reload("")
+        }
+        this.$el.DataTable().ajax.reload();
         });
         toast.error("Record Deleted !", {
             position: toast.POSITION.TOP_RIGHT
@@ -52,7 +52,8 @@ class kraListPage extends Component {
 
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/kra_master/?_size=1000",
+                // url: "http://192.168.10.109:3000/api/kra_master/?_size=1000",
+                url: "http://180.211.103.189:3000/api/kra_master/",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -80,7 +81,7 @@ class kraListPage extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Edit/id=' + row.kraId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/Editkra/id=' + row.kraId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             '&nbsp' +
                             '<a href="#" id="' + row.kraId + '" class="btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
