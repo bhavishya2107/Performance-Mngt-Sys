@@ -150,6 +150,15 @@ html {
     width: 100% !important;
   }
 }
+label.required:after {
+  content: "*";
+  color: #dc3545;
+  font-size: 16px;
+  position: relative;
+  top: -2px;
+  left: 3px;
+}
+
 .form-control.error {
   border-color: #dc3545;
 }

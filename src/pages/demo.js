@@ -48,7 +48,7 @@ class demo extends Component {
     replaceModelItem(id) {
         this.setState({
             isAdd: false,
-        
+
         })
         $.ajax({
             url: baseURL + id,
@@ -67,32 +67,38 @@ class demo extends Component {
 
     }
     editData(data) {
-        var deptList =
-        {
-            "depId": data.depId,
-            "depName": data.depName,
-            "description": data.description,
-        }
-        $.ajax({
-            url: baseURL + data.depId,
-            type: "post",
-            data: JSON.stringify(deptList),
-            success: (data) => {
-                toast.success("Data Update Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                $('.modal').modal('hide')
-                this.$el.DataTable().ajax.reload()
-            },
-            error: function (error) {
-                console.log(error)
-                toast.error("Error !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+        var result = window.formValidation("#addDepartmentform");
+        if (result) {
+            var deptList =
+            {
+                "depId": data.depId,
+                "depName": data.depName,
+                "description": data.description,
+            }
+            $.ajax({
+                url: baseURL + data.depId,
+                type: "post",
+                data: JSON.stringify(deptList),
+                success: (data) => {
+                    toast.success("Data Update Successfully !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                    $('.modal').modal('hide')
+                    this.$el.DataTable().ajax.reload()
+                },
+                error: function (error) {
+                    console.log(error)
+                    toast.error("Error !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
 
-            },
-        });
+                },
+            });
+        } else {
+            return false;
+        }
     }
+
     deleteData(Id) {
         $.ajax({
             url: baseURL + Id,
@@ -111,37 +117,45 @@ class demo extends Component {
 
             },
         });
+
     }
 
     addData(data) {
-        var deptList =
-        {
-            "depName": data.depName,
-            "description": data.description,
-        }
-        $.ajax({
-            url: baseURL,
-            type: "POST",
-            data: deptList,
-            success: (result) => {
-                $('.modal').modal('hide')
-                toast.success("Data Add Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload()
+        var result = window.formValidation("#addDepartmentform");
+        if (result) {
+            var deptList =
+            {
+                "depName": data.depName,
+                "description": data.description,
             }
+            $.ajax({
+                url: baseURL,
+                type: "POST",
+                data: deptList,
+                success: (result) => {
+                    $('.modal').modal('hide')
+                    toast.success("Data Add Successfully !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                    this.$el.DataTable().ajax.reload()
+                }
 
-        });
+            });
+        } else {
+            return false;
+        }
+
+
 
 
 
     }
-    validationDemo(){
-        var result =window.formValidation("#validationDemo");
-        if (result) {    
+    validationDemo() {
+        var result = window.formValidation("#validationDemo");
+        if (result) {
             alert("Success")
-        } else {  
-          return false;
+        } else {
+            return false;
         }
     }
     componentDidMount() {
@@ -270,23 +284,26 @@ class demo extends Component {
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <div className="form-group">
-                                        <label>Department Name</label>
-                                        <input className="form-control" type="text" value={this.state.depName} onChange={(e) => {
-                                            this.setState({
-                                                depName: e.currentTarget.value
-                                            })
-                                        }} />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea className="form-control" cols="3" value={this.state.description} onChange={(e) => {
-                                            this.setState({
-                                                description: e.currentTarget.value
-                                            })
-                                        }}></textarea>
-                                    </div>
+                                    <form id="addDepartmentform">
+                                        <div className="form-group">
+                                            <label className="required">Department Name</label>
+                                            <input className="form-control" type="text" name="departmrntName" required value={this.state.depName} onChange={(e) => {
+                                                this.setState({
+                                                    depName: e.currentTarget.value
+                                                })
+                                            }} />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="required">Description</label>
+                                            <textarea className="form-control" cols="3" name="description" required value={this.state.description} onChange={(e) => {
+                                                this.setState({
+                                                    description: e.currentTarget.value
+                                                })
+                                            }}></textarea>
+                                        </div>
+                                    </form>
                                 </div>
+
                                 <div className="modal-footer">
                                     {this.state.isAdd ? <button type="button" className="btn btn-primary" onClick={() => { this.addData(this.state) }}>Save changes</button> :
                                         <button type="button" className="btn btn-primary" onClick={() => { this.editData(this.state) }}>Edit changes</button>}
@@ -301,15 +318,15 @@ class demo extends Component {
                         <h3>Form Group</h3>
                         <form id="validationDemo">
                             <div className="form-group">
-                                <label>Example label</label>
-                                <input type="text" name="Example" className="form-control" minLength="3"  placeholder="Example input" required />
+                                <label className="required">Example label</label>
+                                <input type="text" name="Example" className="form-control" minLength="3" placeholder="Example input" required />
                             </div>
                             <div className="form-group">
-                                <label>Another label</label>
+                                <label className="required">Another label</label>
                                 <input type="text" name="another" className="form-control" placeholder="Another input" required />
                             </div>
                         </form>
-                        <button className="btn btn-primary" onClick={()=>{this.validationDemo()}}>Check validation</button>
+                        <button className="btn btn-primary" onClick={() => { this.validationDemo() }}>Check validation</button>
                     </div>
                     <div className="col-md-5">
                         <h3>Form Inline</h3>

@@ -2,7 +2,7 @@ const routes = {
     '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
-    '/kraHome' : 'KRA HOME',
+    '/kraHome' : 'ADD KRA',
     '/kraListPage' : 'KRA LIST',
     // '/userRolePMS' : 'ROLE',
     '/userRolePMS' : 'USER ROLE',
