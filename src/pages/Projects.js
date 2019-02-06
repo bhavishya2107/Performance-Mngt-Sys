@@ -12,7 +12,6 @@ class Projects extends Component {
             selectedIds: []
         }
     }
-   
     SingleDelete(projectId) {
         var res = this.DeleteKpiApi(projectId);
         res.done(response => {
@@ -36,9 +35,6 @@ class Projects extends Component {
        }
         });
       }
-
-
-
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.DataTable({
