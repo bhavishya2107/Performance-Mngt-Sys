@@ -11,7 +11,7 @@ class Jobtitlelist extends Component {
         this.state = { }
     }
     SingleDelete(jobtitleId) {
-        var res = this.DeletescalesetApi(jobtitleId);
+        var res = this.DeletejobtitleApi(jobtitleId);
         res.done(response => {
           if (response === 200) {
             alert("Data deleted");

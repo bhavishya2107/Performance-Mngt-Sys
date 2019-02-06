@@ -72,7 +72,7 @@ class Scalesetlist extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Edit/id=' + row.scaleSetId + '"class="mr-3">' +
+                            '<a href="/Editscaleset/id=' + row.scaleSetId + '"class="mr-3">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +                           
                             '<a href="#" id="' + row.scaleSetId +'"class="btnDelete">' +
