@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { environment } from './Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
 class Jobtitle extends Component {
@@ -14,32 +15,38 @@ class Jobtitle extends Component {
         }
     }
     savejobtitle() {
-
-        var _this=this;
+        var isvalidate = window.formValidation("#formjobtitle");
+        if (isvalidate) { 
+            var _this=this;
         
-        var formData ={
-            "jobtitleName" : this.state.Jobtitle,
-            "description":this.state.Description
-           
-          }
-       $.ajax({
-            url: "http://192.168.10.109:3000/api/jobtitle_master",
-            type: "POST",
-            data: formData,           
-            success:function(resultData)
-            { 
-                _this.setState({ redirectToList: true });
-                toast.success("Success Notification !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+            var formData ={
+                "jobtitleName" : this.state.jobtitleName,
+                "description":this.state.description
             }
-        });
+            const endpointPOST = environment.apiUrl + 'jobtitle_master/'
+           $.ajax({
+                url: endpointPOST,
+                type: "POST",
+                data: formData,           
+                success:function(resultData)
+                { 
+                    _this.setState({ redirectToList: true });
+                    toast.success("Jobtitle Added !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            });
+         } else {
+
+            return false;
+        }
+        
  }
  getjobtitleDetilsApi() {
-
-    const endpoint = `http://192.168.10.109:3000/api/jobtitle_master/${this.state.id}`;
+    const endpointGET = environment.apiUrl + 'jobtitle_master/' + `${this.state.id}`
+    
     return $.ajax({
-        url: endpoint,
+        url: endpointGET,
         type: "GET",
 
     })
@@ -52,10 +59,10 @@ updateDetailsApi(data) {
             "description":data.description
 
       }
-    debugger;
-    
+   
+    const endpointPOST = environment.apiUrl + 'jobtitle_master/' + `${data.id}`
     return $.ajax({
-        url:`http://192.168.10.109:3000/api/jobtitle_master/${data.id}`,
+        url:endpointPOST,
         type: "PATCH",
         headers: {
             "content-type": "application/json",
@@ -66,22 +73,28 @@ updateDetailsApi(data) {
     });
 }
 UpdatejobtitleDetails(data) {
-       
-    var res = this.updateDetailsApi(data);
+    var isvalidate = window.formValidation("#formjobtitle");
+    if (isvalidate) { 
+        var res = this.updateDetailsApi(data);
   
-    res.done((response) => {
-        debugger;
-        this.setState({
-            redirectToList: true
-        })
-        toast.info("Updated!", {
-            position: toast.POSITION.TOP_RIGHT
+        res.done((response) => {
+            debugger;
+            this.setState({
+                redirectToList: true
+            })
+            toast.success("Jobtitle Updated!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            
         });
-        
-    });
-    res.fail((error) => {
+        res.fail((error) => {
+    
+        })
+    } else {
 
-    })
+        return false;
+    }
+   
 }
 componentDidMount() {
     if (this.state.id !== undefined) {
@@ -109,19 +122,19 @@ componentDidMount() {
         }
         return(
             <div className="row">
-             {this.state.id !== undefined ? <div>Edit</div> : <div>Add</div>}
+             {this.state.id !== undefined ? <div></div> : <div></div>}
                     <form id="formjobtitle" className="col-6">
                     <div className="form-group">
                         <label>Name</label>
-                        <input className="form-control" value={this.state.jobtitleName}
+                        <input type="text" id="jobtitleid" name="jobtitlename" minLength="" className="form-control" value={this.state.jobtitleName}
                          onChange={(event) => {
                             this.setState({
                                 jobtitleName: event.target.value
                             })
-                        }} />
+                        }} required/>
                     </div>
                     <div className="form-group">
-                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.description}
+                        <label>Description</label> <textarea name="jobtitleaddress"  className="form-control" rows="4" value={this.state.description}
                         onChange={(event) => {
                             this.setState({
                                 description: event.target.value
@@ -129,17 +142,14 @@ componentDidMount() {
                         }} ></textarea>
                     </div>
                     {this.state.id !== undefined ?
-                        <button type="button" onClick={() => {
+                        <button type="button" className="btn btn-success" onClick={() => {
                             this.UpdatejobtitleDetails(this.state);
                         }}>Save</button>
-                        : <button type="button" onClick={() => {
+                        : <button type="button" className="btn btn-success" onClick={() => {
                             this.savejobtitle(this.state);
                         }}>ADD</button>}
 
-                    {/* <button onClick={() => this.savejobtitle()} type="button" className="btn btn-success mr-5" >
-                        Save
-                    </button>
-                    <button className="btn btn-danger">Clear</button> */}
+                   
                    
                 </form>
             </div>

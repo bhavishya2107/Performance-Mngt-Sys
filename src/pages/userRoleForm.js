@@ -25,6 +25,14 @@ class UserRoleForm extends Component {
         {
             "roleName": this.state.roleName,
         };
+        
+        var res = window.formValidation("#userRoleForm");
+        if (res) {    
+            alert("Success")
+        } else  {  
+          
+            return false;
+        }
 
 
 
@@ -87,6 +95,14 @@ class UserRoleForm extends Component {
         res.fail((error) => {
 
         })
+        var res = window.formValidation("#userRoleForm");
+        if (res) {
+            alert("Success")
+        } else  {  
+          
+            return false;
+        }
+
     }
     componentDidMount() {
         debugger;
@@ -115,12 +131,13 @@ class UserRoleForm extends Component {
         return (
             <div className="container">
                 {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
-                <form action="" style={{ textAlign: "center", paddingTop: "100px" }}>
+                <form id="userRoleForm" action="" style={{ textAlign: "center", paddingTop: "100px" }}>
                     <div className="jumbotron">
                         <div className="form-group row">
                             <label for="roleName" className="col-sm-2 col-form-label">Name</label>
                             <div className="col-sm-10">
-                                <input id="roleName" type="text" className="form-control"
+                        
+                                <input id="roleName" type="text" className="form-control" name="rolename"
                                     value={this.state.roleName}
                                     onChange={(event) => {
                                         this.setState(
@@ -128,21 +145,21 @@ class UserRoleForm extends Component {
                                                 roleName: event.target.value
                                             }
                                         )
-                                    }} /><br />
+                                    }} required/><br />
                             </div>
                         </div>
 
                         {/* <button type="button" className="btn btn-success btn-sm" onClick={() => this.submitDataFromRoleform()}>Save</button>&nbsp; */}
                         {this.state.id !== undefined ?
-                            <button type="button" onClick={() => {
+                            <button className="btn btn-success btn-sm" type="button" onClick={() => {
                                 this.UpdateRoleDetails(this.state);
                             }}>Save</button>
-                            : <button type="button" onClick={() => {
+                            : <button className="btn btn-success btn-sm" type="button" onClick={() => {
                                 this.submitDataFromRoleform(this.state);
-                            }}>ADD</button>}
-                <button className="btn btn-success btn-sm">Clear</button>
-                        <br />
-                      
+                            }}>ADD</button>}&nbsp;
+                    <button className="btn btn-success btn-sm">Clear</button>
+                        <br/>
+
                     </div>
                 </form>
 
