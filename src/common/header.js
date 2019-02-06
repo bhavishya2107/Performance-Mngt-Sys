@@ -18,9 +18,9 @@ class Header extends Component {
               <a className="nav-item nav-link dropdown-toggle mr-md-2 text-white" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src={user} className="rounded-circle" /> Lalji Tadhani
               </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-                <a class="dropdown-item" href="/myProfile">Profile</a>
-                <a class="dropdown-item" href="/">LogOut</a>
+              <div className="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+                <a className="dropdown-item" href="/myProfile">Profile</a>
+                <a className="dropdown-item" href="/">LogOut</a>
               </div>
             </li>
           </ul>

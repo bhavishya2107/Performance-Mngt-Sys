@@ -325,6 +325,14 @@ class demo extends Component {
                                 <label className="required">Another label</label>
                                 <input type="text" name="another" className="form-control" placeholder="Another input" required />
                             </div>
+                            <div className="form-group">
+                                <label className="required">Select</label>
+                                <select className="form-control" required name="select">
+                                    <option value="">Select</option>
+                                    <option value="1">Select</option>
+                                    <option value="2">Select</option>
+                                </select>
+                            </div>
                         </form>
                         <button className="btn btn-primary" onClick={() => { this.validationDemo() }}>Check validation</button>
                     </div>
