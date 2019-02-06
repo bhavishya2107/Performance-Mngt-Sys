@@ -8,24 +8,24 @@ class UserRolePMS extends Component{
     constructor(props){
         super(props);
         this.state = {
-            
-           submitEntryFromRole:"",
-
+            submitEntryFromRole:"",
         };
     }
     SingleDelete(roleId) {
         var res = this.DeletescalesetApi(roleId);
         res.done(response => {
-          if (response === 200) {
-        
-            window.location.reload("")
-          }this.$el.DataTable().ajax.reload();
+          if (response.affectedRows>0) {
+            toast.success("Role Deleted Successfully", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+          }
+          this.$el.DataTable().ajax.reload();
         });
-        toast.error("Record Deleted", {
+      
+        res.fail(error => {
+          toast.error("Role Not Deleted", {
             position: toast.POSITION.TOP_RIGHT
         });
-        res.fail(error => {
-          alert("error");
         });
       }
       DeletescalesetApi(roleId) {
@@ -42,17 +42,14 @@ class UserRolePMS extends Component{
       }
     componentDidMount() {
         this.$el = $(this.el);
-
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
-                // url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
-                url: "http://180.211.103.189:3000/api/role_master/",
+                url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
-
                 },
-
             },
             columns: [
                 {
@@ -71,28 +68,26 @@ class UserRolePMS extends Component{
                     className:"text-right",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditForm/id=' + row.roleId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/EditRoleForm/id=' + row.roleId + '"class="btn mr-2 btn-edit btn-info btn-sm">'  + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             '&nbsp' +
-                            '<a href="#" id="' + row.roleId +'"class="btnDelete">' +
+                            '<a href="#" id="' + row.roleId +'"class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                           "</a>"
                         )
                     },
+                    "orderable": false
 
-                },
+                }
             ],
             
             initComplete: (settings, json) => {
-                // alert("DataTables has finished its initialisation.");
                  $(".btnDelete").on("click", e => {
-                   debugger;
-                   this.SingleDelete(e.currentTarget.id);
+                    this.SingleDelete(e.currentTarget.id);
                  });
                },
                drawCallback: ( settings ) =>{
                  $(".btnDelete").on("click", e => {
-                     debugger;
-                     this.SingleDelete(e.currentTarget.id);
+                    this.SingleDelete(e.currentTarget.id);
                    });
              }
 
@@ -102,15 +97,12 @@ class UserRolePMS extends Component{
     render(){
         return(
             <div>
-                <h1>ROLE</h1>
+           
                 {
                     this.props.location.state === "2222"
-    //                 <div className="alert alert-success" role="alert">
-    //                     <strong>Well done!</strong> You added successfully .
-    //   </div>
                 }
             <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/userRoleForm', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
+                <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary">Add</Link>
             </div>
          
      
@@ -123,7 +115,7 @@ class UserRolePMS extends Component{
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Action</th>
+                        <th width="90">Action</th>
 
 
                     </tr>

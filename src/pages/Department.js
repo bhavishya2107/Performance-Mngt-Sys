@@ -112,7 +112,7 @@ class Department extends Component {
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                   
+                   <tbody></tbody>
                 </table>
                 <ToastContainer />
             </div >

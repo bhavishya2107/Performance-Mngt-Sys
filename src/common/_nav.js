@@ -23,7 +23,7 @@ export default {
         },
         {
             name: 'Role',
-            url: '/userRolePMS',
+            url: '/role',
             icon: 'fa fa-plus',
         },
 
