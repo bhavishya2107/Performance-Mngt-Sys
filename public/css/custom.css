@@ -150,5 +150,17 @@ html {
     width: 100% !important;
   }
 }
+.form-control.error {
+  border-color: #dc3545;
+}
+
+label.error {
+  color: #dc3545;
+  margin: 0;
+}
+
+label.error.valid {
+  display: none !important;
+}
 
 /*# sourceMappingURL=custom.css.map */
