@@ -8,25 +8,44 @@ class Projects extends Component {
         super(props);
         this.setState = {
             projectName: "",
-            description: ""
+            description: "",
+            selectedIds: []
         }
     }
-
+    SingleDelete(projectId) {
+        var res = this.DeleteKpiApi(projectId);
+        res.done(response => {
+          if (response === 200) {
+            alert("Data deleted");
+            window.location.reload("")
+          }this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+          alert("error");
+        });
+      }
+      DeleteKpiApi  (projectId) {
+        const endpoint = `http://192.168.10.109:3000/api/project_master/${projectId}`; 
+        return $.ajax({
+          url: endpoint,
+          type: "DELETE",
+          headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+       }
+        });
+      }
     componentDidMount() {
-
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/project_master/",
+                url: "http://192.168.10.109:3000/api/project_master",
                 type: "get",
                 dataSrc: "",
                 error: function (xhr, status, error) {
-
                 },
             },
-
             columns: [
-
                 {
                     data: "projectName",
                     targets: 1,
@@ -43,16 +62,32 @@ class Projects extends Component {
                     className: "text-center",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/edit/' + row.projectId + '">' + 'Edit' + "</a>" + "/" +
-                            '<a href="/delete/' + row.projectId + '">' + 'Delete' + "</a>"
-
+                              '<a href="/EditProject/id=' + row.projectId + '"class="mr-3">' +
+                            '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            "</a>" +
+                            '<a href="#" id="' + row.projectId + '"class="btnDelete">' +
+                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                            "</a>"
                         )
-                    }
-                }
-            ]
-        })
-    }
+                    },
+                    orderable: false
 
+                }
+            ],
+            initComplete: (settings, json) => {
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    this.SingleDelete(e.currentTarget.id);
+                });
+            },
+            drawCallback: (settings) => {
+                $(".btnDelete").on("click", e => {
+                    debugger;
+                    this.SingleDelete(e.currentTarget.id);
+                });
+            }
+        });
+    }
     render() {
         return (
             <div>

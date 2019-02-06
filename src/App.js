@@ -48,8 +48,6 @@ class App extends Component {
               <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
                 <Switch>
                   <Route exact path="/" component={Login} />
-                  <Route exact path="/EditKpi/kpiid=:kpiid" component={AddKpi} />
-                  <Route exact path="/AddKpi" component={AddKpi} />
                 </Switch>
               </div>
             </div>
@@ -88,27 +86,43 @@ class App extends Component {
                           path="/demo"
                           component={Demo}
                         />
+                        <Route  path="/KPI" component={KPI}/>
+                        <Route exact path="/EditKpi/id=:id" component={AddKpi} />
+                        <Route exact path="/AddKpi" component={AddKpi} />
+
+                        <Route path="/ProjectComplexity" component={ProjectComplexity}/>
+                         <Route exact path="/EditProjectComplexity/id=:id" component={AddProjectComplexity} />
+                        <Route exact path="/AddProjectComplexity" component={AddProjectComplexity} />
+                        
+                        <Route path="/Projects" component={Projects} />
+                        <Route exact path="/EditProject/id=:id" component={AddProject} />
+                        <Route exact path="/AddProject" component={AddProject} />
+                      
+
+
+                      
+                      
                         <Route
-                          path="/KPI"
-                          component={KPI}
-                        />
-                        <Route
-                          path="/AddKpi"
-                          component={AddKpi}
-                        />
-                        <Route
-                          path="/ProjectComplexity"
-                          component={ProjectComplexity}
-                        />
-                        <Route
-                          path="/AddProjectComplexity"
-                          component={AddProjectComplexity}
+                          path="/UserManagement"
+                          component={UserManagement}
                         />
                         <Route
                           path="/demo"
                           component={Demo}
                         />
 
+                        <Route
+                          path="/AddUser"
+                          component={AddUser}
+                        />
+                        <Route
+                          path="/Department"
+                          component={Department}
+                        />
+                        <Route
+                          path="/AddDept"
+                          component={AddDept}
+                        />
                         
                         <Route path="/UserManagement" component={UserManagement} />
                         <Route path="/AddUser" component={AddUser} />
@@ -116,7 +130,7 @@ class App extends Component {
                         <Route path="/Department" component={Department} />
                         <Route path="/Edit/depId=:depId" component={AddDept} />
                         <Route path="/AddDept" component={AddDept} />
-                        <Route path="/Projects" component={Projects} />
+
                         <Route path="/AddProject" component={AddProject} />
                         
                         
@@ -137,6 +151,7 @@ class App extends Component {
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/Editscaleset/id=:id" component={Scaleset} />
                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
+                       
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
                         <Route exact path="/myProfile" component={MyProfile} />
 
