@@ -6,10 +6,10 @@ const routes = {
     '/kraListPage' : 'KRA LIST',
     // '/userRolePMS' : 'ROLE',
     '/userRolePMS' : 'USER ROLE',
-    '/addscaleset' : 'Add Scale Set',
+    '/addscaleset' : 'Scale Set',
     '/scaleset': 'Scale Set',
     '/jobtitle':'Job Title',
-    '/addjobtitle':"Add Job title",
+    '/addjobtitle':"Job title",
     //'/lalji': 'Lalji',
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
@@ -17,9 +17,10 @@ const routes = {
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',
-    '/Editscaleset':"Editscaleset",
+    '/Editscaleset':"Scale Set",
     '/Projects':'Projects',
     '/myProfile':'Profile',
+    '/Editjobtitle':'Job Title'
   };
   {
   }
