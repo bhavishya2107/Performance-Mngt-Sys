@@ -136,6 +136,14 @@ class demo extends Component {
 
 
     }
+    validationDemo(){
+        var result =window.formValidation("#validationDemo");
+        if (result) {    
+            alert("Success")
+        } else {  
+          return false;
+        }
+    }
     componentDidMount() {
 
         $(document).on("click", ".confirmDelete", (e) => {
@@ -291,16 +299,17 @@ class demo extends Component {
                 <div className="row mb-3">
                     <div className="col-md-3">
                         <h3>Form Group</h3>
-                        <form>
+                        <form id="validationDemo">
                             <div className="form-group">
-                                <label htmlFor="formGroupExampleInput">Example label</label>
-                                <input type="text" className="form-control" id="formGroupExampleInput" placeholder="Example input" />
+                                <label>Example label</label>
+                                <input type="text" name="Example" className="form-control" minLength="3"  placeholder="Example input" required />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="formGroupExampleInput2">Another label</label>
-                                <input type="text" className="form-control" id="formGroupExampleInput2" placeholder="Another input" />
+                                <label>Another label</label>
+                                <input type="text" name="another" className="form-control" placeholder="Another input" required />
                             </div>
                         </form>
+                        <button className="btn btn-primary" onClick={()=>{this.validationDemo()}}>Check validation</button>
                     </div>
                     <div className="col-md-5">
                         <h3>Form Inline</h3>
