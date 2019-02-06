@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
-import $ from 'jquery';
 import { Redirect } from 'react-router-dom'
 import { environment } from './Environment'
-
+import $ from 'jquery'; 
 class AddDept extends Component {
     constructor(props) {
         super(props);
@@ -19,17 +18,23 @@ class AddDept extends Component {
             isUpdate: false,
              }
     }
-    // clear(){
-    //     this.setState={
-    //         depName: "",
-    //         description: ""
-    //     }
-    // }
+    clear(){
+        this.setState={
+            depName: "",
+            description: ""
+        }
+    }
 
-    
+
    
     save() {
-
+        // var result =window.formValidation("#createDepartment");
+        // if (result) {    
+        //     alert("Success")
+        // } else {  
+        //   return false;
+        // }
+        
         var _this = this
         var deptList =
         {
@@ -136,30 +141,32 @@ class AddDept extends Component {
                     {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
 
                 </div>
-                <Form>
+                <form id="createDepartment">
                     <div>
 
-                        <FormGroup >
-                            <Label for="depName" sm={2}>Name</Label>
-                            <Input type="text" name="depName" id="depName" placeholder="Enter the Name" value={this.state.depName}
+                            <label for="depName">Name</label>
+                            <input type="text" name="depName" id="cdepName" minLength="3" placeholder="Enter the Name" value={this.state.depName}
                                 onChange={(event) => {
                                     this.setState({
                                         depName: event.target.value
                                     })
-                                }} />
-                        </FormGroup>
+                                }} required/>
 
-                        <FormGroup >
-                            <Label for="description" sm={2}>description</Label>
-                            <Input type="text" name="description" id="description" value={this.state.description}
+                       
+                            <label for="description">description</label>
+                            <input type="text" name="description" id="cdescription" minLength="3" value={this.state.description}
                                 onChange={(event) => {
                                     this.setState({
                                         description: event.target.value
                                     })
-                                }} />
-                        </FormGroup>
+                                }} required/>
+                        
                     </div>
-                    {this.state.depId !== undefined ?
+                   
+                </form>
+
+
+                {this.state.depId !== undefined ?
                         <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
                             this.UpdateDeptDetails(this.state);
                         }}>Edit</button>
@@ -170,9 +177,11 @@ class AddDept extends Component {
 
                     {/* <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => { this.UpdateDepDetails(); }}>Save</button> */}
                     <button className="btn btn-sm btn-success mr-2">Clear</button>
-                </Form>
 
-            </div >
+
+             </div>
+                
+           
         )
 
     }
