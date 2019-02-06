@@ -11,10 +11,10 @@ import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
-import kraHome from './pages/kraHome';
+import kraHome from './pages/addKra';
 import kraListPage from './pages/kraListPage';
-import UserRolePMS from './pages/userRolePMS';
-import UserRoleForm from './pages/userRoleForm';
+import UserRolePMS from './pages/role';
+import UserRoleForm from './pages/addRole';
 
 import UserManagement from './pages/UserManagement';
 import AddUser from './pages/AddUser'
@@ -28,12 +28,12 @@ import KPI from './pages/KPI';
 import ProjectComplexity from './pages/ProjectComplexity';
 import AddProjectComplexity from './pages/AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
-import Templatelist from './pages/templateList';
+import Templatelist from './pages/Template/templateList';
 import Scaleset from './pages/addscaleset';
 import Scalesetlist from './pages/scaleset';
 import Jobtitlelist from './pages/jobtitle';
 import Jobtitle from './pages/addjobtitle';
-import Addtemplate from './pages/addtemplate';
+import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/myProfile';
 
 class App extends Component {
@@ -135,13 +135,13 @@ class App extends Component {
                         
                         
                         <Route path="/innerpage" component={innerpage} />
-                        <Route path="/kraHome" component={kraHome}></Route>
+                        <Route path="/addKra" component={kraHome}></Route>
                         <Route path="/kraListPage" component={kraListPage}></Route>
-                        <Route path="/userRolePMS" component={UserRolePMS}></Route>
-                        <Route path="/userRoleForm" component={UserRoleForm}></Route>
+                        <Route path="/role" component={UserRolePMS}></Route>
+                        <Route path="/addRole" component={UserRoleForm}></Route>
                         <Route path="/templateList" component={Templatelist}></Route>
-                        <Route path="/Edit/id=:id" component={kraHome}></Route>
-                        <Route path="/EditForm/id=:id" component={UserRoleForm}></Route>
+                        <Route path="/Editkra/id=:id" component={kraHome}></Route>
+                        <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
 
 
                         <Route exact path="/addscaleset" component={Scaleset} />
@@ -149,7 +149,7 @@ class App extends Component {
                         <Route exact path="/jobtitle" component={Jobtitlelist} />
                         <Route exact path="/addjobtitle" component={Jobtitle} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
-                        <Route exact path="/Edit/id=:id" component={Scaleset} />
+                        <Route exact path="/Editscaleset/id=:id" component={Scaleset} />
                         <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />
                        
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />

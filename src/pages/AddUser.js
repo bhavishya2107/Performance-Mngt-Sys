@@ -414,7 +414,11 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Job Title:</label>
+<<<<<<< HEAD
                             <select required  value={this.state.selectJobTitle} onChange={(e) => { this.onChangeJob(e) }} className="btn btn-info dropdown-toggle md mr-3" required>
+=======
+                            <select onChange={(e) => { this.onChangeJob(e) }} className="btn btn-info dropdown-toggle md mr-3" required>
+>>>>>>> ee1d2b532c57ef6f2d1859fb5e9a100f26ae0ca7
                                 <option>select</option>
                                 {this.state.displayJobData}
                             </select>

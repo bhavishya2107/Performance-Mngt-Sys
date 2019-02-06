@@ -25,6 +25,13 @@ class AddProject extends Component {
             "description": this.state.description,
             "scalesetId": 5
         }
+        var re = window.formValidation("#projectForm");
+        if (re) {
+            alert("Success")
+        } else {
+
+            return false;
+        }
         $.ajax({
             url: "http://192.168.10.109:3000/api/project_master",
             type: "POST",
@@ -77,7 +84,6 @@ class AddProject extends Component {
         res.fail((error) => {
         })
     }
-
     componentDidMount() {
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
@@ -107,7 +113,7 @@ class AddProject extends Component {
             selectProjectStatus: event.target.value
         })
     }
-    addtemplate() {
+    addProject() {
         debugger;
         var templateDataapi = {
             "projectName": this.state.selectProjectComplexity,
@@ -132,7 +138,6 @@ class AddProject extends Component {
                     target: 1
                 },
             ]
-
         })
     }
     getProjectComplexityData() {
@@ -187,8 +192,8 @@ class AddProject extends Component {
                 {this.state.projectId !== undefined ? <div>Edit</div> : <div>ADD</div>}
                 <form id="projectForm" className="col-12">
                     <div className="form-group">
-                        <label>Project Name</label>
-                        <input className="form-control" value={this.state.projectName}
+                    <label for="projectName">Project Name(required, at least 3 characters)</label>                        
+                    <input className="form-control" minlength="5" type="text" value={this.state.projectName}
                             onChange={(event) => {
                                 this.setState({
                                     projectName: event.target.value
@@ -228,7 +233,7 @@ class AddProject extends Component {
                         <button type="button" class="btn btn-success mr-2" onClick={() => {
                             this.UpdateKpiDetails(this.state);
                         }}>Save</button>
-                        : <button type="button" onClick={() => {
+                        : <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
                             this.saveProjectDetails(this.state);
                         }}>ADD</button>}
                     <button className="btn btn-info">Clear</button>

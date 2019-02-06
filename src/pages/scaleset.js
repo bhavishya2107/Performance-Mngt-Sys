@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { environment } from './Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -8,115 +9,109 @@ class Scalesetlist extends Component {
     constructor(props) {
         super(props); debugger;
         this.state = {
-            savescaleset: "",
-            selectedIds:[]
+         
         }
     }
-    savesacleset() {
-        alert("hi")
-    }
+    
+    //#region Delete Scale set functions
     SingleDelete(scaleSetId) {
         var res = this.DeletescalesetApi(scaleSetId);
         res.done(response => {
-          if (response === 200) {
-            alert("Data deleted");
-            window.location.reload("")
-          }this.$el.DataTable().ajax.reload();
+          if (response.affectedRows>0) {
+            toast.success("Record Deleted Successfully!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+          }
+          this.$el.DataTable().ajax.reload();
         });
+      
         res.fail(error => {
-          alert("error");
+          toast.error("Record Not Deleted", {
+            position: toast.POSITION.TOP_RIGHT
+        });
         });
       }
-      DeletescalesetApi(scaleSetId) {
-        const endpoint = `http://192.168.10.109:3000/api/scale_set_master/${scaleSetId}`; 
+    DeletescalesetApi(scaleSetId) {
+       
+        const endpoint = environment.apiUrl + 'scale_set_master/' + `${scaleSetId}`;
         return $.ajax({
-          url: endpoint,
-          type: "DELETE",
-          headers: {
-            "content-type": "application/json",
-            "x-requested-with": "XMLHttpRequest",
-       }
+            url: endpoint,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+            }
         });
-      }
+    }    
+    //#endregion
+
+
+
     componentDidMount() {
+        //#region Data table realted Block
+        const endpointGET = environment.apiUrl + 'scale_set_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
+            
             ajax: {
-                url: "http://192.168.10.109:3000/api/scale_set_master/?_size=1000",
+                url: endpointGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
-
                 },
-                // beforeSend: function(request, urlPath) {
-                //   request.setRequestHeader("Authorization", token);
-                // }
+
             },
             columns: [
-                //   {
-                //       data:"scaleSetId",
-                //       targets:0
-                //   },
+
                 {
                     data: "scaleSetName",
-                    targets: 1
+                    targets: 0
                 },
                 {
                     data: "description",
-                    targets: 2
+                    targets: 1
 
                 },
 
                 {
                     data: "scaleSetId",
-                    targets: 3,
+                    "orderable": false,
+                    targets: 2,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Edit/id=' + row.scaleSetId + '"class="mr-3">' +
+                            '<a href="/Editscaleset/id=' + row.scaleSetId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            "</a>" +                           
-                            '<a href="#" id="' + row.scaleSetId +'"class="btnDelete">' +
+                            "</a>" +
+                            '<a href="#" id="' + row.scaleSetId + '"class="btn mr-2 delete btn-danger btn-sm btnDeletescaleset">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                          "</a>"                           
+                            "</a>"
                         )
                     }
                 },
             ],
             initComplete: (settings, json) => {
-               // alert("DataTables has finished its initialisation.");
-                $(".btnDelete").on("click", e => {
-                  debugger;
-                  this.SingleDelete(e.currentTarget.id);
-                });
-              },
-              drawCallback: ( settings ) =>{
-                $(".btnDelete").on("click", e => {
-                    debugger;
+                
+                $(".btnDeletescaleset").on("click", e => {
+                    
                     this.SingleDelete(e.currentTarget.id);
-                  });
+                });
+            },
+            drawCallback: (settings) => {
+                $(".btnDelete").on("click", e => {
+                   
+                    this.SingleDelete(e.currentTarget.id);
+                });
             }
         });
+        //#endregion
     }
+
     render() {
         return (
             <div>
-                {/* <h1>{this.props.location.state}</h1> */}
-                {/* {
-                this.props.location.state=="2222" ? 
-           ( <div className="alert alert-success" role="alert">
-                <strong>Well done!</strong> You successfully read this important alert message.
-      </div>) : <div></div>
-    } */}
-                {
-                    this.props.location.state === "2222"
-                    //                  &&
-                    //                 <div className="alert alert-success" role="alert">
-                    //                     <strong>Well done!</strong> You added successfully .
-                    //   </div>
-                }
-
-                <div className="clearfix text-right mb-2">
-                    <Link to="/addscaleset" className="btn btn-primary mr-5 "><i className="fa fa-plus"></i> Add</Link>
+            <div className="clearfix text-right mb-2">
+                    <Link to="/addscaleset" className="btn btn-primary btn-sm">Add</Link>
                 </div>
 
                 <table className="table table-striped table-bordered table-hover"
@@ -124,13 +119,13 @@ class Scalesetlist extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            {/* <th>ID</th> */}
                             <th>Scaleset Name</th>
                             <th>Description</th>
-                            <th>Action</th>
+                            <th width="90">Action</th>
                         </tr>
                     </thead>
                     <ToastContainer />
+                    <tbody></tbody>
                 </table>
             </div>
         )
