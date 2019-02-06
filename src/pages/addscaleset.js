@@ -16,28 +16,35 @@ class Scaleset extends Component {
         }
     }
     savescaleset() {
-
-        var _this = this;
+        var isvalidate = window.formValidation("#formscaleset");
+        if (isvalidate) {    
+            alert("Success")
+            var _this = this;
       
-        var formData = {
-            "scaleSetName": this.state.scaleSetName,
-            "description": this.state.description
-
-        }
-        $.ajax({
-            url: "http://192.168.10.109:3000/api/scale_set_master",
-            type: "POST",
-            data: formData,
-            // dataType:"text",           
-            success: function (resultData) {
-                alert("Save Complete");
-                _this.setState({ redirectToList: true });
-                toast.success("Success Notification !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                
+            var formData = {
+                "scaleSetName": this.state.scaleSetName,
+                "description": this.state.description
+    
             }
-        });
+            $.ajax({
+                url: "http://192.168.10.109:3000/api/scale_set_master",
+                type: "POST",
+                data: formData,
+                // dataType:"text",           
+                success: function (resultData) {
+                    alert("Save Complete");
+                    _this.setState({ redirectToList: true });
+                    toast.success("Success Notification !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                    
+                }
+            });
+        } else {  
+          
+            return false;
+        }
+       
     }
     getscalesetDetilsApi() {
 
@@ -119,15 +126,15 @@ class Scaleset extends Component {
                 <form id="formscaleset" className="col-6">
                     <div className="form-group">
                         <label>Name</label>
-                        <input  className="form-control" value={this.state.scaleSetName}
+                        <input type="text" id ="scalesetid" name="scalesetname" className="form-control" minLength="2"  value={this.state.scaleSetName}
                             onChange={(event) => {
                                 this.setState({
                                     scaleSetName: event.target.value
                                 })
-                            }} />
+                            }} required />
                     </div>
                     <div className="form-group">
-                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.description}
+                        <label>Description</label> <textarea id ="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
                             onChange={(event) => {
                                 this.setState({
                                     description: event.target.value

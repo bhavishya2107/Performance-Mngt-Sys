@@ -17,7 +17,7 @@ const routes = {
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',
-    '/Edit':"Edit",
+    '/Editscaleset':"Editscaleset",
     '/Projects':'Projects',
     '/myProfile':'Profile',
   };

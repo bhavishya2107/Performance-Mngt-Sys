@@ -18,10 +18,9 @@ class Jobtitle extends Component {
         var _this=this;
         
         var formData ={
-            "jobtitleName" : this.state.Jobtitle,
-            "description":this.state.Description
-           
-          }
+            "jobtitleName" : this.state.jobtitleName,
+            "description":this.state.description
+        }
        $.ajax({
             url: "http://192.168.10.109:3000/api/jobtitle_master",
             type: "POST",
