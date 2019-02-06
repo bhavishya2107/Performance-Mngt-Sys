@@ -318,11 +318,11 @@ class demo extends Component {
                         <h3>Form Group</h3>
                         <form id="validationDemo">
                             <div className="form-group">
-                                <label>Example label</label>
+                                <label className="required">Example label</label>
                                 <input type="text" name="Example" className="form-control" minLength="3" placeholder="Example input" required />
                             </div>
                             <div className="form-group">
-                                <label>Another label</label>
+                                <label className="required">Another label</label>
                                 <input type="text" name="another" className="form-control" placeholder="Another input" required />
                             </div>
                         </form>
