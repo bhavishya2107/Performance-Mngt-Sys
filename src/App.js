@@ -140,7 +140,7 @@ class App extends Component {
                         <Route path="/userRolePMS" component={UserRolePMS}></Route>
                         <Route path="/userRoleForm" component={UserRoleForm}></Route>
                         <Route path="/templateList" component={Templatelist}></Route>
-                        <Route path="/Edit/id=:id" component={kraHome}></Route>
+                        <Route path="/Editkra/id=:id" component={kraHome}></Route>
                         <Route path="/EditForm/id=:id" component={UserRoleForm}></Route>
 
 

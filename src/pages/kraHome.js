@@ -28,12 +28,11 @@ class kraHome extends Component {
             "description": this.state.description,
         };
 
-
+      
 
         $.ajax({
             url: "http://192.168.10.109:3000/api/kra_master",
             type: "POST",
-           
             data: kraFormData,
             // dataType: "text",
             success: function (resultData) {
@@ -51,6 +50,13 @@ class kraHome extends Component {
             }
        
         });
+        var res = window.formValidation("#kraAddForm");
+        if (res) {    
+            alert("Success")
+        } else  {  
+          
+            return false;
+        }
 
        
 
@@ -106,6 +112,13 @@ class kraHome extends Component {
                         res.fail((error) => {
                 
                         })
+                        var res = window.formValidation("#kraAddForm");
+                        if (res) {    
+                            alert("Success")
+                        } else  {  
+                          
+                            return false;
+                        }
                     }
                     componentDidMount() {
                         debugger;
@@ -137,12 +150,12 @@ class kraHome extends Component {
             
             <div className="container">
             {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
-                <form action="" style={{ textAlign: "center", paddingTop: "100px" }}>
+                <form id="kraAddForm" action="" style={{ textAlign: "center", paddingTop: "100px" }}>
                 <div className="jumbotron">
                 <div className="form-group row">
                 <label className="col-sm-2 col-form-label" for="kraName">Name</label>
                 <div className="col-sm-10">
-                    <input id="kraName" type="text" className="form-control"
+                    <input id="kraName" type="text" className="form-control" name="kraName" minlength="2"
                         value={this.state.kraName}
                         onChange={(event) => {
                             this.setState(
@@ -150,13 +163,13 @@ class kraHome extends Component {
                                     kraName: event.target.value
                                 }
                             )
-                        }} /><br />
+                        }} required/><br />
                         </div>
                         </div>
                     <div className="form-group row">
                     <label className="col-sm-2 col-form-label" for="kraDescription">Description</label>
                     <div className="col-sm-10">
-                    <textarea rows="7" className="form-control"
+                    <textarea name="kraDescription" maxLength="100" rows="7" className="form-control" 
                         value={this.state.description}
                         onChange={(event) => {
                             this.setState(
@@ -164,7 +177,7 @@ class kraHome extends Component {
                                     description: event.target.value
                                 }
                             )
-                        }}></textarea><br />
+                        }} required></textarea><br/>
                     </div>
                     </div>
                     {/* <button type="button" className="btn btn-success btn-sm" onClick={() =>  this.submitDataFromKra() }>Save</button>&nbsp; */}

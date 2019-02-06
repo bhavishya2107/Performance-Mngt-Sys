@@ -45,7 +45,8 @@ class UserRolePMS extends Component{
 
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                // url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                url: "http://180.211.103.189:3000/api/role_master/",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
