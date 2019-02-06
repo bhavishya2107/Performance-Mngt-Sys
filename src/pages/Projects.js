@@ -62,10 +62,10 @@ class Projects extends Component {
                     className: "text-center",
                     render: function (data, type, row) {
                         return (
-                              '<a href="/EditProject/id=' + row.projectId + '"class="mr-3">' +
+                              '<a href="/EditProject/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.projectId + '"class="btnDelete">' +
+                            '<a href="#" id="' + row.projectId + '"class="btnDelete btn mr-2 delete btn-danger btn-sm">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
