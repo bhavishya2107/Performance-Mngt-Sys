@@ -36,11 +36,12 @@ class Jobtitlelist extends Component {
         });
       }
 componentDidMount() {
-
+    const endpointGET = environment.apiUrl + 'jobtitle_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/jobtitle_master/?_size=1000",
+                url: endpointGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -59,14 +60,15 @@ componentDidMount() {
 
                 {
                     data: "scaleSetId",
-                    className: "text-right",
+                    "orderable": false,
                     targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a href="/Editjobtitle/id=' + row.jobtitleId + '"class="mr-3">' +
-                            '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '&nbsp' +
-                            '<a href="#" id="' + row.jobtitleId + '"class="btnDelete" >' +
+                            '<i class="fa fa-pencil" aria-hidden="true"></i>'+
+                            "</a>"
+                             +
+                          '<a href="#" id="' + row.jobtitleId + '"class="btnDelete" >' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -74,7 +76,7 @@ componentDidMount() {
                 },
             ],
             initComplete: (settings, json) => {
-                // alert("DataTables has finished its initialisation.");
+                
                  $(".btnDelete").on("click", e => {
                    debugger;
                    this.SingleDelete(e.currentTarget.id);
@@ -93,19 +95,10 @@ componentDidMount() {
         return (
             <div>
 
-                {
-                    this.props.location.state === "2222" 
-//                   &&  <div className="alert alert-success" role="alert">
-//                         <strong>Well done!</strong> You added successfully .
-// </div>
-                }
                 <div className="clearfix text-right mb-2">
                 <Link to="/addjobtitle"className="btn btn-primary mr-5 "><i className="fa fa-plus"></i>Add</Link>
                 </div>
-                
-
-
-                <table className="table table-striped table-bordered table-hover"
+              <table className="table table-striped table-bordered table-hover"
 
                     ref={el => (this.el = el)}>
                     <thead>
@@ -113,7 +106,7 @@ componentDidMount() {
 
                             <th>Job Title</th>
                             <th>Description</th>
-                            <th>Action</th>
+                            <th width="90">Action</th>
                         </tr>
                     </thead>
                     <ToastContainer />
