@@ -8,16 +8,19 @@ class ProjectComplexity extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveProjectComplexityDetails:"",
+            saveProjectComplexityDetails: "",
             selectedIds: []
         };
     }
-       SingleDelete(projectId) {
+
+    //#region Delete Kpi function
+    SingleDelete(projectId) {
         var res = this.DeleteKpiApi(projectId);
         res.done(response => {
-            if (response === 200) {
-                alert("Data deleted");
-                window.location.reload("")
+            if (response.affectedRows > 0) {
+                toast.success("Record Deleted Succesfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             } this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
@@ -25,7 +28,7 @@ class ProjectComplexity extends Component {
         });
     }
     DeleteKpiApi(projectId) {
-        const endpoint = `http://192.168.10.109:3000/api/project_type_master/${projectId}`;
+        const endpoint = `http://180.211.103.189:3000/api/project_type_master/${projectId}`;
         return $.ajax({
             url: endpoint,
             type: "DELETE",
@@ -35,11 +38,14 @@ class ProjectComplexity extends Component {
             }
         });
     }
+    //#endregion
+
+    //#region datatable 
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/project_type_master",
+                url: "http://180.211.103.189:3000/api/project_type_master",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -54,44 +60,45 @@ class ProjectComplexity extends Component {
                     data: "description",
                     targets: 1
                 },
-
                 {
                     data: "projectTypeId",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditProjectComplexity/id=' + row.projectTypeId + '"class="mr-3">' +
+                            '<a href="/EditProjectComplexity/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.projectTypeId + '"class="btnDelete">' +
+                            '<a href="#" id="' + row.projectTypeId + '"class="btnDelete btn mr-2 delete btn-danger btn-sm">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
                     },
+                    orderable: false
                 }
             ],
+            //#endregion 
+
+            //#region detete function id
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
-                    debugger;
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    debugger;
                     this.SingleDelete(e.currentTarget.id);
                 });
             }
         });
     }
-
+    //#endregion
     render() {
         return (
-
-            <div>
+        //#region ProjectComplexity table(listed items)
+          <div>
                 {this.props.location.state === "2222"}
-                <div>
-                    <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add KPI</Link>
+                  <div className="clearfix text-right mb-2">
+                    <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-primary " role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
                 </div>
                 <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
@@ -101,54 +108,17 @@ class ProjectComplexity extends Component {
                             <tr>
                                 <th>Project Name</th>
                                 <th>Description</th>
-                                <th>Action</th>
+                                <th width="90">Action</th>
+
                             </tr>
                         </thead>
                         <tbody></tbody>
                         <ToastContainer />
                     </table>
-
                 </div>
             </div>
+            //#endregion
         )
-
     }
 }
-//     render() {
-
-//         return (
-
-//     <div>
-//     {/* {
-//         this.props.location.state=="" && 
-//         <div className="alert alert-success" role="alert">
-//         <strong>Well done!</strong> You successfully read this important alert message.
-//         </div>
-//         } */}
-           
-//         <div>
-//             <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-sm btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
-
-//         </div>
-//         <div className="page-header">
-//             <table className="table table-striped table-bordered table-hover"
-//                 id="tblKPI"
-//                 ref={el => (this.el = el)}>
-//                 <thead>
-//                     <tr>
-
-//                         <th>Project Name</th>
-//                         <th>Description</th>
-//                         <th>Actions</th>
-//                     </tr>
-//                 </thead>
-//                 <ToastContainer />
-//             </table>
-
-//         </div>
-//     </div>
-// )
-
-// }
-// }
 export default ProjectComplexity;

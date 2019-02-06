@@ -11,6 +11,12 @@ const routes = {
     '/jobtitle':'Job Title',
     '/addjobtitle':"Job title",
     //'/lalji': 'Lalji',
+    '/addKra' : 'ADD KRA',
+    '/addRole' : 'ROLE',
+    '/addscaleset' : 'Add Scale Set',
+    '/scaleset': 'Scale Set',
+    '/jobtitle':'Job Title',
+    '/addjobtitle':"Add Job title",
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
     '/UserManagement':'User Management',
@@ -20,7 +26,9 @@ const routes = {
     '/Editscaleset':"Scale Set",
     '/Projects':'Projects',
     '/myProfile':'Profile',
-    '/Editjobtitle':'Job Title'
+    '/Editjobtitle':'Job Title',
+    '/role':'Role'
+    
   };
   {
   }

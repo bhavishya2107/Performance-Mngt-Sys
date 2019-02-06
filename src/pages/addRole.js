@@ -18,30 +18,27 @@ class UserRoleForm extends Component {
     }
 
     submitDataFromRoleform() {
-        debugger;
+      
+        var res = window.formValidation("#userRoleForm");
+        if (res) {    
+    
+        } else  {
+          
+            return false;
+        }
         var _this = this;
 
         var roleFormData =
         {
             "roleName": this.state.roleName,
         };
-        
-        var res = window.formValidation("#userRoleForm");
-        if (res) {    
-            alert("Success")
-        } else  {  
-          
-            return false;
-        }
-
+   
 
 
         $.ajax({
             url: "http://192.168.10.109:3000/api/role_master",
             type: "POST",
-
             data: roleFormData,
-            // dataType: "text",
             success: function (resultData) {
 
                 _this.setState({ Redirect: true });
@@ -51,7 +48,7 @@ class UserRoleForm extends Component {
             },
 
         });
-
+            
     }
     getRoleDetailsApi() {
         var _this = this;
@@ -83,12 +80,11 @@ class UserRoleForm extends Component {
 
         var res = this.updateRoleDetailsApi(data);
         res.done((response) => {
-
-            this.setState({
+        this.setState({
                 Redirect: true
 
             })
-            toast.info("Info Notification !", {
+            toast.success("Role Updated Successfully!", {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -103,6 +99,12 @@ class UserRoleForm extends Component {
             return false;
         }
 
+    }
+
+    userFormdetailsClear(){
+        this.setState({
+            roleName: "",
+        });
     }
     componentDidMount() {
         debugger;
@@ -126,18 +128,16 @@ class UserRoleForm extends Component {
 
     render() {
         if (this.state.Redirect) {
-            return <Redirect to={{ pathname: "/userRolePMS", state: "2222" }} />
+            return <Redirect to={{ pathname: "/addRole", state: "2222" }} />
         }
         return (
-            <div className="container">
-                {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
-                <form id="userRoleForm" action="" style={{ textAlign: "center", paddingTop: "100px" }}>
-                    <div className="jumbotron">
-                        <div className="form-group row">
-                            <label for="roleName" className="col-sm-2 col-form-label">Name</label>
-                            <div className="col-sm-10">
-                        
-                                <input id="roleName" type="text" className="form-control" name="rolename"
+            <div className="container-fluid">
+                {this.state.id !== undefined ? <div></div> : <div></div>}
+                <form id="userRoleForm" action="">
+                        <div className="form-group">
+                            <label for="roleName" className="required">Name</label>
+                            <div className="">
+                                <input id="roleName" type="text" className="form-control col-6" name="rolename" 
                                     value={this.state.roleName}
                                     onChange={(event) => {
                                         this.setState(
@@ -145,23 +145,20 @@ class UserRoleForm extends Component {
                                                 roleName: event.target.value
                                             }
                                         )
-                                    }} required/><br />
+                                    }} required/>
                             </div>
                         </div>
-
-                        {/* <button type="button" className="btn btn-success btn-sm" onClick={() => this.submitDataFromRoleform()}>Save</button>&nbsp; */}
                         {this.state.id !== undefined ?
-                            <button className="btn btn-success btn-sm" type="button" onClick={() => {
+                            <button className="btn btn-success " type="button" onClick={() => {
                                 this.UpdateRoleDetails(this.state);
                             }}>Save</button>
-                            : <button className="btn btn-success btn-sm" type="button" onClick={() => {
+                            : <button className="btn btn-success " type="button" onClick={() => {
                                 this.submitDataFromRoleform(this.state);
                             }}>ADD</button>}&nbsp;
-                    <button className="btn btn-success btn-sm">Clear</button>
+                    <button type="clear" className="btn btn-info"  onClick={()=>{this.userFormdetailsClear()}}>Clear</button>&nbsp;
+                    <Link to="/role" className="btn btn-danger">Cancel</Link>
                         <br/>
-
-                    </div>
-                </form>
+                           </form>
 
             </div>
         )

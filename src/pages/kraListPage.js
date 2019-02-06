@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import {environment} from './Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -12,26 +13,26 @@ class kraListPage extends Component {
             kraId:"",
 
         };
-
-
     }
     //delete record on click delete icon
     SingleDelete(kraId) {
         var res = this.DeletescalesetApi(kraId);
-        res.done(response => {
-          if (response === 200) {
-          window.location.reload("")
-        }
-        this.$el.DataTable().ajax.reload();
-        });
-        toast.error("Record Deleted !", {
-            position: toast.POSITION.TOP_RIGHT
-        });
+        res.done(response => {    
+          if (response.affectedRows > 0) {
+            toast.success("KRA Deleted Successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
+        }       
+        });      
         res.fail(error => {
-          alert("error");
+            toast.error("KRA Not Deleted !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
         });
       }
       DeletescalesetApi(kraId) {
+
         const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
     
         return $.ajax({
@@ -46,20 +47,19 @@ class kraListPage extends Component {
 
 
 
-    componentDidMount() {
-    
+    componentDidMount() {  
         this.$el = $(this.el);
-
+        const endpointGET = environment.apiUrl + 'kra_master/'
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
-                // url: "http://192.168.10.109:3000/api/kra_master/?_size=1000",
-                url: "http://180.211.103.189:3000/api/kra_master/",
+                url: endpointGET,
+                // url: "http://180.211.103.189:3000/api/kra_master/",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
 
                 },
-
             },
             columns: [
                 {
@@ -81,20 +81,19 @@ class kraListPage extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Editkra/id=' + row.kraId + '"class="mr-3">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/Editkra/id=' + row.kraId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             '&nbsp' +
-                            '<a href="#" id="' + row.kraId + '" class="btnDelete">' +
+                            '<a href="#" id="' + row.kraId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         );
-                    }
+                    },
+                    "orderable": false
 
                 }
             ],
             initComplete: (settings, json) => {
-                // alert("DataTables has finished its initialisation.");
                 $(".btnDelete").on("click", e => {
-                    debugger;
                
                     this.SingleDelete(e.currentTarget.id);
                     
@@ -111,18 +110,13 @@ class kraListPage extends Component {
     }
     render() {
         return (<div>
-            <h1>KRA</h1>
 
 
             {
                 this.props.location.state === "2222"
-
-                //                 <div className="alert alert-success" role="alert">
-                //                     <strong>Well done!</strong> You added successfully .
-                //   </div>
             }
             <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/kraHome', state: {} }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
+                <Link to={{ pathname: '/addKra', state: {} }} className="btn btn-primary"> Add</Link>
             </div>
 
 
@@ -136,10 +130,8 @@ class kraListPage extends Component {
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Action</th>
-
-
-                    </tr>
+                        <th width="90">Action</th>
+                     </tr>
                 </thead>
                 <ToastContainer />
             </table>

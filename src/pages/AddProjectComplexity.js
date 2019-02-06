@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
-
 const $ = require('jquery');
+
 class AddProjectComplexity extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +14,8 @@ class AddProjectComplexity extends Component {
             redirectToList: false
         };
     }
+
+    //#region  save projectcomplexity details
     saveProjectComplexityDetails() {
         var _this = this;
         var ProjectComplexityData =
@@ -21,27 +23,34 @@ class AddProjectComplexity extends Component {
             "projectTypeName": this.state.projectTypeName,
             "description": this.state.description,
         }
+        var re = window.formValidation("#projectForm");
+        if (re) {
+        } else {
+            return false;
+        }
         $.ajax({
-
-            url: "http://192.168.10.109:3000/api/project_type_master",
+            url: "http://180.211.103.189:3000/api/project_type_master",
             type: "POST",
             data: ProjectComplexityData,
-            // dataType:"text", 
             success: function (resultData) {
                 _this.setState({ redirectToList: true });
-                toast.success("Success  Notification !", {
+                toast.success("Project Complexity Added Successfully!", {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
         });
     }
     getProjectComplexityDeatilsApi(projectTypeId) {
-        const endpoint = `http://192.168.10.109:3000/api/project_type_master/${this.state.projectTypeId}`;
+        const endpoint = `http://180.211.103.189:3000/api/project_type_master/${this.state.projectTypeId}`;
         return $.ajax({
             url: endpoint,
             type: "GET",
         })
     }
+    //#endregion
+ 
+ 
+ //#region update fucntionality details
     updateDetailsApi(data) {
         var body =
         {
@@ -50,7 +59,7 @@ class AddProjectComplexity extends Component {
         }
         debugger;
         return $.ajax({
-            url: `http://192.168.10.109:3000/api/project_type_master/${this.state.projectTypeId}`,
+            url: `http://180.211.103.189:3000/api/project_type_master/${this.state.projectTypeId}`,
             type: "PATCH",
             headers: {
                 "content-type": "application/json",
@@ -63,23 +72,24 @@ class AddProjectComplexity extends Component {
         debugger;
         var res = this.updateDetailsApi(data);
         res.done((response) => {
-            debugger;
             this.setState({
                 redirectToList: true
             })
-            toast.info("Updated!", {
+            toast.success("Project Complexity Updated Successfully!", {
                 position: toast.POSITION.TOP_RIGHT
-            });
+        });
         });
         res.fail((error) => {
         })
     }
+
+    //#endregion
+   
     componentDidMount() {
         if (this.state.projectTypeId !== undefined) {
             var res = this.getProjectComplexityDeatilsApi();
             console.log(res);
             res.done((response) => {
-                debugger;
                 this.setState({
                     projectTypeName: response[0].projectTypeName,
                     description: response[0].description
@@ -90,32 +100,27 @@ class AddProjectComplexity extends Component {
         } else {
         }
     }
-
-
-
-
     render() {
         if (this.state.redirectToList == true) {
-
             return <Redirect to={{ pathname: "/ProjectComplexity" }} />
         }
         return (
-
-            <div className="row">
-                {this.state.projectTypeId !== undefined ? <div>Edit</div> : <div>ADD</div>}
-
-                <form id="kpiform" className="col-12">
+          //#region form of project complexity
+          <div className="row">
+                {this.state.projectTypeId !== undefined ? <div></div> : <div></div>}
+                <form id="projectForm" className="col-12">
                     <div className="form-group">
-                        <label>Project Name</label>
-                        <input className="form-control" value={this.state.projectTypeName}
+                        <label className="required" for="projectName">Project Name</label>
+                        <input className="form-control" minlength="3" type="text" value={this.state.projectTypeName}
                             onChange={(event) => {
                                 this.setState({
                                     projectTypeName: event.target.value
                                 })
-                            }} />
+                            }} required />
                     </div>
                     <div className="form-group">
-                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.description}
+                        <label for="description">Description</label>
+                        <textarea className="form-control" rows="4"  minLength="10" type="text" value={this.state.description}
                             onChange={(event) => {
                                 this.setState({
                                     description: event.target.value
@@ -126,16 +131,16 @@ class AddProjectComplexity extends Component {
                     {this.state.projectTypeId !== undefined ?
                         <button type="button" class="btn btn-success mr-2" onClick={() => {
                             this.UpdateProjectComplexityDetails(this.state);
-                        }}>Save</button>
-                        : <button type="button" class="btn btn-success mr-2" onClick={() => {
+                        }}>Update</button>
+                        : <button type="button" class="btn btn-success mr-2" value="submit" onClick={() => {
                             this.saveProjectComplexityDetails(this.state);
-                        }}>ADD</button>}
-                    <button className="btn btn-info">Clear</button>
-                </form>
-            </div>
-            /* <Link to={{ pathname: '/ProjectComplexity' }} onClick={(event) => { this.save(event) }} class="btn btn-success mr-2" role="submit" input ty style={{ textDecoration: "none", float: "center" }}>Save</Link>
-            <button type="button" id="btnClr" class="btn btn-success" onClick={(event) => { this.clearfields(event) }} style={{ float: "center" }}>Clear</button> */
+                        }}>Save</button>}
+                    <button className="btn btn-info mr-2">Clear</button>
+                    <Link to={{ pathname: '/ProjectComplexity', }} className="btn btn-danger mr-2">Cancel</Link>                
 
+                    </form>
+            </div>
+            //#endregion 
         );
     }
 }
