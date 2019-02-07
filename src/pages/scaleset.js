@@ -9,8 +9,7 @@ class Scalesetlist extends Component {
     constructor(props) {
         super(props); debugger;
         this.state = {
-            savescaleset: "",
-            selectedIds: []
+         
         }
     }
     
@@ -18,15 +17,20 @@ class Scalesetlist extends Component {
     SingleDelete(scaleSetId) {
         var res = this.DeletescalesetApi(scaleSetId);
         res.done(response => {
-            if (response === 200) {
-                alert("Data deleted");
-                window.location.reload("")
-            } this.$el.DataTable().ajax.reload();
+          if (response.affectedRows>0) {
+            toast.success("Record Deleted Successfully!", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+          }
+          this.$el.DataTable().ajax.reload();
         });
+      
         res.fail(error => {
-            alert("error");
+          toast.error("Record Not Deleted", {
+            position: toast.POSITION.TOP_RIGHT
         });
-    }
+        });
+      }
     DeletescalesetApi(scaleSetId) {
        
         const endpoint = environment.apiUrl + 'scale_set_master/' + `${scaleSetId}`;
@@ -45,11 +49,13 @@ class Scalesetlist extends Component {
 
     componentDidMount() {
         //#region Data table realted Block
+        const endpointGET = environment.apiUrl + 'scale_set_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
+            
             ajax: {
-                url: "http://192.168.10.109:3000/api/scale_set_master/?_size=1000",
+                url: endpointGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -77,7 +83,7 @@ class Scalesetlist extends Component {
                             '<a href="/Editscaleset/id=' + row.scaleSetId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.scaleSetId + '"class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
+                            '<a href="#" id="' + row.scaleSetId + '"class="btn mr-2 delete btn-danger btn-sm btnDeletescaleset">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -86,14 +92,14 @@ class Scalesetlist extends Component {
             ],
             initComplete: (settings, json) => {
                 
-                $(".btnDelete").on("click", e => {
-                    debugger;
+                $(".btnDeletescaleset").on("click", e => {
+                    
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    debugger;
+                   
                     this.SingleDelete(e.currentTarget.id);
                 });
             }
@@ -105,7 +111,7 @@ class Scalesetlist extends Component {
         return (
             <div>
             <div className="clearfix text-right mb-2">
-                    <Link to="/addscaleset" className="btn btn-info mr-5 "><i className="fa fa-plus"></i> Add</Link>
+                    <Link to="/addscaleset" className="btn btn-primary btn-sm">Add</Link>
                 </div>
 
                 <table className="table table-striped table-bordered table-hover"
@@ -119,6 +125,7 @@ class Scalesetlist extends Component {
                         </tr>
                     </thead>
                     <ToastContainer />
+                    <tbody></tbody>
                 </table>
             </div>
         )

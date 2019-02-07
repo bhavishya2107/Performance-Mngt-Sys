@@ -14,11 +14,13 @@ const routes = {
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',
-    '/Editscaleset':"Editscaleset",
+    '/Editscaleset':"Scale Set",
     '/Projects':'Projects',
     '/myProfile':'Profile',
     '/role':'Role',
     '/kra':'Kra',
+    '/Editjobtitle':'Job Title',
+    '/role':'Role'
     
   };
   {
