@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment } from './Environment'
+import {Link} from 'react-router-dom';
 var displayDataReturn = []
 
 class AddUser extends Component {
@@ -136,8 +137,8 @@ class AddUser extends Component {
         var userList =
         {
             "jobtitleId": data.selectJobTitle,
-            "depId": data.depId,
-            "roleId": data.roleId,
+            "depId": data.selectDept,
+            "roleId": data.selectRole,
             "userName": data.userName,
             "password": "12345",
             "firstName": data.firstName,
@@ -206,7 +207,7 @@ class AddUser extends Component {
                     selectRole:res.roleId,
                     teamId:res.teamId
                 })
-                alert(this.state.teamId)
+          
             });
             res.fail((error) => {
 
@@ -414,7 +415,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Job Title:</label>
-                            <select onChange={(e) => { this.onChangeJob(e) }} value={this.state.selectJobTitle} className="btn btn-info dropdown-toggle md mr-3" required>
+                            <select onChange={(e) => { this.onChangeJob(e) }} value={this.state.selectJobTitle} className="btn  dropdown-toggle md mr-3" required>
                                 <option>select</option>
                                 {this.state.displayJobData}
                             </select>
@@ -425,7 +426,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Role:</label>
-                            <select value={this.state.selectRole} onChange={(e) => { this.onChangeRole(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                            <select value={this.state.selectRole} onChange={(e) => { this.onChangeRole(e) }} className="btn dropdown-toggle md mr-3">
                                 <option>select</option>
                                 {this.state.displayRoleData}
                             </select>
@@ -434,7 +435,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Team Leader:</label>
-                            <select  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="btn btn-info dropdown-toggle md mr-3">
+                            <select  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="btn dropdown-toggle md mr-3">
                                 <option>select</option>
                                 {this.state.displayTeamLeaderData}
                             </select>
@@ -443,13 +444,13 @@ class AddUser extends Component {
                     {this.state.userId !== undefined ?
                         <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
                             this.UpdateUserDetails(this.state);
-                        }}>Edit</button>
+                        }}>Update</button>
                         : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
                             this.saveUser(this.state);
                         }}>Save</button>}
 
                     <button type="button" className="btn btn-sm btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
-                    <button type="button" className="btn btn-sm btn-danger mr-2" onClick={()=>{this.cancel();}}>Cancel</button>
+                  <Link to='/UserManagement'className="btn btn-sm btn-danger mr-2">Cancel</Link>
 
                 </form>
             </div>

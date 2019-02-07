@@ -10,7 +10,7 @@ class UserManagement extends Component {
     constructor(props) {
         super(props);
 
-        this.setState = {
+        this.state = {
             firstName: "",
             lastName: "",
             userName: "",
@@ -21,18 +21,16 @@ class UserManagement extends Component {
 
         }
     }
-    //Delete single element
+    //#region  Delete single element
     SingleDelete(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
             debugger;
             if (response.affectedRows > 0) {
                 alert("Data deleted successfully");
-                //  window.confirm("Delete User Successfully !", {
-                //     position: toast.POSITION.TOP_RIGHT
-                // });
+
             }
-            this.$el.DataTable().ajax.reload(null, false)
+            // this.$el.DataTable().ajax.reload(null, false)
         });
         res.fail(error => {
             alert("Data is not deleted!");
@@ -48,37 +46,39 @@ class UserManagement extends Component {
             },
         });
     }
-    //#region  checkbox delete functionality
+    //#region multiple delete functionality
     DeleteUser() {
         $("#tblUser input:checkbox:checked").each((e, item) => {
-          this.state.selectedIds.push(item.value);
+            this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
-          this.state.selectedIds.map(item => {
-            var res = this.DeleteUserApi(item);
-            res.done(response => {
-              
+            this.state.selectedIds.map(item => {
+                var res = this.DeleteUserApi(item);
+                res.done(response => {
+                    toast.success("Deleted User Successfully !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                });
+
+                res.fail(error => { });
             });
-
-            res.fail(error => {});
-          });
         } else {
-          alert("please select atleast one record!");
+            alert("please select atleast one record!");
         }
-      }
-      checkall(e) {
+    }
+    checkall(e) {
         $("#tblUser input:checkbox").each((index, item) => {
-          if ($(e.currentTarget).is(":checked") === true) {
-            $(item).prop("checked", true);
-          } else {
-            $(item).prop("checked", false);
-          }
+            if ($(e.currentTarget).is(":checked") === true) {
+                $(item).prop("checked", true);
+            } else {
+                $(item).prop("checked", false);
+            }
         });
-      }
+    }
     componentDidMount() {
-
-
-        bootbox.confirm({
+        $(document).on("click", ".confirmDelete", (e) => {
+            var id = e.currentTarget.id;
+            bootbox.confirm({
                 message: "Delete this record ?",
                 buttons: {
                     confirm: {
@@ -92,15 +92,16 @@ class UserManagement extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.deleteData(this.state.userId);
+                        this.SingleDelete(id);
                     }
                     else {
-    
+
                     }
                 }
-            });       
+            });
+        });
         this.$el = $(this.el);
-         this.$el.DataTable({
+        this.$el.DataTable({
             "order": [[1, 'asc']],
             "autoWidth": false,
             ajax: {
@@ -112,21 +113,21 @@ class UserManagement extends Component {
                 },
 
             },
-            
+
             columns: [
                 {
-                    data:"userId",
-                    targets:0,
-                    render: function(data, type, row){
-                        return(
+                    data: "userId",
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return (
                             '<input type="checkbox" name="userId" value=' + row.userId + ">"
                         )
                     },
-                    orderable:false
+                    orderable: false
                 },
-                
+
                 {
-                   data: "firstName",
+                    data: "firstName",
                     targets: 1,
 
                 },
@@ -153,7 +154,8 @@ class UserManagement extends Component {
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
-                            '<a href="#" id="' + row.userId + '" class="btnDelete btn mr-2 delete btn-danger btn-sm ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+                            '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+
                         )
                     },
                     "orderable": false
@@ -180,28 +182,32 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
+                <h1>User Management</h1>
                 {
                     this.props.location.state === "2"
                 }
-                <div>
-                    <h1>User Management</h1>
-                </div>
+
                 <div className="text-right mb-3">
                     <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">Add New User</Link>
-
                 </div>
+                <button
+                    type="button"
+                    className="btn btn-danger mb-5"
+                    onClick={() => { this.DeleteUser(); }}>Delete</button>
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
-                  id="tblUser"  ref={el => (this.el = el)}> 
+                    id="tblUser"
+
+                    ref={el => (this.el = el)}>
                     <thead>
                         <tr>
                             <th>
                                 <input
                                     type="checkbox"
                                     name="checkAll"
-                                    onClick={e => {this.checkall(e)}}/>
+                                    onClick={e => { this.checkall(e) }} />
                             </th>
-                         
+
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>User Name</th>
