@@ -29,10 +29,10 @@ import ProjectComplexity from './pages/ProjectComplexity';
 import AddProjectComplexity from './pages/AddProjectComplexity';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import Templatelist from './pages/Template/templateList';
-import Scaleset from './pages/addscaleset';
-import Scalesetlist from './pages/scaleset';
-import Jobtitlelist from './pages/jobtitle';
-import Jobtitle from './pages/addjobtitle';
+import Scaleset from './pages/Scale-set/addscaleset';
+import Scalesetlist from './pages/Scale-set/scale-set';
+import Jobtitlelist from './pages/Job-title/job-title';
+import Jobtitle from './pages/Job-title/addjobtitle';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/myProfile';
 
@@ -145,13 +145,13 @@ class App extends Component {
                         <Route exact path="/myProfile" component={MyProfile} />
 
 
-                        <Route exact path="/addscaleset" component={Scaleset} />
-                        <Route exact path="/scaleset" component={Scalesetlist} />
-                        <Route exact path="/jobtitle" component={Jobtitlelist} />
-                        <Route exact path="/addjobtitle" component={Jobtitle} />
+                        <Route exact path="/scale-set/add" component={Scaleset} />
+                        <Route exact path="/scale-set" component={Scalesetlist} />
+                        <Route exact path="/job-title" component={Jobtitlelist} />
+                        <Route exact path="/job-title/add" component={Jobtitle} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
-                        <Route exact path="/Editscaleset/id=:id" component={Scaleset} />
-                        <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />        
+                        <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
+                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />        
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
                        
 
