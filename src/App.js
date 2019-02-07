@@ -16,7 +16,7 @@ import kraListPage from './pages/kra';
 import UserRolePMS from './pages/role';
 import UserRoleForm from './pages/addRole';
 
-import UserManagement from './pages/UserManagement';
+import UserManagement from './pages/User Management';
 import AddUser from './pages/AddUser'
 import Department from './pages/Department';
 import AddDept from './pages/AddDept'
@@ -28,10 +28,10 @@ import KPI from './pages/KPI/KPI';
 import ProjectComplexity from './pages/Project-Complexity/ProjectComplexity';
 import AddProjectComplexity from './pages/Project-Complexity/AddProjectComplexity';
 import Templatelist from './pages/Template/templateList';
-import Scaleset from './pages/addscaleset';
-import Scalesetlist from './pages/scaleset';
-import Jobtitlelist from './pages/jobtitle';
-import Jobtitle from './pages/addjobtitle';
+import Scaleset from './pages/Scale-set/addscaleset';
+import Scalesetlist from './pages/Scale-set/scale-set';
+import Jobtitlelist from './pages/Job-title/job-title';
+import Jobtitle from './pages/Job-title/addjobtitle';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/myProfile';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
@@ -124,12 +124,12 @@ class App extends Component {
                           component={AddDept}
                         />
                         
-                        <Route path="/UserManagement" component={UserManagement} />
-                        <Route path="/AddUser" component={AddUser} />
+                        <Route path="/user-management" component={UserManagement} />
+                        <Route path="/Add-User" component={AddUser} />
                         <Route path="/Edit/userId=:userId" component={AddUser} />
                         <Route path="/Department" component={Department} />
                         <Route path="/Edit/depId=:depId" component={AddDept} />
-                        <Route path="/AddDept" component={AddDept} />
+                        <Route path="/Add-Dept" component={AddDept} />
 
                         <Route path="/AddProject" component={AddProject} />
                         
@@ -145,13 +145,13 @@ class App extends Component {
                         <Route exact path="/myProfile" component={MyProfile} />
 
 
-                        <Route exact path="/addscaleset" component={Scaleset} />
-                        <Route exact path="/scaleset" component={Scalesetlist} />
-                        <Route exact path="/jobtitle" component={Jobtitlelist} />
-                        <Route exact path="/addjobtitle" component={Jobtitle} />
+                        <Route exact path="/scale-set/add" component={Scaleset} />
+                        <Route exact path="/scale-set" component={Scalesetlist} />
+                        <Route exact path="/job-title" component={Jobtitlelist} />
+                        <Route exact path="/job-title/add" component={Jobtitle} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
-                        <Route exact path="/Editscaleset/id=:id" component={Scaleset} />
-                        <Route exact path="/Editjobtitle/id=:id" component={Jobtitle} />        
+                        <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
+                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />        
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
                        
 

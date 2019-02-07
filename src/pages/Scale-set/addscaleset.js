@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
-import { environment } from './Environment'
+import { environment } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 //var scalesetData = []
@@ -127,7 +127,7 @@ class Scaleset extends Component {
     render() {
         if (this.state.redirectToList == true) {
 
-            return <Redirect to={{ pathname: "/scaleset" }} />
+            return <Redirect to={{ pathname: "/scale-set" }} />
         }
         return (
 
@@ -163,7 +163,7 @@ class Scaleset extends Component {
 
                  <button type="clear" className="btn btn-primary mr-3" onClick={() => {
                             this.resetform()}}>Clear</button>
-                  <Link to="/scaleset" className="btn btn-danger ">Cancel</Link>           
+                  <Link to="/scale-set" className="btn btn-danger ">Cancel</Link>           
                 </form>
             </div>
         )

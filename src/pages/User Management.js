@@ -1,35 +1,51 @@
+import { ToastContainer, toast } from 'react-toastify';
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
-import bootbox from 'bootbox';
+import bootbox from 'bootbox'
 $.DataTable = require('datatables.net-bs4');
 
-class Department extends Component {
+
+class UserManagement extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            depName: "",
-            description: "",
+            firstName: "",
+            lastName: "",
+            userName: "",
+            emailAddress: "",
+            mobileNo: "",
             selectedIds: []
+
+
         }
     }
-
-
-    //#region single delete functionality
-    SingleDeleteDept(depId) {
-        var res = this.DeleteDepApi(depId);
+    //#region  Delete single element
+    singleDeleteUser(userId) {
+        var res = this.DeleteUserApi(userId);
         res.done(response => {
+            debugger;
             if (response.affectedRows > 0) {
-                toast.success("Data deleted successfully");
+                toast.success("User Deleted successfully");
+
             }
-            this.$el.DataTable().ajax.reload()
         });
         res.fail(error => {
             toast.error("Data is not deleted!");
         });
     }
-    singleDeleteDeptConfirm(id) {
+    DeleteUserApi(userId) {
+        return $.ajax({
+            url: "http://192.168.10.109:3000/api/user_master/" + userId,
+            type: "DELETE",
+            dataSrc: "",
+            error: function (xhr, status, error) {
+
+            },
+        });
+    }
+    singleDeleteUserConfirm(id) {
 
         if (id !== undefined) {
             bootbox.confirm({
@@ -46,7 +62,7 @@ class Department extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.SingleDeleteDept(id);
+                        this.singleDeleteUser(id);
                     }
                     else {
 
@@ -55,17 +71,10 @@ class Department extends Component {
             });
         }
     }
-    DeleteDepApi(depId) {
-        // var url=environment.apiUrl+"depart"
-        return $.ajax({
-            url: "http://192.168.10.109:3000/api/department_master/" + depId,
-            type: "DELETE"
-        });
-    }
-    //#endregion
+   
     //#region multiple delete functionality
-    multipleDeleteDeptConfirm(id) {
-      
+    multipleDeleteUserConfirm(id) {
+
         if (id !== undefined) {
             bootbox.confirm({
                 message: "Delete this record ?",
@@ -81,24 +90,21 @@ class Department extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.DeleteDept(id);
+                        this.DeleteUser(id);
                     }
                 }
             });
         }
-        else {
-
-        }
     }
-
-    DeleteDept() {
-
-        $("#tblDepartment input:checkbox:checked").each((e, item) => {
+    DeleteUser() {
+        $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
+
             this.state.selectedIds.map(item => {
-                var res = this.DeleteDepApi(item);
+                var res = this.DeleteUserApi(item);
+
                 res.done(response => {
 
                 });
@@ -111,10 +117,8 @@ class Department extends Component {
             alert("please select atleast one record!");
         }
     }
-
-
     checkall(e) {
-        $("#tblDepartment input:checkbox").each((index, item) => {
+        $("#tblUser input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
             } else {
@@ -122,7 +126,6 @@ class Department extends Component {
             }
         });
     }
-    //#endregion
     componentDidMount() {
 
         this.$el = $(this.el);
@@ -130,7 +133,7 @@ class Department extends Component {
             "order": [[1, 'asc']],
             "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/department_master",
+                url: "http://192.168.10.109:3000/api/user_master/",
                 type: "get",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -138,73 +141,91 @@ class Department extends Component {
                 },
 
             },
+
             columns: [
                 {
-                    data: "depId",
-                    orderable: false,
+                    data: "userId",
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="depId" value=' + row.depId + ">"
+                            '<input type="checkbox" name="userId" value=' + row.userId + ">"
                         )
                     },
-
+                    orderable: false
                 },
+
                 {
-                    data: "depName",
+                    data: "firstName",
                     targets: 1,
 
                 },
                 {
-                    data: "description",
+                    data: "lastName",
                     targets: 2,
-                    orderable: false
                 },
                 {
-                    data: "depId",
+                    data: "userName",
                     targets: 3,
+                },
+                {
+                    data: "emailAddress",
+                    targets: 4,
+                },
+
+                {
+                    data: "mobileNo",
+                    targets: 5,
+                },
+                {
+                    data: "userId",
+                    targets: 6,
                     render: function (data, type, row) {
                         return (
-                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
-                            '<a href="#" id="' + row.depId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
                     },
                     "orderable": false
                 }
             ],
+
             initComplete: (settings, json) => {
+
             },
             //#region drawcallback function
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    this.singleDeleteDeptConfirm(e.currentTarget.id);
+                    this.singleDeleteUserConfirm(e.currentTarget.id);
                 });
                 $(".btnDeleteAll").on("click", e => {
-                    this.multipleDeleteDeptConfirm(e.currentTarget.id);
+                    this.multipleDeleteUserConfirm(e.currentTarget.id);
                 });
             }
-            //#endregion
-
         });
     }
+
+
     render() {
         return (
-
             <div>
-                <h1>Department</h1>
+                <h1>User Management</h1>
                 {
                     this.props.location.state === "2"
-
                 }
+
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-info mr-2" >+</Link>
+                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">+</Link>
                 </div>
-                <button type="button" className="btn btn-danger mb-5 btnDeleteAll" onClick={() => { this.DeleteDept(); }}>Delete</button>
+                <button
+                    type="button"
+                    className="btn btn-danger mb-5"
+                    onClick={() => { this.DeleteUser(); }}>Delete</button>
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
-                    id="tblDepartment"
+                    id="tblUser"
+
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
@@ -212,18 +233,22 @@ class Department extends Component {
                                 <input
                                     type="checkbox"
                                     name="checkAll"
-                                    onClick={e => { this.checkall(e); }} />
+                                    onClick={e => { this.checkall(e) }} />
                             </th>
-                            <th>Department Name</th>
-                            <th>Department Description</th>
+
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>User Name</th>
+                            <th>Email Address</th>
+                            <th>Mobile No</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
                 <ToastContainer />
-            </div >
+            </div>
         )
     }
 }
-export default Department;
+export default UserManagement;
