@@ -66,7 +66,7 @@ class Department extends Component {
     //#endregion
     //#region multiple delete functionality
     multipleDeleteDeptConfirm(id) {
-        // if (this.state.selectedIds.length > 0) {
+      
         if (id !== undefined) {
             bootbox.confirm({
                 message: "Delete this record ?",
@@ -98,10 +98,8 @@ class Department extends Component {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
-
             this.state.selectedIds.map(item => {
                 var res = this.DeleteDepApi(item);
-
                 res.done(response => {
 
                 });
@@ -125,6 +123,7 @@ class Department extends Component {
             }
         });
     }
+    //#endregion
     componentDidMount() {
 
         this.$el = $(this.el);

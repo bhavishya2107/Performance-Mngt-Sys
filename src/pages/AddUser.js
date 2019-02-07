@@ -165,7 +165,6 @@ class AddUser extends Component {
             data: JSON.stringify(userList),
         });
     }
-
     UpdateUserDetails(data) {
         console.log(data, 'charmi')
         var res = this.updateAjaxCall(data);

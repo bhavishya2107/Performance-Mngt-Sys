@@ -1,5 +1,5 @@
 const routes = {
-    // '/': 'Home',
+     '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
     '/addKra' : 'KRA',
@@ -10,7 +10,7 @@ const routes = {
     '/addjobtitle':"Add Job title",
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
-    // '/UserManagement':'User Management',
+     '/user-management':'user management',
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',
@@ -20,7 +20,9 @@ const routes = {
     '/role':'Role',
     '/kra':'Kra',
     '/Editjobtitle':'Job Title',
-    '/role':'Role'
+    '/role':'Role',
+    '/Add-User':'Add User',
+    '/Add-Dept':'Add Dept'
     
   };
   {

@@ -22,18 +22,17 @@ class UserManagement extends Component {
         }
     }
     //#region  Delete single element
-    SingleDelete(userId) {
+    singleDeleteUser(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
             debugger;
             if (response.affectedRows > 0) {
-                alert("Data deleted successfully");
+                toast.success("User Deleted successfully");
 
             }
-            // this.$el.DataTable().ajax.reload(null, false)
         });
         res.fail(error => {
-            alert("Data is not deleted!");
+            toast.error("Data is not deleted!");
         });
     }
     DeleteUserApi(userId) {
@@ -46,21 +45,73 @@ class UserManagement extends Component {
             },
         });
     }
+    singleDeleteUserConfirm(id) {
+
+        if (id !== undefined) {
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.singleDeleteUser(id);
+                    }
+                    else {
+
+                    }
+                }
+            });
+        }
+    }
+   
     //#region multiple delete functionality
+    multipleDeleteUserConfirm(id) {
+
+        if (id !== undefined) {
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.DeleteUser(id);
+                    }
+                }
+            });
+        }
+    }
     DeleteUser() {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
+
             this.state.selectedIds.map(item => {
                 var res = this.DeleteUserApi(item);
-                res.done(response => {
-                    toast.success("Deleted User Successfully !", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
-                });
 
-                res.fail(error => { });
+                res.done(response => {
+
+                });
+                this.$el.DataTable().ajax.reload()
+                res.fail(error => {
+
+                });
             });
         } else {
             alert("please select atleast one record!");
@@ -76,30 +127,7 @@ class UserManagement extends Component {
         });
     }
     componentDidMount() {
-        $(document).on("click", ".confirmDelete", (e) => {
-            var id = e.currentTarget.id;
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.SingleDelete(id);
-                    }
-                    else {
 
-                    }
-                }
-            });
-        });
         this.$el = $(this.el);
         this.$el.DataTable({
             "order": [[1, 'asc']],
@@ -154,7 +182,7 @@ class UserManagement extends Component {
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
-                            '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+                            '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
                     },
@@ -164,15 +192,15 @@ class UserManagement extends Component {
 
             initComplete: (settings, json) => {
 
-                $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
-                });
             },
             //#region drawcallback function
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
+                    this.singleDeleteUserConfirm(e.currentTarget.id);
+                });
+                $(".btnDeleteAll").on("click", e => {
+                    this.multipleDeleteUserConfirm(e.currentTarget.id);
                 });
             }
         });
@@ -188,7 +216,7 @@ class UserManagement extends Component {
                 }
 
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">Add New User</Link>
+                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">+</Link>
                 </div>
                 <button
                     type="button"
