@@ -23,7 +23,36 @@ function formValidation(form) {
       debug: true,
       success: "valid"
     });
-    $(form).validate();
+    $(form).validate(
+        {
+            rules:{
+                kraName:{
+                    required:true,
+                    minlength:2,
+
+                },
+                kraDescription:{
+                    required:true,
+                    minlength:2
+                },
+                rolename:{
+                    required:true,
+                    minlength:2
+                },
+                messages:{
+                    kraName:{
+                        required:'required, Enter minimum 2 characters',
+                    },
+                    kraDescription:{
+                        required:'required,cannot leave the area empty',
+                    },
+                    rolename:{
+                        required:'required,Enter minimum 2 characters',
+                    }
+                }
+            }
+        }
+    );
     return $(form).valid();
   }
 function smallTable(){

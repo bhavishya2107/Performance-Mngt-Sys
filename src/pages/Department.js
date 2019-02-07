@@ -14,14 +14,14 @@ class Department extends Component {
     }
 
 
-    // deleted single element
+    //#region single delete functionality
     SingleDelete(depId) {
         var res = this.DeleteDepApi(depId);
         res.done(response => {
             if (response.affectedRows > 0) {
                 alert("Data deleted successfully");
-                this.$el.DataTable().ajax.reload(null, false)
             }
+            this.$el.DataTable().ajax.reload(null, false)
         });
         res.fail(error => {
             alert("Data is not deleted!");
@@ -34,6 +34,7 @@ class Department extends Component {
             type: "DELETE"
         });
     }
+    //#endregion
     componentDidMount() {
 
         this.$el = $(this.el);
@@ -65,29 +66,26 @@ class Department extends Component {
                     targets: 4,
                     render: function (data, type, row) {
                         return (
-                            // '<a href="/' + row.depId + '"class="mr-3">' +
-                            // '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '<a href="/Edit/depId=' + row.depId + '">' + "Edit" + "</a>" + " " +
-                            '<a href="#" id="' + row.depId + '" class="btnDelete">' + "Delete" + '</a>'
+                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a href="#" id="' + row.depId + '" class="btnDelete btn mr-2 delete btn-danger btn-sm ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
                         )
                     },
                     "orderable": false
                 }
-
             ],
             initComplete: (settings, json) => {
-                
                 $(".btnDelete").on("click", e => {
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
-
-            "drawCallback":  (settings) =>  {
+            //#region drawcallback function
+            "drawCallback": (settings) => {
                 window.smallTable();
-                $(".btnDelete").on("click", e => {                 
+                $(".btnDelete").on("click", e => {
                     this.SingleDelete(e.currentTarget.id);
                 });
             }
+            //#endregion
 
         });
     }
@@ -100,7 +98,7 @@ class Department extends Component {
 
                 }
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-success mr-2" >Add Department</Link>
+                    <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-info mr-2" >Add Department</Link>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     ref={el => (this.el = el)}>
@@ -112,7 +110,8 @@ class Department extends Component {
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                   
+
+                   <tbody></tbody>
                 </table>
                 <ToastContainer />
             </div >

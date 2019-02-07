@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { environment } from './Environment'
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,6 +16,7 @@ class Scaleset extends Component {
             redirectToList: false
         }
     }
+    //#region Onclick function for Add
     savescaleset() {
         var isvalidate = window.formValidation("#formscaleset");
         if (isvalidate) {
@@ -33,7 +34,7 @@ class Scaleset extends Component {
                 success: function (resultData) {
                     
                     _this.setState({ redirectToList: true });
-                    toast.success("Scaleset Added !", {
+                    toast.success("Scaleset Saved Successfully!", {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 }
@@ -44,6 +45,18 @@ class Scaleset extends Component {
         }
 
     }
+    //#endregion
+    
+    //#region Reset function onclick
+    resetform(){
+        this.setState({
+            scaleSetName:"",
+            description:""
+
+        })
+    }
+    //#endregion
+    
     getscalesetDetilsApi() {
         const endpointGET = environment.apiUrl + 'scale_set_master/' + `${this.state.id}`
         return $.ajax({
@@ -52,6 +65,7 @@ class Scaleset extends Component {
 
         })
     }
+    //#region  update Api function and ajax call
     updateDetailsApi(data) {
         var body =
         {
@@ -64,43 +78,35 @@ class Scaleset extends Component {
             type: "PATCH",
             headers: {
                 "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
+                "x-requested-with": "XMLHttpRequest"                
             },
             data: JSON.stringify(body)
         });
     }
-    UpdatescalesetDetails(data) {
+    UpdatescalesetDetails(data) {       
         var isvalidate = window.formValidation("#formscaleset");
         if (isvalidate) {
             var res = this.updateDetailsApi(data);
-            res.done((response) => {
+            res.done((response) => {            
                 this.setState({
                     redirectToList: true
                 })
+                toast.success("Scaleset Updated Successfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });    
             });
             res.fail((error) => {
-
+                debugger;
             })
+        
         } else {
 
             return false;
         }
-        var res = this.updateDetailsApi(data);
-
-        res.done((response) => {
-        
-            this.setState({
-                redirectToList: true
-            })
-            toast.success("Scaleset Updated!", {
-                position: toast.POSITION.TOP_RIGHT
-            });
-
-        });
-        res.fail((error) => {
-
-        })
     }
+    //#endregion
+    
+    
     componentDidMount() {
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
@@ -130,7 +136,7 @@ class Scaleset extends Component {
 
                 <form id="formscaleset" className="col-6">
                     <div className="form-group">
-                        <label>Name</label>
+                        <label className="required">Name</label>
                         <input type="text" id="scalesetid" name="scalesetname" className="form-control" minLength="" value={this.state.scaleSetName}
                             onChange={(event) => {
                                 this.setState({
@@ -147,13 +153,17 @@ class Scaleset extends Component {
                             }} ></textarea>
                     </div>
                     {this.state.id !== undefined ?
-                        <button type="button" className="btn btn-success" onClick={() => {
+                        <button type="button" className="btn btn-success mr-3" onClick={() => {
                             this.UpdatescalesetDetails(this.state);
-                        }}>Save</button>
-                        : <button type="button" className="btn btn-success" onClick={() => {
+                        }}>Update</button>
+                        
+                        : <button type="button" className="btn btn-success mr-3" onClick={() => {
                             this.savescaleset(this.state);
-                        }}>ADD</button>}
-                    {/* <button type="clear" className="btn btn-danger">Clear</button> */}
+                        }}>Save</button>}
+
+                 <button type="clear" className="btn btn-primary mr-3" onClick={() => {
+                            this.resetform()}}>Clear</button>
+                  <Link to="/scaleset" className="btn btn-danger ">Cancel</Link>           
                 </form>
             </div>
         )

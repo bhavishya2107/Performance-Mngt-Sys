@@ -18,12 +18,12 @@ export default {
 
         {
             name: 'KRA',
-            url: '/kraListPage',
+            url: '/kra',
             icon: 'fa fa-plus',
         },
         {
             name: 'Role',
-            url: '/userRolePMS',
+            url: '/role',
             icon: 'fa fa-plus',
         },
 

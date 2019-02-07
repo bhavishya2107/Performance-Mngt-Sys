@@ -27,8 +27,8 @@ class UserManagement extends Component {
             debugger;
             if (response.affectedRows > 0) {
                 alert("Data deleted successfully");
-                this.$el.DataTable().ajax.reload(null, false)
             }
+            this.$el.DataTable().ajax.reload(null, false)
         });
         res.fail(error => {
             alert("Data is not deleted!");
@@ -60,7 +60,6 @@ class UserManagement extends Component {
 
             },
             columns: [
-
                 {
                     data: "firstName",
                     targets: 0,
@@ -88,20 +87,21 @@ class UserManagement extends Component {
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Edit/userId=' + row.userId + '">' + "Edit" + "</a>" + " " +
-                            '<a href="#" id="' + row.userId + '" class="btnDelete">' + "Delete" + '</a>'
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a href="#" id="' + row.userId + '" class="btnDelete btn mr-2 delete btn-danger btn-sm ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
                         )
                     },
                     "orderable": false
                 }
             ],
+          
             initComplete: (settings, json) => {
 
                 $(".btnDelete").on("click", e => {
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
-
+            //#region drawcallback function
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
@@ -111,16 +111,15 @@ class UserManagement extends Component {
         });
     }
 
-    //bind the dropdown list
+   
     render() {
         return (
-            //to add the data to the table 
-            <div>
+             <div>
                 {
                     this.props.location.state === "2"
                 }
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-success mr-2" role="submit">Add User</Link>
+                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">Add User</Link>
 
                 </div>
 
