@@ -25,6 +25,7 @@ class AddProjectComplexity extends Component {
         }
         var re = window.formValidation("#projectForm");
         if (re) {
+
         } else {
             return false;
         }
@@ -82,7 +83,6 @@ class AddProjectComplexity extends Component {
         res.fail((error) => {
         })
     }
-
     //#endregion
    
     componentDidMount() {
@@ -111,7 +111,7 @@ class AddProjectComplexity extends Component {
                 <form id="projectForm" className="col-12">
                     <div className="form-group">
                         <label className="required" for="projectName">Project Name</label>
-                        <input className="form-control" minlength="3" type="text" value={this.state.projectTypeName}
+                        <input className="form-control" type="text" value={this.state.projectTypeName}
                             onChange={(event) => {
                                 this.setState({
                                     projectTypeName: event.target.value
@@ -120,7 +120,7 @@ class AddProjectComplexity extends Component {
                     </div>
                     <div className="form-group">
                         <label for="description">Description</label>
-                        <textarea className="form-control" rows="4"  minLength="10" type="text" value={this.state.description}
+                        <textarea className="form-control" rows="3"   type="text" value={this.state.description}
                             onChange={(event) => {
                                 this.setState({
                                     description: event.target.value
