@@ -39,7 +39,7 @@ class AddKpi extends Component {
             data: Kpidata,
             success: function (resultData) {
                 _this.setState({ redirectToList: true });
-                toast.success("KPI Updated Successfully!", {
+                toast.success("Record Added Successfully!", {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -126,7 +126,7 @@ class AddKpi extends Component {
             this.setState({
                 redirectToList: true
             })
-            toast.success("KPI Updated Succesfully!", {
+            toast.success("Record Updated Succesfully!", {
                 position: toast.POSITION.TOP_RIGHT
             });
         });

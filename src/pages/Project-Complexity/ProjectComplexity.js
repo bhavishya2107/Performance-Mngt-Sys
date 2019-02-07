@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { environment } from './Environment';
+import { environment } from '../Environment';
 import bootbox from 'bootbox';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,7 +16,7 @@ class ProjectComplexity extends Component {
         };
     }
     //#region Delete Kpi function
-    SingleDelete(projectId) {
+    SingleDeleteProjectComplexity(projectId) {
         var res = this.DeleteKpiApi(projectId);
         res.done(response => {
             if (response.affectedRows > 0) {
@@ -25,7 +25,7 @@ class ProjectComplexity extends Component {
                 });
             } this.$el.DataTable().ajax.reload();
         });
-       res.fail(error => {
+        res.fail(error => {
 
         });
     }
@@ -40,6 +40,16 @@ class ProjectComplexity extends Component {
             }
         });
     }
+    checkall(e) {
+        $("#tblProjectComplexity input:checkbox").each((index, item) => {
+            if ($(e.currentTarget).is(":checked") === true) {
+                $(item).prop("checked", true);
+            } else {
+                $(item).prop("checked", false);
+            }
+        });
+    }
+
     //#endregion
 
     //#region datatable 
@@ -60,7 +70,7 @@ class ProjectComplexity extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.SingleDelete(id);
+                        this.SingleDeleteProjectComplexity(id);
                     }
                     else {
 
@@ -82,12 +92,22 @@ class ProjectComplexity extends Component {
             },
             columns: [
                 {
+                    data: "projectTypeId",
+                    "orderable": false,
+                    targets: 0,
+                    render: (data, type, row) => {
+                        return (
+                            '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + '" />'
+                        )
+                    },
+                },
+                {
                     data: "projectTypeName",
-                    targets: 0
+                    targets: 1
                 },
                 {
                     data: "description",
-                    targets: 1,
+                    targets: 2,
                     orderable: false
                 },
                 {
@@ -95,12 +115,12 @@ class ProjectComplexity extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditProjectComplexity/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/project-complexity/edit/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            "</a>" +
+                            '</a>' +
                             '<a href="#" id="' + row.projectTypeId + '"class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                            "</a>"
+                            '</a>'
                         )
                     },
                     orderable: false
@@ -111,12 +131,12 @@ class ProjectComplexity extends Component {
             //#region detete function id
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
+                    this.SingleDeleteProjectComplexity(e.currentTarget.id);
                 });
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
+                    this.SingleDeleteProjectComplexity(e.currentTarget.id);
                 });
             }
         });
@@ -124,19 +144,22 @@ class ProjectComplexity extends Component {
     //#endregion
     render() {
         return (
-        //#region ProjectComplexity table(listed items)
-          <div>
+            //#region ProjectComplexity table(listed items)
+            <div>
                 <h1>Project Complexity</h1>
                 {this.props.location.state === "2222"}
-                  <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/AddProjectComplexity', }} className="btn btn-lg btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}></Link>
+                <button type="button" className="btn mr-2 delete btn-danger fa fa-trash" style={{ float: "left" }} onClick={() => { this.multipleDeleteKPI(); }}></button>
+                    <Link to={{ pathname:'/project-complexity/add', }} className="btn btn-lg btn-primary fa fa-plus" style={{float: "Right" }}></Link>
+                <div className="clearfix text-right mb-2">
+             
                 </div>
                 <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
-                        id="tblKpi"
+                        id="tblProjectComplexity"
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
+                                <th width="20"><input type="checkbox" onClick={(e) => { this.checkall(e); }}></input></th>
                                 <th>Project Name</th>
                                 <th>Description</th>
                                 <th width="90">Action</th>
@@ -144,8 +167,9 @@ class ProjectComplexity extends Component {
                             </tr>
                         </thead>
                         <tbody></tbody>
-                        <ToastContainer />
+                        
                     </table>
+                    <ToastContainer />
                 </div>
             </div>
             //#endregion

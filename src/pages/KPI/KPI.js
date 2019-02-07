@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
-import { environment } from './Environment';
-// import {Redirect} from "react-router-dom";
+import { environment } from '../Environment';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -17,7 +16,7 @@ class KPI extends Component {
     }
 
     //#region delete Kpi function
-    SingleDelete(KpiId) {
+    SingleDeleteKpi(KpiId) {
         var res = this.DeleteKpiApi(KpiId);
         res.done(response => {
             if (response.affectedRows > 0) {
@@ -40,24 +39,16 @@ class KPI extends Component {
             }
         });
     }
-    //#endregion
-    // {
-    //     this.$el = $(this.el);
-    //     this.$el.DataTable({
-    //         ajax: {
-    //             url: "http://192.168.10.109:3000/api/kpi_master",
-    //             type: "GET",
-    //             dataSrc: "",
-    //             error: function (xhr, status, error) {
-    //             },
-    //         },
-    componentDidMount() {
-     
+    multipleDeleteKPI() {
+        $("#tblKpi input:checkbox:checked").each((e, item) => {
+            this.state.selectedIds.push(item.value);
+        });
+        if (this.state.selectedIds.length > 0) {
+             //#region multiple delete bootbox from chechbox
         $(document).on("click", ".confirmDelete", (e) => {
-            alert("123")
             var id = e.currentTarget.id;
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: "Are you sure you want to delete this record ?",
                 buttons: {
                     confirm: {
                         label: 'OK',
@@ -70,16 +61,60 @@ class KPI extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.SingleDelete(id);
+                        this.DeleteKpiApi(id);
                     }
                     else {
-
                     }
                 }
             });
         });
-
-     
+        // #endregion
+        //     this.state.selectedIds.map(item => {
+        //         var res = this.DeleteKpiApi(item);
+        //         res.done(response => {
+        //             toast.success("Record Deleted Succesfully!", {
+        //                 position: toast.POSITION.TOP_RIGHT
+        //             });
+        //             this.$el.DataTable().ajax.reload();
+        //         });
+        //         res.fail(error => { });
+        //     });
+            
+        } else {
+        }
+    }
+    checkall(e) {
+        $("#tblKpi input:checkbox").each((index, item) => {
+            if ($(e.currentTarget).is(":checked") === true) {
+                $(item).prop("checked", true);
+            } else {
+                $(item).prop("checked", false);
+            }
+        });
+    }
+    SingleDeleteKpiConfirm(id){
+        bootbox.confirm({
+            message: "Are you sure you want to delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'OK',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.SingleDeleteKpi(id);
+                }
+                else {
+                }
+            }
+        });
+    }
+    componentDidMount() {
         this.$el = $(this.el);
         var apiUrl = environment.apiUrl + "kpi_master";
         this.$el.DataTable({
@@ -92,12 +127,22 @@ class KPI extends Component {
             },
             columns: [
                 {
+                    data: "kpiId",
+                    "orderable": false,
+                    targets: 0,
+                    render: (data, type, row) => {
+                        return (
+                            '<input type="checkbox" name="kpiId" value=' + row.kpiId + '" />'
+                        )
+                    },
+                },
+                {
                     data: "kpiTitle",
-                    targets: 0
+                    targets: 1
                 },
                 {
                     data: "target",
-                    targets: 1
+                    targets: 2
                 },
                 {
                     data: "kpiId",
@@ -115,35 +160,38 @@ class KPI extends Component {
                     orderable: false
                 }
             ],
-            initComplete: (settings, json) => {
-                $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
-                });
-            },
+           
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    this.SingleDelete(e.currentTarget.id);
+                    this.SingleDeleteKpiConfirm(e.currentTarget.id);
                 });
-            }
+            },
+            
+            // drawCallback: (settings) => {
+            //     $(".btnDelete").on("click", e => {
+            //         this.multipleDeleteKPI(e.currentTarget.id);
+            //     });
+            // }
         });
     }
     render() {
         return (
             //#region table of kpi
             <div >
+
                 <h1>KPI</h1>
                 {this.props.location.state === "2222"}
+                <button type="button" className="btn mr-2 delete btn-danger fa fa-trash" style={{ float: "left" }} onClick={() => { this.multipleDeleteKPI(); }}></button>
                 <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/AddKpi', }} className="btn btn-lg btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}></Link>
-
+                    <Link to={{ pathname: '/kpi/add', }} className="btn btn-lg btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}></Link>
                 </div>
                 <div className="page-header">
-
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblKpi"
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
+                                <th width="20"><input type="checkbox" onClick={(e) => { this.checkall(e); }}></input></th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th width="90">Action</th>
