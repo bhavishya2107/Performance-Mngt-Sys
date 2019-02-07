@@ -78,42 +78,31 @@ class Scaleset extends Component {
             type: "PATCH",
             headers: {
                 "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
+                "x-requested-with": "XMLHttpRequest"                
             },
             data: JSON.stringify(body)
         });
     }
-    UpdatescalesetDetails(data) {
+    UpdatescalesetDetails(data) {       
         var isvalidate = window.formValidation("#formscaleset");
         if (isvalidate) {
             var res = this.updateDetailsApi(data);
-            res.done((response) => {
+            res.done((response) => {            
                 this.setState({
                     redirectToList: true
                 })
+                toast.success("Scaleset Updated Successfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });    
             });
             res.fail((error) => {
-
+                debugger;
             })
+        
         } else {
 
             return false;
         }
-        var res = this.updateDetailsApi(data);
-
-        res.done((response) => {
-        
-            this.setState({
-                redirectToList: true
-            })
-            toast.success("Scaleset Updated Successfully!", {
-                position: toast.POSITION.TOP_RIGHT
-            });
-
-        });
-        res.fail((error) => {
-
-        })
     }
     //#endregion
     
@@ -173,7 +162,7 @@ class Scaleset extends Component {
                         }}>Save</button>}
 
                  <button type="clear" className="btn btn-primary mr-3" onClick={() => {
-                            this.resetform()}}>CLEAR</button>
+                            this.resetform()}}>Clear</button>
                   <Link to="/scaleset" className="btn btn-danger ">Cancel</Link>           
                 </form>
             </div>
