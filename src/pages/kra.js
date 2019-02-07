@@ -16,17 +16,15 @@ class kraListPage extends Component {
         };
     }
     //#region delete kra on click delete icon
-    SingleDelete(kraId) {
+    SingleKraDelete(kraId) {
         var res = this.DeleteKraApi(kraId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("KRA Deleted Successfully !", {
+                toast.success("Role Deleted Successfully", {
                     position: toast.POSITION.TOP_RIGHT
                 });
                 this.$el.DataTable().ajax.reload();
             }
-            
-          
         });
         res.fail(error => {
             toast.error("KRA Not Deleted !", {
@@ -34,6 +32,7 @@ class kraListPage extends Component {
             });
         });
     }
+
     DeleteKraApi(kraId) {
 
         // const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
@@ -60,25 +59,80 @@ class kraListPage extends Component {
     }
     DeleteAllKra() {
         $("#kraDataList input:checkbox:checked").each((e, item) => {
-          this.state.selectedIds.push(item.value);
+            this.state.selectedIds.push(item.value);
         });
+        var res = '';
+
         if (this.state.selectedIds.length > 0) {
-          this.state.selectedIds.map(item => {
-            var res = this.DeleteKraApi(item);
-            res.done(response => {
-              alert("data deleted Successfully.");
+            this.state.selectedIds.map(item => {
+                res = this.DeleteKraApi(item);
             });
-            res.fail(error => {});
-          });
-        } else {
-          alert("please select atleast one record!");
+            res.done(response => {
+                toast.success("KRA Deleted Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload();
+            });
+            res.fail(error => {
+
+            });
+
         }
-      }
+    }
 
+    SingleDeleteConfirm(id) {
+        if (id !== undefined) {
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.SingleKraDelete(id);
+                    }
+                    else {
 
+                    }
+                }
+            });
+        }
+    }
+    multiKraDeleteConfirm(id) {
+        if (id !== undefined) {
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        alert(1)
+                       // this.DeleteAllKra(id);
+                    }
+                    else {
+
+                    }
+                }
+            });
+        }
+    }
 
     componentDidMount() {
-      
         this.$el = $(this.el);
         const endpointGET = environment.apiUrl + 'kra_master/'
         this.$el.DataTable({
@@ -95,32 +149,30 @@ class kraListPage extends Component {
             },
             columns: [
                 {
-                   
-                    data: "id",
-                    "orderable": false, "targets": 0,
+
+                    data: "kraId",
+                    "orderable": false,
+                    targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="kraId" value=' + row.id + ">"
+                            '<input type="checkbox" name="kraId" value=' + row.kraId + ">"
                         );
                     },
-                    
-                },
-                {
-                    data: "kraId",
-                    targets: 1,
+
                 },
                 {
                     data: "kraName",
-                    targets: 2
+                    targets: 1
                 },
                 {
                     data: "description",
-                    targets: 3
+                    targets: 2
                 },
 
                 {
-                    data: "",
-                    targets: 4,
+                    data: "action",
+                    "orderable": false,
+                    targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a href="/Editkra/id=' + row.kraId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
@@ -130,27 +182,30 @@ class kraListPage extends Component {
                             "</a>"
                         );
                     },
-                    "orderable": false
+
                 }
             ],
             initComplete: (settings, json) => {
-                $(".btnDelete").on("click", e => {
-                  
-                 
-                    this.SingleDelete(e.currentTarget.id);
-                
-                 
-                });
+                //debugger;
+                // $(".btnDelete").on("click", e => {
+                //     this.SingleDeleteConfirm(e.currentTarget.id);
+                // });
             },
             drawCallback: (settings) => {
+                window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    var result =  window.confirm("Delete Confirm!!!");
-                  
-                    this.SingleDelete(e.currentTarget.id);
+                    // var result =  window.confirm("Delete Confirm!!!");
+                    this.SingleDeleteConfirm(e.currentTarget.id);
+
+                });
+                $(".btnDeleteAll").on("click", e => {
+                    // var result =  window.confirm("Delete Confirm!!!");
+                    this.multiKraDeleteConfirm(e.currentTarget.id);
 
                 });
             },
-            
+
+
         });
     }
     render() {
@@ -162,33 +217,32 @@ class kraListPage extends Component {
                     this.props.location.state === "2222"
                 }
                 <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/addKra', state: {} }} className="btn btn-primary">Add New</Link>
+                    <Link to={{ pathname: '/addKra', state: {} }} className="btn btn-primary btn-lg"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
                 <button
-                className="btn btn-danger mb-2" type="button"
+                    className="btn btn-danger mb-2 btnDeleteAll"
                     onClick={() => {
-                        this.DeleteAllKra();
-                    }}><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        this.multiKraDeleteConfirm();
+                    }}><i className="fa fa-trash" aria-hidden="true"></i></button>
 
-                <table className="table table-striped table-bordered table-hover"
+                <table className="table table-striped table-bordered table-hover customDataTable"
                     id="kraDataList"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th width="10">
+                            <th width="20">
                                 <input
                                     type="checkbox" name="checkAll"
                                     onClick={e => { this.checkall(e); }}
                                 />
                             </th>
-                            <th>ID</th>
                             <th>Name</th>
                             <th>Description</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                    <ToastContainer />
                 </table>
+                <ToastContainer />
             </div>
             //#endregion
         );
