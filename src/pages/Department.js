@@ -28,7 +28,6 @@ class Department extends Component {
         });
     }
     DeleteDepApi(depId) {
-        console.log("http://192.168.10.109:3000/api/department_master/" + depId);
         return $.ajax({
             url: "http://192.168.10.109:3000/api/department_master/" + depId,
             type: "DELETE"
@@ -110,8 +109,7 @@ class Department extends Component {
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-
-                   <tbody></tbody>
+                    <tbody></tbody>
                 </table>
                 <ToastContainer />
             </div >

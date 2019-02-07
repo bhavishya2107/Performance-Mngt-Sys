@@ -1,5 +1,5 @@
 const routes = {
-    '/': 'Home',
+    // '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
     '/kraHome' : 'ADD KRA',
@@ -19,7 +19,7 @@ const routes = {
     '/addjobtitle':"Add Job title",
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
-    '/UserManagement':'User Management',
+    // '/UserManagement':'User Management',
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',

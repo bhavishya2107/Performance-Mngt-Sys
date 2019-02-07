@@ -204,9 +204,9 @@ class AddUser extends Component {
                     selectJobTitle: res.jobtitleId,
                     selectDept:res.depId,
                     selectRole:res.roleId,
-                //    teamId:res.
+                    teamId:res.teamId
                 })
-                alert(this.state.selectJobTitle)
+                alert(this.state.teamId)
             });
             res.fail((error) => {
 
@@ -414,7 +414,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Job Title:</label>
-                            <select onChange={(e) => { this.onChangeJob(e) }} className="btn btn-info dropdown-toggle md mr-3" required>
+                            <select onChange={(e) => { this.onChangeJob(e) }} value={this.state.selectJobTitle} className="btn btn-info dropdown-toggle md mr-3" required>
                                 <option>select</option>
                                 {this.state.displayJobData}
                             </select>
@@ -434,7 +434,7 @@ class AddUser extends Component {
                     <div className="row">
                         <div className="dropdown" >
                             <label className="mr-2">Team Leader:</label>
-                            <select  onChange={(e) => { this.onChangeTeamLeader(e) }} className="btn btn-info dropdown-toggle md mr-3">
+                            <select  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="btn btn-info dropdown-toggle md mr-3">
                                 <option>select</option>
                                 {this.state.displayTeamLeaderData}
                             </select>
@@ -448,7 +448,8 @@ class AddUser extends Component {
                             this.saveUser(this.state);
                         }}>Save</button>}
 
-                    <button type="button" onClick={() => { this.clear(); }}>Clear</button>
+                    <button type="button" className="btn btn-sm btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
+                    <button type="button" className="btn btn-sm btn-danger mr-2" onClick={()=>{this.cancel();}}>Cancel</button>
 
                 </form>
             </div>

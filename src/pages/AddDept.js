@@ -27,12 +27,17 @@ class AddDept extends Component {
         })
     }
     //#endregion
+    //#region  cancel functionality
+
+    cancel(){
+        this.setState({})
+    }
 
     //#region save department details
     saveDept() {
         var result = window.formValidation("#createDepartment");
         if (result) {
-            alert("Success")
+           
         } else {
             return false;
         }

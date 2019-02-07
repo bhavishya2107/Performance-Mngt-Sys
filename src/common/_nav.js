@@ -28,7 +28,7 @@ export default {
         },
 
         {
-            name: 'UserManagement',
+            name: 'User Management',
             url: '/UserManagement',
             icon: 'fa fa-plus'
         },
