@@ -20,7 +20,7 @@ class kraHome extends Component {
         const endpoint = environment.apiUrl + 'kra_master/'
         var res = window.formValidation("#kraAddForm");
         if (res) {
-            alert("Success")
+      
         } else {
 
             return false;
@@ -147,7 +147,7 @@ class kraHome extends Component {
 
             <div className="container-fluid">
                 {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="kraAddForm" action="" >
+                <form id="kraAddForm" className="pt-5" action="" >
 
                     <div className="form-group">
                         <label className=" required" for="kraName">Name</label>

@@ -96,7 +96,7 @@ class UserRoleForm extends Component {
         })
         var result = window.formValidation("#userRoleForm");
         if (result) {
-            alert("Success")
+            // alert("Success")
         } else  {  
           
             return false;
@@ -131,12 +131,12 @@ class UserRoleForm extends Component {
 
     render() {
         if (this.state.Redirect) {
-            return <Redirect to={{ pathname: "/addRole", state: "2222" }} />
+            return <Redirect to={{ pathname: "/role", state: "2222" }} />
         }
         return (
             <div className="container-fluid">
                 {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="userRoleForm" action="">
+                <form id="userRoleForm" className="pt-5" action="">
                         <div className="form-group">
                             <label for="roleName" className="required">Name</label>
                             <div className="">

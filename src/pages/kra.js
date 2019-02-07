@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment } from './Environment'
+import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -57,17 +58,35 @@ class kraListPage extends Component {
             }
         });
     }
+    DeleteAllKra() {
+        $("#kraDataList input:checkbox:checked").each((e, item) => {
+          this.state.selectedIds.push(item.value);
+        });
+        if (this.state.selectedIds.length > 0) {
+          this.state.selectedIds.map(item => {
+            var res = this.DeleteKraApi(item);
+            res.done(response => {
+              alert("data deleted Successfully.");
+            });
+            res.fail(error => {});
+          });
+        } else {
+          alert("please select atleast one record!");
+        }
+      }
 
 
 
     componentDidMount() {
+      
         this.$el = $(this.el);
-        // const endpointGET = environment.apiUrl + 'kra_master/'
+        const endpointGET = environment.apiUrl + 'kra_master/'
         this.$el.DataTable({
             "autoWidth": false,
+            aaSorting: [[1, 'asc']],
             ajax: {
-                // url: endpointGET,
-                url: "http://180.211.103.189:3000/api/kra_master/",
+                url: endpointGET,
+                // url: "http://180.211.103.189:3000/api/kra_master/",
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -76,18 +95,19 @@ class kraListPage extends Component {
             },
             columns: [
                 {
+                   
                     data: "id",
-                    targets: 0,
+                    "orderable": false, "targets": 0,
                     render: function (data, type, row) {
                         return (
                             '<input type="checkbox" name="kraId" value=' + row.id + ">"
                         );
                     },
-                    "orderable": false
+                    
                 },
                 {
                     data: "kraId",
-                    targets: 1
+                    targets: 1,
                 },
                 {
                     data: "kraName",
@@ -115,12 +135,8 @@ class kraListPage extends Component {
             ],
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
-                    var result =  window.confirm("Delete Confirm!!!");
-                    if(result==true){
-                        window.alert();
-                    }else{
-                        
-                    }
+                  
+                 
                     this.SingleDelete(e.currentTarget.id);
                 
                  
@@ -128,11 +144,13 @@ class kraListPage extends Component {
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-
+                    var result =  window.confirm("Delete Confirm!!!");
+                  
                     this.SingleDelete(e.currentTarget.id);
 
                 });
-            }
+            },
+            
         });
     }
     render() {
@@ -149,7 +167,7 @@ class kraListPage extends Component {
                 <button
                 className="btn btn-danger mb-2" type="button"
                     onClick={() => {
-                        this.DeleteAlbum();
+                        this.DeleteAllKra();
                     }}><i class="fa fa-trash" aria-hidden="true"></i></button>
 
                 <table className="table table-striped table-bordered table-hover"

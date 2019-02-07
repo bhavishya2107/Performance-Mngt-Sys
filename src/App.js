@@ -71,7 +71,7 @@ class App extends Component {
                 <div className="container-fluid">
                   <div className="row">
                     <div className="col-xl-12 col-lg-12 col-md-12">
-                      <Breadcrumb />
+                      {/* <Breadcrumb /> */}
                     </div>
                   </div>
                   <div className="row">
