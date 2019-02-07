@@ -156,11 +156,12 @@ class AddKpi extends Component {
         }
         return (
             <div className="row">
+     
                 {this.state.kpiId !== undefined ? <div></div> : <div></div>}
                 <form id="kpiform" className="col-12">
                     <div className="form-group">
-                        <label for="kpititle">KPI title</label>
-                        <input id="kpititle" className="form-control" minlength="3" type="text" value={this.state.kpiTitle}
+                    <label className="required" for="target">KPI Title</label>
+                        <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
                             onChange={(event) => {
                                 this.setState({
                                     kpiTitle: event.target.value
@@ -169,7 +170,7 @@ class AddKpi extends Component {
                     </div>
                     <div className="form-group">
                         <label className="required" for="target">Target</label>
-                        <textarea className="form-control" rows="4" type="text" value={this.state.target}
+                        <textarea  className="form-control" rows="4" type="text" value={this.state.target}
                             onChange={(event) => {
                                 this.setState({
                                     target: event.target.value
@@ -178,7 +179,7 @@ class AddKpi extends Component {
                     </div>
                     <div className="form-group">
                         <label className="required" for="weightage">Weight</label>
-                        <input className="form-control" rows="4" minlength="5" maxlength="5" type="text" value={this.state.weightage}
+                        <input className="form-control" rows="4" type="text" value={this.state.weightage}
                             onChange={(event) => {
                                 this.setState({
                                     weightage: event.target.value
@@ -186,7 +187,6 @@ class AddKpi extends Component {
                             }} required />
                     </div>
                     <div className="dropdown">
-
                         <br /><br />
                         <label className="mr-2">Scale Set</label>
                         <select onChange={(e) => { this.onChangeScaleSetId(e) }} required className="btn btn-info dropdown-toggle md mr-3">

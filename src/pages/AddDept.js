@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom'
 import { environment } from './Environment'
 import $ from 'jquery';
+import { Link } from 'react-router-dom';
 class AddDept extends Component {
     constructor(props) {
         super(props);
@@ -27,12 +28,15 @@ class AddDept extends Component {
         })
     }
     //#endregion
+    //#region  cancel functionality
+
+   
 
     //#region save department details
     saveDept() {
         var result = window.formValidation("#createDepartment");
         if (result) {
-            alert("Success")
+
         } else {
             return false;
         }
@@ -52,10 +56,12 @@ class AddDept extends Component {
             success: function (result) {
 
                 _this.setState({ RedirectToDept: true });
-                toast.success("Success  Notification !", {
+                toast.success("Department Saved Successfully !", {
                     position: toast.POSITION.TOP_RIGHT
                 });
+
             }
+
         });
     }
     //#endregion
@@ -98,7 +104,7 @@ class AddDept extends Component {
             this.setState({
                 isUpdate: true
             })
-            toast.success("Update User Successfully !", {
+            toast.success(" Department Updated Successfully !", {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -148,7 +154,7 @@ class AddDept extends Component {
                     <div>
 
                         <label for="depName">Name<span style={{ color: "red" }}>*</span></label>
-                        <input type="text" name="depName" id="cdepName" minLength="3" placeholder="Enter the Name" value={this.state.depName}
+                        <input type="text" name="depName" id="depName" placeholder="Enter the Name" value={this.state.depName}
                             onChange={(event) => {
                                 this.setState({
                                     depName: event.target.value
@@ -157,7 +163,7 @@ class AddDept extends Component {
 
 
                         <label for="description">description</label>
-                        <input type="text" name="description" id="cdescription" minLength="3" value={this.state.description}
+                        <input type="text" name="description" id="description" value={this.state.description}
                             onChange={(event) => {
                                 this.setState({
                                     description: event.target.value
@@ -178,7 +184,7 @@ class AddDept extends Component {
                     }}>Save</button>}
 
                 <button className="btn btn-sm btn-success mr-2" onClick={() => { this.clear(); }}>Clear</button>
-
+                <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
 
             </div>
 
