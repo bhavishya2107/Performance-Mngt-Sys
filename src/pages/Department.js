@@ -110,11 +110,8 @@ class Department extends Component {
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-<<<<<<< HEAD
 
-=======
                    <tbody></tbody>
->>>>>>> ee1d2b532c57ef6f2d1859fb5e9a100f26ae0ca7
                 </table>
                 <ToastContainer />
             </div >
