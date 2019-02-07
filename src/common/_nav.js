@@ -61,12 +61,12 @@ export default {
         // },
         {
             name: 'Scale Set',
-            url: '/scaleset',
+            url: '/scale-set',
             icon: 'fa fa-plus',
         },
         {
             name: 'Job Title',
-            url: '/jobtitle',
+            url: '/job-title',
             icon: 'fa fa-plus',
         },
         // {

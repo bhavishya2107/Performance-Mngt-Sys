@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from './Environment'
+import { environment } from '../Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
 class Jobtitle extends Component {
@@ -126,7 +126,7 @@ class Jobtitle extends Component {
     render() {
         if (this.state.redirectToList === true) {
 
-            return <Redirect to={{ pathname: "/jobtitle" }} />
+            return <Redirect to={{ pathname: "/job-title" }} />
         }
         return (
             <div className="row">
@@ -160,7 +160,7 @@ class Jobtitle extends Component {
                     <button type="clear" className="btn btn-primary mr-3" onClick={() => {
                         this.resetform()
                     }}>Clear</button>
-                    <Link to="/jobtitle" className="btn btn-danger ">Cancel</Link>
+                    <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
 
                 </form>
             </div>

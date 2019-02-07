@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { environment } from './Environment'
+import { environment } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
@@ -45,23 +45,42 @@ class Scalesetlist extends Component {
         });
     }
     //#endregion
-    Deletescaleset() {
+    multipleDeleteScaleset() {
        
         $("#tblscaleset input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                var res = this.DeletescalesetApi(item);
-                res.done(response => {
-                    //  alert("data deleted Successfully.");
-                    this.$el.DataTable().ajax.reload();
-                });
-                res.fail(error => { });
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.state.selectedIds.map(item => {
+                            var res = this.DeletescalesetApi(item);
+                            res.done(response => {                               
+                                //toast.success("Data deleted successfully.")
+                                this.$el.DataTable().ajax.reload();
+                            });
+                            res.fail(error => { 
+                                toast.error("Delete Fail.");
+                            });
+                        });
+                    }                   
+                }
             });
         } 
         else {
-            alert("please select atleast one record!");
+            toast.info("please select atleast one record!");
         }
     }
     checkall(e) {
@@ -73,15 +92,40 @@ class Scalesetlist extends Component {
           }
         });
       }
-
-
     componentDidMount() {
+
+       
+        $(document).on("click", ".confirmDelete", (e) => {
+            var id = e.currentTarget.id;
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.SingleDelete(id);
+                    }
+                    else {
+
+                    }
+                }
+            });
+        });
         //#region Data table realted Block
         const endpointGET = environment.apiUrl + 'scale_set_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
+            aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "GET",
@@ -102,32 +146,42 @@ class Scalesetlist extends Component {
                     }
                 },
                 {
+                    data:null,
+                     targets: 1,
+                     "orderable": false,
+                    
+                 },
+                {
                     data: "scaleSetName",
-                    targets: 1
+                    targets: 2
                 },
                 {
                     data: "description",
                     "orderable": false,
-                    targets: 2
+                    targets: 3
 
                 },
 
                 {
                     data: "scaleSetId",
                     "orderable": false,
-                    targets: 3,
+                    targets: 4,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Editscaleset/id=' + row.scaleSetId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/scale-set/edit/id=' + row.scaleSetId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.scaleSetId + '"class="btn mr-2 delete btn-danger btn-sm  btnDeletescaleset">' +
+                            '<a href="#" id="' + row.scaleSetId + '"class="btn btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
                     }
                 },
             ],
+            "fnRowCallback" : function(nRow, aData, iDisplayIndex){
+                $("td:eq(1)", nRow).html(iDisplayIndex +1);
+               return nRow;
+            },
             initComplete: (settings, json) => {
 
                 $(".btnDeletescaleset").on("click", e => {
@@ -144,40 +198,21 @@ class Scalesetlist extends Component {
         });
         //#endregion
 
-        // $(document).on("click", ".confirmDelete", (e) => {
-        //     var id = e.currentTarget.id;
-        //     bootbox.confirm({
-        //         message: "Delete this record ?",
-        //         buttons: {
-        //             confirm: {
-        //                 label: 'Yes',
-        //                 className: 'btn-success'
-        //             },
-        //             cancel: {
-        //                 label: 'No',
-        //                 className: 'btn-danger'
-        //             }
-        //         },
-        //         callback: (result) => {
-        //             if (result === true) {
-        //                 this.Deletescaleset(id);
-        //             }
-        //             else {
-                    
-        //             }
-        //         }
-        //     });
-        // });
+        
     }
 
     render() {
         return (
             <div className="">
-                <button onClick={() => this.Deletescaleset()}>Delete</button>
+                
                 <div>
                     <h2 className="clearfix mt-6">Scale Set</h2>
+                    <br/>
+                    <button class=" btn-danger btn-md" onClick={()=>{
+                        this.multipleDeleteScaleset()
+                    }}><i class="fa fa-trash " aria-hidden="true"></i></button>
                     <div className="clearfix text-right mb-2">
-                        <Link to="/addscaleset" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to="/scale-set/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                 </div>
                 <table className="table table-striped table-bordered table-hover"
@@ -185,8 +220,7 @@ class Scalesetlist extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            
-                            <th  width="20">
+                          <th  width="20">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
@@ -195,6 +229,7 @@ class Scalesetlist extends Component {
                                     }}
                                 />
                             </th>
+                            <th width="50">Serial No</th>
                             <th>Scaleset Name</th>
                             <th>Description</th>
                             <th width="90">Action</th>

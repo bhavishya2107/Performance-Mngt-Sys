@@ -4,25 +4,23 @@ const routes = {
     '/demo': 'UI Design Control',
     '/addKra' : 'KRA',
     '/addRole' : 'ROLE',
-    '/addscaleset' : 'Add Scale Set',
-    '/scaleset': 'Scale Set',
-    '/jobtitle':'Job Title',
-    '/addjobtitle':"Add Job title",
+    '/scale-set/add' : 'Add Scale Set',
+    '/scale-set': 'Scale Set',
+    '/job-title':'Job Title',
+    '/job-title/add':"Add Job title",
     '/KPI': 'KPI',
     '/ProjectComplexityHome':'Project Complexity',
      '/user-management':'user management',
     '/Department':'Department',
     '/templatelist':'Template List',
     '/addtemplate':'Add Template',
-    '/Editscaleset':"Scale Set",
+    '/scale-set/edit':"Scale-Set",
     '/Projects':'Projects',
     '/myProfile':'Profile',
     '/role':'Role',
     '/kra':'Kra',
-    '/Editjobtitle':'Job Title',
-    '/role':'Role',
-    '/Add-User':'Add User',
-    '/Add-Dept':'Add Dept'
+    '/job-title/edit':'Job Title',
+    '/role':'Role'
     
   };
   {
