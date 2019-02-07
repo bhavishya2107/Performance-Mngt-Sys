@@ -58,7 +58,7 @@ class UserRolePMS extends Component {
         if (this.state.selectedIds.length > 0) {
           this.state.selectedIds.map(item => {
 
-            var res = this.DeleteKraApi(item);
+            var res = this.DeleteRoleApi(item);
 
             res.done(response => {
                 toast.success("Role Deleted Successfully !", {
@@ -147,8 +147,8 @@ class UserRolePMS extends Component {
                 {
                     this.props.location.state === "2222"
                 }
-                <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary">Add New</Link>
+                <div className="clearfix text-right mb-2 btn-lg">
+                    <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
                 <button
                 className="btn btn-danger mb-2" 
