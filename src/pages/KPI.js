@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import bootbox from 'bootbox';
+import { environment } from './Environment';
 // import {Redirect} from "react-router-dom";
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -25,7 +27,6 @@ class KPI extends Component {
             } this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
-            alert("error");
         });
     }
     DeleteKpiApi(KpiId) {
@@ -39,14 +40,51 @@ class KPI extends Component {
             }
         });
     }
-//#endregion
-   
+    //#endregion
+    // {
+    //     this.$el = $(this.el);
+    //     this.$el.DataTable({
+    //         ajax: {
+    //             url: "http://192.168.10.109:3000/api/kpi_master",
+    //             type: "GET",
+    //             dataSrc: "",
+    //             error: function (xhr, status, error) {
+    //             },
+    //         },
+    componentDidMount() {
+     
+        $(document).on("click", ".confirmDelete", (e) => {
+            alert("123")
+            var id = e.currentTarget.id;
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'OK',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.SingleDelete(id);
+                    }
+                    else {
 
-componentDidMount() {
+                    }
+                }
+            });
+        });
+
+     
         this.$el = $(this.el);
+        var apiUrl = environment.apiUrl + "kpi_master";
         this.$el.DataTable({
             ajax: {
-                url: "http://192.168.10.109:3000/api/kpi_master",
+                url: apiUrl,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -69,7 +107,7 @@ componentDidMount() {
                             '<a href="/EditKpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.kpiId + '"class="btnDelete btn mr-2 delete btn-danger btn-sm">' +
+                            '<a href="#" id="' + row.kpiId + '"class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -91,15 +129,16 @@ componentDidMount() {
     }
     render() {
         return (
-//#region table of kpi
+            //#region table of kpi
             <div >
-                
+                <h1>KPI</h1>
                 {this.props.location.state === "2222"}
                 <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/AddKpi', }} className="btn btn-sm btn-primary" role="submit" style={{ textDecoration: "none", float: "Right" }}>Add</Link>
+                    <Link to={{ pathname: '/AddKpi', }} className="btn btn-lg btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}></Link>
 
                 </div>
                 <div className="page-header">
+
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblKpi"
                         ref={el => (this.el = el)}>

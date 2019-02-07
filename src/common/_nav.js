@@ -18,7 +18,7 @@ export default {
 
         {
             name: 'KRA',
-            url: '/kraListPage',
+            url: '/kra',
             icon: 'fa fa-plus',
         },
         {

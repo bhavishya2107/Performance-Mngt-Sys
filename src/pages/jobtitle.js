@@ -8,7 +8,9 @@ $.DataTable = require('datatables.net-bs4');
 class Jobtitlelist extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            selectedIds:[]
+        }
     }
     //#region delete details
     SingleDelete(jobtitleId) {
@@ -42,11 +44,40 @@ class Jobtitlelist extends Component {
         });
     }
     //#endregion
+    Deletejobtitle() {
+       
+        $("#tbljobtitle input:checkbox:checked").each((e, item) => {
+            this.state.selectedIds.push(item.value);
+        });
+        if (this.state.selectedIds.length > 0) {
+            this.state.selectedIds.map(item => {
+                var res = this.DeletejobtitleApi(item);
+                res.done(response => {
+                    //  alert("data deleted Successfully.");
+                    this.$el.DataTable().ajax.reload();
+                });
+                res.fail(error => { });
+            });
+        } 
+        else {
+            alert("please select atleast one record!");
+        }
+    }
+    checkall(e) {
+        $("#tbljobtitle input:checkbox").each((index, item) => {
+          if ($(e.currentTarget).is(":checked") === true) {
+            $(item).prop("checked", true);
+          } else {
+            $(item).prop("checked", false);
+          }
+        });
+      }
     componentDidMount() {
         const endpointGET = environment.apiUrl + 'jobtitle_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
+            aaSorting: [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "GET",
@@ -56,17 +87,28 @@ class Jobtitlelist extends Component {
             },
             columns: [
                 {
+                    data: "jobtitleId",
+                    "orderable": false,
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return (
+                            '<input type="checkbox" name="scalesetId" value=' + row.jobtitleId + ">"
+                        );
+                    }
+                },
+                {
                     data: "jobtitleName",
-                    targets: 0
+                    targets: 1
                 },
                 {
                     data: "description",
-                    targets: 1
+                    "orderable": false,
+                    targets: 2
 
                 },
 
                 {
-                    data: "scaleSetId",
+                    data: "jobtitleId",
                     "orderable": false,
                     targets: 3,
                     render: function (data, type, row) {
@@ -101,15 +143,24 @@ class Jobtitlelist extends Component {
 
         return (
             <div>
+                <button onClick={() => this.Deletejobtitle()}>Delete</button>
                 <div className="clearfix text-right mb-2">
                     <Link to="/addjobtitle" className="btn btn-primary btn-sm ">Add</Link>
                 </div>
                 <table className="table table-striped table-bordered table-hover"
-
+                        id="tbljobtitle"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-
+                        <th  width="20">
+                                <input
+                                    type="checkbox"
+                                    name="checkAll"
+                                    onClick={e => {
+                                        this.checkall(e);
+                                    }}
+                                />
+                            </th>
                             <th>Job Title</th>
                             <th>Description</th>
                             <th width="90">Action</th>
