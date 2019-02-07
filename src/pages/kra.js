@@ -106,30 +106,28 @@ class kraListPage extends Component {
         }
     }
     multiKraDeleteConfirm(id) {
-        if (id !== undefined) {
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        alert(1)
-                       // this.DeleteAllKra(id);
-                    }
-                    else {
 
-                    }
+
+        //    if (id !== undefined) {
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
                 }
-            });
-        }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.DeleteAllKra(id);
+                }
+            }
+        });
+        // }
     }
 
     componentDidMount() {
@@ -198,11 +196,11 @@ class kraListPage extends Component {
                     this.SingleDeleteConfirm(e.currentTarget.id);
 
                 });
-                $(".btnDeleteAll").on("click", e => {
-                    // var result =  window.confirm("Delete Confirm!!!");
-                    this.multiKraDeleteConfirm(e.currentTarget.id);
+                // $(".btnDeleteAll").on("click", e => {
+                //     // var result =  window.confirm("Delete Confirm!!!");
+                //     this.multiKraDeleteConfirm(e.currentTarget.id);
 
-                });
+                // });
             },
 
 
@@ -222,7 +220,7 @@ class kraListPage extends Component {
                 <button
                     className="btn btn-danger mb-2 btnDeleteAll"
                     onClick={() => {
-                        this.multiKraDeleteConfirm();
+                        this.multiKraDeleteConfirm(this);
                     }}><i className="fa fa-trash" aria-hidden="true"></i></button>
 
                 <table className="table table-striped table-bordered table-hover customDataTable"

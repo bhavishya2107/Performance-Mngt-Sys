@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
 import bootbox from 'bootbox';
-import { environment } from './Environment';
 $.DataTable = require('datatables.net-bs4');
 
 class Department extends Component {
