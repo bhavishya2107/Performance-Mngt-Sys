@@ -25,7 +25,6 @@ class MyProfile extends Component {
     }
 
     getUserDetailsApi() {
-        debugger;
     //   var endpoint = environment.dynamicUrl + 'dynamic';
     
        const endpoint = 'http://192.168.10.109:3000/dynamic';
@@ -86,7 +85,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userFirstName">First Name</label>
                                         <div>
-                                            <input id="userFirstName" type="text" className="form-control"
+                                            <input id="userFirstName" type="text" className="form-control" readonly
                                                 value={this.state.firstName}
                                             />
                                             
@@ -97,7 +96,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userLastName">Last Name</label>
                                         <div>
-                                            <input id="userLastName" type="text" className="form-control "
+                                            <input id="userLastName" type="text" className="form-control " readonly
                                                 
                                                 value={this.state.lastName}
                                             />
@@ -112,7 +111,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userName">User Name</label>
                                         <div>
-                                            <input id="userName" type="text" className="form-control "
+                                            <input id="userName" type="text" className="form-control " readonly
                                                 value={this.state.userName}
                                             />
                                         </div>
@@ -122,7 +121,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userEmail">Email</label>
                                         <div>
-                                            <input id="userEmail" type="email" className="form-control"
+                                            <input id="userEmail" type="email" className="form-control" readonly
                                                 value={this.state.emailAddress}
                                            />
                                         </div>
@@ -135,7 +134,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userAddress">Address</label>
                                         <div>
-                                            <input id="userAddress" type="text" className="form-control"
+                                            <input id="userAddress" type="text" className="form-control" readonly
                                               value={this.state.address}
                                         
                                             />
@@ -146,7 +145,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userImage">Mobile No.</label>
                                         <div>
-                                            <input id="userLastName" type="text" className="form-control "
+                                            <input id="userLastName" type="text" className="form-control " readonly
                                               value={this.state.mobileno}
                                             />
                                         </div>
@@ -159,7 +158,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userDepartment">Department</label>
                                         <div>
-                                            <input id="userDepartment" type="text" className="form-control "
+                                            <input id="userDepartment" type="text" className="form-control " readonly
                                                 value={this.state.depname}
                                             />
                                         </div>
@@ -169,7 +168,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userLastName">Department</label>
                                         <div>
-                                            <input id="userLastName" type="text" className="form-control "
+                                            <input id="userLastName" type="text" className="form-control " readonly
                                                 value="Department"
                                             />
                                         </div>
@@ -182,7 +181,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userFirstName">Job Title</label>
                                         <div>
-                                            <input id="userFirstName" type="text" className="form-control "
+                                            <input id="userFirstName" type="text" className="form-control " readonly
                                                 value="jobtitle"
                                             />
                                         </div>
@@ -192,7 +191,7 @@ class MyProfile extends Component {
                                     <div className="form-group">
                                         <label className="" for="userLastName">Team Leader</label>
                                         <div>
-                                            <input id="userLastName" type="text" className="form-control "
+                                            <input id="userLastName" type="text" className="form-control " readonly
                                                 value="Team leader"
                                             />
                                         </div>

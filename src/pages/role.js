@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import {environment} from './Environment';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -12,7 +13,7 @@ class UserRolePMS extends Component{
         };
     }
     SingleDelete(roleId) {
-        var res = this.DeletescalesetApi(roleId);
+        var res = this.DeleteRoleApi(roleId);
         res.done(response => {
           if (response.affectedRows>0) {
             toast.success("Role Deleted Successfully", {
@@ -28,8 +29,9 @@ class UserRolePMS extends Component{
         });
         });
       }
-      DeletescalesetApi(roleId) {
-        const endpoint = `http://192.168.10.109:3000/api/role_master/${roleId}`;
+      DeleteRoleApi(roleId) {
+        const endpoint = environment.apiUrl + 'role_master/' + `${roleId}`
+        // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
     
         return $.ajax({
           url: endpoint,
@@ -42,10 +44,12 @@ class UserRolePMS extends Component{
       }
     componentDidMount() {
         this.$el = $(this.el);
+        const endpointGET = environment.apiUrl + 'role_master/'
         this.$el.DataTable({
             "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/role_master/?_size=1000",
+                // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
+                url:endpointGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -97,12 +101,13 @@ class UserRolePMS extends Component{
     render(){
         return(
             <div>
+                <h1>Role</h1>
            
                 {
                     this.props.location.state === "2222"
                 }
             <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary">Add</Link>
+                <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary">Add New</Link>
             </div>
          
      
@@ -116,8 +121,6 @@ class UserRolePMS extends Component{
                         <th>ID</th>
                         <th>Name</th>
                         <th width="90">Action</th>
-
-
                     </tr>
                 </thead>
                 <ToastContainer />

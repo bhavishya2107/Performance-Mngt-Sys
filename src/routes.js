@@ -2,7 +2,7 @@ const routes = {
     '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
-    '/addKra' : 'ADD KRA',
+    '/addKra' : 'KRA',
     '/addRole' : 'ROLE',
     '/addscaleset' : 'Add Scale Set',
     '/scaleset': 'Scale Set',
@@ -17,7 +17,8 @@ const routes = {
     '/Editscaleset':"Editscaleset",
     '/Projects':'Projects',
     '/myProfile':'Profile',
-    '/role':'Role'
+    '/role':'Role',
+    '/kra':'Kra',
     
   };
   {

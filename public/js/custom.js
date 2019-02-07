@@ -33,7 +33,6 @@ function formValidation(form) {
                 },
                 kraDescription:{
                     required:true,
-                   
                     minlength:2
                 },
                 rolename:{
@@ -45,7 +44,7 @@ function formValidation(form) {
                         required:'required, Enter minimum 2 characters',
                     },
                     kraDescription:{
-                        required:'required max 50 character',
+                        required:'required,cannot leave the area empty',
                     },
                     rolename:{
                         required:'required,Enter minimum 2 characters',
