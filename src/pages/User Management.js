@@ -211,19 +211,13 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
-                <h1>User Management</h1>
-                {
-                    this.props.location.state === "2"
-                }
-
-                <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit"><i class="fa fa-plus" aria-hidden="true"></i></Link>
+                 <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">User Management</h2>
+                    <div className="col text-right">
+                        <Link  to={{ pathname: '/AddUser' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete"  onClick={() => { this.multipleDeleteUserConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-                <button
-                    type="button"
-                    className="btn btn-danger mb-5"
-                    onClick={() => { this.multipleDeleteUserConfirm(); }}>Delete</button>
-
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblUser"
 

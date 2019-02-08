@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from "react-router-dom";
 const $ = require('jquery');
@@ -188,56 +189,84 @@ class AddProject extends Component {
             return <Redirect to={{ pathname: "/Projects" }} />
         }
         return (
-            <div className="row">
-                {this.state.projectId !== undefined ? <div>Edit</div> : <div>ADD</div>}
-                <form id="projectForm" className="col-12">
-                    <div className="form-group">
-                    <label for="projectName">Project Name(required, at least 3 characters)</label>                        
-                    <input className="form-control" minlength="5" type="text" value={this.state.projectName}
-                            onChange={(event) => {
-                                this.setState({
-                                    projectName: event.target.value
-                                })
-                            }} />
+            <div className="clearfix">
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> Project >
+                    {this.state.projectId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    </h2>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <form id="projectForm">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label for="projectName">Project Name(required, at least 3 characters)</label>
+                                        <input className="form-control" minlength="5" type="text" value={this.state.projectName}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    projectName: event.target.value
+                                                })
+                                            }} />
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label>Start Date</label>
+                                        <input type="date" className="form-control" />
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <label>End Date</label>
+                                    <input type="date" className="form-control" />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <label className="mr-2">Project Complexity:</label>
+                                    <select onChange={(e) => { this.onChangeProjectComplexity(e) }} className="form-control">
+                                        <option>select</option>
+                                        {this.state.displayProjectComplexity}
+                                    </select>
+                                </div>
+                                <div className="col-md-4">
+                                    <label className="mr-2">Project Status:</label>
+                                    <select onChange={(e) => { this.onChangeProjectStatus(e) }} className="form-control">
+                                        <option>select</option>
+                                        {this.state.displayProjectStatus}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <div className="form-group">
+                                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.description}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    description: event.target.value
+                                                })
+                                            }} ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <div className="form-group">
+                                        {this.state.projectId !== undefined ?
+                                            <button type="button" class="btn btn-success mr-2" onClick={() => {
+                                                this.UpdateKpiDetails(this.state);
+                                            }}>Save</button>
+                                            : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
+                                                this.saveProjectDetails(this.state);
+                                            }}>ADD</button>}
+                                        <button className="btn btn-info mr-2">Clear</button>
+                                        <Link to={{ pathname: '/Projects', }} className="btn btn-danger mr-2">Cancel</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div className="form-group">
-                        <label>Description</label> <textarea className="form-control" rows="4" value={this.state.description}
-                            onChange={(event) => {
-                                this.setState({
-                                    description: event.target.value
-                                })
-                            }} ></textarea>
-                    </div>
-                    <div className="form-group">
-                        <label>Start Date</label>
-                        <input type="date" className="form-control" />
-                    </div>
-                    <div className="form-group">
-                        <label>End Date</label>
-                        <input type="date" className="form-control" />
-                    </div>
-                    <div className="dropdown">
-                        <label className="mr-2">Project Complexity:</label>
-                        <select onChange={(e) => { this.onChangeProjectComplexity(e) }} className="btn btn-info dropdown-toggle md mr-3">
-                            <option>select</option>
-                            {this.state.displayProjectComplexity}
-                        </select>
-                        <br /><br />
-                        <label className="mr-2">Project Status:</label>
-                        <select onChange={(e) => { this.onChangeProjectStatus(e) }} className="btn btn-info dropdown-toggle md mr-3">
-                            <option>select</option>
-                            {this.state.displayProjectStatus}
-                        </select>
-                    </div>
-                    {this.state.projectId !== undefined ?
-                        <button type="button" class="btn btn-success mr-2" onClick={() => {
-                            this.UpdateKpiDetails(this.state);
-                        }}>Save</button>
-                        : <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
-                            this.saveProjectDetails(this.state);
-                        }}>ADD</button>}
-                    <button className="btn btn-info">Clear</button>
-                </form>
+                </div>
             </div >
         )
     }

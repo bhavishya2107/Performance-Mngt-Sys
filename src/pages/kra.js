@@ -77,6 +77,10 @@ class kraListPage extends Component {
 
             });
 
+        } else {
+            toast.info("Select atleast one record", {
+                position: toast.POSITION.TOP_RIGHT
+            });
         }
     }
 
@@ -125,9 +129,13 @@ class kraListPage extends Component {
                 if (result === true) {
                     this.DeleteAllKra(id);
                 }
+                else {
+                    toast.info("Select atleast one record", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
             }
         });
-        // }
     }
 
     componentDidMount() {
@@ -192,15 +200,10 @@ class kraListPage extends Component {
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    // var result =  window.confirm("Delete Confirm!!!");
                     this.SingleDeleteConfirm(e.currentTarget.id);
 
                 });
-                // $(".btnDeleteAll").on("click", e => {
-                //     // var result =  window.confirm("Delete Confirm!!!");
-                //     this.multiKraDeleteConfirm(e.currentTarget.id);
 
-                // });
             },
 
 
@@ -215,7 +218,7 @@ class kraListPage extends Component {
                     this.props.location.state === "2222"
                 }
                 <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/addKra', state: {} }} className="btn btn-primary btn-lg"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    <Link to={{ pathname: '/add-kra', state: {} }} className="btn btn-primary btn-lg"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
                 <button
                     className="btn btn-danger mb-2 btnDeleteAll"

@@ -73,6 +73,7 @@ class ProjectComplexity extends Component {
         this.$el = $(this.el);
         var apiUrl = environment.apiUrl + "project_type_master";
         this.$el.DataTable({
+            "autoWidth": false,
             ajax: {
                 url: apiUrl,
                 type: "GET",
@@ -137,7 +138,7 @@ class ProjectComplexity extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                                <th>Project Name</th>
+                                <th width="150">Project Name</th>
                                 <th>Description</th>
                                 <th width="90">Action</th>
 

@@ -8,7 +8,7 @@ $.DataTable = require('datatables.net-bs4');
 
 class Scalesetlist extends Component {
     constructor(props) {
-        super(props); debugger;
+        super(props);
         this.state = {
             selectedIds: []
         }
@@ -16,7 +16,7 @@ class Scalesetlist extends Component {
 
     //#region Delete Scale set functions
 
-    SingleDeleteConfirm(id){
+    SingleDeleteConfirm(id) {
         bootbox.confirm({
             message: Notification.deleteConfirm,
             buttons: {
@@ -38,7 +38,7 @@ class Scalesetlist extends Component {
                 }
             }
         });
-        
+
     }
     SingleDelete(scaleSetId) {
         var res = this.DeletescalesetApi(scaleSetId);
@@ -71,7 +71,7 @@ class Scalesetlist extends Component {
     }
     //#endregion
 
-    multipleDeleteScalesetconfirm(id){
+    multipleDeleteScalesetconfirm(id) {
         bootbox.confirm({
             message: "Delete this record ?",
             buttons: {
@@ -94,7 +94,7 @@ class Scalesetlist extends Component {
 
 
     multipleDeleteScaleset() {
-       
+
         $("#tblscaleset input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
@@ -121,16 +121,16 @@ class Scalesetlist extends Component {
     }
     checkall(e) {
         $("#tblscaleset input:checkbox").each((index, item) => {
-          if ($(e.currentTarget).is(":checked") === true) {
-            $(item).prop("checked", true);
-          } else {
-            $(item).prop("checked", false);
-          }
+            if ($(e.currentTarget).is(":checked") === true) {
+                $(item).prop("checked", true);
+            } else {
+                $(item).prop("checked", false);
+            }
         });
-      }
+    }
     componentDidMount() {
 
-       
+
         //#region Data table realted Block
         const endpointGET = environment.apiUrl + 'scale_set_master/'
         this.$el = $(this.el);
@@ -158,11 +158,11 @@ class Scalesetlist extends Component {
                     }
                 },
                 {
-                    data:null,
-                     targets: 1,
-                     "orderable": false,
-                    
-                 },
+                    data: null,
+                    targets: 1,
+                    "orderable": false,
+
+                },
                 {
                     data: "scaleSetName",
                     targets: 2
@@ -190,9 +190,9 @@ class Scalesetlist extends Component {
                     }
                 },
             ],
-            "fnRowCallback" : function(nRow, aData, iDisplayIndex){
-                $("td:eq(1)", nRow).html(iDisplayIndex +1);
-               return nRow;
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
             },
             initComplete: (settings, json) => {
 
@@ -211,29 +211,28 @@ class Scalesetlist extends Component {
         });
         //#endregion
 
-        
+
     }
 
     render() {
         return (
             <div className="">
-                
-                <div>
-                    <h2 className="clearfix mt-6">Scale Set</h2>
-                    <br/>
-                    <button className=" btn-danger btn-md" onClick={()=>{
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">Scale Set</h2>
+                    <div className="col text-right">
+                        <Link to="/scale-set/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => {
                         this.multipleDeleteScalesetconfirm()
                     }}><i className="fa fa-trash " aria-hidden="true"></i></button>
-                    <div className="clearfix text-right mb-2">
-                        <Link to="/scale-set/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
-                    </div>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblscaleset"
                     ref={el => (this.el = el)}>
                     <thead>
+
                         <tr>
-                          <th  width="20">
+                            <th width="20">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
@@ -242,12 +241,12 @@ class Scalesetlist extends Component {
                                     }}
                                 />
                             </th>
-                            <th width="50">Serial No</th>
+                            <th width="50">Sr.No</th>
                             <th>Scaleset Name</th>
                             <th>Description</th>
                             <th width="90">Action</th>
                         </tr>
-                    </thead>                  
+                    </thead>
                     <tbody></tbody>
                 </table>
                 <ToastContainer />
