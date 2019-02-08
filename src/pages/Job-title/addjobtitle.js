@@ -43,10 +43,10 @@ class Jobtitle extends Component {
 
     }
     //#endregion
-    resetform(){
+    resetform() {
         this.setState({
-            jobtitleName:"",
-            description:""
+            jobtitleName: "",
+            description: ""
 
         })
     }
@@ -129,40 +129,49 @@ class Jobtitle extends Component {
             return <Redirect to={{ pathname: "/job-title" }} />
         }
         return (
-            <div className="row">
-                {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="formjobtitle" className="col-6">
-                    <div className="form-group">
-                        <label className="required">Name</label>
-                        <input type="text" id="jobtitleid" name="jobtitlename" minLength="" className="form-control" value={this.state.jobtitleName}
-                            onChange={(event) => {
-                                this.setState({
-                                    jobtitleName: event.target.value
-                                })
-                            }} required />
-                    </div>
-                    <div className="form-group">
-                        <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}
-                            onChange={(event) => {
-                                this.setState({
-                                    description: event.target.value
-                                })
-                            }} ></textarea>
-                    </div>
-                    {this.state.id !== undefined ?
-                        <button type="button" className="btn btn-success mr-3" onClick={() => {
-                            this.UpdatejobtitleDetails(this.state);
-                        }}>Update</button>
-                        : <button type="button" className="btn btn-success mr-3" onClick={() => {
-                            this.savejobtitle(this.state);
-                        }}>Save</button>}
+            <div className="clearfix">
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> Job Title >
+                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    </h2>
+                </div>
+                <div className="row">
+                    <div className="col-md-6">
+                        <form id="formjobtitle">
+                            <div className="form-group">
+                                <label className="required">Name</label>
+                                <input type="text" id="jobtitleid" name="jobtitlename" minLength="" className="form-control" value={this.state.jobtitleName}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            jobtitleName: event.target.value
+                                        })
+                                    }} required />
+                            </div>
+                            <div className="form-group">
+                                <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            description: event.target.value
+                                        })
+                                    }} ></textarea>
+                            </div>
+                            <div className="form-group">
+                                {this.state.id !== undefined ?
+                                    <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                        this.UpdatejobtitleDetails(this.state);
+                                    }}>Update</button>
+                                    : <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                        this.savejobtitle(this.state);
+                                    }}>Save</button>}
 
-                    <button type="clear" className="btn btn-primary mr-3" onClick={() => {
-                        this.resetform()
-                    }}>Clear</button>
-                    <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
-
-                </form>
+                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                    this.resetform()
+                                }}>Clear</button>
+                                <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         )
     }

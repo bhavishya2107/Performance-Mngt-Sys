@@ -209,7 +209,16 @@ class Jobtitlelist extends Component {
 
         return (
             <div>
-                <div>
+                 <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">Job Title</h2>
+                    <div className="col text-right">
+                        <Link to="/job-title/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => {
+                        this.Deletejobtitleconfirm()
+                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
+                </div>
+                {/* <div>
                     <h2 className="clearfix mt-6">Job Title</h2>
                     <br/>
                     <button className=" btn-danger btn-md" onClick={() => {
@@ -218,7 +227,7 @@ class Jobtitlelist extends Component {
                     <div className="clearfix text-right mb-2">
                         <Link to="/job-title/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
-                </div>
+                </div> */}
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tbljobtitle"

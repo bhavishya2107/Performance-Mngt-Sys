@@ -85,9 +85,12 @@ class Scalesetlist extends Component {
                 }
             },
             callback: (result) => {
-                if (result === true) {
+                if (result > 0) {
                     this.multipleDeleteScaleset(id);
                 }
+                // else{
+                //     toast.info("select")
+                // }
             }
         });
     }
@@ -111,7 +114,7 @@ class Scalesetlist extends Component {
                 this.$el.DataTable().ajax.reload();
             });
             res.fail(error => {
-
+               
             });
 
         }
