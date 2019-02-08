@@ -11,10 +11,10 @@ import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
-import kraHome from './pages/add-kra';
-import kraListPage from './pages/kra';
-import UserRolePMS from './pages/role';
-import UserRoleForm from './pages/addRole';
+import kraHome from './pages/Kra/add-kra';
+import kraListPage from './pages/Kra/kra';
+import UserRolePMS from './pages/Role/role';
+import UserRoleForm from './pages/Role/addRole';
 
 import UserManagement from './pages/User Management';
 import AddUser from './pages/AddUser'
@@ -135,7 +135,7 @@ class App extends Component {
                         
                         
                         <Route path="/innerpage" component={innerpage} />
-                        <Route path="/add-kra" component={kraHome}></Route>
+                        <Route exact path="/kra/add" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>

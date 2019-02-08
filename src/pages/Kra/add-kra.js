@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from './Environment';
+import { environment } from '../Environment';
 const $ = require('jquery');
 
 class kraHome extends Component {
@@ -145,9 +145,14 @@ class kraHome extends Component {
         return (
 
 
-            <div className="container-fluid">
-                {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="kraAddForm" className="pt-5" action="" >
+            <div className="clearfix">
+            <div className="clearfix d-flex align-items-center row page-title">
+                <h2 className="col"> Kra >
+                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                </h2>
+            </div>
+              
+                <form id="kraAddForm" action="" >
 
                     <div className="form-group">
                         <label className=" required" for="kraName">Name</label>

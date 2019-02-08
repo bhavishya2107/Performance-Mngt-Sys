@@ -25,14 +25,14 @@ class MyProfile extends Component {
     }
 
     getUserDetailsApi() {
-    //   var endpoint = environment.dynamicUrl + 'dynamic';
+     var endpoint = environment.dynamicUrl + 'dynamic';
     
-       const endpoint = 'http://192.168.10.109:3000/user_master';
+     //  const endpoint = 'http://192.168.10.109:3000/user_master';
   
         return $.ajax({
             url: endpoint,
             type: "POST",
-            data : {"query" : "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.depname,u.address,u.profileimage,j.jobtitlename,r.rolename, u1.firstname  as teamleader from user_master U join department_master d on U.depid = d.depid join jobtitle_master j on u.jobtitleId = j.jobtitleId join role_master r on u.roleid = r.roleid join user_master u1 on u.teamid = u1.userid where u.userid = 87"},
+            data : {"query" : "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.depname,u.address,u.profileimage,j.jobtitlename,r.rolename, u1.firstname  as teamleader from user_master U join department_master d on U.depid = d.depid join jobtitle_master j on u.jobtitleId = j.jobtitleId join role_master r on u.roleid = r.roleid join user_master u1 on u.teamid = u1.userid where u.userid = 94"},
         })
     }
 
@@ -68,10 +68,16 @@ class MyProfile extends Component {
 
     render() {
         return (
-            
+         
 
             <div className="container-fluid">
-                <h1>MY PROFILE</h1>
+               <div className="clearfix d-flex align-items-center row page-title">
+            <h2 className="col">My-Profile</h2>
+            <div className="col text-right">
+            </div>
+            </div>
+            
+             
                 <form action="">
                     <div className="row">
                     <div className="col-md-3 order-md-last text-center">

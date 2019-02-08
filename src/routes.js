@@ -2,7 +2,7 @@ const routes = {
      '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
-    '/add-kra' : 'KRA',
+    '/kra/add' : ' add KRA',
     '/addRole' : 'ROLE',
     '/scale-set/add' : 'Add Scale Set',
     '/scale-set': 'Scale Set',
@@ -22,7 +22,9 @@ const routes = {
     '/job-title/edit':'Job Title',
     '/role':'Role',
     '/addDept':'Add Dept',
-    '/addUser':'Add User'
+    '/addUser':'Add User',
+    // '/kra/edit':'edit kra'
+
     
   };
   {
