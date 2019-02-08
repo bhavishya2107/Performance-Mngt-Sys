@@ -2,7 +2,7 @@ const routes = {
     // '/': 'Home',
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
-    '/addKra' : 'KRA',
+    '/add-kra' : 'KRA',
     '/addRole' : 'ROLE',
     '/scale-set/add' : 'Add Scale Set',
     '/scale-set': 'Scale Set',
