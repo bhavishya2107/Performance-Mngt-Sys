@@ -25,40 +25,92 @@ class KPI extends Component {
             }
         });
     }
-    multipleDeleteKPI() {
+    SingleDeleteConfirm(id) {
+        bootbox.confirm({
+            message: "Are you sure you want to delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Ok',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.SingleDeleteKpi(id);
+                }
+                else {
+
+                }
+            }
+        });
+
+    }
+    SingleDeleteKpi(kpiId) {
+        var res = this.DeleteKpiApi(kpiId);
+        res.done(response => {
+            if (response.affectedRows > 0) {
+                toast.success("Record Deleted Successfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            this.$el.DataTable().ajax.reload();
+        });
+
+        res.fail(error => {
+            toast.error("Record Not Deleted", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        });
+    }
+    multipleDeleteKpiconfirm(id) {
+        bootbox.confirm({
+            message: "Are you sure you want to delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Ok',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Cancel',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.multipleDeleteKpi(id);
+                }
+            }
+        });
+    }
+    multipleDeleteKpi() {
         $("#tblKpi input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
+        var res = '';
         if (this.state.selectedIds.length > 0) {
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Ok',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'Cancel',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.state.selectedIds.map(item => {
-                            var res = this.DeleteKpiApi(item);
-                            res.done(response => {                               
-                                toast.success("Data deleted successfully.")
-                                this.$el.DataTable().ajax.reload();
-                            }); 
-                        });
-                    }                   
-                }
+            this.state.selectedIds.map(item => {
+                res = this.DeleteKpiApi(item);
             });
-        } 
+            res.done(response => {
+                toast.success("KPI Deleted Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload();
+            });
+            res.fail(error => {
+
+            });
+
+        }
         else {
             toast.info("please select atleast one record!");
         }
     }
+
     checkall(e) {
         $("#tblKpi input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -68,43 +120,9 @@ class KPI extends Component {
             }
         });
     }
-    SingleDeleteKpi(projectId) {
-        var res = this.DeleteKpiApi(projectId);
-        res.done(response => {
-            if (response.affectedRows > 0) {
-                toast.success("Record Deleted Succesfully!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            } this.$el.DataTable().ajax.reload();
-        });
-        res.fail(error => {
-
-        });
-    }
+  
     componentDidMount() {
-        $(document).on("click", ".confirmDelete", (e) => {
-            var id = e.currentTarget.id;
-            bootbox.confirm({
-                message: "Are you sure you want to delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'OK',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'Cancel',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.SingleDeleteKpi(id);
-                    }
-                    else {
-                    }
-                }
-            });
-        });
+      
         const endpointGET = environment.apiUrl + 'kpi_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -150,7 +168,7 @@ class KPI extends Component {
                             '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.kpiId + '"class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
+                            '<a href="#" id="' + row.kpiId + '"class="btn btn-danger btnDelete btn-sm";"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -163,25 +181,28 @@ class KPI extends Component {
                return nRow;
             },
             drawCallback: (settings) => {
+                window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    this.SingleDeleteKpi(e.currentTarget.id);
+
+                    this.SingleDeleteConfirm(e.currentTarget.id);
                 });
-            },
-            
-            
+            }
         });
-    }
+    }           
     render() {
         return (
             //#region table of kpi
             <div >
-                <h1>KPI</h1>
-                {this.props.location.state === "2222"}
-                <button type="button" className="btn mr-2 delete btn-danger fa fa-trash" style={{ float: "left" }} onClick={() => { this.multipleDeleteKPI(); }}></button>
-                <div className="clearfix text-right mb-2">
-                    <Link to={{ pathname: '/kpi/add', }} className="btn btn-lg btn-primary fa fa-plus" role="submit" style={{ textDecoration: "none", float: "Right" }}></Link>
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">KPI</h2>
+                    <div className="col text-right">
+                        <Link to="/kpi/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => {
+                        this.multipleDeleteKpiconfirm()
+                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-                <div className="page-header">
+          <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblKpi"
                         ref={el => (this.el = el)}>

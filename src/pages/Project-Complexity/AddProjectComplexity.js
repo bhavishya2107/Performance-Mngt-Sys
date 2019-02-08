@@ -76,21 +76,26 @@ class AddProjectComplexity extends Component {
         });
     }
     UpdateProjectComplexityDetails(data) {
-        debugger;
-        var res = this.updateDetailsApi(data);
-        res.done((response) => {
-            this.setState({
-                redirectToList: true
-            })
-            toast.success("Project Complexity Updated Successfully!", {
-                position: toast.POSITION.TOP_RIGHT
+        var isvalidate = window.formValidation("#projectForm");
+        if (isvalidate) {
+            var res = this.updateDetailsApi(data);
+            res.done((response) => {
+                this.setState({
+                    redirectToList: true
+                })
+                toast.success("Project Complexity Updated Successfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             });
-        });
-        res.fail((error) => {
-        })
-    }
-    //#endregion
+            res.fail((error) => {
+                debugger;
+            })
 
+        } else {
+
+            return false;
+        }
+    }
     componentDidMount() {
         if (this.state.projectTypeId !== undefined) {
             var res = this.getProjectComplexityDeatilsApi();
@@ -112,41 +117,50 @@ class AddProjectComplexity extends Component {
         }
         return (
             //#region form of project complexity
-            <div className="row">
-                {this.state.projectTypeId !== undefined ? <div></div> : <div></div>}
-                <form id="projectForm" className="col-12">
-                    <div className="form-group">
-                        <label className="required" for="projectName">Project Name</label>
-                        <input className="form-control" type="text" value={this.state.projectTypeName}
-                            onChange={(event) => {
-                                this.setState({
-                                    projectTypeName: event.target.value
-                                })
-                            }} required />
-                    </div>
-                    <div className="form-group">
-                        <label for="description">Description</label>
-                        <textarea className="form-control" rows="3" type="text" value={this.state.description}
-                            onChange={(event) => {
-                                this.setState({
-                                    description: event.target.value
-                                })
-                            }} ></textarea>
-                    </div>
-                    <br />
-                    {this.state.projectTypeId !== undefined ?
-                        <button type="button" class="btn btn-success mr-2" onClick={() => {
-                            this.UpdateProjectComplexityDetails(this.state);
-                        }}>Update</button>
-                        : <button type="button" class="btn btn-success mr-2" value="submit" onClick={() => {
-                            this.saveProjectComplexityDetails(this.state);
-                        }}>Save</button>}
-                    <button type="clear" className="btn btn-primary mr-3" onClick={() => {
-                        this.clearForm()
-                    }}>Clear</button>
-                    <Link to={{ pathname: '/project-complexity', }} className="btn btn-danger mr-2">Cancel</Link>
+            <div className="clearfix">
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> Project Complexity >
+                {this.state.projectTypeId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    </h2>
+                </div>
+                <div className="row">
+                    <div className="col-md-6">
+                        <form id="projectForm">
+                            <div className="form-group">
+                                <label className="required">Project Name</label>
+                                <input type="text" id="projectTypeName" className="form-control" minLength="" value={this.state.projectTypeName}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            projectTypeName: event.target.value
+                                        })
+                                    }} required />
+                            </div>
+                            <div className="form-group">
+                                <label>Description</label> <textarea id="description"  className="form-control" rows="4" value={this.state.description}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            description: event.target.value
+                                        })
+                                    }} ></textarea>
+                            </div>
+                            <div className="form-group">
+                                {this.state.projectTypeId !== undefined ?
+                                    <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                        this.UpdateProjectComplexityDetails(this.state);
+                                    }}>Update</button>
 
-                </form>
+                                    : <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                        this.saveProjectComplexityDetails(this.state);
+                                    }}>Save</button>}
+
+                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                    this.clearForm()
+                                }}>Clear</button>
+                                <Link to="/project-complexity" className="btn btn-danger ">Cancel</Link>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
             //#endregion 
         );

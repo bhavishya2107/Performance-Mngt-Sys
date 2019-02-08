@@ -129,17 +129,25 @@ class AddKpi extends Component {
         });
     }
     UpdateKpiDetails(data) {
-        var res = this.updateDetailsApi(data);
-        res.done((response) => {
-            this.setState({
-                redirectToList: true
-            })
-            toast.success("Record Updated Succesfully!", {
-                position: toast.POSITION.TOP_RIGHT
+        var isvalidate = window.formValidation("#kpiform");
+        if (isvalidate) {
+            var res = this.updateDetailsApi(data);
+            res.done((response) => {
+                this.setState({
+                    redirectToList: true
+                })
+                toast.success("KPI Updated Successfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             });
-        });
-        res.fail((error) => {
-        })
+            res.fail((error) => {
+                debugger;
+            })
+
+        } else {
+
+            return false;
+        }
     }
     componentDidMount() {
         if (this.state.kpiId !== undefined) {
@@ -228,7 +236,9 @@ class AddKpi extends Component {
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveApiDetails(this.state);
                                             }}>Save</button>}
-                                        <button className="btn btn-info mr-2">Clear</button>
+                                        <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                            this.clearForm()
+                                        }}>Clear</button>
                                         <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>
