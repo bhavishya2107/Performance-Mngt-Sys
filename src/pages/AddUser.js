@@ -320,9 +320,9 @@ class AddUser extends Component {
         return (
             <div>
                 <div>
-                    {this.state.userId !== undefined ? <div>Edit</div> : <div>ADD</div>}
+                    {this.state.userId !== undefined ? <div></div> : <div></div>}
                 </div>
-                <form id="createUser">
+                <form id="createUser" className="pt-5">
                     <div className="row">
                         <div className="col">
                             <label for="firstName" class="required" sm={2} >FirstName</label>

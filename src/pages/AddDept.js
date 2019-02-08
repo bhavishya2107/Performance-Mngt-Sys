@@ -147,11 +147,11 @@ class AddDept extends Component {
         return (
             <div>
                 <div>
-                    {this.state.id !== undefined ? <div>Edit</div> : <div>ADD</div>}
+                    {this.state.id !== undefined ? <div></div> : <div></div>}
 
                 </div>
-                <form id="createDepartment">
-                    <div>
+                <form id="createDepartment"className="pt-5" >
+                    <div >
 
                         <label for="depName">Name<span style={{ color: "red" }}>*</span></label>
                         <input type="text" name="depName" id="depName" placeholder="Enter the Name" value={this.state.depName}
