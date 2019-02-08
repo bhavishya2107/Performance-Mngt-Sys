@@ -318,138 +318,175 @@ class AddUser extends Component {
 
 
         return (
-            <div>
-                <div>
-                    {this.state.userId !== undefined ? <div>Edit</div> : <div>ADD</div>}
+            <div className="clearfix">
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> User Management >
+                    {this.state.userId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    </h2>
                 </div>
-                <form id="createUser">
-                    <div className="row">
-                        <div className="col">
-                            <label for="firstName" class="required" sm={2} >FirstName</label>
-                            <input type="text" name="firstName" id="firstName" maxLength="20" className="form-control col-sm-5" placeholder="Enter the Name" value={this.state.firstName}
-                                onChange={(event) => {
-                                    this.setState({
-                                        firstName: event.target.value
-                                    })
-                                }} required />
-                        </div>
-                        <div className="col">
-                            <label for="lastName" class="required" sm={2}>LastName</label>
-                            <input type="text" name="lastName" id="lastName" maxLength="20" className="form-control col-sm-5" placeholder="Enter the Name" value={this.state.lastName}
-                                onChange={(event) => {
-                                    this.setState({
-                                        lastName: event.target.value
-                                    })
-                                }} required />
-                        </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <form id="createUser">
+                            <div className="row">
+                                <div className="col-md-3 order-md-last text-left">
+                                    <div className="form-group">
+                                        <label for="profileImage" class="required">Image</label>
+                                        <div className="clearfix mb-2">
+                                            <div className="user-img-block">
+                                                <img src="https://via.placeholder.com/150" className="img-thumbnail" />
+                                                <a href="#" className="btn-image-remove">x</a>
+                                            </div>
+                                        </div>
+                                        <div className="upload-img">
+                                            <Input type="file" name="profileImage" id="profileImage" className="" value={this.state.profileImage}
+                                                onChange={(event) => {
+                                                    this.setState({
+                                                        profileImage: event.target.value
+                                                    })
+                                                }} required />
+
+                                            <label className="btn btn-primary btn-block">Upload Image</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-9 order-md-first">
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label for="firstName" class="required" sm={2} >FirstName</label>
+                                                <input type="text" name="firstName" id="firstName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.firstName}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            firstName: event.target.value
+                                                        })
+                                                    }} required />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label for="lastName" class="required" sm={2}>LastName</label>
+                                                <input type="text" name="lastName" id="lastName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.lastName}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            lastName: event.target.value
+                                                        })
+                                                    }} required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label for="userName" sm={2}>UserName</label>
+                                                <input type="text" name="userName" id="userName" maxLength="20" className="form-control" value={this.state.userName}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            userName: event.target.value
+                                                        })
+                                                    }} required />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label for="emailAddress" class="required" sm={2}>Email ID</label>
+                                                <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            emailAddress: event.target.value
+                                                        })
+                                                    }} required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label for="mobileNo" class="required">Mobile No</label>
+                                                <input type="phone" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            mobileNo: event.target.value
+                                                        })
+                                                    }} required />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Department:</label>
+                                                <select name="deptDropDown" value={this.state.selectDept} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" required>
+                                                    <option>select</option>
+                                                    {this.state.displayDeptData}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Job Title:</label>
+                                                <select onChange={(e) => { this.onChangeJob(e) }} value={this.state.selectJobTitle} className="form-control" required>
+                                                    <option>select</option>
+                                                    {this.state.displayJobData}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Role:</label>
+                                                <select value={this.state.selectRole} onChange={(e) => { this.onChangeRole(e) }} className="form-control">
+                                                    <option>select</option>
+                                                    {this.state.displayRoleData}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label>Team Leader:</label>
+                                                <select onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <option>select</option>
+                                                    {this.state.displayTeamLeaderData}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <div className="form-group">
+                                                <label class="required">Address</label>
+                                                <textarea name="Address" id="Address" maxLength="50" rows="3" className="form-control" value={this.state.Address}
+                                                    onChange={(event) => {
+                                                        this.setState({
+                                                            Address: event.target.value
+                                                        })
+                                                    }} required>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <div className="form-group">
+                                                {this.state.userId !== undefined ?
+                                                    <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                                        this.UpdateUserDetails(this.state);
+                                                    }}>Update</button>
+                                                    : <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                                        this.saveUser(this.state);
+                                                    }}>Save</button>}
+
+                                                <button type="button" className="btn btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
+                                                <Link to='/UserManagement' className="btn btn-danger mr-2">Cancel</Link>
+                                            </div>
+                                        </div></div>
+                                </div>
+                            </div>
+
+                        </form>
+
                     </div>
-
-                    <div className="row">
-                        <div className="col">
-                            <label for="userName" sm={2}>UserName</label>
-                            <input type="text" name="userName" id="userName" maxLength="20" className="form-control col-sm-5" value={this.state.userName}
-                                onChange={(event) => {
-                                    this.setState({
-                                        userName: event.target.value
-                                    })
-                                }} required />
-                        </div>
-                        <div className="col">
-                            <label for="emailAddress" class="required" sm={2}>Email ID</label>
-                            <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control col-sm-5" value={this.state.emailAddress}
-                                onChange={(event) => {
-                                    this.setState({
-                                        emailAddress: event.target.value
-                                    })
-                                }} required />
-
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col">
-                            <label for="Address" class="required" sm={2}>Address</label>
-                            <input type="textarea" name="Address" id="Address" maxLength="50" className="form-control col-sm-5" value={this.state.Address}
-                                onChange={(event) => {
-                                    this.setState({
-                                        Address: event.target.value
-                                    })
-                                }} required />
-                        </div>
-                        <div className="col">
-                            <label for="profileImage" class="required" sm={2}>Image</label>
-                            <Input type="text" name="profileImage" id="profileImage" className="form-control col-sm-5" value={this.state.profileImage}
-                                onChange={(event) => {
-                                    this.setState({
-                                        profileImage: event.target.value
-                                    })
-                                }} required />
-
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-
-                            <label for="mobileNo" class="required">Mobile No</label>
-                            <input type="phone" name="mobileNo" id="mobileNo" maxLength="10" className="form-control col-sm-5" value={this.state.mobileNo}
-                                onChange={(event) => {
-                                    this.setState({
-                                        mobileNo: event.target.value
-                                    })
-                                }} required />
-
-                        </div>
-                        <div className="dropdown" >
-                            <label className="mr-2">Department:</label>
-                            <select name="deptDropDown" value={this.state.selectDept} onChange={(e) => { this.onChangeDepartment(e) }} className="btn btn-info dropdown-toggle md mr-3" required>
-                                <option>select</option>
-                                {this.state.displayDeptData}
-                            </select>
-
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="dropdown" >
-                            <label className="mr-2">Job Title:</label>
-                            <select onChange={(e) => { this.onChangeJob(e) }} value={this.state.selectJobTitle} className="btn  dropdown-toggle md mr-3" required>
-                                <option>select</option>
-                                {this.state.displayJobData}
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div className="row">
-                        <div className="dropdown" >
-                            <label className="mr-2">Role:</label>
-                            <select value={this.state.selectRole} onChange={(e) => { this.onChangeRole(e) }} className="btn dropdown-toggle md mr-3">
-                                <option>select</option>
-                                {this.state.displayRoleData}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="dropdown" >
-                            <label className="mr-2">Team Leader:</label>
-                            <select onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="btn dropdown-toggle md mr-3">
-                                <option>select</option>
-                                {this.state.displayTeamLeaderData}
-                            </select>
-                        </div>
-                    </div>
-                    {this.state.userId !== undefined ?
-                        <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                            this.UpdateUserDetails(this.state);
-                        }}>Update</button>
-                        : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                            this.saveUser(this.state);
-                        }}>Save</button>}
-
-                    <button type="button" className="btn btn-sm btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
-                    <Link to='/UserManagement' className="btn btn-sm btn-danger mr-2">Cancel</Link>
-
-                </form>
+                </div>
             </div>
         )
     }
