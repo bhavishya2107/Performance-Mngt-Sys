@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom'
-import { environment } from './Environment'
+import { environment } from '../Environment'
 import $ from 'jquery';
 import { Link } from 'react-router-dom';
 class AddDept extends Component {
@@ -13,7 +13,6 @@ class AddDept extends Component {
         this.state = {
             RedirectToDept: false,
             depId: props.match.params.depId,
-            // depId:
             depName: "",
             description: "",
             isUpdate: false,
@@ -28,10 +27,6 @@ class AddDept extends Component {
         })
     }
     //#endregion
-    //#region  cancel functionality
-
-   
-
     //#region save department details
     saveDept() {
         var result = window.formValidation("#createDepartment");
@@ -109,7 +104,6 @@ class AddDept extends Component {
             });
         });
         res.fail((error) => {
-
             console.log('error', error);
         })
     }
@@ -146,51 +140,51 @@ class AddDept extends Component {
 
         return (
             <div>
-                <div>
-                    {this.state.id !== undefined ? <div></div> : <div></div>}
-
-                </div>
-                <form id="createDepartment"className="pt-5" >
-                    <div >
-
-                        <label for="depName">Name<span style={{ color: "red" }}>*</span></label>
-                        <input type="text" name="depName" id="depName" placeholder="Enter the Name" value={this.state.depName}
-                            onChange={(event) => {
-                                this.setState({
-                                    depName: event.target.value
-                                })
-                            }} required />
-
-
-                        <label for="description">description</label>
-                        <input type="text" name="description" id="description" value={this.state.description}
-                            onChange={(event) => {
-                                this.setState({
-                                    description: event.target.value
-                                })
-                            }} required />
-
+                 <div className="clearfix">
+                    <div className="clearfix d-flex align-items-center row page-title">
+                        <h2 className="col"> Department >
+                    {this.state.depId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                        </h2>
                     </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-6">
+                        <form id="createDepartment">
+                            <div className="form-group">
+                                <label for="depName">Name</label>
+                                <input type="text" name="depName" className="form-control" id="depName" placeholder="Enter the Name" value={this.state.depName}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            depName: event.target.value
+                                        })
+                                    }} required />
+                            </div>
+                            <div className="form-group">
+                                <label for="description">Description</label>
+                                <textarea name="description" className="form-control" id="description" value={this.state.description}
+                                    onChange={(event) => {
+                                        this.setState({
+                                            description: event.target.value
+                                        })
+                                    }} required />
+                            </div>
+                            <div className="form-group">
+                                {this.state.depId !== undefined ?
+                                    <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                        this.UpdateDeptDetails(this.state);
+                                    }}>Update</button>
+                                    : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                        this.saveDept(this.state);
+                                    }}>Save</button>}
 
-                </form>
-
-
-                {this.state.depId !== undefined ?
-                    <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                        this.UpdateDeptDetails(this.state);
-                    }}>Update</button>
-                    : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                        this.saveDept(this.state);
-                    }}>Save</button>}
-
-                <button className="btn btn-sm btn-success mr-2" onClick={() => { this.clear(); }}>Clear</button>
-                <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
-
+                                <button className="btn btn-sm btn-success mr-2" onClick={() => { this.clear(); }}>Clear</button>
+                                <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-
         )
-
     }
 }
 export default AddDept;

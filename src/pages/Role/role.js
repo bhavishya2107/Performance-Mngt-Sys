@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from './Environment';
+import { environment } from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -54,29 +54,49 @@ class UserRolePMS extends Component {
         });
     }
     DeleteAllRole() {
+       
+
         $("#roleDataList input:checkbox:checked").each((e, item) => {
+            debugger;
             this.state.selectedIds.push(item.value);
         });
+
         var res = '';
+debugger;
         if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeleteRoleApi(item);
-            });
-
-            res.done(response => {
-                toast.success("Role Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
-
-            });
-
-        } else {
-            toast.info("Select atleast one record", {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.state.selectedIds.map(item => {
+                        res = this.DeleteRoleApi(item);
+                    });
+                    res.done(response => {
+                        toast.success("Role Deleted Successfully !", {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
+                        this.$el.DataTable().ajax.reload();
+                    });
+                    res.fail(error => {
+        
+                    });
+                }
+            }
+        });
+        }
+        else {
+            toast.info("please select atleast one record!");
         }
     }
 
@@ -107,33 +127,9 @@ class UserRolePMS extends Component {
         }
     }
 
-    multiKraDeleteConfirm(id) {
-
-
-        //    if (id !== undefined) {
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.DeleteAllRole(id);
-                }
-                else {
-                    toast.info("Select atleast one record", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
-                }
-            }
-        });
+    multiRoleDeleteConfirm(id) {
+        debugger;
+       
     }
 
     componentDidMount() {
@@ -142,6 +138,7 @@ class UserRolePMS extends Component {
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
+            aaSorting: [[2, 'asc']],
             ajax: {
                 // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
                 url: endpointGET,
@@ -153,24 +150,30 @@ class UserRolePMS extends Component {
             columns: [
                 {
 
-                    data: "kraId",
+                    data: "roleId",
                     "orderable": false,
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="kraId" value=' + row.kraId + ">"
+                            '<input type="checkbox" name="roleId" value=' + row.roleId + ">"
                         );
                     },
 
                 },
                 {
+                    data: null,
+                    targets: 1,
+                    "orderable": false,
+
+                },
+                {
                     data: "roleName",
-                    targets: 1
+                    targets: 2
                 },
 
                 {
                     data: "action",
-                    targets: 2,
+                    targets: 3,
                     className: "text-right",
                     render: function (data, type, row) {
                         return (
@@ -185,6 +188,10 @@ class UserRolePMS extends Component {
 
                 }
             ],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            },
 
             initComplete: (settings, json) => {
                 // $(".btnDelete").on("click", e => {
@@ -204,21 +211,18 @@ class UserRolePMS extends Component {
     render() {
         return (
             <div>
-                <h1>Role</h1>
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">Role</h2>
+                    <div className="col text-right">
+                        <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button type="button"
+                        className="btn btn-danger btn-multi-delete"
+                        onClick={() => {
+                            this.DeleteAllRole();
+                        }}><i className="fa fa-trash" aria-hidden="true"></i></button>
 
-                {
-                    this.props.location.state === "2222"
-                }
-                <div className="clearfix text-right mb-2 btn-lg">
-                    <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
-                <button
-                    className="btn btn-danger mb-2 btnDeleteAllRole"
-                    onClick={() => {
-                        this.multiKraDeleteConfirm(this);
-                    }}><i className="fa fa-trash" aria-hidden="true"></i></button>
-
-
 
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
@@ -232,12 +236,14 @@ class UserRolePMS extends Component {
                                     onClick={e => { this.checkallrole(e); }}
                                 />
                             </th>
+                            <th width="50">Sr.No</th>
                             <th>Name</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                    <ToastContainer />
+                   <tbody></tbody>
                 </table>
+                <ToastContainer />
             </div>
         )
     }

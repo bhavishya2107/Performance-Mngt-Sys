@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import {environment} from './Environment';
+import {environment} from '../Environment';
 const $ = require('jquery');
 
 
@@ -135,8 +135,13 @@ class UserRoleForm extends Component {
         }
         return (
             <div className="container-fluid">
-                {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="userRoleForm" className="pt-5" >
+              <div className="clearfix d-flex align-items-center row page-title">
+                <h2 className="col"> Role >
+                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                </h2>
+            </div>
+         
+                <form id="userRoleForm" >
                         <div className="form-group">
                             <label for="roleName" className="required">Name</label>
                             <div className="">
