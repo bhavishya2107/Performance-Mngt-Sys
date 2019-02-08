@@ -120,6 +120,34 @@ class demo extends Component {
 
     }
 
+ DeleteAlbum() {
+    $("#tblAlbumList input:checkbox:checked").each((e, item) => {
+      this.state.selectedIds.push(item.value);
+    });
+    if (this.state.selectedIds.length > 0) {
+      this.state.selectedIds.map(item => {
+        var res = this.DeleteAlbumApi(item);
+        res.done(response => {
+          alert("data deleted Successfully.");
+        });
+        res.fail(error => {});
+      });
+    } else {
+      alert("please select atleast one record!");
+    }
+  }
+
+  checkall(e) {
+    $("#tblAlbumList input:checkbox").each((index, item) => {
+      if ($(e.currentTarget).is(":checked") === true) {
+        $(item).prop("checked", true);
+      } else {
+        $(item).prop("checked", false);
+      }
+    });
+  }
+
+
     addData(data) {
         var result = window.formValidation("#addDepartmentform");
         if (result) {

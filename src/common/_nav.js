@@ -37,15 +37,14 @@ export default {
             url: '/Department',
             icon: 'fa fa-plus'
         },
-
         {
             name: 'KPI',
-            url: '/KPI',
+            url: '/kpi',
             icon: 'fa fa-plus',
         },
         {
             name: 'Project Complexity',
-            url: '/ProjectComplexity',
+            url: '/project-complexity',
             icon: 'fa fa-plus',
         },
         {
