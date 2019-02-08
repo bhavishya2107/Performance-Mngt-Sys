@@ -99,6 +99,7 @@ class kraListPage extends Component {
                 }
                 else {
                     toast.info("please select atleast one record!");
+                    this.$el.DataTable().ajax.reload();
                 }
             }
               

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { environment } from './Environment';
 const $ = require('jquery');
 
@@ -172,10 +171,10 @@ class MyProfile extends Component {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="userLastName">Department</label>
+                                        <label className="" for="userLastName">Job Title</label>
                                         <div>
                                             <input id="userLastName" type="text" className="form-control " readonly
-                                                value="Department"
+                                                value={this.state.jobtitlename}
                                             />
                                         </div>
                                     </div>
@@ -185,10 +184,10 @@ class MyProfile extends Component {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label className="" for="userFirstName">Job Title</label>
+                                        <label className="" for="userFirstName">Role</label>
                                         <div>
                                             <input id="userFirstName" type="text" className="form-control " readonly
-                                                value="jobtitle"
+                                                value={this.state.rolename}
                                             />
                                         </div>
                                     </div>
@@ -198,7 +197,7 @@ class MyProfile extends Component {
                                         <label className="" for="userLastName">Team Leader</label>
                                         <div>
                                             <input id="userLastName" type="text" className="form-control " readonly
-                                                value="Team leader"
+                                                value={this.state.teamleader}
                                             />
                                         </div>
                                     </div>
