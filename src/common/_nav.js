@@ -29,7 +29,7 @@ export default {
 
         {
             name: 'User Management',
-            url: '/UserManagement',
+            url: '/user-management',
             icon: 'fa fa-plus'
         },
         {

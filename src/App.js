@@ -16,10 +16,10 @@ import kraListPage from './pages/Kra/kra';
 import UserRolePMS from './pages/Role/role';
 import UserRoleForm from './pages/Role/addRole';
 
-import UserManagement from './pages/User Management';
-import AddUser from './pages/AddUser'
-import Department from './pages/Department';
-import AddDept from './pages/AddDept'
+import UserManagement from './pages/user management/User Management';
+import AddUser from './pages/user management/AddUser'
+import Department from './pages/Department/Department';
+import AddDept from './pages/Department/AddDept'
 import Projects from './pages/Projects';
 import AddProject from './pages/AddProject';
 import AddKpi from './pages/KPI/AddKpi';
@@ -115,21 +115,18 @@ class App extends Component {
                           path="/AddUser"
                           component={AddUser}
                         />
-                        <Route
-                          path="/Department"
-                          component={Department}
-                        />
+                    
                         <Route
                           path="/AddDept"
                           component={AddDept}
                         />
 
                         <Route path="/user-management" component={UserManagement} />
-                        <Route path="/Add-User" component={AddUser} />
+                        <Route path="/user-managemnet/add" component={AddUser} />
                         <Route path="/EditUser/userId=:userId" component={AddUser} />
                         <Route path="/Department" component={Department} />
                         <Route path="/EditDept/depId=:depId" component={AddDept} />
-                        <Route path="/Add-Dept" component={AddDept} />
+                        <Route exact path="/Department/add" component={AddDept} />
 
                         <Route path="/AddProject" component={AddProject} />
 

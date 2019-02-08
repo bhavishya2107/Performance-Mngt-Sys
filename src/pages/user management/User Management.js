@@ -30,6 +30,7 @@ class UserManagement extends Component {
                 toast.success("User Deleted successfully");
 
             }
+           
         });
         res.fail(error => {
             toast.error("Data is not deleted!");
@@ -92,8 +93,11 @@ class UserManagement extends Component {
                 if (result === true) {
                     this.DeleteUser();
                 }
-            }
+               
+            },
+        
         });
+       
     }
 
     DeleteUser() {
@@ -106,15 +110,18 @@ class UserManagement extends Component {
                 var res = this.DeleteUserApi(item);
 
                 res.done(response => {
-
+                    toast.success("User Deleted Successfully !", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
                 });
                 this.$el.DataTable().ajax.reload()
                 res.fail(error => {
 
                 });
             });
+
         }
-         else {
+        else {
             toast.info("please select atleast one record!")
         }
     }
@@ -132,6 +139,7 @@ class UserManagement extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "order": [[1, 'asc']],
+            "sorting":[[1,'asc']],
             "autoWidth": false,
             ajax: {
                 url: "http://192.168.10.109:3000/api/user_master/",
@@ -154,32 +162,38 @@ class UserManagement extends Component {
                     },
                     orderable: false
                 },
+                {
+                    data: null,
+                    targets: 1,
+                    "orderable": false
+
+                },
 
                 {
                     data: "firstName",
-                    targets: 1,
+                    targets: 2,
 
                 },
                 {
                     data: "lastName",
-                    targets: 2,
-                },
-                {
-                    data: "userName",
                     targets: 3,
                 },
                 {
-                    data: "emailAddress",
+                    data: "userName",
                     targets: 4,
+                },
+                {
+                    data: "emailAddress",
+                    targets: 5,
                 },
 
                 {
                     data: "mobileNo",
-                    targets: 5,
+                    targets: 6,
                 },
                 {
                     data: "userId",
-                    targets: 6,
+                    targets: 7,
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditUser/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
@@ -190,7 +204,10 @@ class UserManagement extends Component {
                     "orderable": false
                 }
             ],
-
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            },
             initComplete: (settings, json) => {
 
             },
@@ -200,9 +217,7 @@ class UserManagement extends Component {
                 $(".btnDelete").on("click", e => {
                     this.singleDeleteUserConfirm(e.currentTarget.id);
                 });
-                // $(".btnDeleteAll").on("click", e => {
-                //     this.multipleDeleteUserConfirm(e.currentTarget.id);
-                // });
+
             }
         });
     }
@@ -211,12 +226,12 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
-                 <div className="clearfix d-flex align-items-center row page-title">
+                <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">User Management</h2>
                     <div className="col text-right">
-                        <Link  to={{ pathname: '/AddUser' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/user-managemnet/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
-                    <button className="btn btn-danger btn-multi-delete"  onClick={() => { this.multipleDeleteUserConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteUserConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblUser"
@@ -230,7 +245,7 @@ class UserManagement extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkall(e) }} />
                             </th>
-
+                            <th width="50">Sr.No</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>User Name</th>
