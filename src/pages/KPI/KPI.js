@@ -13,21 +13,7 @@ class KPI extends Component {
             saveKpiDetails: "",
             selectedIds: []
         };
-    }
-
-    //#region delete Kpi function
-    SingleDeleteKpi(KpiId) {
-        var res = this.DeleteKpiApi(KpiId);
-        res.done(response => {
-            if (response.affectedRows > 0) {
-                toast.success("Record Deleted Succesfully!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            } this.$el.DataTable().ajax.reload();
-        });
-        res.fail(error => {
-        });
-    }
+    }   
     DeleteKpiApi(KpiId) {
         const endpoint = `http://192.168.10.109:3000/api/kpi_master/${KpiId}`;
         return $.ajax({
@@ -44,7 +30,58 @@ class KPI extends Component {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
-             //#region multiple delete bootbox from chechbox
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Ok',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.state.selectedIds.map(item => {
+                            var res = this.DeleteKpiApi(item);
+                            res.done(response => {                               
+                                toast.success("Data deleted successfully.")
+                                this.$el.DataTable().ajax.reload();
+                            }); 
+                        });
+                    }                   
+                }
+            });
+        } 
+        else {
+            toast.info("please select atleast one record!");
+        }
+    }
+    checkall(e) {
+        $("#tblKpi input:checkbox").each((index, item) => {
+            if ($(e.currentTarget).is(":checked") === true) {
+                $(item).prop("checked", true);
+            } else {
+                $(item).prop("checked", false);
+            }
+        });
+    }
+    SingleDeleteKpi(projectId) {
+        var res = this.DeleteKpiApi(projectId);
+        res.done(response => {
+            if (response.affectedRows > 0) {
+                toast.success("Record Deleted Succesfully!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            } this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+
+        });
+    }
+    componentDidMount() {
         $(document).on("click", ".confirmDelete", (e) => {
             var id = e.currentTarget.id;
             bootbox.confirm({
@@ -61,65 +98,21 @@ class KPI extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.DeleteKpiApi(id);
+                        this.SingleDeleteKpi(id);
                     }
                     else {
                     }
                 }
             });
         });
-        // #endregion
-        //     this.state.selectedIds.map(item => {
-        //         var res = this.DeleteKpiApi(item);
-        //         res.done(response => {
-        //             toast.success("Record Deleted Succesfully!", {
-        //                 position: toast.POSITION.TOP_RIGHT
-        //             });
-        //             this.$el.DataTable().ajax.reload();
-        //         });
-        //         res.fail(error => { });
-        //     });
-            
-        } else {
-        }
-    }
-    checkall(e) {
-        $("#tblKpi input:checkbox").each((index, item) => {
-            if ($(e.currentTarget).is(":checked") === true) {
-                $(item).prop("checked", true);
-            } else {
-                $(item).prop("checked", false);
-            }
-        });
-    }
-    SingleDeleteKpiConfirm(id){
-        bootbox.confirm({
-            message: "Are you sure you want to delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'OK',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.SingleDeleteKpi(id);
-                }
-                else {
-                }
-            }
-        });
-    }
-    componentDidMount() {
+        const endpointGET = environment.apiUrl + 'kpi_master/'
         this.$el = $(this.el);
-        var apiUrl = environment.apiUrl + "kpi_master";
         this.$el.DataTable({
+            "autoWidth": false,
+            aaSorting: [[1, 'asc']],
+            aaSorting: [[2, 'asc']],
             ajax: {
-                url: apiUrl,
+                url: endpointGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -137,19 +130,24 @@ class KPI extends Component {
                     },
                 },
                 {
-                    data: "kpiTitle",
-                    targets: 1
-                },
+                    data:null,
+                     targets: 1,
+                     "orderable": false, 
+                 },
                 {
-                    data: "target",
+                    data: "kpiTitle",
                     targets: 2
                 },
                 {
+                    data: "target",
+                    targets: 3
+                },
+                {
                     data: "kpiId",
-                    targets: 3,
+                    targets: 4,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditKpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.kpiId + '"class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
@@ -160,25 +158,23 @@ class KPI extends Component {
                     orderable: false
                 }
             ],
-           
+            "fnRowCallback" : function(nRow, aData, iDisplayIndex){
+                $("td:eq(1)", nRow).html(iDisplayIndex +1);
+               return nRow;
+            },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    this.SingleDeleteKpiConfirm(e.currentTarget.id);
+                    this.SingleDeleteKpi(e.currentTarget.id);
                 });
             },
             
-            // drawCallback: (settings) => {
-            //     $(".btnDelete").on("click", e => {
-            //         this.multipleDeleteKPI(e.currentTarget.id);
-            //     });
-            // }
+            
         });
     }
     render() {
         return (
             //#region table of kpi
             <div >
-
                 <h1>KPI</h1>
                 {this.props.location.state === "2222"}
                 <button type="button" className="btn mr-2 delete btn-danger fa fa-trash" style={{ float: "left" }} onClick={() => { this.multipleDeleteKPI(); }}></button>
@@ -192,6 +188,7 @@ class KPI extends Component {
                         <thead>
                             <tr>
                                 <th width="20"><input type="checkbox" onClick={(e) => { this.checkall(e); }}></input></th>
+                                <th width="50">Sr.No</th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th width="90">Action</th>

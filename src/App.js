@@ -86,22 +86,22 @@ class App extends Component {
                           path="/demo"
                           component={Demo}
                         />
-                        <Route exact path="/KPI" component={KPI}/>
-                        <Route exact path="/KPI/EditKpi/id=:id" component={AddKpi} />
+                        <Route exact path="/KPI" component={KPI} />
+                        <Route exact path="/KPI/editkpi/id=:id" component={AddKpi} />
                         <Route exact path="/KPI/add" component={AddKpi} />
 
-                        <Route exact path="/project-complexity" component={ProjectComplexity}/>
-                         <Route exact path="/project-complexity/edit/id=:id" component={AddProjectComplexity} />
+                        <Route exact path="/project-complexity" component={ProjectComplexity} />
+                        <Route exact path="/project-complexity/edit/id=:id" component={AddProjectComplexity} />
                         <Route exact path="/project-complexity/add" component={AddProjectComplexity} />
-                        
+
                         <Route path="/Projects" component={Projects} />
                         <Route exact path="/EditProject/id=:id" component={AddProject} />
                         <Route exact path="/AddProject" component={AddProject} />
-                      
 
 
-                      
-                      
+
+
+
                         <Route
                           path="/UserManagement"
                           component={UserManagement}
@@ -123,7 +123,7 @@ class App extends Component {
                           path="/AddDept"
                           component={AddDept}
                         />
-                        
+
                         <Route path="/user-management" component={UserManagement} />
                         <Route path="/Add-User" component={AddUser} />
                         <Route path="/Edit/userId=:userId" component={AddUser} />
@@ -132,8 +132,8 @@ class App extends Component {
                         <Route path="/Add-Dept" component={AddDept} />
 
                         <Route path="/AddProject" component={AddProject} />
-                        
-                        
+
+
                         <Route path="/innerpage" component={innerpage} />
                         <Route path="/addKra" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
@@ -151,9 +151,9 @@ class App extends Component {
                         <Route exact path="/job-title/add" component={Jobtitle} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
-                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />        
+                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
-                       
+
 
                       </Switch>
                     </div>

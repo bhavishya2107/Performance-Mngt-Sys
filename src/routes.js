@@ -10,6 +10,7 @@ const routes = {
   '/job-title/add': "Add Job title",
   '/kpi': 'KPI',
   '/kpi/add': 'KPI',
+  '/KPI/editkpi/id=:id': 'KPI',
   '/project-complexity': 'Project Complexity',
   '/project-complexity/add': 'Add Project Complexity',
   '/project-complexity/edit': 'Edit Project Complexity',
@@ -24,7 +25,6 @@ const routes = {
   '/kra': 'Kra',
   '/job-title/edit': 'Job Title',
   '/role': 'Role'
-
 };
 {
 }

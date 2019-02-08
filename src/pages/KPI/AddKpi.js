@@ -20,6 +20,14 @@ class AddKpi extends Component {
             redirectToList: false
         }
     }
+    clearForm() {
+        this.setState({
+            kpiTitle: "",
+            target: "",
+            weightage: ""
+
+        })
+    }
     saveApiDetails() {
         var _this = this;
         var Kpidata = {
@@ -156,11 +164,11 @@ class AddKpi extends Component {
         }
         return (
             <div className="row">
-     
+
                 {this.state.kpiId !== undefined ? <div></div> : <div></div>}
                 <form id="kpiform" className="col-12">
                     <div className="form-group">
-                    <label className="required" for="target">KPI Title</label>
+                        <label className="required" for="target">KPI Title</label>
                         <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
                             onChange={(event) => {
                                 this.setState({
@@ -170,7 +178,7 @@ class AddKpi extends Component {
                     </div>
                     <div className="form-group">
                         <label className="required" for="target">Target</label>
-                        <textarea  className="form-control" rows="4" type="text" value={this.state.target}
+                        <textarea className="form-control" rows="4" type="text" value={this.state.target}
                             onChange={(event) => {
                                 this.setState({
                                     target: event.target.value
@@ -202,9 +210,12 @@ class AddKpi extends Component {
                         : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                             this.saveApiDetails(this.state);
                         }}>Save</button>}
-                    <button className="btn btn-info mr-2">Clear</button>
-                    <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>                
-                    
+
+                    <button type="clear" className="btn btn-primary mr-3" onClick={() => {
+                        this.clearForm()
+                    }}>Clear</button>
+                    <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
+
                 </form>
             </div>
         );
