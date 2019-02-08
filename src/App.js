@@ -16,7 +16,7 @@ import kraListPage from './pages/kra';
 import UserRolePMS from './pages/role';
 import UserRoleForm from './pages/addRole';
 
-import UserManagement from './pages/UserManagement';
+import UserManagement from './pages/User Management';
 import AddUser from './pages/AddUser'
 import Department from './pages/Department';
 import AddDept from './pages/AddDept'
@@ -124,12 +124,12 @@ class App extends Component {
                           component={AddDept}
                         />
                         
-                        <Route path="/UserManagement" component={UserManagement} />
-                        <Route path="/AddUser" component={AddUser} />
-                        <Route path="/Edit/userId=:userId" component={AddUser} />
+                        <Route path="/user-management" component={UserManagement} />
+                        <Route path="/Add-User" component={AddUser} />
+                        <Route path="/EditUser/userId=:userId" component={AddUser} />
                         <Route path="/Department" component={Department} />
-                        <Route path="/Edit/depId=:depId" component={AddDept} />
-                        <Route path="/AddDept" component={AddDept} />
+                        <Route path="/EditDept/depId=:depId" component={AddDept} />
+                        <Route path="/Add-Dept" component={AddDept} />
 
                         <Route path="/AddProject" component={AddProject} />
                         

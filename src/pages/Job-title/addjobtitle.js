@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from '../Environment'
+import { environment, Notification } from '../Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
 class Jobtitle extends Component {
@@ -31,7 +31,7 @@ class Jobtitle extends Component {
                 data: formData,
                 success: function (resultData) {
                     _this.setState({ redirectToList: true });
-                    toast.success("Jobtitle Saved Successfully!", {
+                    toast.success("Jobtitle " + Notification.saved, {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 }

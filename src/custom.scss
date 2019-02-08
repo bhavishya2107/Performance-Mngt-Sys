@@ -92,10 +92,66 @@ html {
     padding: 0 15px;
     box-shadow: 0 -5px 10px 7px rgba(0,0,0, .5);
 }
-
+.page-title{
+    padding: 10px 0;
+    border-bottom:1px solid #ddd; 
+    margin-bottom: 25px;
+    position: relative;
+    h2{
+        font-size: 25px;
+        color: #333;
+        margin: 0;
+    }
+}
+.dataTables_length{
+    padding-left: 50px;
+}
+.btn-multi-delete{
+    position: absolute;
+    left: 15px;
+    bottom: -60px;
+    z-index: 9;
+}
 .content-block {
     margin-left: 200px;
-    padding-top: 56px;
+    padding-top: 60px;
+}
+.upload-img{
+    width: 100%;
+    position: relative;
+    input[type=file]{
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 9;
+        cursor: pointer;
+        height: 100%;
+    }
+    label{
+        cursor: pointer;
+    }
+}
+.user-img-block{
+    display: inline-block;
+    position: relative;
+    .btn-image-remove{
+        background: #ff8585;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 18px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 13px;
+        border: 2px solid #fff;
+        position: absolute;
+        right: -10px;
+        top: -9px;
+        text-decoration: none;
+    }
 }
 
 @media(max-width:991.85px) {

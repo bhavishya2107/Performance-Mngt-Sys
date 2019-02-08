@@ -64,9 +64,9 @@ class Department extends Component {
     }
     //#endregion
     //#region multiple delete functionality
-    multipleDeleteDeptConfirm(id) {
-        // if (this.state.selectedIds.length > 0) {
-        if (id !== undefined) {
+    multipleDeleteDeptConfirm() {
+      
+       // if (id !== undefined) {
             bootbox.confirm({
                 message: "Delete this record ?",
                 buttons: {
@@ -81,14 +81,14 @@ class Department extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.DeleteDept(id);
+                        this.DeleteDept();
                     }
                 }
             });
-        }
-        else {
+        // }
+        // else {
 
-        }
+        // }
     }
 
     DeleteDept() {
@@ -97,10 +97,8 @@ class Department extends Component {
             this.state.selectedIds.push(item.value);
         });
         if (this.state.selectedIds.length > 0) {
-
             this.state.selectedIds.map(item => {
                 var res = this.DeleteDepApi(item);
-
                 res.done(response => {
 
                 });
@@ -110,7 +108,8 @@ class Department extends Component {
                 });
             });
         } else {
-            alert("please select atleast one record!");
+           
+            toast.info("please select atleast one record!")
         }
     }
 
@@ -124,6 +123,7 @@ class Department extends Component {
             }
         });
     }
+    //#endregion
     componentDidMount() {
 
         this.$el = $(this.el);
@@ -166,7 +166,7 @@ class Department extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.depId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -182,9 +182,9 @@ class Department extends Component {
                 $(".btnDelete").on("click", e => {
                     this.singleDeleteDeptConfirm(e.currentTarget.id);
                 });
-                $(".btnDeleteAll").on("click", e => {
-                    this.multipleDeleteDeptConfirm(e.currentTarget.id);
-                });
+                // $(".btnDeleteAll").on("click", e => {
+                //     this.multipleDeleteDeptConfirm(e.currentTarget.id);
+                // });
             }
             //#endregion
 
@@ -200,9 +200,9 @@ class Department extends Component {
 
                 }
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-info mr-2" >+</Link>
+                    <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-info mr-2" ><i class="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
-                <button type="button" className="btn btn-danger mb-5 btnDeleteAll" onClick={() => { this.DeleteDept(); }}>Delete</button>
+                <button type="button" className="btn btn-danger mb-5 btnDeleteAll" onClick={() => { this.multipleDeleteDeptConfirm(); }}>Delete</button>
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblDepartment"
