@@ -14,7 +14,13 @@ class AddProjectComplexity extends Component {
             redirectToList: false
         };
     }
+    clearForm() {
+        this.setState({
+            projectTypeName: "",
+            description: ""
 
+        })
+    }
     //#region  save projectcomplexity details
     saveProjectComplexityDetails() {
         var _this = this;
@@ -49,9 +55,9 @@ class AddProjectComplexity extends Component {
         })
     }
     //#endregion
- 
- 
- //#region update fucntionality details
+
+
+    //#region update fucntionality details
     updateDetailsApi(data) {
         var body =
         {
@@ -78,13 +84,13 @@ class AddProjectComplexity extends Component {
             })
             toast.success("Project Complexity Updated Successfully!", {
                 position: toast.POSITION.TOP_RIGHT
-        });
+            });
         });
         res.fail((error) => {
         })
     }
     //#endregion
-   
+
     componentDidMount() {
         if (this.state.projectTypeId !== undefined) {
             var res = this.getProjectComplexityDeatilsApi();
@@ -102,11 +108,11 @@ class AddProjectComplexity extends Component {
     }
     render() {
         if (this.state.redirectToList == true) {
-            return <Redirect to={{ pathname: "/ProjectComplexity" }} />
+            return <Redirect to={{ pathname: "/project-complexity" }} />
         }
         return (
-          //#region form of project complexity
-          <div className="row">
+            //#region form of project complexity
+            <div className="row">
                 {this.state.projectTypeId !== undefined ? <div></div> : <div></div>}
                 <form id="projectForm" className="col-12">
                     <div className="form-group">
@@ -120,7 +126,7 @@ class AddProjectComplexity extends Component {
                     </div>
                     <div className="form-group">
                         <label for="description">Description</label>
-                        <textarea className="form-control" rows="3"   type="text" value={this.state.description}
+                        <textarea className="form-control" rows="3" type="text" value={this.state.description}
                             onChange={(event) => {
                                 this.setState({
                                     description: event.target.value
@@ -135,10 +141,12 @@ class AddProjectComplexity extends Component {
                         : <button type="button" class="btn btn-success mr-2" value="submit" onClick={() => {
                             this.saveProjectComplexityDetails(this.state);
                         }}>Save</button>}
-                    <button className="btn btn-info mr-2">Clear</button>
-                    <Link to={{ pathname: '/ProjectComplexity', }} className="btn btn-danger mr-2">Cancel</Link>                
+                    <button type="clear" className="btn btn-primary mr-3" onClick={() => {
+                        this.clearForm()
+                    }}>Clear</button>
+                    <Link to={{ pathname: '/project-complexity', }} className="btn btn-danger mr-2">Cancel</Link>
 
-                    </form>
+                </form>
             </div>
             //#endregion 
         );

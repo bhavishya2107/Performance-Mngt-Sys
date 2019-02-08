@@ -11,10 +11,10 @@ import Breadcrumb from './common/breadcrumb';
 import innerpage from './pages/innerpage';
 import Login from './pages/login';
 import Demo from './pages/demo';
-import kraHome from './pages/add-kra';
-import kraListPage from './pages/kra';
-import UserRolePMS from './pages/role';
-import UserRoleForm from './pages/addRole';
+import kraHome from './pages/Kra/add-kra';
+import kraListPage from './pages/Kra/kra';
+import UserRolePMS from './pages/Role/role';
+import UserRoleForm from './pages/Role/addRole';
 
 import UserManagement from './pages/user management/User Management';
 import AddUser from './pages/user management/AddUser'
@@ -22,12 +22,11 @@ import Department from './pages/Department/Department';
 import AddDept from './pages/Department/AddDept'
 import Projects from './pages/Projects';
 import AddProject from './pages/AddProject';
-import AddKpi from './pages/AddKpi';
-import KPI from './pages/KPI';
+import AddKpi from './pages/KPI/AddKpi';
+import KPI from './pages/KPI/KPI';
 
-import ProjectComplexity from './pages/ProjectComplexity';
-import AddProjectComplexity from './pages/AddProjectComplexity';
-import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import ProjectComplexity from './pages/Project-Complexity/ProjectComplexity';
+import AddProjectComplexity from './pages/Project-Complexity/AddProjectComplexity';
 import Templatelist from './pages/Template/templateList';
 import Scaleset from './pages/Scale-set/addscaleset';
 import Scalesetlist from './pages/Scale-set/scale-set';
@@ -35,6 +34,7 @@ import Jobtitlelist from './pages/Job-title/job-title';
 import Jobtitle from './pages/Job-title/addjobtitle';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/myProfile';
+import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 
 class App extends Component {
 
@@ -86,22 +86,22 @@ class App extends Component {
                           path="/demo"
                           component={Demo}
                         />
-                        <Route  path="/KPI" component={KPI}/>
-                        <Route exact path="/EditKpi/id=:id" component={AddKpi} />
-                        <Route exact path="/AddKpi" component={AddKpi} />
+                        <Route exact path="/KPI" component={KPI} />
+                        <Route exact path="/KPI/editkpi/id=:id" component={AddKpi} />
+                        <Route exact path="/KPI/add" component={AddKpi} />
 
-                        <Route path="/ProjectComplexity" component={ProjectComplexity}/>
-                         <Route exact path="/EditProjectComplexity/id=:id" component={AddProjectComplexity} />
-                        <Route exact path="/AddProjectComplexity" component={AddProjectComplexity} />
-                        
+                        <Route exact path="/project-complexity" component={ProjectComplexity} />
+                        <Route exact path="/project-complexity/edit/id=:id" component={AddProjectComplexity} />
+                        <Route exact path="/project-complexity/add" component={AddProjectComplexity} />
+
                         <Route path="/Projects" component={Projects} />
                         <Route exact path="/EditProject/id=:id" component={AddProject} />
                         <Route exact path="/AddProject" component={AddProject} />
-                      
 
 
-                      
-                      
+
+
+
                         <Route
                           path="/UserManagement"
                           component={UserManagement}
@@ -120,7 +120,7 @@ class App extends Component {
                           path="/AddDept"
                           component={AddDept}
                         />
-                        
+
                         <Route path="/user-management" component={UserManagement} />
                         <Route path="/user-managemnet/add" component={AddUser} />
                         <Route path="/EditUser/userId=:userId" component={AddUser} />
@@ -129,10 +129,10 @@ class App extends Component {
                         <Route exact path="/Department/add" component={AddDept} />
 
                         <Route path="/AddProject" component={AddProject} />
-                        
-                        
+
+
                         <Route path="/innerpage" component={innerpage} />
-                        <Route path="/add-kra" component={kraHome}></Route>
+                        <Route exact path="/kra/add" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>
@@ -148,9 +148,9 @@ class App extends Component {
                         <Route exact path="/job-title/add" component={Jobtitle} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
-                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />        
+                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
-                       
+
 
                       </Switch>
                     </div>
