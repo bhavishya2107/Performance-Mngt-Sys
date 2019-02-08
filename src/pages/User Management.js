@@ -71,31 +71,31 @@ class UserManagement extends Component {
             });
         }
     }
-   
-    //#region multiple delete functionality
-    multipleDeleteUserConfirm(id) {
 
-        if (id !== undefined) {
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
+    //#region multiple delete functionality
+    multipleDeleteUserConfirm() {
+
+        // if (id !== undefined) {
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
                 },
-                callback: (result) => {
-                    if (result === true) {
-                        this.DeleteUser(id);
-                    }
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
                 }
-            });
-        }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.DeleteUser();
+                }
+            }
+        });
     }
+
     DeleteUser() {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -113,8 +113,9 @@ class UserManagement extends Component {
 
                 });
             });
-        } else {
-            alert("please select atleast one record!");
+        }
+         else {
+            toast.info("please select atleast one record!")
         }
     }
     checkall(e) {
@@ -181,7 +182,7 @@ class UserManagement extends Component {
                     targets: 6,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/Edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditUser/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -199,9 +200,9 @@ class UserManagement extends Component {
                 $(".btnDelete").on("click", e => {
                     this.singleDeleteUserConfirm(e.currentTarget.id);
                 });
-                $(".btnDeleteAll").on("click", e => {
-                    this.multipleDeleteUserConfirm(e.currentTarget.id);
-                });
+                // $(".btnDeleteAll").on("click", e => {
+                //     this.multipleDeleteUserConfirm(e.currentTarget.id);
+                // });
             }
         });
     }
@@ -216,12 +217,12 @@ class UserManagement extends Component {
                 }
 
                 <div className="text-right mb-3">
-                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit">+</Link>
+                    <Link to={{ pathname: '/AddUser' }} className="btn btn-sm btn-info mr-2" role="submit"><i class="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
                 <button
                     type="button"
                     className="btn btn-danger mb-5"
-                    onClick={() => { this.DeleteUser(); }}>Delete</button>
+                    onClick={() => { this.multipleDeleteUserConfirm(); }}>Delete</button>
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblUser"

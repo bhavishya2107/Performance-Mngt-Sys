@@ -20,7 +20,9 @@ const routes = {
     '/role':'Role',
     '/kra':'Kra',
     '/job-title/edit':'Job Title',
-    '/role':'Role'
+    '/role':'Role',
+    '/addDept':'Add Dept',
+    '/addUser':'Add User'
     
   };
   {
