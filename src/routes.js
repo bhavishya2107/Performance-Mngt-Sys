@@ -21,8 +21,12 @@ const routes = {
     '/kra':'Kra',
     '/job-title/edit':'Job Title',
     '/role':'Role',
-    '/addDept':'Add Dept',
-    '/addUser':'Add User'
+
+    '/Department/add':'add dept',
+    '/EditDept':'Department',
+
+    '/user-management/add':'add user',    
+    '/EditUser':'user-management',
     
   };
   {
