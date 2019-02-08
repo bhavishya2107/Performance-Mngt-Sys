@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { environment } from '../Environment'
+import { environment, Type, Notification } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
@@ -15,6 +15,31 @@ class Scalesetlist extends Component {
     }
 
     //#region Delete Scale set functions
+
+    SingleDeleteConfirm(id){
+        bootbox.confirm({
+            message: Notification.deleteConfirm,
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.SingleDelete(id);
+                }
+                else {
+
+                }
+            }
+        });
+        
+    }
     SingleDelete(scaleSetId) {
         var res = this.DeletescalesetApi(scaleSetId);
         res.done(response => {
@@ -45,40 +70,51 @@ class Scalesetlist extends Component {
         });
     }
     //#endregion
+
+    multipleDeleteScalesetconfirm(id){
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.multipleDeleteScaleset(id);
+                }
+            }
+        });
+    }
+
+
     multipleDeleteScaleset() {
        
         $("#tblscaleset input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
+        var res = '';
+
         if (this.state.selectedIds.length > 0) {
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.state.selectedIds.map(item => {
-                            var res = this.DeletescalesetApi(item);
-                            res.done(response => {                               
-                                //toast.success("Data deleted successfully.")
-                                this.$el.DataTable().ajax.reload();
-                            });
-                            res.fail(error => { 
-                                toast.error("Delete Fail.");
-                            });
-                        });
-                    }                   
-                }
+            this.state.selectedIds.map(item => {
+                res = this.DeletescalesetApi(item);
             });
-        } 
+            res.done(response => {
+                toast.success("Scaleset Deleted Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload();
+            });
+            res.fail(error => {
+
+            });
+
+        }
         else {
             toast.info("please select atleast one record!");
         }
@@ -95,30 +131,6 @@ class Scalesetlist extends Component {
     componentDidMount() {
 
        
-        $(document).on("click", ".confirmDelete", (e) => {
-            var id = e.currentTarget.id;
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.SingleDelete(id);
-                    }
-                    else {
-
-                    }
-                }
-            });
-        });
         //#region Data table realted Block
         const endpointGET = environment.apiUrl + 'scale_set_master/'
         this.$el = $(this.el);
@@ -128,7 +140,7 @@ class Scalesetlist extends Component {
             aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
-                type: "GET",
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },
@@ -168,10 +180,10 @@ class Scalesetlist extends Component {
                     targets: 4,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/scale-set/edit/id=' + row.scaleSetId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/scale-set/edit/id=' + row.scaleSetId + '"class=" btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.scaleSetId + '"class="btn btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
+                            '<a href="#" id="' + row.scaleSetId + '"class="btn btn-danger btnDelete btn-sm">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -184,15 +196,16 @@ class Scalesetlist extends Component {
             },
             initComplete: (settings, json) => {
 
-                $(".btnDeletescaleset").on("click", e => {
+                // $(".btnDeletescaleset").on("click", e => {
 
-                    this.SingleDelete(e.currentTarget.id);
-                });
+                //     this.SingleDelete(e.currentTarget.id);
+                // });
             },
             drawCallback: (settings) => {
+                window.smallTable();
                 $(".btnDelete").on("click", e => {
 
-                    this.SingleDelete(e.currentTarget.id);
+                    this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             }
         });
@@ -208,14 +221,14 @@ class Scalesetlist extends Component {
                 <div>
                     <h2 className="clearfix mt-6">Scale Set</h2>
                     <br/>
-                    <button class=" btn-danger btn-md" onClick={()=>{
-                        this.multipleDeleteScaleset()
-                    }}><i class="fa fa-trash " aria-hidden="true"></i></button>
+                    <button className=" btn-danger btn-md" onClick={()=>{
+                        this.multipleDeleteScalesetconfirm()
+                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                     <div className="clearfix text-right mb-2">
                         <Link to="/scale-set/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                 </div>
-                <table className="table table-striped table-bordered table-hover"
+                <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblscaleset"
                     ref={el => (this.el = el)}>
                     <thead>
@@ -234,10 +247,10 @@ class Scalesetlist extends Component {
                             <th>Description</th>
                             <th width="90">Action</th>
                         </tr>
-                    </thead>
-                    <ToastContainer />
+                    </thead>                  
                     <tbody></tbody>
                 </table>
+                <ToastContainer />
             </div>
         )
     }

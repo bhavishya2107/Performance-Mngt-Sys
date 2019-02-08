@@ -13,6 +13,29 @@ class Jobtitlelist extends Component {
             selectedIds: []
         }
     }
+    SingleDeleteConfirm(id){
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.SingleDelete(id);
+                }
+                else {
+
+                }
+            }
+        });
+    }
     //#region delete details
     SingleDelete(jobtitleId) {
         var res = this.DeletejobtitleApi(jobtitleId);
@@ -33,10 +56,10 @@ class Jobtitlelist extends Component {
     }
     DeletejobtitleApi(jobtitleId) {
 
-        const endpoint = environment.apiUrl + 'jobtitle_master/' + `${jobtitleId}`
+        const deleteJobTitleApiUrl = environment.apiUrl + 'jobtitle_master/' + `${jobtitleId}`
 
         return $.ajax({
-            url: endpoint,
+            url: deleteJobTitleApiUrl,
             type: "DELETE",
             headers: {
                 "content-type": "application/json",
@@ -45,58 +68,52 @@ class Jobtitlelist extends Component {
         });
     }
     //#endregion
+    Deletejobtitleconfirm(id){
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.Deletejobtitle(id);
+                }
+            }
+        });
+    }
+
     Deletejobtitle() {
         $("#tbljobtitle input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
+        var res = '';
+
         if (this.state.selectedIds.length > 0) {
-            bootbox.confirm({
-                message: "Delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.state.selectedIds.map(item => {
-                            var res = this.DeletejobtitleApi(item);
-                            res.done(response => {                               
-                                //toast.success("Data deleted successfully.")
-                                this.$el.DataTable().ajax.reload();
-                            });
-                            res.fail(error => { 
-                                toast.error("Delete Fail.");
-                            });
-                        });
-                    }                   
-                }
+            this.state.selectedIds.map(item => {
+                res = this.DeletejobtitleApi(item);
             });
-        } 
+            res.done(response => {
+                toast.success("Jobtitle Deleted Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload();
+            });
+            res.fail(error => {
+
+            });
+
+        }
         else {
             toast.info("please select atleast one record!");
         }
-        // $("#tbljobtitle input:checkbox:checked").each((e, item) => {
-        //     this.state.selectedIds.push(item.value);
-        // });
-        // if (this.state.selectedIds.length > 0) {
-        //     this.state.selectedIds.map(item => {
-        //         var res = this.DeletejobtitleApi(item);
-        //         res.done(response => {
-        //             //  alert("data deleted Successfully.");
-        //             this.$el.DataTable().ajax.reload();
-        //         });
-        //         res.fail(error => { });
-        //     });
-        // }
-        // else {
-        //     alert("please select atleast one record!");
-        // }
+        
     }
     checkall(e) {
         $("#tbljobtitle input:checkbox").each((index, item) => {
@@ -108,7 +125,7 @@ class Jobtitlelist extends Component {
         });
     }
     componentDidMount() {
-        const endpointGET = environment.apiUrl + 'jobtitle_master/'
+     const endpointGET = environment.apiUrl + 'jobtitle_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -160,7 +177,7 @@ class Jobtitlelist extends Component {
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
                             +
-                            '<a href="#" id="' + row.jobtitleId + '"class="btn mr-2 delete btn-danger btn-sm btnDeletejobtitle" >' +
+                            '<a href="#" id="' + row.jobtitleId + '"class="btn btn-danger btnDelete btn-sm">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -173,16 +190,16 @@ class Jobtitlelist extends Component {
             },
             initComplete: (settings, json) => {
 
-                $(".btnDeletejobtitle").on("click", e => {
-                    debugger;
-                    this.SingleDelete(e.currentTarget.id);
-                });
+                // $(".btnDeletejobtitle").on("click", e => {
+                //     debugger;
+                //     this.SingleDelete(e.currentTarget.id);
+                // });
             },
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    debugger;
-                    this.SingleDelete(e.currentTarget.id);
+                   
+                    this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             }
             
@@ -195,9 +212,9 @@ class Jobtitlelist extends Component {
                 <div>
                     <h2 className="clearfix mt-6">Job Title</h2>
                     <br/>
-                    <button class=" btn-danger btn-md" onClick={() => {
-                        this.Deletejobtitle()
-                    }}><i class="fa fa-trash " aria-hidden="true"></i></button>
+                    <button className=" btn-danger btn-md" onClick={() => {
+                        this.Deletejobtitleconfirm()
+                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                     <div className="clearfix text-right mb-2">
                         <Link to="/job-title/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
@@ -222,8 +239,9 @@ class Jobtitlelist extends Component {
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                    <ToastContainer />
+                   
                 </table>
+                <ToastContainer />
             </div>
         )
     }
