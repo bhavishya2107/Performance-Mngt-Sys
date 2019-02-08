@@ -136,7 +136,7 @@ class UserRoleForm extends Component {
         return (
             <div className="container-fluid">
                 {this.state.id !== undefined ? <div></div> : <div></div>}
-                <form id="userRoleForm" className="pt-5" action="">
+                <form id="userRoleForm" className="pt-5" >
                         <div className="form-group">
                             <label for="roleName" className="required">Name</label>
                             <div className="">

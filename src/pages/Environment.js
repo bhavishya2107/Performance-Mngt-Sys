@@ -25,7 +25,8 @@ export const Type = {
 export const Notification = {
     saved: 'Saved Successfully',
     updated: 'Updated Successfully',
-    deleted: 'Deleted Successfully'
+    deleted: 'Deleted Successfully',
+    deleteConfirm : 'Are you sure you want to delete this record?'
 }
 export const ModuleNames = {
     kra: 'KRA',

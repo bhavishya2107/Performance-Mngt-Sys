@@ -163,60 +163,79 @@ class AddKpi extends Component {
             return <Redirect to={{ pathname: "/KPI" }} />
         }
         return (
-            <div className="row">
-
-                {this.state.kpiId !== undefined ? <div></div> : <div></div>}
-                <form id="kpiform" className="col-12">
-                    <div className="form-group">
-                        <label className="required" for="target">KPI Title</label>
-                        <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
-                            onChange={(event) => {
-                                this.setState({
-                                    kpiTitle: event.target.value
-                                })
-                            }} required />
+            <div className="clearfix">
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> KPI >
+                    {this.state.kpiId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    </h2>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <form id="kpiform">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label className="required" for="target">KPI Title</label>
+                                        <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    kpiTitle: event.target.value
+                                                })
+                                            }} required />
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label className="required" for="weightage">Weight</label>
+                                        <input className="form-control" rows="4" type="text" value={this.state.weightage}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    weightage: event.target.value
+                                                })
+                                            }} required />
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="form-group">
+                                        <label className="mr-2">Scale Set</label>
+                                        <select onChange={(e) => { this.onChangeScaleSetId(e) }} required className="form-control">
+                                            <option>select</option>
+                                            {this.state.displayScaleSetId}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <div className="form-group">
+                                        <label className="required" for="target">Target</label>
+                                        <textarea className="form-control" rows="4" type="text" value={this.state.target}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    target: event.target.value
+                                                })
+                                            }} required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col">
+                                    <div className="form-group">
+                                        {this.state.kpiId !== undefined ?
+                                            <button type="button" class="btn btn-success mr-2" onClick={() => {
+                                                this.UpdateKpiDetails(this.state);
+                                            }}>Update</button>
+                                            : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
+                                                this.saveApiDetails(this.state);
+                                            }}>Save</button>}
+                                        <button className="btn btn-info mr-2">Clear</button>
+                                        <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div className="form-group">
-                        <label className="required" for="target">Target</label>
-                        <textarea className="form-control" rows="4" type="text" value={this.state.target}
-                            onChange={(event) => {
-                                this.setState({
-                                    target: event.target.value
-                                })
-                            }} required></textarea>
-                    </div>
-                    <div className="form-group">
-                        <label className="required" for="weightage">Weight</label>
-                        <input className="form-control" rows="4" type="text" value={this.state.weightage}
-                            onChange={(event) => {
-                                this.setState({
-                                    weightage: event.target.value
-                                })
-                            }} required />
-                    </div>
-                    <div className="dropdown">
-                        <br /><br />
-                        <label className="mr-2">Scale Set</label>
-                        <select onChange={(e) => { this.onChangeScaleSetId(e) }} required className="btn btn-info dropdown-toggle md mr-3">
-                            <option>select</option>
-                            {this.state.displayScaleSetId}
-                        </select>
-                    </div>
-                    <br />
-                    {this.state.kpiId !== undefined ?
-                        <button type="button" class="btn btn-success mr-2" onClick={() => {
-                            this.UpdateKpiDetails(this.state);
-                        }}>Update</button>
-                        : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
-                            this.saveApiDetails(this.state);
-                        }}>Save</button>}
-
-                    <button type="clear" className="btn btn-primary mr-3" onClick={() => {
-                        this.clearForm()
-                    }}>Clear</button>
-                    <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
-
-                </form>
+                </div>
             </div>
         );
     }
