@@ -82,7 +82,7 @@ class MyProfile extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userFirstName">
+                    <label className="" htmlFor="userFirstName">
                       First Name
                     </label>
                     <div>
@@ -98,7 +98,7 @@ class MyProfile extends Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userLastName">
+                    <label className="" htmlFor="userLastName">
                       Last Name
                     </label>
                     <div>
@@ -117,7 +117,7 @@ class MyProfile extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userName">
+                    <label className="" htmlFor="userName">
                       User Name
                     </label>
                     <div>
@@ -133,7 +133,7 @@ class MyProfile extends Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userEmail">
+                    <label className="" htmlFor="userEmail">
                       Email
                     </label>
                     <div>
@@ -151,7 +151,7 @@ class MyProfile extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userAddress">
+                    <label className="" htmlFor="userAddress">
                       Address
                     </label>
                     <div>
@@ -167,7 +167,7 @@ class MyProfile extends Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userImage">
+                    <label className="" htmlFor="userImage">
                       Mobile No.
                     </label>
                     <div>
@@ -185,7 +185,7 @@ class MyProfile extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userDepartment">
+                    <label className="" htmlFor="userDepartment">
                       Department
                     </label>
                     <div>
@@ -201,7 +201,7 @@ class MyProfile extends Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userLastName">
+                    <label className="" htmlFor="userLastName">
                       Job Title
                     </label>
                     <div>
@@ -219,7 +219,7 @@ class MyProfile extends Component {
               <div className="row">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userFirstName">
+                    <label className="" htmlFor="userFirstName">
                       Role
                     </label>
                     <div>
@@ -235,7 +235,7 @@ class MyProfile extends Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label className="" for="userLastName">
+                    <label className="" htmlFor="userLastName">
                       Team Leader
                     </label>
                     <div>
