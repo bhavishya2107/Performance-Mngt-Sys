@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars';
 
 //import logo from './logo.svg';
 //import './app.css';
@@ -65,7 +66,12 @@ class App extends Component {
             <PrimaryHeader />
             <div className="wrapper">
               <div className="left-sidebar navbar-collapse" id="navbarSupportedContent">
-                <Sidebar />
+                <Scrollbars className="sidebar-custom-scroll"
+                  autoHide
+                  autoHideTimeout={1000}
+                  autoHideDuration={200}>
+                  <Sidebar />
+                </Scrollbars>
               </div>
               <div className="content-block" id="page-wrapper">
                 <div className="container-fluid">
@@ -115,7 +121,7 @@ class App extends Component {
                           path="/AddUser"
                           component={AddUser}
                         />
-                    
+
                         <Route
                           path="/AddDept"
                           component={AddDept}

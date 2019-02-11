@@ -24,9 +24,12 @@ html {
     box-shadow: 0 -5px 20px 5px inset rgba(0,0,0, .5);
     width: 200px;
     top: 60px;
-    max-height: 100vh;
-    min-height: 100vh;
     background: #343a40;
+    .sidebar-custom-scroll{
+        max-height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
+    overflow: auto;
+    }
     li {
         margin-bottom: 5px;
         a {
