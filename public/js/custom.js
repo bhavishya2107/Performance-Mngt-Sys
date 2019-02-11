@@ -28,17 +28,16 @@ function formValidation(form) {
             rules:{
                 kraName:{
                     required:true,
-                    minlength:2,
+            
 
                 },
                 kraDescription:{
                     required:true,
-                    minlength:2
+              
                 },
                 rolename:{
                     required:true,
-                    minlength:2
-                },
+                               },
                 messages:{
                     kraName:{
                         required:'required, Enter minimum 2 characters',

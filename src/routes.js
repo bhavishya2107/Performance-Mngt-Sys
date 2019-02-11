@@ -3,6 +3,7 @@ const routes = {
     '/innerpage': 'Inner Page',
     '/demo': 'UI Design Control',
     '/kra/add' : ' add KRA',
+    '/kra/edit' : 'KRA',
     '/addRole' : 'ROLE',
     '/scale-set/add' : 'Add Scale Set',
     '/scale-set': 'Scale Set',
