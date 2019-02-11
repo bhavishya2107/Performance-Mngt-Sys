@@ -17,28 +17,53 @@ class Scaleset extends Component {
         }
     }
     //#region Onclick function for Add
+    isScalesetExistsApi(){
+        const endpointGET = environment.apiUrl + 'scale_set_master?_where=(scaleSetName,eq,'+ this.state.scaleSetName +')';
+        return $.ajax({
+            url: endpointGET,
+            type: "GET",
+            data: ''
+            });
+        }
+       
+
+
+
     savescaleset() {
         var isvalidate = window.formValidation("#formscaleset");
         if (isvalidate) {
-
-            var _this = this;
-            var formData = {
-                "scaleSetName": this.state.scaleSetName,
-                "description": this.state.description
-            }
-            const endpointPOST = environment.apiUrl + 'scale_set_master/'
-            $.ajax({
-                url: endpointPOST,
-                type: "POST",
-                data: formData,
-                success: function (resultData) {
-
-                    _this.setState({ redirectToList: true });
-                    toast.success("Scaleset Saved Successfully!", {
+            var res = this.isScalesetExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
+                    toast.error("Scaleset Already exists!", {
                         position: toast.POSITION.TOP_RIGHT
+                    });
+                } else {
+                    var _this = this;
+                    var formData = {
+                        "scaleSetName": this.state.scaleSetName,
+                        "description": this.state.description
+                    }
+                    const endpointPOST = environment.apiUrl + 'scale_set_master/'
+                    $.ajax({
+                        url: endpointPOST,
+                        type: "POST",
+                        data: formData,
+                        success: function (resultData) {
+
+                            _this.setState({ redirectToList: true });
+                            toast.success("Scaleset Saved Successfully!", {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
                     });
                 }
             });
+            res.fail(error => {
+
+            });
+
         } else {
 
             return false;
@@ -174,6 +199,7 @@ class Scaleset extends Component {
                         </form>
                     </div>
                 </div>
+                <ToastContainer></ToastContainer>
             </div>
         )
     }

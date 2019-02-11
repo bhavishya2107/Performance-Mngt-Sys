@@ -44,6 +44,20 @@ class UserRolePMS extends Component {
             }
         });
     }
+
+    multiDeleteRoleApi(roleId){
+        debugger;
+         const endpoint = environment.apiUrl + 'role_master/bulk?_ids=' + `${roleId}`;
+         return $.ajax({
+             url: endpoint,
+             type: "DELETE",
+             headers: {
+                 "content-type": "application/json",
+                 "x-requested-with": "XMLHttpRequest",
+             }
+         });
+     }
+
     checkallrole(e) {
         $("#roleDataList input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -53,33 +67,21 @@ class UserRolePMS extends Component {
             }
         });
     }
-    DeleteAllRole() {
+    DeleteAllRole(roleId) {
 
+        var  item  = roleId.join(",")
 
-        $("#roleDataList input:checkbox:checked").each((e, item) => {
-            debugger;
-            this.state.selectedIds.push(item.value);
-        });
-
-        var res = '';
         debugger;
-        if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeleteRoleApi(item);
-            });
-            res.done(response => {
-                toast.success("Role Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
-
-            });
-        }
-        else {
-            toast.info("please select atleast one record!");
-        }
+          var res = this.multiDeleteRoleApi(item);
+          res.done((response) => {
+      
+      toast.success("Role Deleted Successfully !", {
+          position: toast.POSITION.TOP_RIGHT
+      });
+      this.$el.DataTable().ajax.reload();
+      });
+      res.fail(error => {
+      });    
     }
 
 
@@ -109,26 +111,40 @@ class UserRolePMS extends Component {
         }
     }
 
-    multiRoleDeleteConfirm(id) {
-        debugger;
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.DeleteAllRole(id);
-                }
-            }
+    multiRoleDeleteConfirm() {
+        var roleId=[]
+        $("#roleDataList input:checkbox:checked").each((e, item) => {
+            roleId.push(item.value);
         });
+        if (roleId.length > 0) {
+            
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                            this.DeleteAllRole(roleId);
+                    }
+                    else {
+    
+                    }
+                }
+            });
+        }
+        else {
+            toast.info("please select atleast one record!");
+        }
+
+  
 
     }
 

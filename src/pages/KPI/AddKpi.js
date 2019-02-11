@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { environment } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 var kpiData = []
@@ -20,6 +21,8 @@ class AddKpi extends Component {
             redirectToList: false
         }
     }
+
+    //#region Clear form details function
     clearForm() {
         this.setState({
             kpiTitle: "",
@@ -28,6 +31,8 @@ class AddKpi extends Component {
 
         })
     }
+    //#endregion
+   
     saveApiDetails() {
         var _this = this;
         var Kpidata = {
@@ -41,8 +46,9 @@ class AddKpi extends Component {
         } else {
             return false;
         }
+        const endpointPOST = environment.apiUrl + 'kpi_master/?_size=1000'
         $.ajax({
-            url: "http://180.211.103.189:3000/api/kpi_master",
+            url: endpointPOST,
             type: "POST",
             data: Kpidata,
             success: function (resultData) {
@@ -53,10 +59,11 @@ class AddKpi extends Component {
             }
         });
     }
+
     getKpiDetailsApi(KpiId) {
-        const endpoint = `http://180.211.103.189:3000/api/kpi_master/${this.state.kpiId}`;
+        const endpointGET = environment.apiUrl + 'kpi_master/' + `${this.state.kpiId}`
         return $.ajax({
-            url: endpoint,
+            url: endpointGET,
             type: "GET",
         })
     }
