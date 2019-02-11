@@ -22,9 +22,9 @@ class MyProfile extends Component {
   }
 
   getUserDetailsApi() {
-    //  var endpoint = environment.dynamicUrl + 'dynamic';
+     var endpoint = environment.dynamicUrl + 'dynamic';
 
-    const endpoint = "http://180.211.103.189:3000/dynamic";
+    // const endpoint = "http://180.211.103.189:3000/dynamic";
 
     return $.ajax({
       url: endpoint,

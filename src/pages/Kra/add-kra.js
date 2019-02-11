@@ -155,7 +155,7 @@ class kraHome extends Component {
                 <form id="kraAddForm" action="" >
 
                     <div className="form-group">
-                        <label className=" required" for="kraName">Name</label>
+                        <label className=" required" htmlFor="kraName">Name</label>
                         <div className="">
                             <input id="kraName" type="text" className="form-control col-6" name="kraName" minlength="2"
                                 value={this.state.kraName}
@@ -169,7 +169,7 @@ class kraHome extends Component {
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className=" required" for="kraDescription">Description</label>
+                        <label className=" required" htmlFor="kraDescription">Description</label>
                         <div className="">
                             <textarea name="kraDescription" className="form-control col-6"
                                 value={this.state.description}
@@ -185,12 +185,12 @@ class kraHome extends Component {
                     {this.state.id !== undefined ?
                         <button className="btn btn-success" type="button" onClick={() => {
                             this.UpdateKraDetails(this.state);
-                        }}>Save</button>
+                        }}>Update</button>
                         : <button className="btn btn-success" type="button" onClick={() => {
                             this.submitDataFromKra(this.state);
-                        }}>ADD</button>}&nbsp;
+                        }}>Save</button>}&nbsp;
                 <button type="clear" className="btn btn-info" onClick={() => { this.kraFormClear() }}>Clear</button>&nbsp;
-                <Link to="/kra" className="btn btn-danger" type="button" >Cancel</Link><br />
+                <Link to="/kra" className="btn btn-danger" >Cancel</Link><br />
                 </form>
 
             </div>

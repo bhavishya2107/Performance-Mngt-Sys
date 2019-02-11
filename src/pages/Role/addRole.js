@@ -143,7 +143,7 @@ class UserRoleForm extends Component {
          
                 <form id="userRoleForm" >
                         <div className="form-group">
-                            <label for="roleName" className="required">Name</label>
+                            <label htmlFor="roleName" className="required">Name</label>
                             <div className="">
                                 <input id="roleName" type="text" className="form-control col-6" name="rolename" 
                                     value={this.state.roleName}
@@ -159,10 +159,10 @@ class UserRoleForm extends Component {
                         {this.state.id !== undefined ?
                             <button className="btn btn-success " type="button" onClick={() => {
                                 this.UpdateRoleDetails(this.state);
-                            }}>Save</button>
+                            }}>Update</button>
                             : <button className="btn btn-success " type="button" onClick={() => {
                                 this.submitDataFromRoleform(this.state);
-                            }}>ADD</button>}&nbsp;
+                            }}>Save</button>}&nbsp;
                     <button type="clear" className="btn btn-info"  onClick={()=>{this.userFormdetailsClear()}}>Clear</button>&nbsp;
                     <Link to="/role" className="btn btn-danger">Cancel</Link>
                         <br/>
