@@ -20,7 +20,7 @@ class kraHome extends Component {
         const endpoint = environment.apiUrl + 'kra_master/'
         var res = window.formValidation("#kraAddForm");
         if (res) {
-      
+
         } else {
 
             return false;
@@ -58,6 +58,22 @@ class kraHome extends Component {
 
 
     }
+
+    kraAlreadyExistApi() {
+        // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
+        const endpoint = environment.apiUrl + 'kra_master?_where=(kraName,eq,' + this.state.kraName + ')';
+        return $.ajax({
+            url: endpoint,
+            type: "GET",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+            }
+        });
+    }
+  
+
+
     getKraDetailsApi() {
         var _this = this;
         const endpoint = environment.apiUrl + 'kra_master/' + `${this.state.id}`
@@ -146,12 +162,12 @@ class kraHome extends Component {
 
 
             <div className="clearfix">
-            <div className="clearfix d-flex align-items-center row page-title">
-                <h2 className="col"> Kra >
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col"> Kra >
                 {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
-                </h2>
-            </div>
-              
+                    </h2>
+                </div>
+
                 <form id="kraAddForm" action="" >
 
                     <div className="form-group">
