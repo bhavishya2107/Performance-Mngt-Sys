@@ -5,15 +5,24 @@ export default {
             url: '/dashboard',
             icon: 'fa fa-dashboard',
         },
-        {
-            name: 'InnerPage',
-            url: '/innerpage',
-            icon: 'fa fa-plus',
-        },
+       
         {
             name: 'UI Control',
-            url: '/demo',
-            icon: 'fa fa-cogs',
+            icon: 'fa fa-cog',
+            id: 'lnkSettings',
+            children: [
+                {
+                    name: 'InnerPage',
+                    url: '/innerpage',
+                    icon: 'fa fa-plus',
+                },
+                {
+                    name: 'UI Control',
+                    url: '/demo',
+                    icon: 'fa fa-cogs',
+                },
+
+            ]
         },
 
         {
@@ -78,6 +87,7 @@ export default {
             url: '/Projects',
             icon: 'fa fa-plus',
         },
+
         // {
         //     name: 'My Profile',
         //     url: '/myProfile',

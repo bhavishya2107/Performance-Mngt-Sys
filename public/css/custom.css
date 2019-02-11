@@ -37,7 +37,7 @@ html {
   margin-bottom: 5px;
 }
 .left-sidebar li a {
-  padding: 10px 15px;
+  padding: 10px 15px !important;
   display: block;
   text-decoration: none;
   color: #fff;
@@ -84,6 +84,28 @@ html {
 .left-sidebar li a i {
   margin-right: 5px;
   min-width: 18px;
+}
+.left-sidebar li a i.down-arrow {
+  margin: 0;
+  min-width: auto;
+}
+.left-sidebar li .nav-dropdown-items {
+  display: none;
+  padding: 0 0 0 0px;
+  list-style: none;
+}
+.left-sidebar li .nav-dropdown-items li a {
+  padding: 5px 45px !important;
+  display: block;
+}
+.left-sidebar li .nav-dropdown-items li a:hover {
+  background: #ffc88e;
+}
+.left-sidebar li.open .fa-angle-down {
+  transform: rotate(-180deg);
+}
+.left-sidebar li.open .nav-dropdown-items {
+  display: block;
 }
 
 .breadcrumb li {

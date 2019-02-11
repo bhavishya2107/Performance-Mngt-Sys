@@ -34,7 +34,7 @@ html {
     li {
         margin-bottom: 5px;
         a {
-            padding: 10px 15px;
+            padding: 10px 15px !important;
             display: block;
             text-decoration: none;
             color: #fff;
@@ -80,8 +80,36 @@ html {
             i{
                 margin-right: 5px;
                 min-width: 18px;
+                &.down-arrow{
+                    margin: 0;
+                    min-width: auto;
+                }
             }
         }
+        .nav-dropdown-items{
+            display: none;
+            padding: 0 0 0 0px;
+            list-style: none;
+            li{
+                a{
+                    padding: 5px 45px !important;
+                    display: block;
+                    &:hover{
+                        background: #ffc88e;
+                    }
+                }
+            }
+        }
+        &.open{
+            .fa-angle-down{
+                transform: rotate(-180deg);
+            }
+        }
+        &.open .nav-dropdown-items{
+            display: block;
+           
+        }
+        
     }
 }
 .breadcrumb {
