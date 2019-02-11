@@ -45,8 +45,19 @@ class kraListPage extends Component {
       }
     });
   }
+  multiDeleteKraApi(kraId){
+    const endpoint = environment.apiUrl + 'kra_master/bulk?_ids=' + `${kraId}`;
+    return $.ajax({
+        url: endpoint,
+        type: "DELETE",
+        headers: {
+            "content-type": "application/json",
+            "x-requested-with": "XMLHttpRequest",
+        }
+    });
+  }
   //#endregion
-  
+
 //   var a = [{name:"bull", text: "sour"},
 //     { name: "tom", text: "tasty" },
 //     { name: "tom", text: "tasty" }
@@ -72,30 +83,18 @@ class kraListPage extends Component {
     });
   }
 
-  DeleteAllKra() {
-    $("#kraDataList input:checkbox:checked").each((e, item) => {
-      this.state.selectedIds.push(item.value);
-    });
-    var res = "";
-
-    if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-              res = this.DeleteKraApi(item);
-            });
-            res.done(response => {
-              toast.success("Kra Deleted Successfully !", {
-                position: toast.POSITION.TOP_RIGHT
-              });
-              this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
-
-            });
-          
-    } else {
-      toast.info("please select atleast one record!");
-    
-    }
+  DeleteAllKra(kraId) {
+    var  item  = kraId.join(",")
+      var res = this.multiDeleteKraApi(item);
+      res.done((response) => {
+  
+  toast.success("Kra Deleted Successfully !", {
+      position: toast.POSITION.TOP_RIGHT
+  });
+  this.$el.DataTable().ajax.reload();
+  });
+  res.fail(error => {
+  });
   }
 
   SingleDeleteConfirm(id) {
@@ -121,25 +120,40 @@ class kraListPage extends Component {
       });
     }
   }
-  multiKraDeleteConfirm(id) {
-    bootbox.confirm({
-      message: "Delete this record ?",
-      buttons: {
-          confirm: {
-              label: 'Yes',
-              className: 'btn-success'
-          },
-          cancel: {
-              label: 'No',
-              className: 'btn-danger'
-          }
-      },
-      callback: (result) => {
-          if (result === true) {
-              this.DeleteAllKra(id);
-          }
-      }
+  multiKraDeleteConfirm() {
+    var kraId=[]
+    $("#kraDataList input:checkbox:checked").each((e, item) => {
+      kraId.push(item.value);
   });
+  if (kraId.length > 0) {
+      
+      bootbox.confirm({
+          message: "Delete this record ?",
+          buttons: {
+              confirm: {
+                  label: 'Yes',
+                  className: 'btn-success'
+              },
+              cancel: {
+                  label: 'No',
+                  className: 'btn-danger'
+              }
+          },
+          callback: (result) => {
+              if (result === true) {
+                      this.DeleteAllKra(kraId);
+              }
+              else {
+
+              }
+          }
+      });
+  }
+  else {
+      toast.info("please select atleast one record!");
+  }
+
+
   }
 
   componentDidMount() {
