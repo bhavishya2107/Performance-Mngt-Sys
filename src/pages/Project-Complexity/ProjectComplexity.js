@@ -15,8 +15,10 @@ class ProjectComplexity extends Component {
             selectedIds: []
         };
     }
+
+    //#region Delete functionality with single and multiple both
     DeleteProjectComplexityApi(projectId) {
-        const endpoint = `http://180.211.103.189:3000/api/project_type_master/${projectId}`;
+        const endpoint = environment.apiUrl + 'project_type_master/' + `${projectId}`;
         return $.ajax({
             url: endpoint,
             type: "DELETE",
@@ -26,7 +28,6 @@ class ProjectComplexity extends Component {
             }
         });
     }
-
     SingleDeleteConfirm(id) {
         bootbox.confirm({
             message: "Are you sure you want to delete this record ?",
@@ -51,8 +52,8 @@ class ProjectComplexity extends Component {
         });
 
     }
-    SingleDeleteProjectComplexity(kpiId) {
-        var res = this.DeleteProjectComplexityApi(kpiId);
+    SingleDeleteProjectComplexity(projectTypeId) {
+        var res = this.DeleteProjectComplexityApi(projectTypeId);
         res.done(response => {
             if (response.affectedRows > 0) {
                 toast.success("Record Deleted Successfully!", {
@@ -68,51 +69,66 @@ class ProjectComplexity extends Component {
             });
         });
     }
-
-    multipleDeleteProjectComplexityConfirm(id) {
-        bootbox.confirm({
-            message: "Are you sure you want to delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Ok',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.multipleDeleteProjectComplexity(id);
-                }
+    multiDeleteProjectComplexityApi(projectTypeId) {
+        debugger;
+        const endpoint = environment.apiUrl + `project_type_master/bulk?_ids=${projectTypeId}`;
+        return $.ajax({
+            url: endpoint,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
             }
         });
     }
-    multipleDeleteProjectComplexity() {
-        $("#tblProjectComplexity input:checkbox:checked").each((e, item) => {
-            this.state.selectedIds.push(item.value);
+
+    multiDeleteProjectComplexity(projectTypeId) {
+        var item = projectTypeId.join(",")
+        var res = this.multiDeleteProjectComplexityApi(item);
+        res.done((response) => {
+            toast.success("Record Deleted Successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
         });
-        var res = '';
-        if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeleteProjectComplexityApi(item);
-            });
-            res.done(response => {
-                toast.success("KPI Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
+        res.fail(error => {
+        });
 
+    }
+    multipleDeleteProjectComplexityConfirm() {
+        var projectTypeId = []
+        $("#tblProjectComplexity input:checkbox:checked").each((e, item) => {
+            projectTypeId.push(item.value);
+        });
+        if (projectTypeId.length > 0) {
+            bootbox.confirm({
+                message: "Are you sure you want toDelete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.multiDeleteProjectComplexity(projectTypeId);
+                    }
+                    else {
+                    }
+                }
             });
-
         }
         else {
             toast.info("please select atleast one record!");
         }
+
+
     }
+    //#endregion
 
     checkall(e) {
         $("#tblProjectComplexity input:checkbox").each((index, item) => {
@@ -124,45 +140,10 @@ class ProjectComplexity extends Component {
         });
     }
 
-    //#endregion
-    // SingleDeleteProjectComplexity(id) {
-    //     var res = this.DeleteProjectComplexityApi(id);
-    //     res.done(response => {
-    //         if (response.affectedRows > 0) {
-    //             toast.success("Record Deleted Succesfully!", {
-    //                 position: toast.POSITION.TOP_RIGHT
-    //             });
-    //         } this.$el.DataTable().ajax.reload();
-    //     });
-    //     res.fail(error => {
 
-    //     });
-    // }
-    //#region datatable 
     componentDidMount() {
-        $(document).on("click", ".confirmDelete", (e) => {
-            var id = e.currentTarget.id;
-            bootbox.confirm({
-                message: "Are you sure you want to delete this record ?",
-                buttons: {
-                    confirm: {
-                        label: 'OK',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'Cancel',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.SingleDeleteProjectComplexity(id);
-                    }
-                    else {
-                    }
-                }
-            });
-        });
+
+    //#region datatable 
         const endpointGET = environment.apiUrl + 'project_type_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -183,7 +164,7 @@ class ProjectComplexity extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + '" />'
+                            '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + ' />'
                         )
                     },
                 },
@@ -209,10 +190,10 @@ class ProjectComplexity extends Component {
                         return (
                             '<a href="/project-complexity/edit/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '</a>' +
-                            '<a href="#" id="' + row.projectTypeId + '"class="btn mr-2 delete btn-danger btn-sm confirmDelete" href="javascript:void(0);"">' +
+                            "</a>" +
+                            '<a href="#" id="' + row.projectTypeId + '"class="btn btn-danger btnDelete btn-sm";"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
-                            '</a>'
+                            "</a>"
                         )
                     },
                     orderable: false
@@ -227,7 +208,7 @@ class ProjectComplexity extends Component {
             //#region detete function id
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
-                    this.SingleDeleteProjectComplexity(e.currentTarget.id);
+                    this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             },
         });

@@ -13,9 +13,11 @@ class KPI extends Component {
             saveKpiDetails: "",
             selectedIds: []
         };
-    }   
+    }
+
+    //#region delete functionality with single and multiple api
     DeleteKpiApi(KpiId) {
-        const endpoint = `http://192.168.10.109:3000/api/kpi_master/${KpiId}`;
+        const endpoint = environment.apiUrl + 'kpi_master/' + `${KpiId}`;
         return $.ajax({
             url: endpoint,
             type: "DELETE",
@@ -25,6 +27,7 @@ class KPI extends Component {
             }
         });
     }
+
     SingleDeleteConfirm(id) {
         bootbox.confirm({
             message: "Are you sure you want to delete this record ?",
@@ -66,50 +69,67 @@ class KPI extends Component {
             });
         });
     }
-    multipleDeleteKpiconfirm(id) {
-        bootbox.confirm({
-            message: "Are you sure you want to delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Ok',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.multipleDeleteKpi(id);
-                }
+    multiDeleteKpiApi(KpiId) {
+        debugger;
+        const endpoint = environment.apiUrl + `kpi_master/bulk?_ids=${KpiId}`;
+        return $.ajax({
+            url: endpoint,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
             }
         });
     }
-    multipleDeleteKpi() {
-        $("#tblKpi input:checkbox:checked").each((e, item) => {
-            this.state.selectedIds.push(item.value);
+
+    multiDeleteKpi(KpiId) {
+        var item = KpiId.join(",")
+        var res = this.multiDeleteKpiApi(item);
+        res.done((response) => {
+            toast.success("Record Deleted Successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
         });
-        var res = '';
-        if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeleteKpiApi(item);
-            });
-            res.done(response => {
-                toast.success("KPI Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
+        res.fail(error => {
+        });
 
-            });
+    }
+    multipleDeleteKpiconfirm() {
+        var KpiId = []
+        $("#tblKpi input:checkbox:checked").each((e, item) => {
+            KpiId.push(item.value);
+        });
+        if (KpiId.length > 0) {
+            bootbox.confirm({
+                message: "Are you sure you want toDelete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.multiDeleteKpi(KpiId);
+                    }
+                    else {
 
+                    }
+                }
+            });
         }
         else {
             toast.info("please select atleast one record!");
         }
+
+
     }
+    //#endregion
 
     checkall(e) {
         $("#tblKpi input:checkbox").each((index, item) => {
@@ -120,9 +140,8 @@ class KPI extends Component {
             }
         });
     }
-  
+//#region Datatable 
     componentDidMount() {
-      
         const endpointGET = environment.apiUrl + 'kpi_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -143,15 +162,15 @@ class KPI extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="kpiId" value=' + row.kpiId + '" />'
+                            '<input type="checkbox" name="kpiId" value=' + row.kpiId + ' />'
                         )
                     },
                 },
                 {
-                    data:null,
-                     targets: 1,
-                     "orderable": false, 
-                 },
+                    data: null,
+                    targets: 1,
+                    "orderable": false,
+                },
                 {
                     data: "kpiTitle",
                     targets: 2
@@ -176,10 +195,12 @@ class KPI extends Component {
                     orderable: false
                 }
             ],
-            "fnRowCallback" : function(nRow, aData, iDisplayIndex){
-                $("td:eq(1)", nRow).html(iDisplayIndex +1);
-               return nRow;
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
             },
+            //#endregion
+          
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
@@ -188,7 +209,7 @@ class KPI extends Component {
                 });
             }
         });
-    }           
+    }
     render() {
         return (
             //#region table of kpi
@@ -202,7 +223,7 @@ class KPI extends Component {
                         this.multipleDeleteKpiconfirm()
                     }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-          <div className="page-header">
+                <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblKpi"
                         ref={el => (this.el = el)}>

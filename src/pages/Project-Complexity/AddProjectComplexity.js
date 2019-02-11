@@ -96,6 +96,9 @@ class AddProjectComplexity extends Component {
             return false;
         }
     }
+    //#endregion
+  
+  
     componentDidMount() {
         if (this.state.projectTypeId !== undefined) {
             var res = this.getProjectComplexityDeatilsApi();
@@ -111,6 +114,7 @@ class AddProjectComplexity extends Component {
         } else {
         }
     }
+  
     render() {
         if (this.state.redirectToList == true) {
             return <Redirect to={{ pathname: "/project-complexity" }} />
@@ -153,7 +157,7 @@ class AddProjectComplexity extends Component {
                                         this.saveProjectComplexityDetails(this.state);
                                     }}>Save</button>}
 
-                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                <button className="btn btn-info mr-2" onClick={() => {
                                     this.clearForm()
                                 }}>Clear</button>
                                 <Link to="/project-complexity" className="btn btn-danger ">Cancel</Link>
