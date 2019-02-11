@@ -46,6 +46,21 @@ class kraListPage extends Component {
     });
   }
   //#endregion
+  
+//   var a = [{name:"bull", text: "sour"},
+//     { name: "tom", text: "tasty" },
+//     { name: "tom", text: "tasty" }
+// ]
+// var index = a.findIndex(x => x.name=="bob")
+// // here you can check specific property for an object whether it exist in your array or not
+
+// if (index === -1){
+//     a.push({your_object});
+// }
+// else console.log("object already exists")
+
+
+
 
   checkall(e) {
     $("#kraDataList input:checkbox").each((index, item) => {
@@ -129,7 +144,7 @@ class kraListPage extends Component {
 
   componentDidMount() {
     this.$el = $(this.el);
-    const endpointGET = environment.apiUrl + "kra_master/";
+    const endpointGET = environment.apiUrl + "kra_master/?_size=1000";
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[1, "asc"]],

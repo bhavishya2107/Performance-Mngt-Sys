@@ -134,11 +134,12 @@ class UserRolePMS extends Component {
 
     componentDidMount() {
         this.$el = $(this.el);
-        const endpointGET = environment.apiUrl + 'role_master/'
+        const endpointGET = environment.apiUrl + 'role_master/?_size=1000'
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
             aaSorting: [[2, 'asc']],
+      
             ajax: {
                 // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
                 url: endpointGET,
