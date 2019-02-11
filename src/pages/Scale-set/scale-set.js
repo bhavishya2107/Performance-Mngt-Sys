@@ -69,59 +69,73 @@ class Scalesetlist extends Component {
             }
         });
     }
-    //#endregion
-
-    multipleDeleteScalesetconfirm(id) {
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result > 0) {
-                    this.multipleDeleteScaleset(id);
-                }
-                // else{
-                //     toast.info("select")
-                // }
+    multiDeletescalesetApi(scaleSetId){
+       debugger;
+        const endpoint = environment.apiUrl + 'scale_set_master/bulk?_ids=' + `${scaleSetId}`;
+        return $.ajax({
+            url: endpoint,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
             }
         });
     }
 
+    //#endregion
+multiDelete(scaleSetId){
+    var  item  = scaleSetId.join(",")
 
-    multipleDeleteScaleset() {
+  debugger;
+    var res = this.multiDeletescalesetApi(item);
+    res.done((response) => {
 
+toast.success("Scaleset Deleted Successfully !", {
+    position: toast.POSITION.TOP_RIGHT
+});
+this.$el.DataTable().ajax.reload();
+});
+res.fail(error => {
+});    
+   
+}
+    multipleDeleteScalesetconfirm() {
+       
+        var scaleSetId=[]
         $("#tblscaleset input:checkbox:checked").each((e, item) => {
-            this.state.selectedIds.push(item.value);
+            scaleSetId.push(item.value);
         });
-        var res = '';
-
-        if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeletescalesetApi(item);
+        if (scaleSetId.length > 0) {
+            
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                            this.multiDelete(scaleSetId);
+                    }
+                    else {
+    
+                    }
+                }
             });
-            res.done(response => {
-                toast.success("Scaleset Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
-               
-            });
-
         }
         else {
             toast.info("please select atleast one record!");
         }
+       
+   
     }
+    
     checkall(e) {
         $("#tblscaleset input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -132,10 +146,8 @@ class Scalesetlist extends Component {
         });
     }
     componentDidMount() {
-
-
-        //#region Data table realted Block
-        const endpointGET = environment.apiUrl + 'scale_set_master/'
+//#region Data table realted Block
+        const endpointGET = environment.apiUrl + 'scale_set_master/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -209,7 +221,13 @@ class Scalesetlist extends Component {
                 $(".btnDelete").on("click", e => {
 
                     this.SingleDeleteConfirm(e.currentTarget.id);
+                   
                 });
+                // $(".confirmbtnmulti").on("click", e => {
+
+                //     this.multipleDeleteScalesetconfirm(e.id);
+                   
+                // });
             }
         });
         //#endregion
