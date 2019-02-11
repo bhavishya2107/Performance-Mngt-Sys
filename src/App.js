@@ -33,7 +33,7 @@ import Scalesetlist from './pages/Scale-set/scale-set';
 import Jobtitlelist from './pages/Job-title/job-title';
 import Jobtitle from './pages/Job-title/addjobtitle';
 import Addtemplate from './pages/Template/addtemplate';
-import MyProfile from './pages/myProfile';
+import MyProfile from './pages/My-Profile/myProfile';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 
 class App extends Component {

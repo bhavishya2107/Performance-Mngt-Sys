@@ -54,7 +54,7 @@ class UserRolePMS extends Component {
         });
     }
     DeleteAllRole() {
-       
+
 
         $("#roleDataList input:checkbox:checked").each((e, item) => {
             debugger;
@@ -62,42 +62,23 @@ class UserRolePMS extends Component {
         });
 
         var res = '';
-debugger;
+        debugger;
         if (this.state.selectedIds.length > 0) {
-            
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.state.selectedIds.map(item => {
-                        res = this.DeleteRoleApi(item);
-                    });
-                    res.done(response => {
-                        toast.success("Role Deleted Successfully !", {
-                            position: toast.POSITION.TOP_RIGHT
-                        });
-                        this.$el.DataTable().ajax.reload();
-                    });
-                    res.fail(error => {
-        
-                    });
-                }
-            }
-        });
+            this.state.selectedIds.map(item => {
+                res = this.DeleteRoleApi(item);
+            });
+            res.done(response => {
+                toast.success("Role Deleted Successfully !", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                this.$el.DataTable().ajax.reload();
+            });
+            res.fail(error => {
+
+            });
         }
         else {
             toast.info("please select atleast one record!");
-        
         }
     }
 
@@ -130,7 +111,25 @@ debugger;
 
     multiRoleDeleteConfirm(id) {
         debugger;
-       
+        bootbox.confirm({
+            message: "Delete this record ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: (result) => {
+                if (result === true) {
+                    this.DeleteAllRole(id);
+                }
+            }
+        });
+
     }
 
     componentDidMount() {
@@ -220,7 +219,7 @@ debugger;
                     <button type="button"
                         className="btn btn-danger btn-multi-delete"
                         onClick={() => {
-                            this.DeleteAllRole();
+                            this.multiRoleDeleteConfirm();
                         }}><i className="fa fa-trash" aria-hidden="true"></i></button>
 
                 </div>
@@ -242,7 +241,7 @@ debugger;
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                   <tbody></tbody>
+                    <tbody></tbody>
                 </table>
                 <ToastContainer />
             </div>
