@@ -20,6 +20,8 @@ class Addtemplate extends Component {
         };
     }
     savetemplatenameApi() {
+        var isvalidate = window.formValidation("#formtemplate");
+        if (isvalidate) {
         var _this = this;
 
         var formData = {
@@ -39,7 +41,11 @@ class Addtemplate extends Component {
 
             }
         });
+    }else{
+        return false;
     }
+}
+
     getjobtitleDetilsApi() {
 
         const endpoint = `http://192.168.10.109:3000/api/jobtitle_master/${this.state.id}`;
@@ -175,13 +181,13 @@ class Addtemplate extends Component {
                     (<div>Add
                   <form id="formtemplate" className="col-6">
                             <div className="form-group">
-                                <label>Template Name</label>
-                                <input className="form-control" value={this.state.templateName}
+                                <label className="required">Template Name</label>
+                                <input id="templateid" className="form-control" value={this.state.templateName}
                                     onChange={(event) => {
                                         this.setState({
                                             templateName: event.target.value
                                         })
-                                    }} />
+                                    }} required/>
                             </div>
                             <button onClick={() => this.savetemplatenameApi()} type="button" className="btn btn-primary">SAVE</button>
 

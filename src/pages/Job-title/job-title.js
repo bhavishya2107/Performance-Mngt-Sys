@@ -13,7 +13,7 @@ class Jobtitlelist extends Component {
             selectedIds: []
         }
     }
-    SingleDeleteConfirm(id){
+    SingleDeleteConfirm(id) {
         bootbox.confirm({
             message: "Delete this record ?",
             buttons: {
@@ -67,53 +67,65 @@ class Jobtitlelist extends Component {
             }
         });
     }
-    //#endregion
-    Deletejobtitleconfirm(id){
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.Deletejobtitle(id);
-                }
+    multiDeletejobtitleApi(jobtitleId) {
+
+        const deleteJobTitleApiUrl = environment.apiUrl + 'jobtitle_master/bulk?_ids=' + `${jobtitleId}`
+
+        return $.ajax({
+            url: deleteJobTitleApiUrl,
+            type: "DELETE",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
             }
         });
     }
-
-    Deletejobtitle() {
+    //#endregion
+    Deletejobtitleconfirm() {
+        var jobtitleId = []
         $("#tbljobtitle input:checkbox:checked").each((e, item) => {
-            this.state.selectedIds.push(item.value);
+            jobtitleId.push(item.value);
         });
-        var res = '';
-
-        if (this.state.selectedIds.length > 0) {
-            this.state.selectedIds.map(item => {
-                res = this.DeletejobtitleApi(item);
+        if (jobtitleId.length > 0) {
+            bootbox.confirm({
+                message: "Delete this record ?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.Deletejobtitle(jobtitleId);
+                    }
+                    else {
+                    }
+                }
             });
-            res.done(response => {
-                toast.success("Jobtitle Deleted Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                this.$el.DataTable().ajax.reload();
-            });
-            res.fail(error => {
-
-            });
-
         }
         else {
             toast.info("please select atleast one record!");
         }
-        
+    }
+    Deletejobtitle(jobtitleId) {
+        var item = jobtitleId.join(",")
+        var res = this.multiDeletejobtitleApi(item);
+        res.done((response) => {
+
+            toast.success("Job Title Deleted Successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+        });
+
+
     }
     checkall(e) {
         $("#tbljobtitle input:checkbox").each((index, item) => {
@@ -125,7 +137,7 @@ class Jobtitlelist extends Component {
         });
     }
     componentDidMount() {
-     const endpointGET = environment.apiUrl + 'jobtitle_master/'
+        const endpointGET = environment.apiUrl + 'jobtitle_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -139,7 +151,7 @@ class Jobtitlelist extends Component {
                 },
             },
             columns: [
-                
+
                 {
                     data: "jobtitleId",
                     "orderable": false,
@@ -151,10 +163,10 @@ class Jobtitlelist extends Component {
                     }
                 },
                 {
-                   data:null,
+                    data: null,
                     targets: 1,
                     "orderable": false,
-                   
+
                 },
                 {
                     data: "jobtitleName",
@@ -184,9 +196,9 @@ class Jobtitlelist extends Component {
                     }
                 },
             ],
-            "fnRowCallback" : function(nRow, aData, iDisplayIndex){
-                $("td:eq(1)", nRow).html(iDisplayIndex +1);
-               return nRow;
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
             },
             initComplete: (settings, json) => {
 
@@ -198,18 +210,18 @@ class Jobtitlelist extends Component {
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-                   
+
                     this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             }
-            
+
         });
     }
     render() {
 
         return (
             <div>
-                 <div className="clearfix d-flex align-items-center row page-title">
+                <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">Job Title</h2>
                     <div className="col text-right">
                         <Link to="/job-title/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
@@ -218,37 +230,26 @@ class Jobtitlelist extends Component {
                         this.Deletejobtitleconfirm()
                     }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-                {/* <div>
-                    <h2 className="clearfix mt-6">Job Title</h2>
-                    <br/>
-                    <button className=" btn-danger btn-md" onClick={() => {
-                        this.Deletejobtitleconfirm()
-                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
-                    <div className="clearfix text-right mb-2">
-                        <Link to="/job-title/add" className="btn btn-primary btn-lg mb-3"><i className="fa fa-plus" aria-hidden="true"></i></Link>
-                    </div>
-                </div> */}
-
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tbljobtitle"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr><th width="20">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => {
-                                        this.checkall(e);
-                                    }}
-                                />
-                            </th>
+                            <input
+                                type="checkbox"
+                                name="checkAll"
+                                onClick={e => {
+                                    this.checkall(e);
+                                }}
+                            />
+                        </th>
                             <th width="50">Serial No</th>
                             <th>Job Title</th>
                             <th>Description</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
-                   
+
                 </table>
                 <ToastContainer />
             </div>

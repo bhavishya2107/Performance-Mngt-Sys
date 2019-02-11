@@ -12,10 +12,14 @@ class Templatelist extends Component {
             submitDataFromKra: "",
         };
     }
+    checkall(){}
     componentDidMount() {
         // debugger;
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
+            aaSorting: [[1, 'asc']],
+            aaSorting: [[2, 'asc']],
             ajax: {
                 url: "http://192.168.10.109:3000/dynamic",
                 type: "POST",
@@ -27,16 +31,33 @@ class Templatelist extends Component {
             },
             columns: [
                 {
+                    data: "templateId",
+                    "orderable": false,
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return (
+                            '<input type="checkbox" name="templateId" value=' + row.templateId + ">"
+                        );
+                    }
+                },
+                {
+                    data: null,
+                    targets: 1,
+                    "orderable": false,
+
+                },
+                {
                     data: "KRAname",
-                    targets: 0
+                    targets: 2
                 },
                 {
                     data: "templateName",
-                    targets: 1
+                    targets: 3
                 },
                 {
                     data: "templateId",
-                    targets: 2,
+                    targets: 4,
+                    "orderable": false,
                     render: function (data, type, row) {
                         debugger;
                         return (
@@ -50,10 +71,15 @@ class Templatelist extends Component {
                     }
                 }
             ],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+                return nRow;
+            },
             initComplete: (settings, json) => {
 
             },
             drawCallback: (settings) => {
+                window.smallTable();
 
             }
         });
@@ -61,17 +87,31 @@ class Templatelist extends Component {
 
     render() {
         return (<div>
-
-            <div className="clearfix text-right mb-2">
-                <Link to={{ pathname: '/addtemplate' }} className="btn btn-primary"><i className="fa fa-plus"></i> Add</Link>
+            <div className="clearfix d-flex align-items-center row page-title">
+                <h2 className="col">TEMPLATE</h2>
+                <div className="col text-right">
+                    <Link to="/addtemplate" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                </div>
+                <button className="btn btn-danger btn-multi-delete" onClick={() => {
+                    this.multipleDeleteconfirm()
+                }}><i className="fa fa-trash " aria-hidden="true"></i></button>
             </div>
-
-            <table className="table table-striped table-bordered table-hover"
+            <table className="table table-striped table-bordered table-hover customDataTable"
                 ref={el => (this.el = el)}>
                 <thead>
                     <tr>
-                        <th>KRA NAME</th>
-                        <th>TEMPLATE NAME</th>
+                        <th width="20">
+                            <input
+                                type="checkbox"
+                                name="checkAll"
+                                onClick={e => {
+                                    this.checkall(e);
+                                }}
+                            />
+                        </th>
+                        <th width="50">Sr.No</th>
+                        <th>Kra Name</th>
+                        <th>Template Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>

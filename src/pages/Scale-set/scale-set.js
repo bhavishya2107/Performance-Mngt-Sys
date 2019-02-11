@@ -69,8 +69,8 @@ class Scalesetlist extends Component {
             }
         });
     }
-    multiDeletescalesetApi(scaleSetId){
-       debugger;
+    multiDeletescalesetApi(scaleSetId) {
+        debugger;
         const endpoint = environment.apiUrl + 'scale_set_master/bulk?_ids=' + `${scaleSetId}`;
         return $.ajax({
             url: endpoint,
@@ -83,30 +83,27 @@ class Scalesetlist extends Component {
     }
 
     //#endregion
-multiDelete(scaleSetId){
-    var  item  = scaleSetId.join(",")
+    multiDelete(scaleSetId) {
+        var item = scaleSetId.join(",")
+        var res = this.multiDeletescalesetApi(item);
+        res.done((response) => {
 
-  debugger;
-    var res = this.multiDeletescalesetApi(item);
-    res.done((response) => {
+            toast.success("Scaleset Deleted Successfully !", {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+        });
 
-toast.success("Scaleset Deleted Successfully !", {
-    position: toast.POSITION.TOP_RIGHT
-});
-this.$el.DataTable().ajax.reload();
-});
-res.fail(error => {
-});    
-   
-}
+    }
     multipleDeleteScalesetconfirm() {
-       
-        var scaleSetId=[]
+        var scaleSetId = []
         $("#tblscaleset input:checkbox:checked").each((e, item) => {
             scaleSetId.push(item.value);
         });
         if (scaleSetId.length > 0) {
-            
+
             bootbox.confirm({
                 message: "Delete this record ?",
                 buttons: {
@@ -121,10 +118,10 @@ res.fail(error => {
                 },
                 callback: (result) => {
                     if (result === true) {
-                            this.multiDelete(scaleSetId);
+                        this.multiDelete(scaleSetId);
                     }
                     else {
-    
+
                     }
                 }
             });
@@ -132,10 +129,10 @@ res.fail(error => {
         else {
             toast.info("please select atleast one record!");
         }
-       
-   
+
+
     }
-    
+
     checkall(e) {
         $("#tblscaleset input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -146,7 +143,7 @@ res.fail(error => {
         });
     }
     componentDidMount() {
-//#region Data table realted Block
+        //#region Data table realted Block
         const endpointGET = environment.apiUrl + 'scale_set_master/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -221,12 +218,12 @@ res.fail(error => {
                 $(".btnDelete").on("click", e => {
 
                     this.SingleDeleteConfirm(e.currentTarget.id);
-                   
+
                 });
                 // $(".confirmbtnmulti").on("click", e => {
 
                 //     this.multipleDeleteScalesetconfirm(e.id);
-                   
+
                 // });
             }
         });
