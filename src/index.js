@@ -10,7 +10,7 @@ import '../node_modules/react-toastify/dist/ReactToastify.css';
 import bootbox from 'bootbox';
 
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import * as serviceWorker from './serviceWorker';
 window.bootbox = bootbox;
