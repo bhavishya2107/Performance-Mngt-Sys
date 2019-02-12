@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import $ from 'jquery';
 import bootbox from 'bootbox'
+import { environment, moduleUrls, Type,Notification } from '../Environment';
 $.DataTable = require('datatables.net-bs4');
 
 
@@ -25,21 +26,21 @@ class UserManagement extends Component {
     singleDeleteUser(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
-            debugger;
             if (response.affectedRows > 0) {
-                toast.success("User Deleted successfully");
+                toast.success("User " + Notification.deleted);
 
             }
-           
+            this.$el.DataTable().ajax.reload()
         });
         res.fail(error => {
-            toast.error("Data is not deleted!");
+            toast.error(Notification.deleteError);
         });
     }
-    DeleteUserApi(userId) {
+     DeleteUserApi(userId) {
+        var url = environment.apiUrl + moduleUrls.User +'/'+ "${userId}"
         return $.ajax({
-            url: "http://192.168.10.109:3000/api/user_master/" + userId,
-            type: "DELETE",
+            url: url,
+            type: Type.deletetype,
             dataSrc: "",
             error: function (xhr, status, error) {
 
@@ -50,7 +51,7 @@ class UserManagement extends Component {
 
         if (id !== undefined) {
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleted,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -74,32 +75,44 @@ class UserManagement extends Component {
     }
 
     //#region multiple delete functionality
-    multipleDeleteUserConfirm() {
-
-        // if (id !== undefined) {
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.DeleteUser();
-                }
-               
-            },
-        
-        });
-       
+    multipleUserApi(userId) {
+        var url = environment.apiUrl + moduleUrls.User +`bulk?_ids=` +`${userId}`
+        return $.ajax({
+            url: url,
+            type: Type.deletetype
+        })
     }
-
+    multipleDeleteUserConfirm() {
+        var userId = []
+        $("#tblUser input:checkbox:checked").each((e, item) => {
+            userId.push(item.value);
+        });
+        if (userId.length > 0) {
+            bootbox.confirm({
+                message: Notification.deleteConfirm,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.DeleteUser();
+                    }
+                    else {
+                    }
+                },
+            });
+        }
+        else {
+            toast.info(Notification.deleteInfo)
+        }
+    }
     DeleteUser() {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -108,9 +121,8 @@ class UserManagement extends Component {
 
             this.state.selectedIds.map(item => {
                 var res = this.DeleteUserApi(item);
-
                 res.done(response => {
-                    toast.success("User Deleted Successfully !", {
+                    toast.success("User " + Notification.deleted, {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 });
@@ -122,7 +134,7 @@ class UserManagement extends Component {
 
         }
         else {
-            toast.info("please select atleast one record!")
+            toast.info(Notification.deleteInfo)
         }
     }
     checkall(e) {
@@ -135,15 +147,15 @@ class UserManagement extends Component {
         });
     }
     componentDidMount() {
-
+        const url = environment.apiUrl + moduleUrls.User //+ '/${userId}'
         this.$el = $(this.el);
         this.$el.DataTable({
-            "order": [[1, 'asc']],
-            "sorting":[[1,'asc']],
+            "sorting": [[1, 'asc']],
+            "sorting": [[2, 'asc']],
             "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/user_master/",
-                type: "get",
+                url: url,
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
 
@@ -239,7 +251,7 @@ class UserManagement extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>
+                            <th width="50">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
