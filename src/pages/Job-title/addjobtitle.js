@@ -108,7 +108,7 @@ class Jobtitle extends Component {
             var res = this.updateDetailsApi(data);
 
             res.done((response) => {
-                debugger;
+                
                 this.setState({
                     redirectToList: true
                 })
@@ -130,7 +130,7 @@ class Jobtitle extends Component {
         if (this.state.id !== undefined) {
             var res = this.getjobtitleDetilsApi();
             res.done((response) => {
-                debugger;
+               
                 this.setState({
                     jobtitleName: response[0].jobtitleName,
                     description: response[0].description

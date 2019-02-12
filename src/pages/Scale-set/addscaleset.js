@@ -122,7 +122,7 @@ class Scaleset extends Component {
                 });
             });
             res.fail((error) => {
-                debugger;
+                
             })
 
         } else {
@@ -137,7 +137,7 @@ class Scaleset extends Component {
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
             res.done((response) => {
-                debugger;
+               
                 this.setState({
                     scaleSetName: response[0].scaleSetName,
                     description: response[0].description
@@ -173,7 +173,7 @@ class Scaleset extends Component {
                                             scaleSetName: event.target.value
                                         })
                                     }} required />
-                                <p class="hide" style={{ "display": "none" }}>exist</p>
+                                <p className="hide" style={{ "display": "none" }}>exist</p>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
