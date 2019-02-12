@@ -18,6 +18,8 @@ class AddKpi extends Component {
             kpiTitle: "",
             target: "",
             weightage: "",
+            scaleSetId: "",
+            scaleSetName:"",
             redirectToList: false
         }
     }
@@ -33,7 +35,7 @@ class AddKpi extends Component {
     }
     //#endregion
     isKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi +'?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -54,11 +56,11 @@ class AddKpi extends Component {
                     var _this = this;
                     var Kpidata = {
                         "KpiTitle": this.state.kpiTitle,
-                        "target": this.state.target,
-                        "scaleSetId": 5,
                         "weightage": this.state.weightage,
+                        "scaleSetName": this.state.scaleSetName,
+                        "target": this.state.target,
                     }
-                    const endpointPOST = environment.apiUrl + moduleUrls.Kpi+'/'
+                    const endpointPOST = environment.apiUrl + moduleUrls.Kpi + '/'
                     $.ajax({
                         url: endpointPOST,
                         type: Type.post,
@@ -81,7 +83,7 @@ class AddKpi extends Component {
     }
 
     getKpiDetailsApi(KpiId) {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi+'/' + `${this.state.kpiId}`
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -89,7 +91,7 @@ class AddKpi extends Component {
     }
     onChangeScaleSetId(event) {
         this.setState({
-            selectScaleSetId: event.target.value
+            scaleSetId: event.target.value
         })
     }
     addKpi() {
@@ -114,7 +116,7 @@ class AddKpi extends Component {
     }
 
     getscaleSetIdData() {
-        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet+'/'
+        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/'
         $.ajax({
             type: Type.get,
             url: endpointGET,
@@ -122,8 +124,7 @@ class AddKpi extends Component {
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
-                        <option value={i.scaleSetId}>{i.scaleSetId}</option> ,
-                        <option value={i.scaleSetName}>{i.scaleSetName}</option>
+                        <option value={i.scaleSetId}>{i.scaleSetName}</option>
                     )
                 });
                 this.setState({
@@ -136,15 +137,15 @@ class AddKpi extends Component {
     componentWillMount() {
         this.getscaleSetIdData();
     }
-    
+
     updateDetailsApi(data) {
-        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi+'/' + `${this.state.kpiId}`
+        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         var body =
         {
             "KpiTitle": data.kpiTitle,
             "target": data.target,
             "weightage": data.weightage,
-            "scaleSetName": data.scaleSetName
+            "scaleSetName":data.scaleSetName
         }
         return $.ajax({
             url: endpointPATCH,
@@ -183,7 +184,7 @@ class AddKpi extends Component {
                     kpiTitle: response[0].kpiTitle,
                     target: response[0].target,
                     weightage: response[0].weightage,
-                    scaleSetId: response[0].scaleSetId
+                    scaleSetName: response[0].scaleSetName
                 })
             });
             res.fail((error) => {
@@ -208,7 +209,7 @@ class AddKpi extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label className="required" for="target">KPI Title</label>
+                                        <label className="required" htmlFor="target">KPI Title</label>
                                         <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 this.setState({
@@ -219,7 +220,7 @@ class AddKpi extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label className="required" for="weightage">Weight</label>
+                                        <label className="required" htmlFor="weightage">Weight</label>
                                         <input className="form-control" rows="4" type="text" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
@@ -231,17 +232,17 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="mr-2">Scale Set</label>
-                                        <select onChange={(e) => { this.onChangeScaleSetId(e) }} required className="form-control">
+                                        <select value={this.state.scaleSetName} onChange={(e) => { this.onChangeScaleSetId(e) }}  className="form-control" required >
                                             <option>select</option>
                                             {this.state.displayScaleSetId}
-                                        </select>
+                                        </select >
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col">
                                     <div className="form-group">
-                                        <label className="required" for="target">Target</label>
+                                        <label className="required" htmlFor="target">Target</label>
                                         <textarea className="form-control" rows="4" type="text" value={this.state.target}
                                             onChange={(event) => {
                                                 this.setState({
