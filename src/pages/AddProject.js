@@ -59,7 +59,7 @@ class AddProject extends Component {
             "KpiTitle": data.kpiTitle,
             "target": data.target,
         }
-        debugger;
+        ;
         return $.ajax({
             url: `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`,
             type: "PATCH",
@@ -71,10 +71,10 @@ class AddProject extends Component {
         });
     }
     UpdateKpiDetails(data) {
-        debugger;
+        ;
         var res = this.updateDetailsApi(data);
         res.done((response) => {
-            debugger;
+            ;
             this.setState({
                 redirectToList: true
             })
@@ -90,7 +90,7 @@ class AddProject extends Component {
             var res = this.getKpiDetailsApi();
             console.log(res);
             res.done((response) => {
-                debugger;
+                ;
                 this.setState({
                     kpiTitle: response[0].kpiTitle,
                     target: response[0].target
@@ -103,19 +103,19 @@ class AddProject extends Component {
     }
 
     onChangeProjectComplexity(event) {
-        debugger;
+        ;
         this.setState({
             selectProjectComplexity: event.target.value
         })
     }
     onChangeProjectStatus(event) {
-        debugger;
+        ;
         this.setState({
             selectProjectStatus: event.target.value
         })
     }
     addProject() {
-        debugger;
+        ;
         var templateDataapi = {
             "projectName": this.state.selectProjectComplexity,
             "status": this.state.selectProjectStatus

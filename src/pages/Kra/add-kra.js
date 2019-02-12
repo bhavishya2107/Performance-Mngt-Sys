@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from '../Environment';
+import { environment, moduleUrls, Type, Notification } from '../Environment';
 const $ = require('jquery');
 
 class kraHome extends Component {
@@ -17,58 +17,55 @@ class kraHome extends Component {
     }
 
     submitDataFromKra() {
-        const endpoint = environment.apiUrl + 'kra_master/'
-        var res = window.formValidation("#kraAddForm");
-        if (res) {
+        var isvalidate = window.formValidation("#kraAddForm");
+        if (isvalidate) {
+            var res = this.kraAlreadyExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
+                    toast.error("Kra Already exists!", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                } else {
+                    var _this = this;
+                    var kraFormData =
+                    {
+                        "kraName": this.state.kraName,
+                        "description": this.state.description,
+                    };
+                    const endpointPOST = environment.apiUrl + moduleUrls.Kra + '/'
+                    $.ajax({
+                        url: endpointPOST,
+                        type: "POST",
+                        data: kraFormData,
+                        success: function (resultData) {
+
+                            _this.setState({ RedirectToSample: true });
+                            toast.success("Kra" + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
+            res.fail(error => {
+
+            });
 
         } else {
 
             return false;
         }
 
-        var _this = this;
-
-        var kraFormData =
-        {
-            "kraName": this.state.kraName,
-            "description": this.state.description,
-        };
-
-        $.ajax({
-            url: endpoint,
-            type: "POST",
-            data: kraFormData,
-            success: function (resultData) {
-
-                _this.setState({ RedirectToSample: true });
-                toast.success("Added Record Successfully!", {
-                    position: toast.POSITION.TOP_RIGHT
-                })
-            },
-            error: function (error) {
-                _this.setState({ RedirectToSample: true });
-                toast.error("Error Notification !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            }
-
-        });
-
-
-
-
     }
 
     kraAlreadyExistApi() {
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const endpoint = environment.apiUrl + 'kra_master?_where=(kraName,eq,' + this.state.kraName + ')';
+        const endpoint = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName + ')';
         return $.ajax({
             url: endpoint,
-            type: "GET",
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest",
-            }
+            type: Type.get,
+            data:''
         });
     }
   
@@ -76,11 +73,11 @@ class kraHome extends Component {
 
     getKraDetailsApi() {
         var _this = this;
-        const endpoint = environment.apiUrl + 'kra_master/' + `${this.state.id}`
+        const endpoint = environment.apiUrl + moduleUrls.kra + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
             url: endpoint,
-            type: "GET",
+            type: Type.get,
 
         })
     }
@@ -92,7 +89,7 @@ class kraHome extends Component {
     }
 
     updatekraDetailsApi(data) {
-        const endpoint = environment.apiUrl + 'kra_master/' + `${data.id}`
+        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
         var body =
         {
             "kraName": data.kraName,
@@ -101,7 +98,7 @@ class kraHome extends Component {
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/kra_master/${data.id}`,
             url: endpoint,
-            type: "PATCH",
+            type: Type.patch,
             headers: {
                 "Content-Type": "application/json",
                 "x-requested-with": "XMLHttpRequest"
@@ -118,7 +115,7 @@ class kraHome extends Component {
                 RedirectToSample: true
 
             })
-            toast.success("KRA Updated Successfully", {
+            toast.success("KRA" + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -208,6 +205,7 @@ class kraHome extends Component {
                 <button type="clear" className="btn btn-info" onClick={() => { this.kraFormClear() }}>Clear</button>&nbsp;
                 <Link to="/kra" className="btn btn-danger" >Cancel</Link><br />
                 </form>
+                <ToastContainer></ToastContainer>
 
             </div>
         )

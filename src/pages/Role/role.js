@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from '../Environment';
+import { environment, moduleUrls, Type, Notification} from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -19,7 +19,7 @@ class UserRolePMS extends Component {
         var res = this.DeleteRoleApi(roleId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Role Deleted Successfully", {
+                toast.success("Role "+Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
                 this.$el.DataTable().ajax.reload();
@@ -32,12 +32,12 @@ class UserRolePMS extends Component {
         });
     }
     DeleteRoleApi(roleId) {
-        const endpoint = environment.apiUrl + 'role_master/' + `${roleId}`
+        const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
 
         return $.ajax({
             url: endpoint,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -46,11 +46,11 @@ class UserRolePMS extends Component {
     }
 
     multiDeleteRoleApi(roleId){
-        debugger;
-         const endpoint = environment.apiUrl + 'role_master/bulk?_ids=' + `${roleId}`;
+        ;
+         const endpoint = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
          return $.ajax({
              url: endpoint,
-             type: "DELETE",
+             type: Type.deletetype,
              headers: {
                  "content-type": "application/json",
                  "x-requested-with": "XMLHttpRequest",
@@ -71,11 +71,11 @@ class UserRolePMS extends Component {
 
         var  item  = roleId.join(",")
 
-        debugger;
+        ;
           var res = this.multiDeleteRoleApi(item);
           res.done((response) => {
       
-      toast.success("Role Deleted Successfully !", {
+      toast.success("Role "+ Notification.deleted, {
           position: toast.POSITION.TOP_RIGHT
       });
       this.$el.DataTable().ajax.reload();
@@ -150,7 +150,7 @@ class UserRolePMS extends Component {
 
     componentDidMount() {
         this.$el = $(this.el);
-        const endpointGET = environment.apiUrl + 'role_master/?_size=1000'
+        const endpointGET = environment.apiUrl + moduleUrls.Role + '/?_size=1000'
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
@@ -159,7 +159,7 @@ class UserRolePMS extends Component {
             ajax: {
                 // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
                 url: endpointGET,
-                type: "GET",
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },
