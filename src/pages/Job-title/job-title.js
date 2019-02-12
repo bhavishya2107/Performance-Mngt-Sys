@@ -203,7 +203,7 @@ class Jobtitlelist extends Component {
             initComplete: (settings, json) => {
 
                 // $(".btnDeletejobtitle").on("click", e => {
-                //     debugger;
+                //     ;
                 //     this.SingleDelete(e.currentTarget.id);
                 // });
             },

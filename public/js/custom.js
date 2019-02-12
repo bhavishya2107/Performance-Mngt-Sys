@@ -38,9 +38,11 @@ function formValidation(form) {
                 rolename:{
                     required:true,
                                },
+              
                 messages:{
                     kraName:{
                         required:'required, Enter minimum 2 characters',
+        
                     },
                     kraDescription:{
                         required:'required,cannot leave the area empty',

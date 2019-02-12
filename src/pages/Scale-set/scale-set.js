@@ -70,7 +70,7 @@ class Scalesetlist extends Component {
         });
     }
     multiDeletescalesetApi(scaleSetId) {
-        debugger;
+        ;
         const endpoint = environment.apiUrl + 'scale_set_master/bulk?_ids=' + `${scaleSetId}`;
         return $.ajax({
             url: endpoint,

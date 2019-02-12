@@ -185,14 +185,14 @@ class AddUser extends Component {
     }
     getUserDetails() {
 
-        debugger;
+        ;
         if (this.state.userId !== undefined) {
             var res = this.getUserApi();
             res.done((response) => {
-                debugger;
+                ;
                 if (response != undefined) {
                     var res = response[0];
-                    debugger;
+                    ;
 
                     this.setState({
                         firstName: res.firstName,
@@ -214,7 +214,7 @@ class AddUser extends Component {
                 }
             });
             res.fail((error) => {
-                debugger
+                
             })
         } else {
 
@@ -307,7 +307,7 @@ class AddUser extends Component {
         });
     }
     componentDidMount() {
-        debugger;
+        ;
         this.getUserDetails();
         this.getDeptData();
         this.getJobData();

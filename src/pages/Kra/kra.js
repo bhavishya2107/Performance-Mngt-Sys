@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { environment } from "../Environment";
+import { environment, moduleUrls, Type , Notification} from "../Environment";
 import bootbox from "bootbox";
 const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
@@ -20,14 +20,14 @@ class kraListPage extends Component {
     var res = this.DeleteKraApi(kraId);
     res.done(response => {
       if (response.affectedRows > 0) {
-        toast.success("Role Deleted Successfully", {
+        toast.success("KRA " + Notification.deleted, {
           position: toast.POSITION.TOP_RIGHT
         });
         this.$el.DataTable().ajax.reload();
       }
     });
     res.fail(error => {
-      toast.error("KRA Not Deleted !", {
+      toast.error("KRA Not deleted", {
         position: toast.POSITION.TOP_RIGHT
       });
     });
@@ -35,10 +35,10 @@ class kraListPage extends Component {
 
   DeleteKraApi(kraId) {
     // const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
-    const endpoint = environment.apiUrl + "kra_master/" + `${kraId}`;
+    const endpoint = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
     return $.ajax({
       url: endpoint,
-      type: "DELETE",
+      type: Type.deletetype,
       headers: {
         "content-type": "application/json",
         "x-requested-with": "XMLHttpRequest"
@@ -46,33 +46,16 @@ class kraListPage extends Component {
     });
   }
   multiDeleteKraApi(kraId){
-    const endpoint = environment.apiUrl + 'kra_master/bulk?_ids=' + `${kraId}`;
+    const endpoint = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
     return $.ajax({
         url: endpoint,
-        type: "DELETE",
+        type: Type.deletetype,
         headers: {
             "content-type": "application/json",
             "x-requested-with": "XMLHttpRequest",
         }
     });
   }
-  //#endregion
-
-//   var a = [{name:"bull", text: "sour"},
-//     { name: "tom", text: "tasty" },
-//     { name: "tom", text: "tasty" }
-// ]
-// var index = a.findIndex(x => x.name=="bob")
-// // here you can check specific property for an object whether it exist in your array or not
-
-// if (index === -1){
-//     a.push({your_object});
-// }
-// else console.log("object already exists")
-
-
-
-
   checkall(e) {
     $("#kraDataList input:checkbox").each((index, item) => {
       if ($(e.currentTarget).is(":checked") === true) {
@@ -88,7 +71,7 @@ class kraListPage extends Component {
       var res = this.multiDeleteKraApi(item);
       res.done((response) => {
   
-  toast.success("Kra Deleted Successfully !", {
+  toast.success("Kra"+ Notification.deleted, {
       position: toast.POSITION.TOP_RIGHT
   });
   this.$el.DataTable().ajax.reload();
@@ -158,7 +141,7 @@ class kraListPage extends Component {
 
   componentDidMount() {
     this.$el = $(this.el);
-    const endpointGET = environment.apiUrl + "kra_master/?_size=1000";
+    const endpointGET = environment.apiUrl + moduleUrls.Kra + "/?_size=1000";
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[1, "asc"]],
@@ -220,7 +203,7 @@ class kraListPage extends Component {
         return nRow;
       },
       initComplete: (settings, json) => {
-        //debugger;
+        //;
         // $(".btnDelete").on("click", e => {
         //     this.SingleDeleteConfirm(e.currentTarget.id);
         // });

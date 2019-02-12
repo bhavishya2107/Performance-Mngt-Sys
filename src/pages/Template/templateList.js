@@ -14,7 +14,7 @@ class Templatelist extends Component {
     }
     checkall(){}
     componentDidMount() {
-        // debugger;
+        // ;
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -59,7 +59,7 @@ class Templatelist extends Component {
                     targets: 4,
                     "orderable": false,
                     render: function (data, type, row) {
-                        debugger;
+                        ;
                         return (
                             '<a href="/Edittemplate/id=' + row.templateId + '"class="mr-3">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +

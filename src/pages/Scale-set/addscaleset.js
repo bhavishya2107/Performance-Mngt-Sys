@@ -121,7 +121,7 @@ class Scaleset extends Component {
                 });
             });
             res.fail((error) => {
-                debugger;
+                ;
             })
 
         } else {
@@ -136,7 +136,7 @@ class Scaleset extends Component {
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
             res.done((response) => {
-                debugger;
+                ;
                 this.setState({
                     scaleSetName: response[0].scaleSetName,
                     description: response[0].description

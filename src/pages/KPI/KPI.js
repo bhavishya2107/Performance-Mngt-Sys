@@ -70,7 +70,7 @@ class KPI extends Component {
         });
     }
     multiDeleteKpiApi(KpiId) {
-        debugger;
+        ;
         const endpoint = environment.apiUrl + `kpi_master/bulk?_ids=${KpiId}`;
         return $.ajax({
             url: endpoint,

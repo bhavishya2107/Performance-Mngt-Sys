@@ -25,7 +25,7 @@ class UserManagement extends Component {
     singleDeleteUser(userId) {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
-            debugger;
+            ;
             if (response.affectedRows > 0) {
                 toast.success("User Deleted successfully");
 

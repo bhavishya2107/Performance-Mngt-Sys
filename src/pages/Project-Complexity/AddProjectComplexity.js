@@ -64,7 +64,7 @@ class AddProjectComplexity extends Component {
             "projectTypeName": data.projectTypeName,
             "description": data.description,
         }
-        debugger;
+        ;
         return $.ajax({
             url: `http://180.211.103.189:3000/api/project_type_master/${this.state.projectTypeId}`,
             type: "PATCH",
@@ -88,7 +88,7 @@ class AddProjectComplexity extends Component {
                 });
             });
             res.fail((error) => {
-                debugger;
+                ;
             })
 
         } else {

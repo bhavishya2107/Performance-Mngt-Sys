@@ -70,7 +70,7 @@ class ProjectComplexity extends Component {
         });
     }
     multiDeleteProjectComplexityApi(projectTypeId) {
-        debugger;
+        ;
         const endpoint = environment.apiUrl + `project_type_master/bulk?_ids=${projectTypeId}`;
         return $.ajax({
             url: endpoint,

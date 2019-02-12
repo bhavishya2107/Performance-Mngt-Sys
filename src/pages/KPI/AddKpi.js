@@ -73,7 +73,7 @@ class AddKpi extends Component {
         })
     }
     addKpi() {
-        debugger;
+        ;
         var kpiDataapi = {
             "scaleSetId": this.state.scaleSetId,
         }
@@ -148,7 +148,7 @@ class AddKpi extends Component {
                 });
             });
             res.fail((error) => {
-                debugger;
+                ;
             })
 
         } else {
