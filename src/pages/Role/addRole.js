@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type , Notification } from '../Environment';
+import { environment, moduleUrls, Type , Notification,ModuleNames } from '../Environment';
 const $ = require('jquery');
 
 
@@ -45,7 +45,7 @@ class UserRoleForm extends Component {
                         success: function (resultData) {
 
                             _this.setState({ Redirect: true });
-                            toast.success("Role"+ Notification.saved, {
+                            toast.success("Role "+ Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -157,7 +157,7 @@ class UserRoleForm extends Component {
         return (
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Role >
+                    <h2 className="col"> {ModuleNames.Role} >
                 {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
                     </h2>
                 </div>

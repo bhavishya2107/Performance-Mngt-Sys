@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type, Notification } from '../Environment';
+import { environment, moduleUrls, Type, Notification , ModuleNames } from '../Environment';
 const $ = require('jquery');
 
 class kraHome extends Component {
@@ -161,7 +161,7 @@ class kraHome extends Component {
 
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Kra >
+                    <h2 className="col"> {ModuleNames.kra} >
                 {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
                     </h2>
                 </div>

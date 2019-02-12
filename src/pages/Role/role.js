@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type, Notification} from '../Environment';
+import { environment, moduleUrls, Type, Notification,ModuleNames} from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -26,7 +26,7 @@ class UserRolePMS extends Component {
             }
         });
         res.fail(error => {
-            toast.error("Role Not Deleted", {
+            toast.error("Role "+ Notification.notdeleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -88,7 +88,7 @@ class UserRolePMS extends Component {
     SingleRoleDeleteConfirm(id) {
         if (id !== undefined) {
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -119,7 +119,7 @@ class UserRolePMS extends Component {
         if (roleId.length > 0) {
             
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -141,7 +141,7 @@ class UserRolePMS extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
 
   
@@ -229,7 +229,7 @@ class UserRolePMS extends Component {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Role</h2>
+                    <h2 className="col">{ModuleNames.Role}</h2>
                     <div className="col text-right">
                         <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
