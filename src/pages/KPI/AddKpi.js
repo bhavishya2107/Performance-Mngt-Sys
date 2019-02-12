@@ -57,7 +57,7 @@ class AddKpi extends Component {
                     var Kpidata = {
                         "KpiTitle": this.state.kpiTitle,
                         "weightage": this.state.weightage,
-                        "scaleSetName": this.state.scaleSetName,
+                        "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
                     }
                     const endpointPOST = environment.apiUrl + moduleUrls.Kpi + '/'
@@ -184,7 +184,7 @@ class AddKpi extends Component {
                     kpiTitle: response[0].kpiTitle,
                     target: response[0].target,
                     weightage: response[0].weightage,
-                    scaleSetName: response[0].scaleSetName
+                    scaleSetId: response[0].scalesetId
                 })
             });
             res.fail((error) => {
@@ -232,7 +232,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="mr-2">Scale Set</label>
-                                        <select value={this.state.scaleSetName} onChange={(e) => { this.onChangeScaleSetId(e) }}  className="form-control" required >
+                                        <select value={this.state.scaleSetId} onChange={(e) => { this.onChangeScaleSetId(e) }}  className="form-control" required >
                                             <option>select</option>
                                             {this.state.displayScaleSetId}
                                         </select >
