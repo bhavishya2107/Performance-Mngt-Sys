@@ -61,7 +61,7 @@ class demo extends Component {
                 })
             },
             error: function (error) {
-                debugger
+                
             },
         });
 

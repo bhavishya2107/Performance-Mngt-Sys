@@ -76,13 +76,13 @@ class Projects extends Component {
             ],
             initComplete: (settings, json) => {
                 $(".btnDelete").on("click", e => {
-                    debugger;
+                    ;
                     this.SingleDelete(e.currentTarget.id);
                 });
             },
             drawCallback: (settings) => {
                 $(".btnDelete").on("click", e => {
-                    debugger;
+                    ;
                     this.SingleDelete(e.currentTarget.id);
                 });
             }

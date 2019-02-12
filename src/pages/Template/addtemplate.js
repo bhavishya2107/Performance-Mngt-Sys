@@ -6,7 +6,7 @@ var templateData = []
 class Addtemplate extends Component {
     constructor(props) {
         super(props);
-        debugger;
+        ;
         this.state = {
             displayDatakra: "",
             displayDatakpi: "",
@@ -70,7 +70,7 @@ class Addtemplate extends Component {
     }
 
     addtemplate() {
-        debugger;
+        ;
         var templateDataapi = {
             "kraName": this.state.selectkra,
             "kpiTitle": this.state.selectkpi

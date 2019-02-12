@@ -201,7 +201,6 @@ class AddUser extends Component {
                 }
             });
             res.fail((error) => {
-
             })
         } else {
 

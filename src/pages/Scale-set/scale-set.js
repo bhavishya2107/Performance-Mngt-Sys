@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { environment, Type, Notification } from '../Environment'
+import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
@@ -10,7 +10,8 @@ class Scalesetlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIds: []
+            selectedIds: [],
+            title:""
         }
     }
 
@@ -44,7 +45,7 @@ class Scalesetlist extends Component {
         var res = this.DeletescalesetApi(scaleSetId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Record Deleted Successfully!", {
+                toast.success("Scaleset " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -52,17 +53,17 @@ class Scalesetlist extends Component {
         });
 
         res.fail(error => {
-            toast.error("Record Not Deleted", {
+            toast.error(Notification.notdeleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
     }
     DeletescalesetApi(scaleSetId) {
 
-        const endpoint = environment.apiUrl + 'scale_set_master/' + `${scaleSetId}`;
+        const singleDeleteAPIUrl = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${scaleSetId}`;
         return $.ajax({
-            url: endpoint,
-            type: "DELETE",
+            url: singleDeleteAPIUrl,
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -70,10 +71,10 @@ class Scalesetlist extends Component {
         });
     }
     multiDeletescalesetApi(scaleSetId) {
-        debugger;
-        const endpoint = environment.apiUrl + 'scale_set_master/bulk?_ids=' + `${scaleSetId}`;
+       
+        const multiDeleteAPIUrl = environment.apiUrl + moduleUrls.ScaleSet + '/bulk?_ids=' + `${scaleSetId}`;
         return $.ajax({
-            url: endpoint,
+            url: multiDeleteAPIUrl,
             type: "DELETE",
             headers: {
                 "content-type": "application/json",
@@ -88,7 +89,7 @@ class Scalesetlist extends Component {
         var res = this.multiDeletescalesetApi(item);
         res.done((response) => {
 
-            toast.success("Scaleset Deleted Successfully !", {
+            toast.success("Scaleset " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -105,7 +106,7 @@ class Scalesetlist extends Component {
         if (scaleSetId.length > 0) {
 
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -127,10 +128,8 @@ class Scalesetlist extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
-
-
     }
 
     checkall(e) {
@@ -144,7 +143,10 @@ class Scalesetlist extends Component {
     }
     componentDidMount() {
         //#region Data table realted Block
-        const endpointGET = environment.apiUrl + 'scale_set_master/?_size=1000'
+        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000'
+        this.setState({
+            title:ModuleNames.ScaleSet
+        })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -236,7 +238,7 @@ class Scalesetlist extends Component {
         return (
             <div className="">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Scale Set</h2>
+                    <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
                         <Link to="/scale-set/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
