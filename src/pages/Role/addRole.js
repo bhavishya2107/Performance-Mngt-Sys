@@ -174,7 +174,7 @@ class UserRoleForm extends Component {
                                             roleName: event.target.value
                                         }
                                     )
-                                }} required />
+                                }} required /><p className="hide" style={{ "display": "none" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
                     {this.state.id !== undefined ?

@@ -42,7 +42,7 @@ class kraHome extends Component {
                         success: function (resultData) {
 
                             _this.setState({ RedirectToSample: true });
-                            toast.success("Kra" + Notification.saved, {
+                            toast.success("Kra " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -74,7 +74,7 @@ class kraHome extends Component {
 
     getKraDetailsApi() {
         var _this = this;
-        const endpoint = environment.apiUrl + moduleUrls.kra + '/' + `${this.state.id}`
+        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
             url: endpoint,
@@ -116,7 +116,7 @@ class kraHome extends Component {
                 RedirectToSample: true
 
             })
-            toast.success("KRA" + Notification.updated, {
+            toast.success("KRA " + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -171,7 +171,7 @@ class kraHome extends Component {
                     <div className="form-group">
                         <label className=" required" htmlFor="kraName">Name</label>
                         <div className="">
-                            <input id="kraName" type="text" className="form-control col-6" name="kraName" minLength="2"
+                            <input id="kraName" type="text" className="form-control col-6" name="kraName"
                                 value={this.state.kraName}
                                 onChange={(event) => {
                                     this.setState(
@@ -179,7 +179,7 @@ class kraHome extends Component {
                                             kraName: event.target.value
                                         }
                                     )
-                                }} required /> <p className="hide" style={{ "display": "none" }}>kra exist</p>
+                                }} required /> <p className="hide" style={{ "display": "none" }}>{Notification.recordExists}</p>
                                 
                         </div>
                     </div>
@@ -194,7 +194,7 @@ class kraHome extends Component {
                                             description: event.target.value
                                         }
                                     )
-                                }} required></textarea><br />
+                                }}></textarea><br />
                         </div>
                     </div>
                     {this.state.id !== undefined ?

@@ -27,7 +27,7 @@ class kraListPage extends Component {
       }
     });
     res.fail(error => {
-      toast.error("KRA" + Notification.notdeleted, {
+      toast.error("KRA " + Notification.notdeleted, {
         position: toast.POSITION.TOP_RIGHT
       });
     });
@@ -256,8 +256,8 @@ class kraListPage extends Component {
                 />
               </th>
               <th width="50">Sr.No</th>
-              <th>Name</th>
-              <th>Description</th>
+              <th width="100">Name</th>
+              <th width="600">Description</th>
               <th width="90">Action</th>
             </tr>
           </thead>
