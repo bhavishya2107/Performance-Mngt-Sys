@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-import { environment } from '../Environment'
+import { environment, moduleUrls, Type, Notification } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 var kpiData = []
@@ -32,39 +32,59 @@ class AddKpi extends Component {
         })
     }
     //#endregion
-   
-    saveApiDetails() {
-        var _this = this;
-        var Kpidata = {
-            "KpiTitle": this.state.kpiTitle,
-            "target": this.state.target,
-            "scaleSetId": 5,
-            "weightage": this.state.weightage,
-        }
-        var re = window.formValidation("#kpiform");
-        if (re) {
-        } else {
-            return false;
-        }
-        const endpointPOST = environment.apiUrl + 'kpi_master/?_size=1000'
-        $.ajax({
-            url: endpointPOST,
-            type: "POST",
-            data: Kpidata,
-            success: function (resultData) {
-                _this.setState({ redirectToList: true });
-                toast.success("Record Added Successfully!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            }
+    isKpiExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi +'?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
         });
     }
 
+    saveApiDetails() {
+        var isvalidate = window.formValidation("#kpiform");
+        if (isvalidate) {
+            var res = this.isKpiExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    // toast.error("KPI Already exists!", {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    // });
+                } else {
+                    var _this = this;
+                    var Kpidata = {
+                        "KpiTitle": this.state.kpiTitle,
+                        "target": this.state.target,
+                        "scaleSetId": 5,
+                        "weightage": this.state.weightage,
+                    }
+                    const endpointPOST = environment.apiUrl + moduleUrls.Kpi+'/'
+                    $.ajax({
+                        url: endpointPOST,
+                        type: Type.post,
+                        data: Kpidata,
+                        success: function (resultData) {
+                            _this.setState({ redirectToList: true });
+                            toast.success("KPI " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
+            res.fail(error => {
+            });
+        }
+        else {
+            return false;
+        }
+    }
+
     getKpiDetailsApi(KpiId) {
-        const endpointGET = environment.apiUrl + 'kpi_master/' + `${this.state.kpiId}`
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi+'/' + `${this.state.kpiId}`
         return $.ajax({
             url: endpointGET,
-            type: "GET",
+            type: Type.get,
         })
     }
     onChangeScaleSetId(event) {
@@ -73,7 +93,6 @@ class AddKpi extends Component {
         })
     }
     addKpi() {
-        debugger;
         var kpiDataapi = {
             "scaleSetId": this.state.scaleSetId,
         }
@@ -95,11 +114,11 @@ class AddKpi extends Component {
     }
 
     getscaleSetIdData() {
+        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet+'/'
         $.ajax({
-            type: 'GET',
-            url: 'http://180.211.103.189:3000/api/scale_set_master',
+            type: Type.get,
+            url: endpointGET,
             complete: (temp) => {
-                console.log(temp);
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
@@ -117,7 +136,9 @@ class AddKpi extends Component {
     componentWillMount() {
         this.getscaleSetIdData();
     }
+    
     updateDetailsApi(data) {
+        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi+'/' + `${this.state.kpiId}`
         var body =
         {
             "KpiTitle": data.kpiTitle,
@@ -126,8 +147,8 @@ class AddKpi extends Component {
             "scaleSetName": data.scaleSetName
         }
         return $.ajax({
-            url: `http://180.211.103.189:3000/api/kpi_master/${this.state.kpiId}`,
-            type: "PATCH",
+            url: endpointPATCH,
+            type: Type.patch,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest"
@@ -143,14 +164,12 @@ class AddKpi extends Component {
                 this.setState({
                     redirectToList: true
                 })
-                toast.success("KPI Updated Successfully!", {
+                toast.success("KPI " + Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             });
             res.fail((error) => {
-                debugger;
             })
-
         } else {
 
             return false;
@@ -159,7 +178,6 @@ class AddKpi extends Component {
     componentDidMount() {
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
-            console.log(res);
             res.done((response) => {
                 this.setState({
                     kpiTitle: response[0].kpiTitle,
@@ -253,6 +271,7 @@ class AddKpi extends Component {
                         </form>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
         );
     }

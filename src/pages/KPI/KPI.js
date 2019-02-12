@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
-import { environment } from '../Environment';
+import { environment, Type, moduleUrls, Notification } from '../Environment';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -17,10 +17,10 @@ class KPI extends Component {
 
     //#region delete functionality with single and multiple api
     DeleteKpiApi(KpiId) {
-        const endpoint = environment.apiUrl + 'kpi_master/' + `${KpiId}`;
+        const endpoint = environment.apiUrl + moduleUrls.Kpi + '/' + `${KpiId}`;
         return $.ajax({
             url: endpoint,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -30,7 +30,7 @@ class KPI extends Component {
 
     SingleDeleteConfirm(id) {
         bootbox.confirm({
-            message: "Are you sure you want to delete this record ?",
+            message: Notification.deleteConfirm,
             buttons: {
                 confirm: {
                     label: 'Ok',
@@ -46,17 +46,15 @@ class KPI extends Component {
                     this.SingleDeleteKpi(id);
                 }
                 else {
-
                 }
             }
         });
-
     }
     SingleDeleteKpi(kpiId) {
         var res = this.DeleteKpiApi(kpiId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Record Deleted Successfully!", {
+                toast.success("KPI " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -70,11 +68,10 @@ class KPI extends Component {
         });
     }
     multiDeleteKpiApi(KpiId) {
-        debugger;
-        const endpoint = environment.apiUrl + `kpi_master/bulk?_ids=${KpiId}`;
+        const endpoint = environment.apiUrl + moduleUrls.Kpi+`/bulk?_ids=${KpiId}`;
         return $.ajax({
             url: endpoint,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -86,7 +83,7 @@ class KPI extends Component {
         var item = KpiId.join(",")
         var res = this.multiDeleteKpiApi(item);
         res.done((response) => {
-            toast.success("Record Deleted Successfully !", {
+            toast.success("KPI " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -102,7 +99,7 @@ class KPI extends Component {
         });
         if (KpiId.length > 0) {
             bootbox.confirm({
-                message: "Are you sure you want toDelete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -118,7 +115,6 @@ class KPI extends Component {
                         this.multiDeleteKpi(KpiId);
                     }
                     else {
-
                     }
                 }
             });
@@ -126,8 +122,6 @@ class KPI extends Component {
         else {
             toast.info("please select atleast one record!");
         }
-
-
     }
     //#endregion
 
@@ -140,9 +134,9 @@ class KPI extends Component {
             }
         });
     }
-//#region Datatable 
+    //#region Datatable 
     componentDidMount() {
-        const endpointGET = environment.apiUrl + 'kpi_master/'
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi+'/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -150,7 +144,7 @@ class KPI extends Component {
             aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
-                type: "GET",
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },
@@ -200,7 +194,7 @@ class KPI extends Component {
                 return nRow;
             },
             //#endregion
-          
+
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {

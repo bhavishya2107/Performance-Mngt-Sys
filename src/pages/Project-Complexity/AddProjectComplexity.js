@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
+import { environment, moduleUrls, Type, Notification } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 
@@ -18,40 +19,60 @@ class AddProjectComplexity extends Component {
         this.setState({
             projectTypeName: "",
             description: ""
-
         })
     }
     //#region  save projectcomplexity details
-    saveProjectComplexityDetails() {
-        var _this = this;
-        var ProjectComplexityData =
-        {
-            "projectTypeName": this.state.projectTypeName,
-            "description": this.state.description,
-        }
-        var re = window.formValidation("#projectForm");
-        if (re) {
+    isProjectComplexityExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity+ '?_where=(projectTypeName,eq,' + this.state.projectTypeName + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
+        });
+    }
 
+    saveProjectComplexityDetails() {
+        var isvalidate = window.formValidation("#projectForm");
+        if (isvalidate) {
+            var res = this.isProjectComplexityExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    toast.error("Already exists!", {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                } else {
+                    var _this = this;
+                    var ProjectComplexitydata = {
+                        "projectTypeName": this.state.projectTypeName,
+                        "description": this.state.description,
+
+                    }
+                    const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
+                    $.ajax({
+                        url: endpointPOST,
+                        type: Type.post,
+                        data: ProjectComplexitydata,
+                        success: function (resultData) {
+                            _this.setState({ redirectToList: true });
+                            toast.success("Record " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
+            res.fail(error => {
+            });
         } else {
             return false;
         }
-        $.ajax({
-            url: "http://180.211.103.189:3000/api/project_type_master",
-            type: "POST",
-            data: ProjectComplexityData,
-            success: function (resultData) {
-                _this.setState({ redirectToList: true });
-                toast.success("Project Complexity Added Successfully!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            }
-        });
     }
+
     getProjectComplexityDeatilsApi(projectTypeId) {
-        const endpoint = `http://180.211.103.189:3000/api/project_type_master/${this.state.projectTypeId}`;
+        const endpointGET = environment.apiUrl +  moduleUrls.ProjectComplexity +'/' + `${this.state.projectTypeId}`
         return $.ajax({
-            url: endpoint,
-            type: "GET",
+            url: endpointGET,
+            type: Type.get,
         })
     }
     //#endregion
@@ -59,15 +80,15 @@ class AddProjectComplexity extends Component {
 
     //#region update fucntionality details
     updateDetailsApi(data) {
+        const endpointPATCH = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${this.state.projectTypeId}`
         var body =
         {
             "projectTypeName": data.projectTypeName,
             "description": data.description,
         }
-        debugger;
         return $.ajax({
-            url: `http://180.211.103.189:3000/api/project_type_master/${this.state.projectTypeId}`,
-            type: "PATCH",
+            url: endpointPATCH,
+            type: Type.patch,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest"
@@ -83,26 +104,21 @@ class AddProjectComplexity extends Component {
                 this.setState({
                     redirectToList: true
                 })
-                toast.success("Project Complexity Updated Successfully!", {
+                toast.success("Record " + Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             });
             res.fail((error) => {
-                debugger;
             })
-
         } else {
-
             return false;
         }
     }
     //#endregion
-  
-  
+
     componentDidMount() {
         if (this.state.projectTypeId !== undefined) {
             var res = this.getProjectComplexityDeatilsApi();
-            console.log(res);
             res.done((response) => {
                 this.setState({
                     projectTypeName: response[0].projectTypeName,
@@ -114,7 +130,7 @@ class AddProjectComplexity extends Component {
         } else {
         }
     }
-  
+
     render() {
         if (this.state.redirectToList == true) {
             return <Redirect to={{ pathname: "/project-complexity" }} />
@@ -132,7 +148,7 @@ class AddProjectComplexity extends Component {
                         <form id="projectForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
-                                <input type="text" id="projectTypeName" className="form-control" minLength="" value={this.state.projectTypeName}
+                                <input type="text" id="projectTypeName" className="form-control" value={this.state.projectTypeName}
                                     onChange={(event) => {
                                         this.setState({
                                             projectTypeName: event.target.value
@@ -140,7 +156,7 @@ class AddProjectComplexity extends Component {
                                     }} required />
                             </div>
                             <div className="form-group">
-                                <label>Description</label> <textarea id="description"  className="form-control" rows="4" value={this.state.description}
+                                <label>Description</label> <textarea id="description" className="form-control" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
@@ -165,6 +181,7 @@ class AddProjectComplexity extends Component {
                         </form>
                     </div>
                 </div>
+                <ToastContainer />
             </div>
             //#endregion 
         );
