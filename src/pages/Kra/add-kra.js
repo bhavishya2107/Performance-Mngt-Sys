@@ -23,9 +23,10 @@ class kraHome extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
-                    toast.error("Kra Already exists!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    // toast.error("Kra Already exists!", {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    // });
+                    $(".hide").show()
                 } else {
                     var _this = this;
                     var kraFormData =
@@ -170,7 +171,7 @@ class kraHome extends Component {
                     <div className="form-group">
                         <label className=" required" htmlFor="kraName">Name</label>
                         <div className="">
-                            <input id="kraName" type="text" className="form-control col-6" name="kraName" minlength="2"
+                            <input id="kraName" type="text" className="form-control col-6" name="kraName" minLength="2"
                                 value={this.state.kraName}
                                 onChange={(event) => {
                                     this.setState(
@@ -178,7 +179,8 @@ class kraHome extends Component {
                                             kraName: event.target.value
                                         }
                                     )
-                                }} required /><br />
+                                }} required /> <p className="hide" style={{ "display": "none" }}>kra exist</p>
+                                
                         </div>
                     </div>
                     <div className="form-group">

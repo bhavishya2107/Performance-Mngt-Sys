@@ -31,7 +31,6 @@ function formValidation(form) {
                 },
                 kraDescription: {
                     required: true,
-
                 },
                 rolename: {
                     required: true,
@@ -39,9 +38,6 @@ function formValidation(form) {
                 scalesetname: {
                     required: true,
                 },
-                rolename:{
-                    required:true,
-                               },
               
                 messages:{
                     kraName:{

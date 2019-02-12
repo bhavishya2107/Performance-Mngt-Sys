@@ -27,9 +27,10 @@ class UserRoleForm extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
-                    toast.error("Role Already exists!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    // toast.error("Role Already exists!", {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    // });
+                    $(".hide").show()
                 } else {
                     var _this = this;
                     var roleFormData =
