@@ -12,7 +12,7 @@ class Jobtitle extends Component {
             jobtitleName: "",
             description: "",
             redirectToList: false,
-            title:""
+            title: ""
         }
     }
     //#region onClick Add function
@@ -31,10 +31,10 @@ class Jobtitle extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
-
-                    toast.error("Jobtitle Already exists!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    $(".recordexists").show()
+                    // toast.error("Jobtitle Already exists!", {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    // });
                 } else {
                     var _this = this;
 
@@ -109,7 +109,7 @@ class Jobtitle extends Component {
             var res = this.updateDetailsApi(data);
 
             res.done((response) => {
-                
+
                 this.setState({
                     redirectToList: true
                 })
@@ -129,12 +129,12 @@ class Jobtitle extends Component {
     }
     componentDidMount() {
         this.setState({
-            title:ModuleNames.Jobtitle
+            title: ModuleNames.Jobtitle
         })
         if (this.state.id !== undefined) {
             var res = this.getjobtitleDetilsApi();
             res.done((response) => {
-               
+
                 this.setState({
                     jobtitleName: response[0].jobtitleName,
                     description: response[0].description
@@ -172,6 +172,7 @@ class Jobtitle extends Component {
                                             jobtitleName: event.target.value
                                         })
                                     }} required />
+                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}

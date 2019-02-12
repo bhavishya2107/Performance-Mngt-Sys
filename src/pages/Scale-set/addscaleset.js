@@ -171,7 +171,7 @@ class Scaleset extends Component {
                         <form id="formscaleset">
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="scalesetid" name="scalesetname" className="form-control" minLength="" value={this.state.scaleSetName}
+                                <input type="text" id="scalesetid" name="scalesetname" className="form-control"  value={this.state.scaleSetName}
                                     onChange={(event) => {
                                         this.setState({
                                             scaleSetName: event.target.value
@@ -179,7 +179,7 @@ class Scaleset extends Component {
                                     }} required />
                                 {/* <p className="hide" id="recordexists">exist</p> */}
 
-                                <label className="recordexists" style={{ "display": "none","color":"red" }}>Already exist</label>
+                                <label className="recordexists" style={{ "display": "none","color":"red" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
