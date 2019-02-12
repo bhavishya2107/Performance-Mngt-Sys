@@ -20,55 +20,66 @@ function navigation() {
 //...For Form validation
 function formValidation(form) {
     jQuery.validator.setDefaults({
-      debug: true,
-      success: "valid"
+        debug: true,
+        success: "valid"
     });
     $(form).validate(
         {
-            rules:{
-                kraName:{
-                    required:true,
-            
+            rules: {
+                kraName: {
+                    required: true,
+
 
                 },
-                kraDescription:{
-                    required:true,
-              
+                kraDescription: {
+                    required: true,
+
                 },
-                rolename:{
-                    required:true,
-                               },
-                messages:{
-                    kraName:{
-                        required:'required, Enter minimum 2 characters',
+                rolename: {
+                    required: true,
+                },
+                messages: {
+                    kraName: {
+                        required: 'required, Enter minimum 2 characters',
                     },
-                    kraDescription:{
-                        required:'required,cannot leave the area empty',
+                    kraDescription: {
+                        required: 'required,cannot leave the area empty',
                     },
-                    rolename:{
-                        required:'required,Enter minimum 2 characters',
+                    rolename: {
+                        required: 'required,Enter minimum 2 characters',
+                    },
+
+                    deptDropDown: {
+                        required: true,
+                    },
+                    jobDropDown: {
+                        required: true,
+                    },
+                    roleDropDown: {
+                        required: true,
                     }
+
                 }
             }
         }
     );
     return $(form).valid();
-  }
-function smallTable(){
+}
+function smallTable() {
     var headertext = [],
-    headers = document.querySelectorAll(".customDataTable th"),
-    tablerows = document.querySelectorAll(".customDataTable th"),
-    tablebody = document.querySelector(".customDataTable tbody");
+        headers = document.querySelectorAll(".customDataTable th"),
+        tablerows = document.querySelectorAll(".customDataTable th"),
+        tablebody = document.querySelector(".customDataTable tbody");
 
-        for (var i = 0; i < headers.length; i++) {
-            var current = headers[i];
-            headertext.push(current.textContent.replace(/\r?\n|\r/, ""));
+    for (var i = 0; i < headers.length; i++) {
+        var current = headers[i];
+        headertext.push(current.textContent.replace(/\r?\n|\r/, ""));
+    }
+    for (var i = 0, row; row = tablebody.rows[i]; i++) {
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            col.setAttribute("data-th", headertext[j]);
         }
-        for (var i = 0, row; row = tablebody.rows[i]; i++) {
-            for (var j = 0, col; col = row.cells[j]; j++) {
-                col.setAttribute("data-th", headertext[j]);
-            }
-        }     
+    }
 }
 
 $(document).ready(function () {
@@ -88,7 +99,7 @@ $(document).ready(function () {
 
         $('.navbar-collapse').css('height', '0');
     });
-    $(document).on("click", ".confirm", function(e) {
+    $(document).on("click", ".confirm", function (e) {
         bootbox.confirm({
             message: "This is a confirm with custom button text and color! Do you like it?",
             buttons: {

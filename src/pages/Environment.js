@@ -26,7 +26,9 @@ export const Notification = {
   saved: "Saved Successfully",
   updated: "Updated Successfully",
   deleted: "Deleted Successfully",
-  deleteConfirm: "Are you sure you want to delete this record?"
+  deleteConfirm: "Are you sure you want to delete this record?",
+  deleteInfo:"Please select atleast one record",
+  deleteError:"Data is not deleted"
 };
 export const ModuleNames = {
   kra: "KRA",
