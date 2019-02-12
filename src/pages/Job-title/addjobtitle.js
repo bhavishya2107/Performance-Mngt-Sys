@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, Notification, moduleUrls, Type } from '../Environment'
+import { environment, Notification, moduleUrls, Type, ModuleNames } from '../Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
 class Jobtitle extends Component {
@@ -11,7 +11,8 @@ class Jobtitle extends Component {
             id: props.match.params.id,
             jobtitleName: "",
             description: "",
-            redirectToList: false
+            redirectToList: false,
+            title:""
         }
     }
     //#region onClick Add function
@@ -127,6 +128,9 @@ class Jobtitle extends Component {
 
     }
     componentDidMount() {
+        this.setState({
+            title:ModuleNames.Jobtitle
+        })
         if (this.state.id !== undefined) {
             var res = this.getjobtitleDetilsApi();
             res.done((response) => {
@@ -153,7 +157,7 @@ class Jobtitle extends Component {
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Job Title >
+                    <h2 className="col"> {this.state.title} >
                 {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
                     </h2>
                 </div>

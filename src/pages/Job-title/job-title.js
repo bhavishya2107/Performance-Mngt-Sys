@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type, Notification } from '../Environment';
+import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -10,7 +10,8 @@ class Jobtitlelist extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIds: []
+            selectedIds: [],
+            title:""
         }
     }
     SingleDeleteConfirm(id) {
@@ -49,7 +50,7 @@ class Jobtitlelist extends Component {
         });
 
         res.fail(error => {
-            toast.error("Record Not Deleted", {
+            toast.error(Notification.notdeleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -109,7 +110,7 @@ class Jobtitlelist extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
     }
     Deletejobtitle(jobtitleId) {
@@ -137,6 +138,9 @@ class Jobtitlelist extends Component {
         });
     }
     componentDidMount() {
+        this.setState({
+            title:ModuleNames.Jobtitle
+        })
         const endpointGET = environment.apiUrl + 'jobtitle_master/'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -222,7 +226,7 @@ class Jobtitlelist extends Component {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Job Title</h2>
+                    <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
                         <Link to="/job-title/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>

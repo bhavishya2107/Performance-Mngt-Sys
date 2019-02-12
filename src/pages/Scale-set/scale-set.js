@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { environment, Type, Notification, moduleUrls } from '../Environment'
+import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
@@ -10,7 +10,8 @@ class Scalesetlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIds: []
+            selectedIds: [],
+            title:""
         }
     }
 
@@ -52,7 +53,7 @@ class Scalesetlist extends Component {
         });
 
         res.fail(error => {
-            toast.error("Record Not Deleted", {
+            toast.error(Notification.notdeleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -127,7 +128,7 @@ class Scalesetlist extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
     }
 
@@ -143,6 +144,9 @@ class Scalesetlist extends Component {
     componentDidMount() {
         //#region Data table realted Block
         const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000'
+        this.setState({
+            title:ModuleNames.ScaleSet
+        })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -234,7 +238,7 @@ class Scalesetlist extends Component {
         return (
             <div className="">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Scale Set</h2>
+                    <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
                         <Link to="/scale-set/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>

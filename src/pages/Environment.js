@@ -26,7 +26,10 @@ export const Notification = {
   saved: "Saved Successfully",
   updated: "Updated Successfully",
   deleted: "Deleted Successfully",
-  deleteConfirm: "Are you sure you want to delete this record?"
+  deleteConfirm: "Are you sure you want to delete this record?",
+  notdeleted:"Not Deleted Successfully",
+  selectOneRecord:"Please select atleast one record!",
+  recordExists:"Record already exists"
 };
 export const ModuleNames = {
   kra: "KRA",

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
-import { environment, Type, moduleUrls, Notification } from '../Environment'
+import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 //var scalesetData = []
@@ -13,7 +13,8 @@ class Scaleset extends Component {
             id: props.match.params.id,
             scaleSetName: "",
             description: "",
-            redirectToList: false
+            redirectToList: false,
+            title:""
         }
     }
     //#region Onclick function for Add
@@ -36,7 +37,7 @@ class Scaleset extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
-                    $(".hide").show()
+                    $(".recordexists").show()
                     // toast.error("Scaleset Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
                     // });
@@ -134,6 +135,9 @@ class Scaleset extends Component {
 
 
     componentDidMount() {
+        this.setState({
+            title:ModuleNames.ScaleSet
+        })
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
             res.done((response) => {
@@ -158,7 +162,7 @@ class Scaleset extends Component {
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Scale Set >
+                    <h2 className="col"> {this.state.title} >
                     {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
                     </h2>
                 </div>
@@ -173,7 +177,9 @@ class Scaleset extends Component {
                                             scaleSetName: event.target.value
                                         })
                                     }} required />
-                                <p className="hide" style={{ "display": "none" }}>exist</p>
+                                {/* <p className="hide" id="recordexists">exist</p> */}
+
+                                <label className="recordexists" style={{ "display": "none","color":"red" }}>Already exist</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
