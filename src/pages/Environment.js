@@ -27,6 +27,8 @@ export const Notification = {
   updated: "Updated Successfully",
   deleted: "Deleted Successfully",
   deleteConfirm: "Are you sure you want to delete this record?",
+  deleteInfo:"Please select atleast one record",
+  deleteError:"Data is not deleted",
   notdeleted:"Not Deleted Successfully",
   selectOneRecord:"Please select atleast one record!",
   recordExists:"Record already exists"

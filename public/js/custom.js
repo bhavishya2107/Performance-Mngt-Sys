@@ -28,6 +28,35 @@ function formValidation(form) {
             rules: {
                 kraName: {
                     required: true,
+
+
+                },
+                kraDescription: {
+                    required: true,
+
+                },
+                rolename: {
+                    required: true,
+                },
+                messages: {
+                    kraName: {
+                        required: 'required, Enter minimum 2 characters',
+                    },
+                    kraDescription: {
+                        required: 'required,cannot leave the area empty',
+                    },
+                    rolename: {
+                        required: 'required,Enter minimum 2 characters',
+                    },
+
+                    deptDropDown: {
+                        required: true,
+                    },
+                    jobDropDown: {
+                        required: true,
+                    },
+                    roleDropDown: {
+                        required: true,
                 },
                
                 rolename: {
@@ -47,10 +76,12 @@ function formValidation(form) {
                     scalesetname: {
                         required: 'row exists'
                     }
+
                 }
             }
-        }
+        }}
     );
+    
     return $(form).valid();
 }
 function smallTable() {
