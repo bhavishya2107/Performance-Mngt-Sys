@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment } from '../Environment';
+import { environment, moduleUrls, Type, Notification } from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -15,7 +15,7 @@ class Jobtitlelist extends Component {
     }
     SingleDeleteConfirm(id) {
         bootbox.confirm({
-            message: "Delete this record ?",
+            message: Notification.deleteConfirm,
             buttons: {
                 confirm: {
                     label: 'Yes',
@@ -41,7 +41,7 @@ class Jobtitlelist extends Component {
         var res = this.DeletejobtitleApi(jobtitleId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Record Deleted Successfully!", {
+                toast.success("Jobtitle " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -56,11 +56,11 @@ class Jobtitlelist extends Component {
     }
     DeletejobtitleApi(jobtitleId) {
 
-        const deleteJobTitleApiUrl = environment.apiUrl + 'jobtitle_master/' + `${jobtitleId}`
+        const deleteJobTitleApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${jobtitleId}`
 
         return $.ajax({
             url: deleteJobTitleApiUrl,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -69,11 +69,11 @@ class Jobtitlelist extends Component {
     }
     multiDeletejobtitleApi(jobtitleId) {
 
-        const deleteJobTitleApiUrl = environment.apiUrl + 'jobtitle_master/bulk?_ids=' + `${jobtitleId}`
+        const deleteJobTitleApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '/bulk?_ids=' + `${jobtitleId}`
 
         return $.ajax({
             url: deleteJobTitleApiUrl,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -88,7 +88,7 @@ class Jobtitlelist extends Component {
         });
         if (jobtitleId.length > 0) {
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -117,7 +117,7 @@ class Jobtitlelist extends Component {
         var res = this.multiDeletejobtitleApi(item);
         res.done((response) => {
 
-            toast.success("Job Title Deleted Successfully !", {
+            toast.success("Job Title "+ Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -204,6 +204,7 @@ class Jobtitlelist extends Component {
 
                 // $(".btnDeletejobtitle").on("click", e => {
                 //     ;
+                   
                 //     this.SingleDelete(e.currentTarget.id);
                 // });
             },

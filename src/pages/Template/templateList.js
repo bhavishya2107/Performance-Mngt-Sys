@@ -88,7 +88,7 @@ class Templatelist extends Component {
     render() {
         return (<div>
             <div className="clearfix d-flex align-items-center row page-title">
-                <h2 className="col">TEMPLATE</h2>
+                <h2 className="col">Template</h2>
                 <div className="col text-right">
                     <Link to="/addtemplate" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>

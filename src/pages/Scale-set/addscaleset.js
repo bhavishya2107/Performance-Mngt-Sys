@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
-import { environment } from '../Environment'
+import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 //var scalesetData = []
@@ -17,15 +17,15 @@ class Scaleset extends Component {
         }
     }
     //#region Onclick function for Add
-    isScalesetExistsApi(){
-        const endpointGET = environment.apiUrl + 'scale_set_master?_where=(scaleSetName,eq,'+ this.state.scaleSetName +')';
+    isScalesetExistsApi() {
+        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')';
         return $.ajax({
-            url: endpointGET,
-            type: "GET",
+            url: scalesetExistsGET,
+            type: Type.get,
             data: ''
-            });
-        }
-       
+        });
+    }
+
 
 
 
@@ -36,24 +36,25 @@ class Scaleset extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
-                    toast.error("Scaleset Already exists!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    $(".hide").show()
+                    // toast.error("Scaleset Already exists!", {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    // });
                 } else {
                     var _this = this;
                     var formData = {
                         "scaleSetName": this.state.scaleSetName,
                         "description": this.state.description
                     }
-                    const endpointPOST = environment.apiUrl + 'scale_set_master/'
+                    const saveScalesetUrl = environment.apiUrl + moduleUrls.ScaleSet + '/'
                     $.ajax({
-                        url: endpointPOST,
-                        type: "POST",
+                        url: saveScalesetUrl,
+                        type: Type.post,
                         data: formData,
                         success: function (resultData) {
 
                             _this.setState({ redirectToList: true });
-                            toast.success("Scaleset Saved Successfully!", {
+                            toast.success("Scaleset " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -83,10 +84,10 @@ class Scaleset extends Component {
     //#endregion
 
     getscalesetDetilsApi() {
-        const endpointGET = environment.apiUrl + 'scale_set_master/' + `${this.state.id}`
+        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${this.state.id}`
         return $.ajax({
             url: endpointGET,
-            type: "GET",
+            type: Type.get,
 
         })
     }
@@ -97,7 +98,7 @@ class Scaleset extends Component {
             "scaleSetName": data.scaleSetName,
             "description": data.description,
         }
-        const endpointPOST = environment.apiUrl + 'scale_set_master/' + `${data.id}`
+        const endpointPOST = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${data.id}`
         return $.ajax({
             url: endpointPOST,
             type: "PATCH",
@@ -116,12 +117,12 @@ class Scaleset extends Component {
                 this.setState({
                     redirectToList: true
                 })
-                toast.success("Scaleset Updated Successfully!", {
+                toast.success("Scaleset "+ Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             });
             res.fail((error) => {
-                ;
+                
             })
 
         } else {
@@ -136,7 +137,7 @@ class Scaleset extends Component {
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
             res.done((response) => {
-                ;
+               
                 this.setState({
                     scaleSetName: response[0].scaleSetName,
                     description: response[0].description
@@ -172,6 +173,7 @@ class Scaleset extends Component {
                                             scaleSetName: event.target.value
                                         })
                                     }} required />
+                                <p className="hide" style={{ "display": "none" }}>exist</p>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}

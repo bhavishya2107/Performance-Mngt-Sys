@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { environment } from '../Environment';
+import { environment, Type, moduleUrls, Notification } from '../Environment';
 import bootbox from 'bootbox';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,10 +18,10 @@ class ProjectComplexity extends Component {
 
     //#region Delete functionality with single and multiple both
     DeleteProjectComplexityApi(projectId) {
-        const endpoint = environment.apiUrl + 'project_type_master/' + `${projectId}`;
+        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity+'/' + `${projectId}`;
         return $.ajax({
             url: endpoint,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -30,7 +30,7 @@ class ProjectComplexity extends Component {
     }
     SingleDeleteConfirm(id) {
         bootbox.confirm({
-            message: "Are you sure you want to delete this record ?",
+            message: Notification.deleteConfirm,
             buttons: {
                 confirm: {
                     label: 'Ok',
@@ -56,7 +56,7 @@ class ProjectComplexity extends Component {
         var res = this.DeleteProjectComplexityApi(projectTypeId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Record Deleted Successfully!", {
+                toast.success("Project Complexity " + Notification.saved, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -70,11 +70,10 @@ class ProjectComplexity extends Component {
         });
     }
     multiDeleteProjectComplexityApi(projectTypeId) {
-        ;
-        const endpoint = environment.apiUrl + `project_type_master/bulk?_ids=${projectTypeId}`;
+        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity +`/bulk?_ids=${projectTypeId}`;
         return $.ajax({
             url: endpoint,
-            type: "DELETE",
+            type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
@@ -86,7 +85,7 @@ class ProjectComplexity extends Component {
         var item = projectTypeId.join(",")
         var res = this.multiDeleteProjectComplexityApi(item);
         res.done((response) => {
-            toast.success("Record Deleted Successfully !", {
+            toast.success("Project Complexity " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -102,14 +101,14 @@ class ProjectComplexity extends Component {
         });
         if (projectTypeId.length > 0) {
             bootbox.confirm({
-                message: "Are you sure you want toDelete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -125,8 +124,6 @@ class ProjectComplexity extends Component {
         else {
             toast.info("please select atleast one record!");
         }
-
-
     }
     //#endregion
 
@@ -140,11 +137,9 @@ class ProjectComplexity extends Component {
         });
     }
 
-
     componentDidMount() {
-
     //#region datatable 
-        const endpointGET = environment.apiUrl + 'project_type_master/'
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -152,7 +147,7 @@ class ProjectComplexity extends Component {
             aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
-                type: "GET",
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },

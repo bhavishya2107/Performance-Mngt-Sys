@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, Notification } from '../Environment'
+import { environment, Notification, moduleUrls, Type } from '../Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
 class Jobtitle extends Component {
@@ -15,27 +15,49 @@ class Jobtitle extends Component {
         }
     }
     //#region onClick Add function
+    isJobtitleExistsApi() {
+        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '?_where=(jobtitleName,eq,' + this.state.jobtitleName + ')';
+        return $.ajax({
+            url: isJobtitleExistsApiUrl,
+            type: Type.get,
+            data: ''
+        });
+    }
     savejobtitle() {
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
-            var _this = this;
+            var res = this.isJobtitleExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
 
-            var formData = {
-                "jobtitleName": this.state.jobtitleName,
-                "description": this.state.description
-            }
-            const endpointPOST = environment.apiUrl + 'jobtitle_master/'
-            $.ajax({
-                url: endpointPOST,
-                type: "POST",
-                data: formData,
-                success: function (resultData) {
-                    _this.setState({ redirectToList: true });
-                    toast.success("Jobtitle " + Notification.saved, {
+                    toast.error("Jobtitle Already exists!", {
                         position: toast.POSITION.TOP_RIGHT
                     });
+                } else {
+                    var _this = this;
+
+                    var formData = {
+                        "jobtitleName": this.state.jobtitleName,
+                        "description": this.state.description
+                    }
+                    const savejobtitleUrl = environment.apiUrl + moduleUrls.Jobtitle + '/'
+                    $.ajax({
+                        url: savejobtitleUrl,
+                        type: Type.post,
+                        data: formData,
+                        success: function (resultData) {
+                            _this.setState({ redirectToList: true });
+                            toast.success("Jobtitle " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
                 }
+            }); res.fail(error => {
+
             });
+
         } else {
 
             return false;
@@ -51,7 +73,7 @@ class Jobtitle extends Component {
         })
     }
     getjobtitleDetilsApi() {
-        const endpointGET = environment.apiUrl + 'jobtitle_master/' + `${this.state.id}`
+        const endpointGET = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${this.state.id}`
 
         return $.ajax({
             url: endpointGET,
@@ -68,7 +90,7 @@ class Jobtitle extends Component {
 
         }
 
-        const endpointPOST = environment.apiUrl + 'jobtitle_master/' + `${data.id}`
+        const endpointPOST = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${data.id}`
         return $.ajax({
             url: endpointPOST,
             type: "PATCH",
@@ -86,11 +108,11 @@ class Jobtitle extends Component {
             var res = this.updateDetailsApi(data);
 
             res.done((response) => {
-                ;
+                
                 this.setState({
                     redirectToList: true
                 })
-                toast.success("Job Title Updated Successfully!", {
+                toast.success("Job Title " + Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
 
@@ -108,7 +130,7 @@ class Jobtitle extends Component {
         if (this.state.id !== undefined) {
             var res = this.getjobtitleDetilsApi();
             res.done((response) => {
-                ;
+               
                 this.setState({
                     jobtitleName: response[0].jobtitleName,
                     description: response[0].description
@@ -172,6 +194,7 @@ class Jobtitle extends Component {
                         </form>
                     </div>
                 </div>
+                <ToastContainer></ToastContainer>
             </div>
         )
     }
