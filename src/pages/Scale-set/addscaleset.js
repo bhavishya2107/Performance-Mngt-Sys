@@ -120,7 +120,6 @@ class Scaleset extends Component {
         var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
             var res = this.isScalesetExistsUpdateApi();
-            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()

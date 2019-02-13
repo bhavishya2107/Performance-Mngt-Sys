@@ -24,6 +24,14 @@ class Jobtitle extends Component {
             data: ''
         });
     }
+    isJobtitleExistsUpdateApi() {
+        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '?_where=(jobtitleName,eq,' + this.state.jobtitleName + ')' + '~and(jobtitleId,ne,' + this.state.id + ')';
+        return $.ajax({
+            url: isJobtitleExistsApiUrl,
+            type: Type.get,
+            data: ''
+        });
+    }
     savejobtitle() {
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
@@ -32,7 +40,7 @@ class Jobtitle extends Component {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
-                    
+
                     // toast.error("Jobtitle Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
                     // });
@@ -107,17 +115,21 @@ class Jobtitle extends Component {
     UpdatejobtitleDetails(data) {
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
-            var res = this.updateDetailsApi(data);
-
+            var res = this.isJobtitleExistsUpdateApi()
             res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
 
-                this.setState({
-                    redirectToList: true
-                })
-                toast.success("Job Title " + Notification.updated, {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                } else {
 
+                    var res = this.updateDetailsApi(data);
+                    this.setState({
+                        redirectToList: true
+                    })
+                    toast.success("Job Title " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
             });
             res.fail((error) => {
 
@@ -159,7 +171,7 @@ class Jobtitle extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> {this.state.title} >
-                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                {this.state.id !== undefined ? <span>Edit Job Title</span> : <span>Add Job Title</span>}
                     </h2>
                 </div>
                 <div className="row">

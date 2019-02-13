@@ -63,7 +63,7 @@ export default {
             {
                 name: 'Template',
                 url: '/templateList',
-                icon: 'fa fa-text-width',
+                icon: 'fa fa-clipboard',
             },
 
             // {
