@@ -78,7 +78,7 @@ class kraHome extends Component {
    
 
     updatekraDetailsApi(data) {
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
+        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`       
         var body =
         {
             "kraName": data.kraName,
@@ -95,29 +95,45 @@ class kraHome extends Component {
             data: JSON.stringify(body)
         });
     }
+    updatekraEditExistApi(){
+        const updatekraexist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName + ')' + '~and(kraId,ne,' + this.state.id + ')';
+        return $.ajax({
+            url: updatekraexist,
+            type: Type.get,
+            data:''
+        })
+    }
+  
 
     UpdateKraDetails(data) {
-        var res = this.updatekraDetailsApi(data);
-        res.done((response) => {
 
-            this.setState({
-                RedirectToSample: true
+        var isvalidate = window.formValidation("#kraAddForm");
+        if (isvalidate) {
+            var res = this.updatekraEditExistApi();
+            debugger;
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".hide").show()
+
+                } else {
+                    var res = this.updatekraDetailsApi(data);
+                    this.setState({
+                        RedirectToSample: true
+                    })
+                    toast.success("Kra " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            });
+            res.fail((error) => {
 
             })
-            toast.success("KRA " + Notification.updated, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        });
-        res.fail((error) => {
-
-        })
-        var res = window.formValidation("#kraAddForm");
-        if (res) {
 
         } else {
 
             return false;
         }
+        
     }
     componentDidMount() {
         if (this.state.id !== undefined) {
@@ -165,7 +181,7 @@ class kraHome extends Component {
                                             kraName: event.target.value
                                         }
                                     )
-                                }} required /> <p className="hide" style={{ "display": "none" }}>{Notification.recordExists}</p>
+                                }} required /> <p className="hide" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                                 
                         </div>
                     </div>

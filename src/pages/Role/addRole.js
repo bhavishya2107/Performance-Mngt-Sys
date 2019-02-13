@@ -103,23 +103,38 @@ class UserRoleForm extends Component {
             data: JSON.stringify(body)
         });
     }
+    updateroleEditExistApi(){
+        const updateroleexist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')' + '~and(roleId,ne,' + this.state.id + ')';
+        return $.ajax({
+            url: updateroleexist,
+            type: Type.get,
+            data:''
+        })
+    }
     UpdateRoleDetails(data) {
 
-        var res = this.updateRoleDetailsApi(data);
-        res.done((response) => {
-            this.setState({
-                Redirect: true
-            })
-            toast.success("Role "+ Notification.updated, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        });
-        res.fail((error) => {
+        var isvalidate = window.formValidation("#userRoleForm");
+        if (isvalidate) {
+            var res = this.updateroleEditExistApi();
+            debugger;
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".hiderole").show()
 
-        })
-        var result = window.formValidation("#userRoleForm");
-        if (result) {
-    
+                } else {
+                    var res = this.updateRoleDetailsApi(data);
+                    this.setState({
+                        Redirect: true
+                    })
+                    toast.success("Role " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
+            });
+            res.fail((error) => {
+
+            })
+
         } else {
 
             return false;
@@ -127,11 +142,8 @@ class UserRoleForm extends Component {
 
     }
 
-    // userFormdetailsClear() {
-    //     this.setState({
-    //         roleName: "",
-    //     });
-    // }
+    
+
     componentDidMount() {
         if (this.state.id !== undefined) {
             var res = this.getRoleDetailsApi();
