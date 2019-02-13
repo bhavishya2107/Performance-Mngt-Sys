@@ -11,7 +11,7 @@ class Scalesetlist extends Component {
         super(props);
         this.state = {
             selectedIds: [],
-            title:""
+            title: ""
         }
     }
 
@@ -71,7 +71,7 @@ class Scalesetlist extends Component {
         });
     }
     multiDeletescalesetApi(scaleSetId) {
-       
+
         const multiDeleteAPIUrl = environment.apiUrl + moduleUrls.ScaleSet + '/bulk?_ids=' + `${scaleSetId}`;
         return $.ajax({
             url: multiDeleteAPIUrl,
@@ -85,6 +85,7 @@ class Scalesetlist extends Component {
 
     //#endregion
     multiDelete(scaleSetId) {
+
         var item = scaleSetId.join(",")
         var res = this.multiDeletescalesetApi(item);
         res.done((response) => {
@@ -99,9 +100,13 @@ class Scalesetlist extends Component {
 
     }
     multipleDeleteScalesetconfirm() {
+        debugger;
         var scaleSetId = []
-        $("#tblscaleset input:checkbox:checked").each((e, item) => {
-            scaleSetId.push(item.value);
+        $("#tblscaleset  input:checkbox:checked ").each((e, item) => {
+            if (item.name != 'checkAll') {
+
+                scaleSetId.push(item.value);
+            }
         });
         if (scaleSetId.length > 0) {
 
@@ -122,7 +127,7 @@ class Scalesetlist extends Component {
                         this.multiDelete(scaleSetId);
                     }
                     else {
-
+                        toast.error("error")
                     }
                 }
             });
@@ -133,7 +138,7 @@ class Scalesetlist extends Component {
     }
 
     checkall(e) {
-        $("#tblscaleset input:checkbox").each((index, item) => {
+        $("#tblscaleset  input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
             } else {
@@ -143,17 +148,20 @@ class Scalesetlist extends Component {
     }
     componentDidMount() {
         //#region Data table realted Block
-        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000'
+        const scalesetGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000' + '&_sort=-scaleSetId'
+
         this.setState({
-            title:ModuleNames.ScaleSet
+            title: ModuleNames.ScaleSet
         })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
+            "order": [[1, 'asc']],
+            
+            // aaSorting: [[1, 'asc']],
+            // aaSorting: [[2, 'asc']],
             ajax: {
-                url: endpointGET,
+                url: scalesetGET,
                 type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -167,7 +175,7 @@ class Scalesetlist extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="scalesetId" value=' + row.scaleSetId + ">"
+                            '<input className="chkDelete" type="checkbox" name="scalesetId" value=' + row.scaleSetId + ">"
                         );
                     }
                 },
@@ -254,17 +262,19 @@ class Scalesetlist extends Component {
                         <tr>
                             <th width="20">
                                 <input
+
                                     type="checkbox"
+
                                     name="checkAll"
                                     onClick={e => {
                                         this.checkall(e);
                                     }}
                                 />
                             </th>
-                            <th width="50">Sr.No</th>
-                            <th>Scaleset Name</th>
+                            <th width="5">Sr.No</th>
+                            <th width="100">Scaleset Name</th>
                             <th>Description</th>
-                            <th width="90">Action</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
