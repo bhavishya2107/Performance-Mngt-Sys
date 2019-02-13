@@ -37,7 +37,7 @@ class UserManagement extends Component {
         });
     }
      DeleteUserApi(userId) {
-        var url = environment.apiUrl + moduleUrls.User +'/'+ "${userId}"
+        var url = environment.apiUrl + moduleUrls.User +'/'+ `${userId}`
         return $.ajax({
             url: url,
             type: Type.deletetype,
@@ -75,8 +75,8 @@ class UserManagement extends Component {
     }
 
     //#region multiple delete functionality
-    multipleUserApi(userId) {
-        var url = environment.apiUrl + moduleUrls.User +`bulk?_ids=` +`${userId}`
+    multipleUserDeleteApi(userId) {
+        var url = environment.apiUrl + moduleUrls.User +'/bulk?_ids=' +`${userId}`;
         return $.ajax({
             url: url,
             type: Type.deletetype
@@ -85,7 +85,10 @@ class UserManagement extends Component {
     multipleDeleteUserConfirm() {
         var userId = []
         $("#tblUser input:checkbox:checked").each((e, item) => {
-            userId.push(item.value);
+            if(item.name!="checkAll"){
+                userId.push(item.value);
+            }
+            
         });
         if (userId.length > 0) {
             bootbox.confirm({
@@ -102,7 +105,7 @@ class UserManagement extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.DeleteUser();
+                        this.multiDelete(userId);
                     }
                     else {
                     }
@@ -113,30 +116,25 @@ class UserManagement extends Component {
             toast.info(Notification.deleteInfo)
         }
     }
-    DeleteUser() {
+    multiDelete(userId) {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
-        if (this.state.selectedIds.length > 0) {
+        var item=userId.join(",")
+        var res=this.multipleUserDeleteApi(item);
 
-            this.state.selectedIds.map(item => {
-                var res = this.DeleteUserApi(item);
                 res.done(response => {
                     toast.success("User " + Notification.deleted, {
                         position: toast.POSITION.TOP_RIGHT
                     });
+                    this.$el.DataTable().ajax.reload()
                 });
-                this.$el.DataTable().ajax.reload()
+                
                 res.fail(error => {
 
                 });
-            });
-
-        }
-        else {
-            toast.info(Notification.deleteInfo)
-        }
-    }
+           }
+       
     checkall(e) {
         $("#tblUser input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {

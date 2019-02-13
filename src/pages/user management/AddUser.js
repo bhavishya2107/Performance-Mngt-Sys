@@ -80,45 +80,62 @@ class AddUser extends Component {
     }
     //#endregion
     //#region save the details on click button
+
+    isUserExistApi() {
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+
+
     saveUser() {
         var res = window.formValidation("#createUser");
         if (res) {
+            var res = this.isUserExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    alert("already exist")
+                }
 
-        } else {
+                else {
+                    var _this = this;
+                    var DataList =
+                    {
+                        "userName": this.state.userName,
+                        "password": this.state.password,
+                        "firstName": this.state.firstName,
+                        "lastName": this.state.lastName,
+                        "emailAddress": this.state.emailAddress,
+                        "roleId": this.state.roleId,
+                        "mobileNo": this.state.mobileNo,
+                        "profileImage": this.state.profileImage,
+                        "teamId": this.state.teamId,
+                        "depId": this.state.depId,
+                        "jobtitleId": this.state.jobtitleId,
+                        "Address": this.state.Address
 
-            return false;
+                    }
+                    var url = environment.apiUrl + moduleUrls.User
+                    
+                    $.ajax({
+                        url: url,
+                        type: Type.post,
+                        data: DataList,
+                        success: function (response) {
+                            _this.setState({ RedirectToUserManagement: true });
+                            toast.success("User " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
         }
-
-        var _this = this;
-        var DataList =
-        {
-            "userName": this.state.userName,
-            "password": this.state.password,
-            "firstName": this.state.firstName,
-            "lastName": this.state.lastName,
-            "emailAddress": this.state.emailAddress,
-            "roleId": this.state.roleId,
-            "mobileNo": this.state.mobileNo,
-            "profileImage": this.state.profileImage,
-            "teamId": this.state.teamId,
-            "depId": this.state.depId,
-            "jobtitleId": this.state.jobtitleId,
-            "Address": this.state.Address
-
-        }
-        var url = environment.apiUrl + moduleUrls.User
-        $.ajax({
-            url: url,
-            type: Type.post,
-            data: DataList,
-            success: function (response) {
-                _this.setState({ RedirectToUserManagement: true });
-                toast.success("User " + Notification.saved, {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            }
-        });
     }
+
+
     //#endregion 
     //#region  Update the user details
     getUserApi() {
@@ -129,6 +146,10 @@ class AddUser extends Component {
 
         })
     }
+    // isUserExistUpdateApi() {
+
+    // }
+
     updateAjaxCall(data) {
         var _this = this;
         var userList =
@@ -183,7 +204,6 @@ class AddUser extends Component {
             res.done((response) => {
                 if (response != undefined) {
                     var res = response[0];
-
                     this.setState({
                         firstName: res.firstName,
                         lastName: res.lastName,
@@ -217,7 +237,8 @@ class AddUser extends Component {
                 console.log(temp);
                 var displayDataReturn = temp.map(function (item) {
                     return (
-                        <option value={item.depId}>{item.depName}</option>
+                        <option key={item.depId} value={item.depId}>{item.depName}</option>
+                       
                     )
                 });
                 this.setState({
@@ -235,7 +256,9 @@ class AddUser extends Component {
             success: (tempJob) => {
                 var displayDataReturn = tempJob.map(function (i) {
                     return (
-                        <option value={i.jobtitleId}>{i.jobtitleName}</option>
+                        <option  key={i.jobtitleId} value={i.jobtitleId}>{i.jobtitleName}</option>
+                       
+                        
                     )
                 });
                 this.setState({
@@ -254,7 +277,7 @@ class AddUser extends Component {
             success: (tempRole) => {
                 var displayDataReturn = tempRole.map(function (item) {
                     return (
-                        <option value={item.roleId}>{item.roleName}</option>
+                        <option key={item.roleId} value={item.roleId}>{item.roleName}</option>
                     )
                 });
                 this.setState({
@@ -272,7 +295,7 @@ class AddUser extends Component {
             success: (res) => {
                 console.log(res);
                 var displayDataReturn = res.map(function (item) {
-                    if (item.roleId === 61) {
+                    if (item.roleId === 134) {
                         return (
                             <option value={item.userId}>{item.userName}</option>
                         )
@@ -316,7 +339,7 @@ class AddUser extends Component {
                                 <div className="row">
                                     <div className="col-md-3 order-md-last text-left">
                                         <div className="form-group">
-                                            <label for="profileImage" class="required">Image</label>
+                                            <label htmlFor="profileImage" className="required">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
                                                     <img src="https://via.placeholder.com/150" className="img-thumbnail" />
@@ -339,7 +362,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label for="firstName" class="required" sm={2} >FirstName</label>
+                                                    <label htmlFor="firstName" className="required" sm={2} >FirstName</label>
                                                     <input type="text" name="firstName" id="firstName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -350,7 +373,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label for="lastName" class="required" sm={2}>LastName</label>
+                                                    <label htmlFor="lastName" className="required" sm={2}>LastName</label>
                                                     <input type="text" name="lastName" id="lastName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -363,7 +386,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label for="userName" className="required" sm={2}>UserName</label>
+                                                    <label htmlFor="userName" className="required" sm={2}>UserName</label>
                                                     <input type="text" name="userName" id="userName" maxLength="20" className="form-control" value={this.state.userName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -374,7 +397,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label for="emailAddress" class="required" sm={2}>Email ID</label>
+                                                    <label htmlFor="emailAddress" className="required" sm={2}>Email ID</label>
                                                     <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -387,7 +410,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label for="mobileNo" class="required">Mobile No</label>
+                                                    <label htmlFor="mobileNo" className="required">Mobile No</label>
                                                     <input type="phone" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -440,7 +463,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col">
                                                 <div className="form-group">
-                                                    <label class="required">Address</label>
+                                                    <label className="required">Address</label>
                                                     <textarea name="Address" id="Address" maxLength="50" rows="3" className="form-control" value={this.state.Address}
                                                         onChange={(event) => {
                                                             this.setState({

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom'
-import { environment, moduleUrls, Type,Notification } from '../Environment'
+import { environment, moduleUrls, Type, Notification } from '../Environment'
 import $ from 'jquery';
 import { Link } from 'react-router-dom';
 class AddDept extends Component {
@@ -28,52 +28,61 @@ class AddDept extends Component {
         })
     }
     //#endregion
-    //#region save department details
-    isDeptExitApi() {
+
+    //#region check whether the record is exist or not
+    isDeptExistApi() {
         var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName + ')'
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
+    //#endregion
+    //#region sort the list 
+
+    //#endregion
+    //#region save department details
     saveDept() {
         var result = window.formValidation("#createDepartment");
         if (result) {
-            var res = this.isDeptExitApi();
-            res.done((response) => {
+            var existApiResponse = this.isDeptExistApi();
+
+            existApiResponse.done((response) => {
+           //     alert(response.length)
                 if (response.length > 0) {
-                    alert("already exists")
+                    //alert('if')
+                    // alert("already exists")
+                    $(".dataExist").show();
                 }
                 else {
+                  //  alert('else')
                     var _this = this
                     var deptList =
                     {
-        
+
                         "depName": this.state.depName,
                         "description": this.state.description,
                     }
-                    var url = environment.apiUrl + moduleUrls.Department;
+                    var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
                     $.ajax({
-                        url: url,
+                        url: saveDeptApiUrl,
                         type: Type.post,
                         data: deptList,
                         success: function (result) {
-        
+
                             _this.setState({ RedirectToDept: true });
                             toast.success("Department " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
-        
                         }
-        
                     });
                 }
             })
         }
-
     }
     //#endregion
     //#region Update department details
+
     getDepApi() {
         var url = environment.apiUrl + moduleUrls.Department;
         return $.ajax({
@@ -107,11 +116,12 @@ class AddDept extends Component {
 
     UpdateDeptDetails(data) {
         var res = this.updateDetailsApi(data);
+
         res.done((response) => {
             this.setState({
                 isUpdate: true
             })
-            toast.success(" Department "+ Notification.updated, {
+            toast.success(" Department " + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
@@ -162,7 +172,7 @@ class AddDept extends Component {
                     <div className="col-md-6">
                         <form id="createDepartment">
                             <div className="form-group">
-                                <label for="depName" className="required">Name</label>
+                                <label htmlFor="depName" className="required">Name</label>
                                 <input type="text" name="depName" className="form-control" id="depName" placeholder="Enter the Name" value={this.state.depName}
                                     onChange={(event) => {
                                         this.setState({
@@ -171,7 +181,7 @@ class AddDept extends Component {
                                     }} required />
                             </div>
                             <div className="form-group">
-                                <label for="description">Description</label>
+                                <label htmlFor="description">Description</label>
                                 <textarea name="description" className="form-control" id="description" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
@@ -193,10 +203,10 @@ class AddDept extends Component {
                             </div>
                         </form>
                     </div>
-                    <ToastContainer/>
+                    <ToastContainer />
                 </div>
             </div>
-         
+
         )
     }
 }
