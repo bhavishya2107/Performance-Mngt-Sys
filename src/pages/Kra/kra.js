@@ -106,7 +106,10 @@ class kraListPage extends Component {
   multiKraDeleteConfirm() {
     var kraId = []
     $("#kraDataList input:checkbox:checked").each((e, item) => {
+      if (item.name != "checkAll") {
       kraId.push(item.value);
+      }
+    
     });
     if (kraId.length > 0) {
 

@@ -122,7 +122,7 @@ class UserRolePMS extends Component {
     multiRoleDeleteConfirm() {
         var roleId = []
         $("#roleDataList input:checkbox:checked").each((e, item) => {
-            if (item.name != "checkAll") {
+            if (item.name != "checkAll" && item.name != 134) {
                 roleId.push(item.value);
             }
 
