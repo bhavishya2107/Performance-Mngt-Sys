@@ -95,7 +95,7 @@ html {
   list-style: none;
 }
 .left-sidebar li .nav-dropdown-items li a {
-  padding: 5px 45px !important;
+  padding: 5px 20px !important;
   display: block;
 }
 .left-sidebar li .nav-dropdown-items li a:hover {

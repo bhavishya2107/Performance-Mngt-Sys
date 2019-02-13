@@ -258,7 +258,7 @@ class Jobtitlelist extends Component {
                             />
                         </th>
                             <th width="5">Sr.No</th>
-                            <th width="100">Job Title</th>
+                            <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
                         </tr>

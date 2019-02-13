@@ -272,7 +272,7 @@ class Scalesetlist extends Component {
                                 />
                             </th>
                             <th width="5">Sr.No</th>
-                            <th width="100">Scaleset Name</th>
+                            <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
                         </tr>
