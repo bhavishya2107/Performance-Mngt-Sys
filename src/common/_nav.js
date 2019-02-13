@@ -43,7 +43,7 @@ export default {
             {
                 name: 'User Management',
                 url: '/user-management',
-                icon: 'fa fa-plus'
+                icon: 'fa fa-user-circle-o'
             },
             {
                 name: "Department",

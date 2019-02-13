@@ -32,6 +32,7 @@ class Jobtitle extends Component {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
+                    
                     // toast.error("Jobtitle Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
                     // });

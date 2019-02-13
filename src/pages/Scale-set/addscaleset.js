@@ -27,7 +27,7 @@ class Scaleset extends Component {
         });
     }
     isScalesetExistsUpdateApi() {
-        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetId,eq,' + this.state.id + ')';
+        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')' + '~and(scaleSetId,ne,' + this.state.id + ')';
         return $.ajax({
             url: scalesetExistsGET,
             type: Type.get,
@@ -43,6 +43,7 @@ class Scaleset extends Component {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
+
                     // toast.error("Scaleset Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
                     // });
@@ -118,11 +119,12 @@ class Scaleset extends Component {
     UpdatescalesetDetails(data) {
         var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
-            var res = this.isScalesetExistsApi();
-
+            var res = this.isScalesetExistsUpdateApi();
+            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
+
                 } else {
                     var res = this.updateDetailsApi(data);
                     this.setState({
