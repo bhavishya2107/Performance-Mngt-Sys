@@ -36,7 +36,16 @@ class AddKpi extends Component {
     }
     //#endregion
     isKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'+ this.state.kpiTitle + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
+        });
+    }
+    isEditKpiExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'
+         + this.state.kpiTitle + ')' + '~and(kpiId,ne,' + this.state.id + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -163,14 +172,21 @@ class AddKpi extends Component {
     UpdateKpiDetails(data) {
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {
-            var res = this.updateDetailsApi(data);
+            var res = this.isEditKpiExistsApi();
+            debugger;
             res.done((response) => {
-                this.setState({
-                    redirectToList: true
-                })
-                toast.success("KPI " + Notification.updated, {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                if (response.length > 0) {
+                    $(".recordexists").show()
+
+                } else {
+                    var res = this.updateDetailsApi(data);
+                    this.setState({
+                        redirectToList: true
+                    })
+                    toast.success("KPI " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
             });
             res.fail((error) => {
             })
@@ -203,7 +219,7 @@ class AddKpi extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> KPI >
-                    {this.state.kpiId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    {this.state.kpiId !== undefined ? <span>Edit KPI</span> : <span>Add KPI</span>}
                     </h2>
                 </div>
                 <div className="row">

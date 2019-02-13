@@ -71,7 +71,6 @@ function formValidation(form) {
                     scalesetname: {
                         required: 'row exists'
                     }
-
                 }
             }
         }}

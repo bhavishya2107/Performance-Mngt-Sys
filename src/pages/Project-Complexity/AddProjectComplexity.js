@@ -23,7 +23,17 @@ class AddProjectComplexity extends Component {
     }
     //#region  save projectcomplexity details
     isProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,' + this.state.projectTypeName + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,' 
+        + this.state.projectTypeName + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
+        });
+    }
+    isEditProjectComplexityExistsApi() {
+        const endpointGET = environment.apiUrl +  moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
+         + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.id + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -31,8 +41,9 @@ class AddProjectComplexity extends Component {
         });
     }
 
+
     saveProjectComplexityDetails() {
-        var isvalidate = window.formValidation("#projectForm");
+        var isvalidate = window.formValidation("#projectComplexityForm");
         if (isvalidate) {
             var res = this.isProjectComplexityExistsApi();
             res.done((response) => {
@@ -95,16 +106,22 @@ class AddProjectComplexity extends Component {
         });
     }
     UpdateProjectComplexityDetails(data) {
-        var isvalidate = window.formValidation("#projectForm");
+        var isvalidate = window.formValidation("#projectComplexityForm");
         if (isvalidate) {
-            var res = this.updateDetailsApi(data);
+            var res = this.isEditProjectComplexityExistsApi();
+            debugger;
             res.done((response) => {
-                this.setState({
-                    redirectToList: true
-                })
-                toast.success("Record " + Notification.updated, {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                    var res = this.updateDetailsApi(data);
+                    this.setState({
+                        redirectToList: true
+                    })
+                    toast.success("Project Complexity " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
             });
             res.fail((error) => {
             })
@@ -137,13 +154,13 @@ class AddProjectComplexity extends Component {
             //#region form of project complexity
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Project Complexity >
-                {this.state.projectTypeId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    <h2 className="col"> Project Complexity > 
+                {this.state.projectTypeId !== undefined ? <span>Edit Project Complexity</span> : <span>Add Project Complexity</span>}
                     </h2>
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <form id="projectForm">
+                        <form id="projectComplexityForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
                                 <input type="text" id="projectTypeName" className="form-control" name="projectTypeName" value={this.state.projectTypeName}
