@@ -18,7 +18,7 @@ class ProjectComplexity extends Component {
 
     //#region Delete functionality with single and multiple both
     DeleteProjectComplexityApi(projectId) {
-        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity+'/' + `${projectId}`;
+        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${projectId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,

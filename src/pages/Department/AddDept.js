@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom'
-import { environment } from '../Environment'
+import { environment, moduleUrls, Type,Notification } from '../Environment'
 import $ from 'jquery';
 import { Link } from 'react-router-dom';
 class AddDept extends Component {
@@ -12,10 +12,11 @@ class AddDept extends Component {
         console.log(props.match.params, 'ppp')
         this.state = {
             RedirectToDept: false,
+            isUpdate: false,
             depId: props.match.params.depId,
             depName: "",
             description: "",
-            isUpdate: false,
+
         }
     }
     //#region clear department fields
@@ -28,49 +29,61 @@ class AddDept extends Component {
     }
     //#endregion
     //#region save department details
+    isDeptExitApi() {
+        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
     saveDept() {
         var result = window.formValidation("#createDepartment");
         if (result) {
-
-        } else {
-            return false;
+            var res = this.isDeptExitApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    alert("already exists")
+                }
+                else {
+                    var _this = this
+                    var deptList =
+                    {
+        
+                        "depName": this.state.depName,
+                        "description": this.state.description,
+                    }
+                    var url = environment.apiUrl + moduleUrls.Department;
+                    $.ajax({
+                        url: url,
+                        type: Type.post,
+                        data: deptList,
+                        success: function (result) {
+        
+                            _this.setState({ RedirectToDept: true });
+                            toast.success("Department " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+        
+                        }
+        
+                    });
+                }
+            })
         }
 
-        var _this = this
-        var deptList =
-        {
-
-            "depName": this.state.depName,
-            "description": this.state.description,
-        }
-        var url = environment.apiUrl + 'department_master';
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: deptList,
-            success: function (result) {
-
-                _this.setState({ RedirectToDept: true });
-                toast.success("Department Saved Successfully !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-
-            }
-
-        });
     }
     //#endregion
     //#region Update department details
     getDepApi() {
-        console.log('dep', this.state.depId)
-        var url = environment.apiUrl + 'department_master/' + `${this.state.depId}`
+        var url = environment.apiUrl + moduleUrls.Department;
         return $.ajax({
             url: url,
-            type: "GET",
+            type: Type.get,
 
         })
     }
     updateDetailsApi(data) {
+        var url = environment.apiUrl + moduleUrls.Department + '/' + `${data.depId}`
         var _this = this;
         var deptList =
         {
@@ -78,8 +91,8 @@ class AddDept extends Component {
             "description": data.description
         }
         return $.ajax({
-            url: `http://192.168.10.109:3000/api/department_master/${data.depId}`,
-            type: "PATCH",
+            url: url,
+            type: Type.patch,
 
             headers: {
                 "content-type": "application/json",
@@ -95,16 +108,15 @@ class AddDept extends Component {
     UpdateDeptDetails(data) {
         var res = this.updateDetailsApi(data);
         res.done((response) => {
-            console.log('sucesss')
             this.setState({
                 isUpdate: true
             })
-            toast.success(" Department Updated Successfully !", {
+            toast.success(" Department "+ Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
         });
         res.fail((error) => {
-            console.log('error', error);
+            // console.log('error', error);
         })
     }
     componentDidMount() {
@@ -112,9 +124,8 @@ class AddDept extends Component {
         if (this.state.depId !== undefined) {
             var res = this.getDepApi();
             res.done((response) => {
-                console.log(response, 'res');
+                // console.log(response, 'res');
                 var res = response[0];
-
                 this.setState({
                     depName: res.depName,
                     description: res.description
@@ -140,7 +151,7 @@ class AddDept extends Component {
 
         return (
             <div>
-                 <div className="clearfix">
+                <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col"> Department >
                     {this.state.depId !== undefined ? <span>Edit</span> : <span>Add</span>}
@@ -151,7 +162,7 @@ class AddDept extends Component {
                     <div className="col-md-6">
                         <form id="createDepartment">
                             <div className="form-group">
-                                <label for="depName">Name</label>
+                                <label for="depName" className="required">Name</label>
                                 <input type="text" name="depName" className="form-control" id="depName" placeholder="Enter the Name" value={this.state.depName}
                                     onChange={(event) => {
                                         this.setState({
@@ -182,8 +193,10 @@ class AddDept extends Component {
                             </div>
                         </form>
                     </div>
+                    <ToastContainer/>
                 </div>
             </div>
+         
         )
     }
 }

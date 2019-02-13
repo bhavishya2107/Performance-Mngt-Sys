@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { environment, moduleUrls, Type , Notification} from "../Environment";
+import { environment, moduleUrls, Type, Notification, ModuleNames } from "../Environment";
 import bootbox from "bootbox";
 const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
@@ -27,7 +27,7 @@ class kraListPage extends Component {
       }
     });
     res.fail(error => {
-      toast.error("KRA Not deleted", {
+      toast.error("KRA " + Notification.notdeleted, {
         position: toast.POSITION.TOP_RIGHT
       });
     });
@@ -45,15 +45,15 @@ class kraListPage extends Component {
       }
     });
   }
-  multiDeleteKraApi(kraId){
+  multiDeleteKraApi(kraId) {
     const endpoint = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
     return $.ajax({
-        url: endpoint,
-        type: Type.deletetype,
-        headers: {
-            "content-type": "application/json",
-            "x-requested-with": "XMLHttpRequest",
-        }
+      url: endpoint,
+      type: Type.deletetype,
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest",
+      }
     });
   }
   checkall(e) {
@@ -67,23 +67,23 @@ class kraListPage extends Component {
   }
 
   DeleteAllKra(kraId) {
-    var  item  = kraId.join(",")
-      var res = this.multiDeleteKraApi(item);
-      res.done((response) => {
-  
-  toast.success("Kra"+ Notification.deleted, {
-      position: toast.POSITION.TOP_RIGHT
-  });
-  this.$el.DataTable().ajax.reload();
-  });
-  res.fail(error => {
-  });
+    var item = kraId.join(",")
+    var res = this.multiDeleteKraApi(item);
+    res.done((response) => {
+
+      toast.success("Kra " + Notification.deleted, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      this.$el.DataTable().ajax.reload();
+    });
+    res.fail(error => {
+    });
   }
 
   SingleDeleteConfirm(id) {
     if (id !== undefined) {
       bootbox.confirm({
-        message: "Delete this record ?",
+        message: Notification.deleteConfirm,
         buttons: {
           confirm: {
             label: "Yes",
@@ -104,61 +104,61 @@ class kraListPage extends Component {
     }
   }
   multiKraDeleteConfirm() {
-    var kraId=[]
+    var kraId = []
     $("#kraDataList input:checkbox:checked").each((e, item) => {
       kraId.push(item.value);
-  });
-  if (kraId.length > 0) {
-      
+    });
+    if (kraId.length > 0) {
+
       bootbox.confirm({
-          message: "Delete this record ?",
-          buttons: {
-              confirm: {
-                  label: 'Yes',
-                  className: 'btn-success'
-              },
-              cancel: {
-                  label: 'No',
-                  className: 'btn-danger'
-              }
+        message: Notification.deleteConfirm,
+        buttons: {
+          confirm: {
+            label: 'Yes',
+            className: 'btn-success'
           },
-          callback: (result) => {
-              if (result === true) {
-                      this.DeleteAllKra(kraId);
-              }
-              else {
-
-              }
+          cancel: {
+            label: 'No',
+            className: 'btn-danger'
           }
+        },
+        callback: (result) => {
+          if (result === true) {
+            this.DeleteAllKra(kraId);
+          }
+          else {
+
+          }
+        }
       });
-  }
-  else {
-      toast.info("please select atleast one record!");
-  }
+    }
+    else {
+      toast.info(Notification.selectOneRecord);
+    }
 
 
   }
-
+//192.168.10.109:3000/api/modulename?_sort=-fieldname
   componentDidMount() {
     this.$el = $(this.el);
-    const endpointGET = environment.apiUrl + moduleUrls.Kra + "/?_size=1000";
+    const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId' 
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[1, "asc"]],
-      aaSorting: [[2, "asc"]],
+      // aaSorting: [[2, "asc"]],          
       ajax: {
         url: endpointGET,
         // url: "http://180.211.103.189:3000/api/kra_master/",
         type: "GET",
         dataSrc: "",
-        error: function(xhr, status, error) {}
+        error: function (xhr, status, error) { }
       },
       columns: [
         {
           data: "kraId",
           orderable: false,
           targets: 0,
-          render: function(data, type, row) {
+          render: function (data, type, row) {
             return (
               '<input type="checkbox" name="kraId" value=' + row.kraId + ">"
             );
@@ -182,7 +182,7 @@ class kraListPage extends Component {
           data: "action",
           orderable: false,
           targets: 4,
-          render: function(data, type, row) {
+          render: function (data, type, row) {
             return (
               '<a href="/Editkra/id=' +
               row.kraId +
@@ -198,7 +198,7 @@ class kraListPage extends Component {
           }
         }
       ],
-      fnRowCallback: function(nRow, aData, iDisplayIndex) {
+      fnRowCallback: function (nRow, aData, iDisplayIndex) {
         $("td:eq(1)", nRow).html(iDisplayIndex + 1);
         return nRow;
       },
@@ -221,7 +221,7 @@ class kraListPage extends Component {
       //#region list table kra
       <div>
         <div className="clearfix d-flex align-items-center row page-title">
-          <h2 className="col">Kra</h2>
+          <h2 className="col">{ModuleNames.kra}</h2>
           <div className="col text-right">
             <Link
               to={{ pathname: "/kra/add", state: {} }}
@@ -256,8 +256,8 @@ class kraListPage extends Component {
                 />
               </th>
               <th width="50">Sr.No</th>
-              <th>Name</th>
-              <th>Description</th>
+              <th width="100">Name</th>
+              <th width="600">Description</th>
               <th width="90">Action</th>
             </tr>
           </thead>

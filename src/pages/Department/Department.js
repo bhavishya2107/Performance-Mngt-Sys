@@ -1,3 +1,4 @@
+import { environment, moduleUrls, Type ,Notification} from '../Environment'
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,19 +22,19 @@ class Department extends Component {
         var res = this.DeleteDepApi(depId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Data deleted successfully");
+                toast.success("Department "+Notification.deleted);
             }
             this.$el.DataTable().ajax.reload()
         });
         res.fail(error => {
-            toast.error("Data is not deleted!");
+            toast.error(Notification.deleteError);
         });
     }
     singleDeleteDeptConfirm(id) {
 
         if (id !== undefined) {
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleted,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -56,37 +57,53 @@ class Department extends Component {
         }
     }
     DeleteDepApi(depId) {
-        // var url=environment.apiUrl+"depart"
+        var url = environment.apiUrl + moduleUrls.Department +'/'+ `${depId}`
         return $.ajax({
-            url: "http://192.168.10.109:3000/api/department_master/" + depId,
-            type: "DELETE"
+            url: url,
+            type: Type.deletetype
         });
     }
     //#endregion
     //#region multiple delete functionality
-    multipleDeleteDeptConfirm() {
-
-        // if (id !== undefined) {
-        bootbox.confirm({
-            message: "Delete this record ?",
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.DeleteDept();
-                }
-            }
-        });
+    multipleDeleteApi(depId) {
+        var url = environment.apiUrl + moduleUrls.Department + '/bulk?_ids=' + `${depId}`;
+        return $.ajax({
+            url: url,
+            type: Type.deletetype
+        })
     }
+    multipleDeleteDeptConfirm() {
+        var depId = []
+        $("#tblDepartment input:checkbox:checked").each((e, item) => {
+            depId.push(item.value);
+        });
+        if (depId.length > 0) {
+            bootbox.confirm({
+                message: Notification.deleted,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: (result) => {
+                    if (result === true) {
+                        this.DeleteDept();
+                    }
+                    else {
+                    }
+                }
+            });
+        }
+        else {
+            toast.info(Notification.deleteInfo)
+        }
 
+    }
     DeleteDept() {
 
         $("#tblDepartment input:checkbox:checked").each((e, item) => {
@@ -96,7 +113,7 @@ class Department extends Component {
             this.state.selectedIds.map(item => {
                 var res = this.DeleteDepApi(item);
                 res.done(response => {
-                      toast.success("Department Deleted Successfully !", {
+                    toast.success("Department "+ Notification.deleted, {
                         position: toast.POSITION.TOP_RIGHT
                     });
                 });
@@ -105,8 +122,9 @@ class Department extends Component {
 
                 });
             });
-        } else {
-            toast.info("please select atleast one record!")
+        }
+        else {
+            toast.info(Notification.deleteInfo)
         }
     }
 
@@ -122,16 +140,15 @@ class Department extends Component {
     }
     //#endregion
     componentDidMount() {
-
+        var url = environment.apiUrl + moduleUrls.Department;
         this.$el = $(this.el);
         this.$el.DataTable({
-            "order": [[1, 'asc']],
-            aaSorting: [[1, 'asc']],
-           
+            "sorting": [[1, 'asc']],
+            "sorting": [[2, 'asc']],
             "autoWidth": false,
             ajax: {
-                url: "http://192.168.10.109:3000/api/department_master",
-                type: "get",
+                url:url,
+                type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
 
@@ -148,6 +165,7 @@ class Department extends Component {
                             '<input type="checkbox" name="depId" value=' + row.depId + ">"
                         )
                     },
+                    orderable: false
 
                 },
                 {
@@ -171,7 +189,7 @@ class Department extends Component {
                     targets: 4,
                     render: function (data, type, row) {
                         return (
-                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" +"" +
+                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
                             '<a href="#" id="' + row.depId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -203,11 +221,11 @@ class Department extends Component {
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">Department</h2>
                     <div className="col text-right">
-                        <div className="text-right mb-3">
-                            <Link to={{ pathname: '/AddDept' }} className="btn btn-sm btn-info mr-2" ><i class="fa fa-plus" aria-hidden="true"></i></Link>
+                        <div>
+                            <Link to={{ pathname: '/AddDept' }} className="btn btn-primary" ><i class="fa fa-plus" aria-hidden="true"></i></Link>
                         </div>
-                                            </div>
-                                            <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteDeptConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteDeptConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
 
@@ -215,13 +233,13 @@ class Department extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>
+                            <th width="50">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
                                     onClick={e => { this.checkall(e); }} />
                             </th>
-                            <th width="60">Sr.No</th>
+                            <th width="50">Sr.No</th>
                             <th>Department Name</th>
                             <th>Department Description</th>
                             <th width="90">Action</th>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type, Notification} from '../Environment';
+import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -16,22 +16,28 @@ class UserRolePMS extends Component {
         };
     }
     SingleRoleDelete(roleId) {
-        var res = this.DeleteRoleApi(roleId);
-        res.done(response => {
-            if (response.affectedRows > 0) {
-                toast.success("Role "+Notification.deleted, {
+        if (roleId != 134) {
+            var res = this.DeleteRoleApi(roleId);
+
+            res.done(response => {
+                if (response.affectedRows > 0) {
+                    toast.success("Role " + Notification.deleted, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                    this.$el.DataTable().ajax.reload();
+                }
+            });
+            res.fail(error => {
+                toast.error("Role " + Notification.notdeleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
-                this.$el.DataTable().ajax.reload();
-            }
-        });
-        res.fail(error => {
-            toast.error("Role Not Deleted", {
-                position: toast.POSITION.TOP_RIGHT
             });
-        });
+        } else {
+            alert('system role cannot be deleted !')
+        }
     }
     DeleteRoleApi(roleId) {
+
         const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
 
@@ -45,18 +51,19 @@ class UserRolePMS extends Component {
         });
     }
 
-    multiDeleteRoleApi(roleId){
-        ;
-         const endpoint = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
-         return $.ajax({
-             url: endpoint,
-             type: Type.deletetype,
-             headers: {
-                 "content-type": "application/json",
-                 "x-requested-with": "XMLHttpRequest",
-             }
-         });
-     }
+
+    multiDeleteRoleApi(roleId) {
+        
+        const endpoint = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
+        return $.ajax({
+            url: endpoint,
+            type: Type.deletetype,
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+            }
+        });
+    }
 
     checkallrole(e) {
         $("#roleDataList input:checkbox").each((index, item) => {
@@ -68,27 +75,29 @@ class UserRolePMS extends Component {
         });
     }
     DeleteAllRole(roleId) {
+        if(roleId== 134){
 
-        var  item  = roleId.join(",")
+        var item = roleId.join(",");
+        var res = this.multiDeleteRoleApi(item);
+        res.done((response) => {
 
-        ;
-          var res = this.multiDeleteRoleApi(item);
-          res.done((response) => {
-      
-      toast.success("Role "+ Notification.deleted, {
-          position: toast.POSITION.TOP_RIGHT
-      });
-      this.$el.DataTable().ajax.reload();
-      });
-      res.fail(error => {
-      });    
+            toast.success("Role " + Notification.deleted, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload();
+        });
+        res.fail(error => {
+        });
+    }else{
+        alert("Cannot delete role id 134");
+    }
     }
 
 
     SingleRoleDeleteConfirm(id) {
         if (id !== undefined) {
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -112,14 +121,17 @@ class UserRolePMS extends Component {
     }
 
     multiRoleDeleteConfirm() {
-        var roleId=[]
+        var roleId = []
         $("#roleDataList input:checkbox:checked").each((e, item) => {
-            roleId.push(item.value);
+            if (item.name != "checkAll") {
+                roleId.push(item.value);
+            }
+
         });
         if (roleId.length > 0) {
-            
+
             bootbox.confirm({
-                message: "Delete this record ?",
+                message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -132,30 +144,29 @@ class UserRolePMS extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                            this.DeleteAllRole(roleId);
+                        this.DeleteAllRole(roleId);
                     }
                     else {
-    
+
                     }
                 }
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
 
-  
+
 
     }
 
     componentDidMount() {
         this.$el = $(this.el);
-        const endpointGET = environment.apiUrl + moduleUrls.Role + '/?_size=1000'
+        const endpointGET = environment.apiUrl + moduleUrls.Role + '/?_size=1000' + '&_sort=-roleId'
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
-      
+            // aaSorting: [[2, 'asc']],
             ajax: {
                 // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
                 url: endpointGET,
@@ -229,7 +240,7 @@ class UserRolePMS extends Component {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Role</h2>
+                    <h2 className="col">{ModuleNames.Role}</h2>
                     <div className="col text-right">
                         <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>

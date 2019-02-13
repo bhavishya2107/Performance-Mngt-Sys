@@ -136,7 +136,7 @@ class KPI extends Component {
     }
     //#region Datatable 
     componentDidMount() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi+'/'
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -198,7 +198,6 @@ class KPI extends Component {
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-
                     this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             }
@@ -231,9 +230,9 @@ class KPI extends Component {
                             </tr>
                         </thead>
                         <tbody></tbody>
-                        <ToastContainer />
                     </table>
                 </div>
+                <ToastContainer />
             </div>
             //#endregion
         )
