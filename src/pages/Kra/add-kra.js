@@ -19,13 +19,10 @@ class kraHome extends Component {
     submitDataFromKra() {
         var isvalidate = window.formValidation("#kraAddForm");
         if (isvalidate) {
+        
             var res = this.kraAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
-                    // toast.error("Kra Already exists!", {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    // });
                     $(".hide").show()
                 } else {
                     var _this = this;
@@ -69,17 +66,13 @@ class kraHome extends Component {
             data:''
         });
     }
-  
-
 
     getKraDetailsApi() {
-        var _this = this;
         const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
             url: endpoint,
             type: Type.get,
-
         })
     }
     kraFormClear() {
@@ -107,8 +100,8 @@ class kraHome extends Component {
             data: JSON.stringify(body)
         });
     }
-    UpdateKraDetails(data) {
 
+    UpdateKraDetails(data) {
         var res = this.updatekraDetailsApi(data);
         res.done((response) => {
 
@@ -132,8 +125,6 @@ class kraHome extends Component {
         }
     }
     componentDidMount() {
-
-
         if (this.state.id !== undefined) {
             var res = this.getKraDetailsApi();
             res.done((response) => {
@@ -207,7 +198,7 @@ class kraHome extends Component {
                 <button type="clear" className="btn btn-info" onClick={() => { this.kraFormClear() }}>Clear</button>&nbsp;
                 <Link to="/kra" className="btn btn-danger" >Cancel</Link><br />
                 </form>
-                <ToastContainer></ToastContainer>
+                <ToastContainer/>
 
             </div>
         )

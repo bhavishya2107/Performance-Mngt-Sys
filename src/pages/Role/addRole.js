@@ -29,8 +29,8 @@ class UserRoleForm extends Component {
                     //alert("")
                     // toast.error("Role Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
-                    // });
-                    $(".hide").show()
+                    // // });
+                    $(".hiderole").show()
                 } else {
                     var _this = this;
                     var roleFormData =
@@ -71,6 +71,14 @@ class UserRoleForm extends Component {
             url: endpoint,
             type: Type.get,
             data: ''
+        });
+    }
+    roleAddSortApi() {
+        const rolesortAPI = environment.apiUrl + moduleUrls.Role + '?_sort=-roleId';
+        return $.ajax({
+            url: rolesortAPI,
+            type: Type.get,
+            data:''
         });
     }
 
@@ -174,7 +182,8 @@ class UserRoleForm extends Component {
                                             roleName: event.target.value
                                         }
                                     )
-                                }} required /><p className="hide" style={{ "display": "none" }}>{Notification.recordExists}</p>
+                                }} required />
+                                <p className="hiderole" style={{ "display": "none" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
                     {this.state.id !== undefined ?

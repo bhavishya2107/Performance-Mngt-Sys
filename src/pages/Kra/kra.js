@@ -138,14 +138,14 @@ class kraListPage extends Component {
 
 
   }
-
+//192.168.10.109:3000/api/modulename?_sort=-fieldname
   componentDidMount() {
     this.$el = $(this.el);
-    const endpointGET = environment.apiUrl + moduleUrls.Kra + "/?_size=1000";
+    const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId' 
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[1, "asc"]],
-      aaSorting: [[2, "asc"]],
+      // aaSorting: [[2, "asc"]],          
       ajax: {
         url: endpointGET,
         // url: "http://180.211.103.189:3000/api/kra_master/",
