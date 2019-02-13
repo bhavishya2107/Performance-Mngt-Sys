@@ -36,10 +36,10 @@ export const Notification = {
 export const ModuleNames = {
   kra: "KRA",
   kpi: "KPI",
-  Jobtitle: "JobTitle",
+  Jobtitle: "Job Title",
   Project: "Project",
   User: "User",
   Role: "Role",
   Department: "Department",
-  ScaleSet: "ScaleSet"
+  ScaleSet: "Scale Set"
 };

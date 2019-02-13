@@ -49,7 +49,7 @@ class Jobtitle extends Component {
                         data: formData,
                         success: function (resultData) {
                             _this.setState({ redirectToList: true });
-                            toast.success("Jobtitle " + Notification.saved, {
+                            toast.success("Job Title " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }

@@ -11,31 +11,35 @@ class Jobtitlelist extends Component {
         super(props);
         this.state = {
             selectedIds: [],
-            title:""
+            title: ""
         }
     }
     SingleDeleteConfirm(id) {
-        bootbox.confirm({
-            message: Notification.deleteConfirm,
-            buttons: {
-                confirm: {
-                    label: 'Yes',
-                    className: 'btn-success'
+        if (id != 105){
+            bootbox.confirm({
+                message: Notification.deleteConfirm,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
                 },
-                cancel: {
-                    label: 'No',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.SingleDelete(id);
-                }
-                else {
+                callback: (result) => {
+                    if (result === true) {
+                        this.SingleDelete(id);
+                    }
+                    else {
 
+                    }
                 }
-            }
-        });
+            });
+        }else(
+            alert("you cannot delete system generated department")
+        )
     }
     //#region delete details
     SingleDelete(jobtitleId) {
@@ -85,7 +89,11 @@ class Jobtitlelist extends Component {
     Deletejobtitleconfirm() {
         var jobtitleId = []
         $("#tbljobtitle input:checkbox:checked").each((e, item) => {
-            jobtitleId.push(item.value);
+            if (item.name != 'checkAll' && item.value != 105) {
+
+                jobtitleId.push(item.value);
+            }
+
         });
         if (jobtitleId.length > 0) {
             bootbox.confirm({
@@ -118,7 +126,7 @@ class Jobtitlelist extends Component {
         var res = this.multiDeletejobtitleApi(item);
         res.done((response) => {
 
-            toast.success("Job Title "+ Notification.deleted, {
+            toast.success("Job Title " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -139,16 +147,17 @@ class Jobtitlelist extends Component {
     }
     componentDidMount() {
         this.setState({
-            title:ModuleNames.Jobtitle
+            title: ModuleNames.Jobtitle
         })
-        const endpointGET = environment.apiUrl + 'jobtitle_master/'
+        const jobtitleGET = environment.apiUrl + 'jobtitle_master/?' + '_sort=-jobtitleId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
+            "order": [[1, 'asc']],
+            // aaSorting: [[1, 'asc']],
+            // aaSorting: [[2, 'asc']],
             ajax: {
-                url: endpointGET,
+                url: jobtitleGET,
                 type: "GET",
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -208,7 +217,7 @@ class Jobtitlelist extends Component {
 
                 // $(".btnDeletejobtitle").on("click", e => {
                 //     ;
-                   
+
                 //     this.SingleDelete(e.currentTarget.id);
                 // });
             },
@@ -248,10 +257,10 @@ class Jobtitlelist extends Component {
                                 }}
                             />
                         </th>
-                            <th width="50">Serial No</th>
-                            <th>Job Title</th>
+                            <th width="5">Sr.No</th>
+                            <th width="100">Job Title</th>
                             <th>Description</th>
-                            <th width="90">Action</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
 

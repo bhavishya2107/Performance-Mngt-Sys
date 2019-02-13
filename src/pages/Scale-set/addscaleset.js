@@ -14,7 +14,7 @@ class Scaleset extends Component {
             scaleSetName: "",
             description: "",
             redirectToList: false,
-            title:""
+            title: ""
         }
     }
     //#region Onclick function for Add
@@ -26,12 +26,17 @@ class Scaleset extends Component {
             data: ''
         });
     }
-
-
-
+    isScalesetExistsUpdateApi() {
+        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetId,eq,' + this.state.id + ')';
+        return $.ajax({
+            url: scalesetExistsGET,
+            type: Type.get,
+            data: ''
+        });
+    }
 
     savescaleset() {
-        var isvalidate = window.formValidation("#formscaleset");
+        var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
             var res = this.isScalesetExistsApi();
             res.done((response) => {
@@ -111,19 +116,25 @@ class Scaleset extends Component {
         });
     }
     UpdatescalesetDetails(data) {
-        var isvalidate = window.formValidation("#formscaleset");
+        var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
-            var res = this.updateDetailsApi(data);
+            var res = this.isScalesetExistsApi();
+
             res.done((response) => {
-                this.setState({
-                    redirectToList: true
-                })
-                toast.success("Scaleset "+ Notification.updated, {
-                    position: toast.POSITION.TOP_RIGHT
-                });
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                    var res = this.updateDetailsApi(data);
+                    this.setState({
+                        redirectToList: true
+                    })
+                    toast.success("Scaleset " + Notification.updated, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
+                }
             });
             res.fail((error) => {
-                
+
             })
 
         } else {
@@ -136,12 +147,12 @@ class Scaleset extends Component {
 
     componentDidMount() {
         this.setState({
-            title:ModuleNames.ScaleSet
+            title: ModuleNames.ScaleSet
         })
         if (this.state.id !== undefined) {
             var res = this.getscalesetDetilsApi();
             res.done((response) => {
-               
+
                 this.setState({
                     scaleSetName: response[0].scaleSetName,
                     description: response[0].description
@@ -168,10 +179,10 @@ class Scaleset extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <form id="formscaleset">
+                        <form id="formscaleset1">
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="scalesetid" name="scalesetname" className="form-control"  value={this.state.scaleSetName}
+                                <input type="text" id="scalesetid" name="scalesetname" className="form-control" value={this.state.scaleSetName}
                                     onChange={(event) => {
                                         this.setState({
                                             scaleSetName: event.target.value
@@ -179,7 +190,7 @@ class Scaleset extends Component {
                                     }} required />
                                 {/* <p className="hide" id="recordexists">exist</p> */}
 
-                                <label className="recordexists" style={{ "display": "none","color":"red" }}>{Notification.recordExists}</label>
+                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
@@ -199,10 +210,12 @@ class Scaleset extends Component {
                                         this.savescaleset(this.state);
                                     }}>Save</button>}
 
-                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                <button type="clear" className="btn btn-info mr-2">Reset</button>
+                                {/* <button type="clear" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform()
-                                }}>Clear</button>
+                                }}>Clear</button> */}
                                 <Link to="/scale-set" className="btn btn-danger ">Cancel</Link>
+
                             </div>
                         </form>
                     </div>
