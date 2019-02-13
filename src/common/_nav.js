@@ -27,43 +27,43 @@ export default {
 
         {
             name: 'Administrator',
-            icon: 'fa fa-cog',
+            icon: 'fa fa-graduation-cap',
             id: 'lnkSettings',
             children: [{
                 name: 'KRA',
                 url: '/kra',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-area-chart',
             },
             {
                 name: 'Role',
                 url: '/role',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-user-secret',
             },
 
             {
                 name: 'User Management',
                 url: '/user-management',
-                icon: 'fa fa-user-circle-o'
+                icon: 'fa fa-user-o'
             },
             {
                 name: "Department",
                 url: '/Department',
-                icon: 'fa fa-plus'
+                icon: 'fa fa-building-o'
             },
             {
                 name: 'KPI',
                 url: '/kpi',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-key',
             },
             {
                 name: 'Project Complexity',
                 url: '/project-complexity',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-snowflake-o',
             },
             {
-                name: 'Template List',
+                name: 'Template',
                 url: '/templateList',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-text-width',
             },
 
             // {
@@ -74,12 +74,12 @@ export default {
             {
                 name: 'Scale Set',
                 url: '/scale-set',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-balance-scale',
             },
             {
                 name: 'Job Title',
                 url: '/job-title',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-id-card-o',
             },
             // {
             //     name: 'Add template',
@@ -89,7 +89,7 @@ export default {
             {
                 name: 'Projects',
                 url: '/Projects',
-                icon: 'fa fa-plus',
+                icon: 'fa fa-sitemap',
             },
 
                 // {
