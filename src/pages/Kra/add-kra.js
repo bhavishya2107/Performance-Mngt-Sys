@@ -75,12 +75,7 @@ class kraHome extends Component {
             type: Type.get,
         })
     }
-    kraFormClear() {
-        this.setState({
-            description: "",
-            kraName: "",
-        });
-    }
+   
 
     updatekraDetailsApi(data) {
         const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
@@ -195,7 +190,7 @@ class kraHome extends Component {
                         : <button className="btn btn-success" type="button" onClick={() => {
                             this.submitDataFromKra(this.state);
                         }}>Save</button>}&nbsp;
-                <button type="clear" className="btn btn-info" onClick={() => { this.kraFormClear() }}>Clear</button>&nbsp;
+                <button type="clear" className="btn btn-info" >Reset</button>&nbsp;
                 <Link to="/kra" className="btn btn-danger" >Cancel</Link><br />
                 </form>
                 <ToastContainer/>

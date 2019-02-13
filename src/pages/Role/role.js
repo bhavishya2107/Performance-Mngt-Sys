@@ -75,7 +75,7 @@ class UserRolePMS extends Component {
         });
     }
     DeleteAllRole(roleId) {
-        if(roleId== 134){
+        
 
         var item = roleId.join(",");
         var res = this.multiDeleteRoleApi(item);
@@ -88,10 +88,9 @@ class UserRolePMS extends Component {
         });
         res.fail(error => {
         });
-    }else{
-        alert("Cannot delete role id 134");
     }
-    }
+    
+    
 
 
     SingleRoleDeleteConfirm(id) {

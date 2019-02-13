@@ -73,14 +73,6 @@ class UserRoleForm extends Component {
             data: ''
         });
     }
-    roleAddSortApi() {
-        const rolesortAPI = environment.apiUrl + moduleUrls.Role + '?_sort=-roleId';
-        return $.ajax({
-            url: rolesortAPI,
-            type: Type.get,
-            data:''
-        });
-    }
 
 
     getRoleDetailsApi() {
@@ -94,6 +86,7 @@ class UserRoleForm extends Component {
     }
     updateRoleDetailsApi(data) {
         const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${data.id}`
+        // '/?_size=1000' + '&_sort=-kraId' 
 
         var body =
         {
@@ -116,7 +109,6 @@ class UserRoleForm extends Component {
         res.done((response) => {
             this.setState({
                 Redirect: true
-
             })
             toast.success("Role "+ Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
@@ -127,7 +119,7 @@ class UserRoleForm extends Component {
         })
         var result = window.formValidation("#userRoleForm");
         if (result) {
-            // alert("Success")
+    
         } else {
 
             return false;
@@ -135,11 +127,11 @@ class UserRoleForm extends Component {
 
     }
 
-    userFormdetailsClear() {
-        this.setState({
-            roleName: "",
-        });
-    }
+    // userFormdetailsClear() {
+    //     this.setState({
+    //         roleName: "",
+    //     });
+    // }
     componentDidMount() {
         if (this.state.id !== undefined) {
             var res = this.getRoleDetailsApi();
@@ -193,7 +185,7 @@ class UserRoleForm extends Component {
                         : <button className="btn btn-success " type="button" onClick={() => {
                             this.submitDataFromRoleform(this.state);
                         }}>Save</button>}&nbsp;
-                    <button type="clear" className="btn btn-info" onClick={() => { this.userFormdetailsClear() }}>Clear</button>&nbsp;
+                    <button type="clear" className="btn btn-info">Reset</button>&nbsp;
                     <Link to="/role" className="btn btn-danger">Cancel</Link>
                     <br />
                 </form>
