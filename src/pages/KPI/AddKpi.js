@@ -19,17 +19,18 @@ class AddKpi extends Component {
             target: "",
             weightage: "",
             scaleSetId: "",
-            scaleSetName:"",
+            scaleSetName: "",
             redirectToList: false
         }
     }
 
     //#region Clear form details function
-    clearForm() {
+    resetForm() {
         this.setState({
             kpiTitle: "",
             target: "",
-            weightage: ""
+            weightage: "",
+            scaleSetId: ""
 
         })
     }
@@ -49,6 +50,8 @@ class AddKpi extends Component {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
+                    //alert("")
+                    $(".recordexists").show()
                     // toast.error("KPI Already exists!", {
                     //     position: toast.POSITION.TOP_RIGHT
                     // });
@@ -124,7 +127,7 @@ class AddKpi extends Component {
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
-                        <option value={i.scaleSetId}>{i.scaleSetName}</option>
+                        <option key={i.scaleSetId} value={i.scaleSetId}>{i.scaleSetName}</option>
                     )
                 });
                 this.setState({
@@ -145,7 +148,7 @@ class AddKpi extends Component {
             "KpiTitle": data.kpiTitle,
             "target": data.target,
             "weightage": data.weightage,
-            "scaleSetName":data.scaleSetName
+            "scaleSetId": data.scaleSetId
         }
         return $.ajax({
             url: endpointPATCH,
@@ -210,18 +213,19 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input className="form-control" rows="4" type="text" value={this.state.kpiTitle}
+                                        <input className="form-control" rows="4" name="kpiTitle" type="text" value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 this.setState({
                                                     kpiTitle: event.target.value
                                                 })
                                             }} required />
-                                    </div>
+                                   <label className="recordexists" style={{ "display": "none","color":"red" }}>{Notification.recordExists}</label>
+                                    </div>                                  
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="weightage">Weight</label>
-                                        <input className="form-control" rows="4" type="text" value={this.state.weightage}
+                                        <input className="form-control" rows="4" name="weightage" minLength="1" maxLength="99" type="number" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
                                                     weightage: event.target.value
@@ -232,7 +236,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="mr-2">Scale Set</label>
-                                        <select value={this.state.scaleSetId} onChange={(e) => { this.onChangeScaleSetId(e) }}  className="form-control" required >
+                                        <select value={this.state.scaleSetId} name="scaleSetId" onChange={(e) => { this.onChangeScaleSetId(e) }} className="form-control" required >
                                             <option>select</option>
                                             {this.state.displayScaleSetId}
                                         </select >
@@ -243,7 +247,7 @@ class AddKpi extends Component {
                                 <div className="col">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">Target</label>
-                                        <textarea className="form-control" rows="4" type="text" value={this.state.target}
+                                        <textarea className="form-control" rows="4" name="target" type="text" value={this.state.target}
                                             onChange={(event) => {
                                                 this.setState({
                                                     target: event.target.value
@@ -256,15 +260,13 @@ class AddKpi extends Component {
                                 <div className="col">
                                     <div className="form-group">
                                         {this.state.kpiId !== undefined ?
-                                            <button type="button" class="btn btn-success mr-2" onClick={() => {
+                                            <button type="button" className="btn btn-success mr-2" onClick={() => {
                                                 this.UpdateKpiDetails(this.state);
                                             }}>Update</button>
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveApiDetails(this.state);
                                             }}>Save</button>}
-                                        <button type="clear" className="btn btn-info mr-2" onClick={() => {
-                                            this.clearForm()
-                                        }}>Clear</button>
+                                        <button type="clear" className="btn btn-info mr-2" >Reset</button>
                                         <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>

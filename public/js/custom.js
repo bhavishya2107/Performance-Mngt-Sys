@@ -65,6 +65,10 @@ function formValidation(form) {
                 scalesetname: {
                     required: true,
                 },
+                weightage: {
+                    required: true,
+                    digit:true
+                },
               
                 messages:{
                     kraName:{

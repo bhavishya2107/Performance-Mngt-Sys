@@ -70,7 +70,7 @@ class ProjectComplexity extends Component {
         });
     }
     multiDeleteProjectComplexityApi(projectTypeId) {
-        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity +`/bulk?_ids=${projectTypeId}`;
+        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity + `/bulk?_ids=${projectTypeId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -97,7 +97,9 @@ class ProjectComplexity extends Component {
     multipleDeleteProjectComplexityConfirm() {
         var projectTypeId = []
         $("#tblProjectComplexity input:checkbox:checked").each((e, item) => {
-            projectTypeId.push(item.value);
+            if (item.name != 'checkAll') {
+                projectTypeId.push(item.value);
+            }
         });
         if (projectTypeId.length > 0) {
             bootbox.confirm({
@@ -138,13 +140,13 @@ class ProjectComplexity extends Component {
     }
 
     componentDidMount() {
-    //#region datatable 
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
+        //#region datatable 
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + '?&_sort=-projectTypeId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
+            // aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -167,16 +169,16 @@ class ProjectComplexity extends Component {
                     data: null,
                     targets: 1,
                     "orderable": false,
-
                 },
                 {
                     data: "projectTypeName",
                     targets: 2
+                    
                 },
                 {
                     data: "description",
                     targets: 3,
-                    orderable: false
+                    "orderable": false,
                 },
                 {
                     data: "projectTypeId",
@@ -228,11 +230,11 @@ class ProjectComplexity extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                                <th width="20"><input type="checkbox" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="50">Sr.No</th>
-                                <th>Project Name</th>
+                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
+                                <th width="5">Sr.No</th>
+                                <th width="100">Project Name</th>
                                 <th>Description</th>
-                                <th width="90">Action</th>
+                                <th width="100">Action</th>
 
                             </tr>
                         </thead>

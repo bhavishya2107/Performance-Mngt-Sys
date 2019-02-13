@@ -23,7 +23,7 @@ class AddProjectComplexity extends Component {
     }
     //#region  save projectcomplexity details
     isProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity+ '?_where=(projectTypeName,eq,' + this.state.projectTypeName + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,' + this.state.projectTypeName + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -36,31 +36,29 @@ class AddProjectComplexity extends Component {
         if (isvalidate) {
             var res = this.isProjectComplexityExistsApi();
             res.done((response) => {
-                if (response.length > 0) {
-                    toast.error("Already exists!", {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
-                } else {
-                    var _this = this;
-                    var ProjectComplexitydata = {
-                        "projectTypeName": this.state.projectTypeName,
-                        "description": this.state.description,
+                    if (response.length > 0) {
+                        $(".recordexists").show()
+                    } else {
+                        var _this = this;
+                        var ProjectComplexitydata = {
+                            "projectTypeName": this.state.projectTypeName,
+                            "description": this.state.description,
 
-                    }
-                    const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
-                    $.ajax({
-                        url: endpointPOST,
-                        type: Type.post,
-                        data: ProjectComplexitydata,
-                        success: function (resultData) {
-                            _this.setState({ redirectToList: true });
-                            toast.success("Record " + Notification.saved, {
-                                position: toast.POSITION.TOP_RIGHT
-                            });
                         }
-                    });
-                }
-            });
+                        const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
+                        $.ajax({
+                            url: endpointPOST,
+                            type: Type.post,
+                            data: ProjectComplexitydata,
+                            success: function (resultData) {
+                                _this.setState({ redirectToList: true });
+                                toast.success("Record " + Notification.saved, {
+                                    position: toast.POSITION.TOP_RIGHT
+                                });
+                            }
+                        });
+                    }
+                });
             res.fail(error => {
             });
         } else {
@@ -69,7 +67,7 @@ class AddProjectComplexity extends Component {
     }
 
     getProjectComplexityDeatilsApi(projectTypeId) {
-        const endpointGET = environment.apiUrl +  moduleUrls.ProjectComplexity +'/' + `${this.state.projectTypeId}`
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${this.state.projectTypeId}`
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -148,15 +146,16 @@ class AddProjectComplexity extends Component {
                         <form id="projectForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
-                                <input type="text" id="projectTypeName" className="form-control" value={this.state.projectTypeName}
+                                <input type="text" id="projectTypeName" className="form-control" name="projectTypeName" value={this.state.projectTypeName}
                                     onChange={(event) => {
                                         this.setState({
                                             projectTypeName: event.target.value
                                         })
                                     }} required />
+                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
-                                <label>Description</label> <textarea id="description" className="form-control" rows="4" value={this.state.description}
+                                <label>Description</label> <textarea id="description" className="form-control" name="description" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
@@ -172,10 +171,7 @@ class AddProjectComplexity extends Component {
                                     : <button type="button" className="btn btn-success mr-2" onClick={() => {
                                         this.saveProjectComplexityDetails(this.state);
                                     }}>Save</button>}
-
-                                <button className="btn btn-info mr-2" onClick={() => {
-                                    this.clearForm()
-                                }}>Clear</button>
+                                        <button type="clear" className="btn btn-info mr-2" >Reset</button>
                                 <Link to="/project-complexity" className="btn btn-danger ">Cancel</Link>
                             </div>
                         </form>

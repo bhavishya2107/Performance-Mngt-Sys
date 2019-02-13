@@ -95,18 +95,20 @@ class KPI extends Component {
     multipleDeleteKpiconfirm() {
         var KpiId = []
         $("#tblKpi input:checkbox:checked").each((e, item) => {
+            if(item.name!='checkAll'){
             KpiId.push(item.value);
+            }
         });
         if (KpiId.length > 0) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -120,7 +122,7 @@ class KPI extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
     }
     //#endregion
@@ -136,12 +138,12 @@ class KPI extends Component {
     }
     //#region Datatable 
     componentDidMount() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/'
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + '?&_sort=-kpiId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
+            // aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -171,7 +173,8 @@ class KPI extends Component {
                 },
                 {
                     data: "target",
-                    targets: 3
+                    targets: 3,
+                    "orderable": false,
                 },
                 {
                     data: "kpiId",
@@ -222,11 +225,11 @@ class KPI extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                                <th width="20"><input type="checkbox" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="50">Sr.No</th>
-                                <th>Name</th>
+                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
+                                <th width="5">Sr.No</th>
+                                <th width="100">Name</th>
                                 <th>Description</th>
-                                <th width="90">Action</th>
+                                <th width="100">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
