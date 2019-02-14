@@ -38,12 +38,9 @@ class Jobtitle extends Component {
             var res = this.isJobtitleExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
+
                     $(".recordexists").show()
 
-                    // toast.error("Jobtitle Already exists!", {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    // });
                 } else {
                     var _this = this;
 
@@ -76,7 +73,7 @@ class Jobtitle extends Component {
     }
     //#endregion
     resetform() {
-       window.location.reload();
+        window.location.reload();
     }
     getjobtitleDetilsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${this.state.id}`
@@ -119,7 +116,7 @@ class Jobtitle extends Component {
                 } else {
 
                     var res = this.updateDetailsApi(data);
-                    res.done((result)=>{
+                    res.done((result) => {
                         this.setState({
                             redirectToList: true
                         })
@@ -127,10 +124,10 @@ class Jobtitle extends Component {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     });
-                    res.fail((error)=>{
+                    res.fail((error) => {
                         console.log(error)
                     })
-               }
+                }
             });
             res.fail((error) => {
 
@@ -172,7 +169,7 @@ class Jobtitle extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                {this.state.id !== undefined ? <span>Edit Job Title</span> : <span>Add Job Title</span>}
+                        {this.state.id !== undefined ? <span>Edit Job Title</span> : <span>Add Job Title</span>}
                     </h2>
                 </div>
                 <div className="row">
