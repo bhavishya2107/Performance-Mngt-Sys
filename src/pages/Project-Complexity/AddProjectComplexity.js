@@ -15,16 +15,13 @@ class AddProjectComplexity extends Component {
             redirectToList: false
         };
     }
-    clearForm() {
-        this.setState({
-            projectTypeName: "",
-            description: ""
-        })
+    resetForm() {
+        window.location.reload();
     }
     //#region  save projectcomplexity details
     isProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,' 
-        + this.state.projectTypeName + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
+            + this.state.projectTypeName + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -32,8 +29,8 @@ class AddProjectComplexity extends Component {
         });
     }
     isEditProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl +  moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
-         + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.projectTypeId + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
+            + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.projectTypeId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -47,28 +44,28 @@ class AddProjectComplexity extends Component {
         if (isvalidate) {
             var res = this.isProjectComplexityExistsApi();
             res.done((response) => {
-                    if (response.length > 0) {
-                        $(".recordexists").show()
-                    } else {
-                        var _this = this;
-                        var ProjectComplexitydata = {
-                            "projectTypeName": this.state.projectTypeName,
-                            "description": this.state.description,
-                        }
-                        const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
-                        $.ajax({
-                            url: endpointPOST,
-                            type: Type.post,
-                            data: ProjectComplexitydata,
-                            success: function (resultData) {
-                                _this.setState({ redirectToList: true });
-                                toast.success("Project Complexity " + Notification.saved, {
-                                    position: toast.POSITION.TOP_RIGHT
-                                });
-                            }
-                        });
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                    var _this = this;
+                    var ProjectComplexitydata = {
+                        "projectTypeName": this.state.projectTypeName,
+                        "description": this.state.description,
                     }
-                });
+                    const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
+                    $.ajax({
+                        url: endpointPOST,
+                        type: Type.post,
+                        data: ProjectComplexitydata,
+                        success: function (resultData) {
+                            _this.setState({ redirectToList: true });
+                            toast.success("Project Complexity " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
             res.fail(error => {
             });
         } else {
@@ -114,7 +111,7 @@ class AddProjectComplexity extends Component {
                     $(".recordexists").show()
                 } else {
                     var res = this.updateDetailsApi(data);
-                    res.done(()=>{
+                    res.done(() => {
                         this.setState({
                             redirectToList: true
                         })
@@ -122,7 +119,7 @@ class AddProjectComplexity extends Component {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     })
-                    
+
                 }
             });
             res.fail((error) => {
@@ -156,8 +153,8 @@ class AddProjectComplexity extends Component {
             //#region form of project complexity
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Project Complexity > 
-                {this.state.projectTypeId !== undefined ? <span>Edit Project Complexity</span> : <span>Add Project Complexity</span>}
+                    <h2 className="col">
+                        {this.state.projectTypeId !== undefined ? <span>Edit Project Complexity</span> : <span>Add Project Complexity</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -174,7 +171,7 @@ class AddProjectComplexity extends Component {
                                 <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
-                                <label>Description</label> <textarea id="description" className="form-control" name="description" rows="4" value={this.state.description}
+                                <label>Description</label> <textarea id="kpiId" className="form-control" name="description" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
@@ -190,7 +187,10 @@ class AddProjectComplexity extends Component {
                                     : <button type="button" className="btn btn-success mr-2" onClick={() => {
                                         this.saveProjectComplexityDetails(this.state);
                                     }}>Save</button>}
-                                        <button type="clear" className="btn btn-info mr-2" >Reset</button>
+                                <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
+                                    this.resetForm(this.state);
+                                }}>Reset</button>
+                                {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
                                 <Link to="/project-complexity" className="btn btn-danger ">Cancel</Link>
                             </div>
                         </form>

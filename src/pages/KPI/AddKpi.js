@@ -26,7 +26,8 @@ class AddKpi extends Component {
 
     //#region Clear form details function
     resetForm() {
-        $('#kpiform').trigger("reset")    }
+        window.location.reload();
+    }
     //#endregion
     isKpiExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'+ this.state.kpiTitle + ')';
@@ -221,7 +222,7 @@ class AddKpi extends Component {
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> KPI >
+                    <h2 className="col">
                     {this.state.kpiId !== undefined ? <span>Edit KPI</span> : <span>Add KPI</span>}
                     </h2>
                 </div>
@@ -232,7 +233,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input className="form-control" rows="4" name="kpiTitle" type="text" value={this.state.kpiTitle}
+                                        <input type="text" className="form-control" rows="4" name="kpiTitle" type="text" value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 this.setState({
                                                     kpiTitle: event.target.value
@@ -285,10 +286,10 @@ class AddKpi extends Component {
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveApiDetails(this.state);
                                             }}>Save</button>}
-                                        {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
-                                        <button type="reset" className="btn btn-success mr-2"  onClick={() => {
+                                            <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
                                                 this.resetForm(this.state);
-                                            }}>Reset</button>}
+                                            }}>Reset</button>
+                                        {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
                                         <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>

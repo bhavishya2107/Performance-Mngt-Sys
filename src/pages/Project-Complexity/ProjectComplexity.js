@@ -145,8 +145,7 @@ class ProjectComplexity extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            // aaSorting: [[2, 'asc']],
+            "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -196,9 +195,9 @@ class ProjectComplexity extends Component {
                     orderable: false
                 }
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+
+                $('td', row).eq(1).html(index + 1);
             },
             //#endregion 
 

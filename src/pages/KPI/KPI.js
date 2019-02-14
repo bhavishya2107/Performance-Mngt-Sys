@@ -68,7 +68,7 @@ class KPI extends Component {
         });
     }
     multiDeleteKpiApi(KpiId) {
-        const endpoint = environment.apiUrl + moduleUrls.Kpi+`/bulk?_ids=${KpiId}`;
+        const endpoint = environment.apiUrl + moduleUrls.Kpi + `/bulk?_ids=${KpiId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -95,8 +95,8 @@ class KPI extends Component {
     multipleDeleteKpiconfirm() {
         var KpiId = []
         $("#tblKpi input:checkbox:checked").each((e, item) => {
-            if(item.name!='checkAll'){
-            KpiId.push(item.value);
+            if (item.name != 'checkAll') {
+                KpiId.push(item.value);
             }
         });
         if (KpiId.length > 0) {
@@ -142,8 +142,7 @@ class KPI extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            // aaSorting: [[2, 'asc']],
+            "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -192,12 +191,11 @@ class KPI extends Component {
                     orderable: false
                 }
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+
+                $('td', row).eq(1).html(index + 1);
             },
             //#endregion
-
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
