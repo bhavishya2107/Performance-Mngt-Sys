@@ -201,10 +201,15 @@ class kraListPage extends Component {
           }
         }
       ],
-      fnRowCallback: function (nRow, aData, iDisplayIndex) {
-        $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-        return nRow;
-      },
+      "createdRow": function (row, data, index) {
+                
+        $('td', row).eq(1).html(index + 1 );
+    },
+      
+      // fnRowCallback: function (nRow, aData, iDisplayIndex) {
+      //   $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+      //   return nRow;
+     
       initComplete: (settings, json) => {
         //;
         // $(".btnDelete").on("click", e => {
@@ -248,7 +253,7 @@ class kraListPage extends Component {
           ref={el => (this.el = el)}
         >
           <thead>
-            <tr>
+            <tr className="container-fluid">
               <th width="20">
                 <input
                   type="checkbox"
@@ -258,10 +263,12 @@ class kraListPage extends Component {
                   }}
                 />
               </th>
+            
               <th width="50">Sr.No</th>
-              <th width="100">Name</th>
-              <th width="600">Description</th>
+              <th width="150">Name</th>
+              <th width="800">Description</th>
               <th width="90">Action</th>
+       
             </tr>
           </thead>
         </table>

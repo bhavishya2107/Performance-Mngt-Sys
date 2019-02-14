@@ -104,9 +104,9 @@ class UserRoleForm extends Component {
         });
     }
     updateroleEditExistApi(){
-        const updateroleexist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')' + '~and(roleId,ne,' + this.state.id + ')';
+        const updateroleExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')' + '~and(roleId,ne,' + this.state.id + ')';
         return $.ajax({
-            url: updateroleexist,
+            url: updateroleExist,
             type: Type.get,
             data:''
         })
@@ -123,12 +123,18 @@ class UserRoleForm extends Component {
 
                 } else {
                     var res = this.updateRoleDetailsApi(data);
-                    this.setState({
-                        Redirect: true
-                    })
-                    toast.success("Role " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
+                    res.done((result)=>{
+                        this.setState({
+                            Redirect: true
+                        })
+                        toast.success("Role " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
+
                     });
+                    res.fail((error)=>{})
+
+                  
                 }
             });
             res.fail((error) => {
@@ -141,6 +147,12 @@ class UserRoleForm extends Component {
         }
 
     }
+
+
+     myFunction() {
+        window.location.reload();
+      }
+  
 
     
 
@@ -170,7 +182,7 @@ class UserRoleForm extends Component {
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> {ModuleNames.Role} >
-                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
                     </h2>
                 </div>
 
@@ -197,7 +209,7 @@ class UserRoleForm extends Component {
                         : <button className="btn btn-success " type="button" onClick={() => {
                             this.submitDataFromRoleform(this.state);
                         }}>Save</button>}&nbsp;
-                    <button type="clear" className="btn btn-info">Reset</button>&nbsp;
+                    <button type="button" className="btn btn-info" onClick={()=>{this.myFunction()}}>Reset</button>&nbsp;
                     <Link to="/role" className="btn btn-danger">Cancel</Link>
                     <br />
                 </form>

@@ -75,9 +75,11 @@ class kraHome extends Component {
             type: Type.get,
         })
     }
+
    
 
     updatekraDetailsApi(data) {
+        debugger;
         const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`       
         var body =
         {
@@ -96,6 +98,7 @@ class kraHome extends Component {
         });
     }
     updatekraEditExistApi(){
+        debugger;
         const updatekraexist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName + ')' + '~and(kraId,ne,' + this.state.id + ')';
         return $.ajax({
             url: updatekraexist,
@@ -106,7 +109,7 @@ class kraHome extends Component {
   
 
     UpdateKraDetails(data) {
-
+        debugger;
         var isvalidate = window.formValidation("#kraAddForm");
         if (isvalidate) {
             var res = this.updatekraEditExistApi();
@@ -117,12 +120,18 @@ class kraHome extends Component {
 
                 } else {
                     var res = this.updatekraDetailsApi(data);
-                    this.setState({
-                        RedirectToSample: true
-                    })
-                    toast.success("Kra " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
+                    res.done((result)=>{
+                        this.setState({
+                            RedirectToSample: true
+                        })
+                        toast.success("Kra " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     });
+                    res.fail((error)=>{
+
+                    })
+                    
                 }
             });
             res.fail((error) => {
@@ -135,6 +144,10 @@ class kraHome extends Component {
         }
         
     }
+    resetKraForm(){
+        window.location.reload();
+    }
+
     componentDidMount() {
         if (this.state.id !== undefined) {
             var res = this.getKraDetailsApi();
@@ -164,7 +177,7 @@ class kraHome extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> {ModuleNames.kra} >
-                {this.state.id !== undefined ? <span>Edit</span> : <span>Add</span>}
+                {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add {ModuleNames.kra}</span>}
                     </h2>
                 </div>
 
@@ -206,7 +219,7 @@ class kraHome extends Component {
                         : <button className="btn btn-success" type="button" onClick={() => {
                             this.submitDataFromKra(this.state);
                         }}>Save</button>}&nbsp;
-                <button type="clear" className="btn btn-info" >Reset</button>&nbsp;
+                <button type="button" className="btn btn-info" onClick={()=>{this.resetKraForm()}} >Reset</button>&nbsp;
                 <Link to="/kra" className="btn btn-danger" >Cancel</Link><br />
                 </form>
                 <ToastContainer/>

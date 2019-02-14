@@ -89,9 +89,6 @@ class UserRolePMS extends Component {
         res.fail(error => {
         });
     }
-    
-    
-
 
     SingleRoleDeleteConfirm(id) {
         if (id !== undefined) {
@@ -215,10 +212,12 @@ class UserRolePMS extends Component {
 
                 }
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+         
+            "createdRow": function (row, data, index) {
+                
+                $('td', row).eq(1).html(index + 1 );
             },
+    
 
             initComplete: (settings, json) => {
                 // $(".btnDelete").on("click", e => {
