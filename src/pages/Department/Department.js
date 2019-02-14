@@ -1,4 +1,4 @@
-import { environment, moduleUrls, Type, Notification } from '../Environment'
+import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment'
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -77,13 +77,15 @@ class Department extends Component {
         })
     }
     multipleDeleteDeptConfirm() {
+
+        debugger;
         var depId = []
         $("#tblDepartment input:checkbox:checked").each((e, item) => {
             if (item.value != 259) {
-                depId.push(item.value);
-                
+                if (item.name !== "checkAll") {
+                    depId.push(item.value);
+                }
             }
-            console.log(depId)
         });
         if (depId.length > 0) {
             bootbox.confirm({
@@ -100,7 +102,7 @@ class Department extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.multiDeleteDept();
+                        this.multiDeleteDept(depId);
                     }
                     else {
                     }
@@ -114,9 +116,6 @@ class Department extends Component {
     }
     multiDeleteDept(depId) {
 
-        $("#tblDepartment input:checkbox:checked").each((e, item) => {
-            this.state.selectedIds.push(item.value);
-        });
         var item = depId.join(",")
         var res = this.multipleDeleteDeptApi(item);
         res.done(response => {
@@ -125,7 +124,6 @@ class Department extends Component {
             });
             this.$el.DataTable().ajax.reload()
         });
-
         res.fail(error => {
 
         });
@@ -133,7 +131,7 @@ class Department extends Component {
     }
 
 
-    checkall(e) {
+    checkAll(e) {
         $("#tblDepartment input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
@@ -200,9 +198,9 @@ class Department extends Component {
                     "orderable": false
                 }
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+
+                $('td', row).eq(1).html(index + 1);
             },
 
             initComplete: (settings, json) => {
@@ -222,7 +220,7 @@ class Department extends Component {
         return (
             <div className="">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Department</h2>
+                    <h2 className="col">{ModuleNames.Department}</h2>
                     <div className="col text-right">
                         <div>
                             <Link to={{ pathname: '/AddDept' }} className="btn btn-primary" ><i className="fa fa-plus" aria-hidden="true"></i></Link>
@@ -235,16 +233,16 @@ class Department extends Component {
                     id="tblDepartment"
                     ref={el => (this.el = el)}>
                     <thead>
-                        <tr>
+                        <tr className="container-fluid">
                             <th width="50">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
-                                    onClick={e => { this.checkall(e); }} />
+                                    onClick={e => { this.checkAll(e); }} />
                             </th>
                             <th width="50">Sr.No</th>
-                            <th>Department Name</th>
-                            <th>Department Description</th>
+                            <th> Name</th>
+                            <th> Description</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
