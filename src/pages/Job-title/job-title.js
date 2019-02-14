@@ -15,16 +15,16 @@ class Jobtitlelist extends Component {
         }
     }
     SingleDeleteConfirm(id) {
-        if (id != 105){
+        if (id != 105) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -37,7 +37,7 @@ class Jobtitlelist extends Component {
                     }
                 }
             });
-        }else(
+        } else (
             alert("you cannot delete system generated jobtitle")
         )
     }
@@ -100,11 +100,11 @@ class Jobtitlelist extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -154,8 +154,7 @@ class Jobtitlelist extends Component {
         this.$el.DataTable({
             "autoWidth": false,
             "order": [[1, 'asc']],
-            // aaSorting: [[1, 'asc']],
-            // aaSorting: [[2, 'asc']],
+
             ajax: {
                 url: jobtitleGET,
                 type: "GET",
@@ -210,20 +209,12 @@ class Jobtitlelist extends Component {
                 },
             ],
             "createdRow": function (row, data, index) {
-                
-                $('td', row).eq(1).html(index + 1 );
+
+                $('td', row).eq(1).html(index + 1);
             },
-            // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-            //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-            //     return nRow;
-            // },
+
             initComplete: (settings, json) => {
 
-                // $(".btnDeletejobtitle").on("click", e => {
-                //     ;
-
-                //     this.SingleDelete(e.currentTarget.id);
-                // });
             },
             drawCallback: (settings) => {
                 window.smallTable();

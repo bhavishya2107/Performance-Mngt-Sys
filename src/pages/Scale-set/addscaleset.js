@@ -44,9 +44,6 @@ class Scaleset extends Component {
                     //alert("")
                     $(".recordexists").show()
 
-                    // toast.error("Scaleset Already exists!", {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    // });
                 } else {
                     var _this = this;
                     var formData = {
@@ -82,12 +79,7 @@ class Scaleset extends Component {
 
     //#region Reset function onclick
     resetform() {
-        // this.setState({
-        //     scaleSetName: "",
-        //     description: ""
 
-        // })
-       
         window.location.reload();
     }
     //#endregion
@@ -129,19 +121,19 @@ class Scaleset extends Component {
                 } else {
                     var res = this.updateDetailsApi(data);
 
-                    res.done((result)=>{
+                    res.done((result) => {
                         this.setState({
                             redirectToList: true,
-                            
+
                         })
                         toast.success("Scaleset " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     });
-                    res.fail((error)=>{
-                       console.log(error)
+                    res.fail((error) => {
+                        console.log(error)
                     })
-                   
+
                 }
             });
             res.fail((error) => {
@@ -155,7 +147,7 @@ class Scaleset extends Component {
     }
     //#endregion
 
-   
+
     componentDidMount() {
         this.setState({
             title: ModuleNames.ScaleSet
@@ -185,7 +177,7 @@ class Scaleset extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                    {this.state.id !== undefined ? <span>Edit Scale Set</span> : <span>Add Scale Set</span>}
+                        {this.state.id !== undefined ? <span>Edit Scale Set</span> : <span>Add Scale Set</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -199,7 +191,6 @@ class Scaleset extends Component {
                                             scaleSetName: event.target.value
                                         })
                                     }} required />
-                                {/* <p className="hide" id="recordexists">exist</p> */}
 
                                 <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                             </div>
@@ -222,10 +213,9 @@ class Scaleset extends Component {
                                     }}>Save</button>}
 
                                 <button type="button" className="btn btn-info mr-2" onClick={() => {
-                                        this.resetform()}}>Reset</button>
-                                {/* <button type="clear" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform()
-                                }}>Clear</button> */}
+                                }}>Reset</button>
+
                                 <Link to="/scale-set" className="btn btn-danger ">Cancel</Link>
 
                             </div>

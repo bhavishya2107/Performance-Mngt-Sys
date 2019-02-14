@@ -22,11 +22,11 @@ class Scalesetlist extends Component {
             message: Notification.deleteConfirm,
             buttons: {
                 confirm: {
-                    label: 'Yes',
+                    label: 'Ok',
                     className: 'btn-success'
                 },
                 cancel: {
-                    label: 'No',
+                    label: 'Cancel',
                     className: 'btn-danger'
                 }
             },
@@ -127,11 +127,11 @@ class Scalesetlist extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -172,8 +172,6 @@ class Scalesetlist extends Component {
             "autoWidth": false,
             "order": [[1, 'asc']],
 
-            // aaSorting: [[1, 'asc']],
-            // aaSorting: [[2, 'asc']],
             ajax: {
                 url: scalesetGET,
                 type: Type.get,

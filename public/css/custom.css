@@ -260,4 +260,8 @@ label.error.valid {
   display: none !important;
 }
 
+select.custom-select {
+  background-image: none;
+}
+
 /*# sourceMappingURL=custom.css.map */

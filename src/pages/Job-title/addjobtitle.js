@@ -76,12 +76,7 @@ class Jobtitle extends Component {
     }
     //#endregion
     resetform() {
-        // this.setState({
-        //     jobtitleName: "",
-        //     description: ""
-
-        // })
-        window.location.reload();
+       window.location.reload();
     }
     getjobtitleDetilsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${this.state.id}`
