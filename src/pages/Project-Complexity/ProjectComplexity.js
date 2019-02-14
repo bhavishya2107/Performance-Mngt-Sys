@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import { environment, Type, moduleUrls, Notification } from '../Environment';
+import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
 import bootbox from 'bootbox';
-
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -142,6 +141,9 @@ class ProjectComplexity extends Component {
     componentDidMount() {
         //#region datatable 
         const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + '?&_sort=-projectTypeId'
+        this.setState({
+            title: ModuleNames.ProjectComplexity
+        })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -215,7 +217,7 @@ class ProjectComplexity extends Component {
             //#region ProjectComplexity table(listed items)
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">Project Complexity</h2>
+                    <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
                         <Link to="/project-complexity/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>

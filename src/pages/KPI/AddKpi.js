@@ -30,7 +30,7 @@ class AddKpi extends Component {
     }
     //#endregion
     isKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'+ this.state.kpiTitle + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -52,6 +52,7 @@ class AddKpi extends Component {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
+                    $(".hide").show()
                     //alert("")
                     $(".recordexists").show()
                     // toast.error("KPI Already exists!", {
@@ -83,6 +84,8 @@ class AddKpi extends Component {
             });
         }
         else {
+            $(".hide").hide()
+ 
             return false;
         }
     }
@@ -100,7 +103,7 @@ class AddKpi extends Component {
             scaleSetId: event.target.value
         })
     }
-    
+
     addKpi() {
         var kpiDataapi = {
             "scaleSetId": this.state.scaleSetId,
@@ -175,7 +178,7 @@ class AddKpi extends Component {
 
                 } else {
                     var res = this.updateDetailsApi(data);
-                    res.done(()=>{
+                    res.done(() => {
                         this.setState({
                             redirectToList: true
                         })
@@ -183,16 +186,16 @@ class AddKpi extends Component {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     })
-                    res.fail((error)=>{
+                    res.fail((error) => {
 
                     })
-                   
+
                 }
             });
             res.fail((error) => {
             })
         } else {
-
+            $(".recordexists").hide()
             return false;
         }
     }
@@ -223,7 +226,7 @@ class AddKpi extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                    {this.state.kpiId !== undefined ? <span>Edit KPI</span> : <span>Add KPI</span>}
+                        {this.state.kpiId !== undefined ? <span>Edit {ModuleNames.kpi}</span> : <span>Add   {ModuleNames.kpi}</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -235,12 +238,13 @@ class AddKpi extends Component {
                                         <label className="required" htmlFor="target">KPI Title</label>
                                         <input type="text" className="form-control" rows="4" name="kpiTitle" type="text" value={this.state.kpiTitle}
                                             onChange={(event) => {
+                                                $(".recordexists").hide()
                                                 this.setState({
                                                     kpiTitle: event.target.value
                                                 })
                                             }} required />
-                                   <label className="recordexists" style={{ "display": "none","color":"red" }}>{Notification.recordExists}</label>
-                                    </div>                                  
+                                        <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                    </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
@@ -255,11 +259,11 @@ class AddKpi extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label className="mr-2">Scale Set</label>
-                                        <select value={this.state.scaleSetId} name="scaleSetId" onChange={(e) => { this.onChangeScaleSetId(e) }} className="form-control" required >
-                                            <option>select</option>
+                                        <label>Scale Set</label>
+                                        <select required name="scaleSetdropdown" className="form-control" onChange={(e) => { this.onChangeScaleSetId(e) }} value={this.state.scaleSetId}  >
+                                            <option value="">select</option>
                                             {this.state.displayScaleSetId}
-                                        </select >
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -286,9 +290,9 @@ class AddKpi extends Component {
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveApiDetails(this.state);
                                             }}>Save</button>}
-                                            <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
-                                                this.resetForm(this.state);
-                                            }}>Reset</button>
+                                        <button type="button" className="btn btn-info mr-2" onClick={() => {
+                                            this.resetForm();
+                                        }}>Reset</button>
                                         {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
                                         <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>

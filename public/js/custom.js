@@ -60,7 +60,9 @@ function formValidation(form) {
                     required: true,
                     digit:true
                 },
-              
+                 scaleSetdropdown: {
+                    required: true,
+                },
                 messages:{
                     kraName:{
                         required:'required, Enter minimum 2 characters',

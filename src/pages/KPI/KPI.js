@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
-import { environment, Type, moduleUrls, Notification } from '../Environment';
+import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
@@ -12,6 +12,7 @@ class KPI extends Component {
         this.state = {
             saveKpiDetails: "",
             selectedIds: []
+
         };
     }
 
@@ -136,9 +137,13 @@ class KPI extends Component {
             }
         });
     }
-    //#region Datatable 
+   
     componentDidMount() {
+         //#region Datatable 
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + '?&_sort=-kpiId'
+        this.setState({
+            title: ModuleNames.kpi
+        })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -171,13 +176,21 @@ class KPI extends Component {
                     targets: 2
                 },
                 {
+                    data: "weightage",
+                    targets: 3
+                },
+                {
+                    data: "scalesetId",
+                    targets: 4
+                },
+                {
                     data: "target",
-                    targets: 3,
+                    targets: 5,
                     "orderable": false,
                 },
                 {
                     data: "kpiId",
-                    targets: 4,
+                    targets: 6,
                     render: function (data, type, row) {
                         return (
                             '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -209,7 +222,7 @@ class KPI extends Component {
             //#region table of kpi
             <div >
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">KPI</h2>
+                    <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
                         <Link to="/kpi/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
@@ -226,7 +239,9 @@ class KPI extends Component {
                                 <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
                                 <th width="5">Sr.No</th>
                                 <th width="100">Name</th>
-                                <th>Description</th>
+                                <th width="80">Weightage</th>
+                                <th width="100">Scale Set</th>
+                                <th>Target</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -238,5 +253,5 @@ class KPI extends Component {
             //#endregion
         )
     }
-}
+    }
 export default KPI;
