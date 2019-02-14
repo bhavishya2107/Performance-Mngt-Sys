@@ -20,7 +20,7 @@ class AddDept extends Component {
         }
     }
     //#region clear department fields
-    clear() {
+    reset() {
 
         this.setState({
             depName: "",
@@ -38,9 +38,7 @@ class AddDept extends Component {
         })
     }
     //#endregion
-    //#region sort the list 
 
-    //#endregion
     //#region save department details
     saveDept() {
         var result = window.formValidation("#createDepartment");
@@ -48,14 +46,11 @@ class AddDept extends Component {
             var existApiResponse = this.isDeptExistApi();
 
             existApiResponse.done((response) => {
-           //     alert(response.length)
-                if (response.length > 0) {
-                    //alert('if')
-                    // alert("already exists")
+                if (response.length > 0) {  
                     $(".dataExist").show();
                 }
                 else {
-                  //  alert('else')
+                    //  alert('else')
                     var _this = this
                     var deptList =
                     {
@@ -84,7 +79,7 @@ class AddDept extends Component {
     //#region Update department details
 
     getDepApi() {
-        var url = environment.apiUrl + moduleUrls.Department;
+        var url = environment.apiUrl + moduleUrls.Department + '/'+ `${this.state.depId}`;
         return $.ajax({
             url: url,
             type: Type.get,
@@ -113,101 +108,129 @@ class AddDept extends Component {
 
         });
     }
-
-    UpdateDeptDetails(data) {
-        var res = this.updateDetailsApi(data);
-
-        res.done((response) => {
-            this.setState({
-                isUpdate: true
-            })
-            toast.success(" Department " + Notification.updated, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        });
-        res.fail((error) => {
-            // console.log('error', error);
+    isDeptExistUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.Department +'/'+ '?_where=(depName,eq,' + this.state.depName + ')' + '~and(depId,ne,' + this.state.depId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
         })
     }
-    componentDidMount() {
 
-        if (this.state.depId !== undefined) {
-            var res = this.getDepApi();
+    UpdateDeptDetails(data) {
+        var result = window.formValidation("#createDepartment");
+        if (result) {
+            var res = this.isDeptExistUpdateApi();
+            
             res.done((response) => {
-                // console.log(response, 'res');
-                var res = response[0];
-                this.setState({
-                    depName: res.depName,
-                    description: res.description
-                })
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+                else {
+                    var res = this.updateDetailsApi(data);
+                    res.done(()=>{
+                        this.setState({
+                            isUpdate: true
+    
+                        })
+                        toast.success("Department " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
+                    });
+                    res.fail((error)=>{
+                        
+                    })
+                  
+                }
             });
+
             res.fail((error) => {
-
             })
-        } else {
-
         }
-
+        else {
+            return false;
+        }
     }
-    //#endregion
-    render() {
-        if (this.state.RedirectToDept) {
+        componentDidMount() {
+                    if(this.state.depId !== undefined) {
+                var res = this.getDepApi();
+                res.done((response) => {
+                    // console.log(response, 'res');
+                    var res = response[0];
+                    this.setState({
+                        depName: res.depName,
+                        description: res.description
+                    })
+                });
+                res.fail((error) => {
 
-            return <Redirect to={{ pathname: "/Department", state: "2" }} />
-        }
-        if (this.state.isUpdate == true) {
-            return <Redirect to="/Department" />
-        }
+                })
+            } else {
 
-        return (
-            <div>
-                <div className="clearfix">
-                    <div className="clearfix d-flex align-items-center row page-title">
-                        <h2 className="col"> Department >
-                    {this.state.depId !== undefined ? <span>Edit</span> : <span>Add</span>}
-                        </h2>
+            }
+
+        }
+        //#endregion
+        render() {debugger;
+            if (this.state.RedirectToDept) {
+
+                return <Redirect to={{ pathname: "/Department", state: "2" }} />
+            }
+            if (this.state.isUpdate == true) {
+                return <Redirect to="/Department" />
+            }
+
+            return (
+                <div>
+                    <div className="clearfix">
+                        <div className="clearfix d-flex align-items-center row page-title">
+                            <h2 className="col"> 
+                    {this.state.depId !== undefined ? <span>Edit Department</span> : <span>Add Department</span>}
+                            </h2>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <form id="createDepartment">
+                                <div className="form-group">
+                                    <label htmlFor="depName" className="required">Name</label>
+                                    <input type="text" name="depName" className="form-control" id="depName" value={this.state.depName}
+                                        onChange={(event) => {
+                                            this.setState({
+                                                depName: event.target.value
+                                            })
+                                        }} required />
+                                        <p className="dataExist" style={{ "display": "none" ,"color":"red"}}>{Notification.recordExists}></p>
+                                                
+
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="description">Description</label>
+                                    <textarea name="description" className="form-control" id="description" value={this.state.description}
+                                        onChange={(event) => {
+                                            this.setState({
+                                                description: event.target.value
+                                            })
+                                        }} />
+                                </div>
+                                <div className="form-group">
+                                    {this.state.depId !== undefined ?
+                                        <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                            this.UpdateDeptDetails(this.state);
+                                        }}>Update</button>
+                                        : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                            this.saveDept(this.state);
+                                        }}>Save</button>}
+
+                                    <button type="button"  value="reset" className="btn btn-sm btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
+                                    <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
+                                </div>
+                            </form>
+                        </div>
+                        <ToastContainer />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <form id="createDepartment">
-                            <div className="form-group">
-                                <label htmlFor="depName" className="required">Name</label>
-                                <input type="text" name="depName" className="form-control" id="depName" placeholder="Enter the Name" value={this.state.depName}
-                                    onChange={(event) => {
-                                        this.setState({
-                                            depName: event.target.value
-                                        })
-                                    }} required />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <textarea name="description" className="form-control" id="description" value={this.state.description}
-                                    onChange={(event) => {
-                                        this.setState({
-                                            description: event.target.value
-                                        })
-                                    }} required />
-                            </div>
-                            <div className="form-group">
-                                {this.state.depId !== undefined ?
-                                    <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                                        this.UpdateDeptDetails(this.state);
-                                    }}>Update</button>
-                                    : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
-                                        this.saveDept(this.state);
-                                    }}>Save</button>}
 
-                                <button className="btn btn-sm btn-success mr-2" onClick={() => { this.clear(); }}>Clear</button>
-                                <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
-                            </div>
-                        </form>
-                    </div>
-                    <ToastContainer />
-                </div>
-            </div>
-
-        )
+            )
+        }
     }
-}
-export default AddDept;
+    export default AddDept;

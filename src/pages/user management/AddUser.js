@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
+import { Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { Link } from 'react-router-dom';
-var displayDataReturn = []
 
 class AddUser extends Component {
     constructor(props) {
@@ -37,7 +36,7 @@ class AddUser extends Component {
         }
     }
     //#region  clear user fields
-    clear() {
+    reset() {
         this.setState({
 
             userName: "",
@@ -96,7 +95,7 @@ class AddUser extends Component {
             var res = this.isUserExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    alert("already exist")
+                    $(".dataExist").show()
                 }
 
                 else {
@@ -118,7 +117,7 @@ class AddUser extends Component {
 
                     }
                     var url = environment.apiUrl + moduleUrls.User
-                    
+
                     $.ajax({
                         url: url,
                         type: Type.post,
@@ -146,12 +145,17 @@ class AddUser extends Component {
 
         })
     }
-    // isUserExistUpdateApi() {
+    isUserExistUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
 
-    // }
 
     updateAjaxCall(data) {
-        var _this = this;
+
         var userList =
         {
             "jobtitleId": data.jobtitleId,
@@ -170,6 +174,7 @@ class AddUser extends Component {
         }
 
         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
+
         return $.ajax({
             url: url,
             type: Type.patch,
@@ -184,25 +189,47 @@ class AddUser extends Component {
         });
     }
     UpdateUserDetails(data) {
-        var res = this.updateAjaxCall(data);
-        res.done((response) => {
-            this.setState({
-                isUpdate: true
+        var result = window.formValidation("#createUser");
+        if (result) {
+            var res = this.isUserExistUpdateApi();
 
-            })
-            toast.success("Update User Successfully !", {
-                position: toast.POSITION.TOP_RIGHT
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+                else {
+                    var res = this.updateAjaxCall(data);
+                    res.done((response) => {
+                        debugger
+                        this.setState({
+
+                            isUpdate: true
+
+                        })
+                      
+                        toast.success("Update " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
+                    });
+                    res.fail((error) => {
+
+                    })
+
+                }
             });
 
-        });
-        res.fail((error) => {
-        })
+            res.fail((error) => {
+            })
+        }
+        else {
+            return false;
+        }
     }
     getUserDetails() {
         if (this.state.userId !== undefined) {
             var res = this.getUserApi();
             res.done((response) => {
-                if (response != undefined) {
+                if (response !== undefined) {
                     var res = response[0];
                     this.setState({
                         firstName: res.firstName,
@@ -238,7 +265,7 @@ class AddUser extends Component {
                 var displayDataReturn = temp.map(function (item) {
                     return (
                         <option key={item.depId} value={item.depId}>{item.depName}</option>
-                       
+
                     )
                 });
                 this.setState({
@@ -256,9 +283,9 @@ class AddUser extends Component {
             success: (tempJob) => {
                 var displayDataReturn = tempJob.map(function (i) {
                     return (
-                        <option  key={i.jobtitleId} value={i.jobtitleId}>{i.jobtitleName}</option>
-                       
-                        
+                        <option key={i.jobtitleId} value={i.jobtitleId}>{i.jobtitleName}</option>
+
+
                     )
                 });
                 this.setState({
@@ -318,19 +345,18 @@ class AddUser extends Component {
     //#endregion
     render() {
         if (this.state.RedirectToUserManagement) {
-
-            return <Redirect to={{ pathname: "/UserManagement", state: "2" }} />
+            return <Redirect to={{ pathname: "/user-management", state: "2" }} />
         }
-        if (this.state.isUpdate == true) {
+        if (this.state.isUpdate === true) {
 
-            return <Redirect to="/UserManagement" />
+            return <Redirect to="/user-management" />
         }
         return (
             <div>
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
-                        <h2 className="col"> User Management >
-                    {this.state.userId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                        <h2 className="col">
+                            {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
                         </h2>
                     </div>
                     <div className="row">
@@ -362,8 +388,8 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} >FirstName</label>
-                                                    <input type="text" name="firstName" id="firstName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.firstName}
+                                                    <label htmlFor="firstName" className="required" sm={2} >first Name</label>
+                                                    <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 firstName: event.target.value
@@ -373,8 +399,8 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="lastName" className="required" sm={2}>LastName</label>
-                                                    <input type="text" name="lastName" id="lastName" maxLength="20" className="form-control" placeholder="Enter the Name" value={this.state.lastName}
+                                                    <label htmlFor="lastName" className="required" sm={2}>last Name</label>
+                                                    <input type="text" name="lastName" id="lastName" className="form-control" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 lastName: event.target.value
@@ -386,18 +412,19 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="userName" className="required" sm={2}>UserName</label>
-                                                    <input type="text" name="userName" id="userName" maxLength="20" className="form-control" value={this.state.userName}
+                                                    <label htmlFor="userName" className="required" sm={2}>user Name</label>
+                                                    <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
+                                                    <p className="dataExist" style={{ "display": "none" }}>{Notification.recordExists}></p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="emailAddress" className="required" sm={2}>Email ID</label>
+                                                    <label htmlFor="emailAddress" className="required" sm={2}>email ID</label>
                                                     <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -464,7 +491,7 @@ class AddUser extends Component {
                                             <div className="col">
                                                 <div className="form-group">
                                                     <label className="required">Address</label>
-                                                    <textarea name="Address" id="Address" maxLength="50" rows="3" className="form-control" value={this.state.Address}
+                                                    <textarea name="Address" id="Address" rows="3" className="form-control" value={this.state.Address}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 Address: event.target.value
@@ -485,8 +512,8 @@ class AddUser extends Component {
                                                             this.saveUser(this.state);
                                                         }}>Save</button>}
 
-                                                    <button type="button" className="btn btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
-                                                    <Link to='/UserManagement' className="btn btn-danger mr-2">Cancel</Link>
+                                                    <button type="button" className="btn btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
+                                                    <Link to='/user-management' className="btn btn-danger mr-2">Cancel</Link>
                                                 </div>
                                             </div></div>
                                     </div>

@@ -41,5 +41,6 @@ export const ModuleNames = {
   User: "User",
   Role: "Role",
   Department: "Department",
-  ScaleSet: "Scale Set"
+  ScaleSet: "Scale Set",
+  ProjectComplexity:"Project Complexity"
 };

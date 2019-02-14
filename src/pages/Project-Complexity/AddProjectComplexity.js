@@ -125,6 +125,8 @@ class AddProjectComplexity extends Component {
             res.fail((error) => {
             })
         } else {
+            $(".recordexists").hide()
+
             return false;
         }
     }
@@ -162,8 +164,9 @@ class AddProjectComplexity extends Component {
                         <form id="projectComplexityForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
-                                <input type="text" id="projectTypeName" className="form-control" name="projectTypeName" value={this.state.projectTypeName}
+                                <input type="text" id="projectTypeName" className="form-control" maxLength="50" name="projectTypeName" value={this.state.projectTypeName}
                                     onChange={(event) => {
+                                        $(".recordexists").hide()
                                         this.setState({
                                             projectTypeName: event.target.value
                                         })

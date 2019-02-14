@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import $ from 'jquery';
 import bootbox from 'bootbox'
-import { environment, moduleUrls, Type,Notification } from '../Environment';
+import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 $.DataTable = require('datatables.net-bs4');
 
 
@@ -36,8 +36,8 @@ class UserManagement extends Component {
             toast.error(Notification.deleteError);
         });
     }
-     DeleteUserApi(userId) {
-        var url = environment.apiUrl + moduleUrls.User +'/'+ `${userId}`
+    DeleteUserApi(userId) {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${userId}`
         return $.ajax({
             url: url,
             type: Type.deletetype,
@@ -50,33 +50,34 @@ class UserManagement extends Component {
     singleDeleteUserConfirm(id) {
 
         if (id !== undefined) {
-            bootbox.confirm({
-                message: Notification.deleted,
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
+            if (id != 150) {
+                bootbox.confirm({
+                    message: Notification.deleted,
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
                     },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.singleDeleteUser(id);
-                    }
-                    else {
+                    callback: (result) => {
+                        if (result === true) {
+                            this.singleDeleteUser(id);
+                        }
+                        else {
 
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
-
     //#region multiple delete functionality
     multipleUserDeleteApi(userId) {
-        var url = environment.apiUrl + moduleUrls.User +'/bulk?_ids=' +`${userId}`;
+        var url = environment.apiUrl + moduleUrls.User + '/bulk?_ids=' + `${userId}`;
         return $.ajax({
             url: url,
             type: Type.deletetype
@@ -85,10 +86,11 @@ class UserManagement extends Component {
     multipleDeleteUserConfirm() {
         var userId = []
         $("#tblUser input:checkbox:checked").each((e, item) => {
-            if(item.name!="checkAll"){
-                userId.push(item.value);
+            if (item.value != 150) {
+                if (item.name !== "checkAll") {
+                    userId.push(item.value);
+                }
             }
-            
         });
         if (userId.length > 0) {
             bootbox.confirm({
@@ -120,21 +122,20 @@ class UserManagement extends Component {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
-        var item=userId.join(",")
-        var res=this.multipleUserDeleteApi(item);
+        var item = userId.join(",")
+        var res = this.multipleUserDeleteApi(item);
+        res.done(response => {
+            toast.success("User " + Notification.deleted, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+            this.$el.DataTable().ajax.reload()
+        });
 
-                res.done(response => {
-                    toast.success("User " + Notification.deleted, {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
-                    this.$el.DataTable().ajax.reload()
-                });
-                
-                res.fail(error => {
+        res.fail(error => {
 
-                });
-           }
-       
+        });
+    }
+
     checkall(e) {
         $("#tblUser input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -145,11 +146,11 @@ class UserManagement extends Component {
         });
     }
     componentDidMount() {
-        const url = environment.apiUrl + moduleUrls.User //+ '/${userId}'
+        const url = environment.apiUrl + moduleUrls.User + '/?_size=1000' + '/&_sort=-userId';
         this.$el = $(this.el);
         this.$el.DataTable({
             "sorting": [[1, 'asc']],
-            "sorting": [[2, 'asc']],
+
             "autoWidth": false,
             ajax: {
                 url: url,
@@ -214,9 +215,9 @@ class UserManagement extends Component {
                     "orderable": false
                 }
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+
+                $('td', row).eq(1).html(index + 1);
             },
             initComplete: (settings, json) => {
 
@@ -237,7 +238,7 @@ class UserManagement extends Component {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">User Management</h2>
+                    <h2 className="col"> {ModuleNames.User}</h2>
                     <div className="col text-right">
                         <Link to={{ pathname: '/user-managemnet/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
@@ -255,11 +256,11 @@ class UserManagement extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkall(e) }} />
                             </th>
-                            <th width="50">Sr.No</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>User Name</th>
-                            <th>Email Address</th>
+                            <th >Sr.No</th>
+                            <th >First Name</th>
+                            <th >Last Name</th>
+                            <th >User Name</th>
+                            <th >Email Address</th>
                             <th>Mobile No</th>
                             <th width="90">Action</th>
                         </tr>

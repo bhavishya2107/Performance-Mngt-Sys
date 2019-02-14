@@ -181,7 +181,7 @@ class UserRoleForm extends Component {
         return (
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> {ModuleNames.Role} >
+                    <h2 className="col"> 
                 {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
                     </h2>
                 </div>
@@ -199,7 +199,7 @@ class UserRoleForm extends Component {
                                         }
                                     )
                                 }} required />
-                                <p className="hiderole" style={{ "display": "none" }}>{Notification.recordExists}</p>
+                                <p className="hiderole" style={{ "display": "none" , "color" : "red"}}>{Notification.recordExists}</p>
                         </div>
                     </div>
                     {this.state.id !== undefined ?

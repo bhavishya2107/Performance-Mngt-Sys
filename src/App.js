@@ -105,35 +105,13 @@ class App extends Component {
                         <Route exact path="/AddProject" component={AddProject} />
 
 
-
-
-
-                        <Route
-                          path="/UserManagement"
-                          component={UserManagement}
-                        />
-                        <Route
-                          path="/demo"
-                          component={Demo}
-                        />
-
-                        <Route
-                          path="/AddUser"
-                          component={AddUser}
-                        />
-
-                        <Route
-                          path="/AddDept"
-                          component={AddDept}
-                        />
-
                         <Route path="/user-management" component={UserManagement} />
                         <Route path="/user-managemnet/add" component={AddUser} />
                         <Route path="/EditUser/userId=:userId" component={AddUser} />
                         <Route path="/Department" component={Department} />
-                        <Route path="/EditDept/depId=:depId" component={AddDept} />
-                        <Route exact path="/Department/add" component={AddDept} />
-
+                        <Route  path="/EditDept/depId=:depId" component={AddDept} />
+                        {/* <Route exact path="/Department/add" component={AddDept} /> */}
+                        <Route path="/AddDept" component={AddDept} />
                         <Route path="/AddProject" component={AddProject} />
 
 
