@@ -154,10 +154,11 @@ class Scalesetlist extends Component {
             title: ModuleNames.ScaleSet
         })
         this.$el = $(this.el);
+
         this.$el.DataTable({
             "autoWidth": false,
             "order": [[1, 'asc']],
-            
+
             // aaSorting: [[1, 'asc']],
             // aaSorting: [[2, 'asc']],
             ajax: {
@@ -183,7 +184,6 @@ class Scalesetlist extends Component {
                     data: null,
                     targets: 1,
                     "orderable": false,
-
                 },
                 {
                     data: "scaleSetName",
@@ -212,10 +212,14 @@ class Scalesetlist extends Component {
                     }
                 },
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+                
+                $('td', row).eq(1).html(index + 1 );
             },
+            // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+            //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+            //     return nRow;
+            // },
             initComplete: (settings, json) => {
 
                 // $(".btnDeletescaleset").on("click", e => {

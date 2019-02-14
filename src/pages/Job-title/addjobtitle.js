@@ -76,11 +76,12 @@ class Jobtitle extends Component {
     }
     //#endregion
     resetform() {
-        this.setState({
-            jobtitleName: "",
-            description: ""
+        // this.setState({
+        //     jobtitleName: "",
+        //     description: ""
 
-        })
+        // })
+        window.location.reload();
     }
     getjobtitleDetilsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${this.state.id}`
@@ -123,13 +124,18 @@ class Jobtitle extends Component {
                 } else {
 
                     var res = this.updateDetailsApi(data);
-                    this.setState({
-                        redirectToList: true
-                    })
-                    toast.success("Job Title " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
+                    res.done((result)=>{
+                        this.setState({
+                            redirectToList: true
+                        })
+                        toast.success("Job Title " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     });
-                }
+                    res.fail((error)=>{
+                        console.log(error)
+                    })
+               }
             });
             res.fail((error) => {
 
@@ -206,7 +212,7 @@ class Jobtitle extends Component {
 
                                 <button type="clear" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform()
-                                }}>Clear</button>
+                                }}>Reset</button>
                                 <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
                             </div>
                         </form>

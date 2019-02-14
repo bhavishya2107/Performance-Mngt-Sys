@@ -82,11 +82,12 @@ class Scaleset extends Component {
 
     //#region Reset function onclick
     resetform() {
-        this.setState({
-            scaleSetName: "",
-            description: ""
+        // this.setState({
+        //     scaleSetName: "",
+        //     description: ""
 
-        })
+        // })
+        window.location.reload();
     }
     //#endregion
 
@@ -126,12 +127,20 @@ class Scaleset extends Component {
 
                 } else {
                     var res = this.updateDetailsApi(data);
-                    this.setState({
-                        redirectToList: true
-                    })
-                    toast.success("Scaleset " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
+
+                    res.done((result)=>{
+                        this.setState({
+                            redirectToList: true,
+                            
+                        })
+                        toast.success("Scaleset " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     });
+                    res.fail((error)=>{
+                       console.log(error)
+                    })
+                   
                 }
             });
             res.fail((error) => {
@@ -211,7 +220,8 @@ class Scaleset extends Component {
                                         this.savescaleset(this.state);
                                     }}>Save</button>}
 
-                                <button type="clear" className="btn btn-info mr-2">Reset</button>
+                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                        this.resetform()}}>Reset</button>
                                 {/* <button type="clear" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform()
                                 }}>Clear</button> */}

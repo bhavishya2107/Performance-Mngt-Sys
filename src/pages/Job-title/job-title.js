@@ -149,7 +149,7 @@ class Jobtitlelist extends Component {
         this.setState({
             title: ModuleNames.Jobtitle
         })
-        const jobtitleGET = environment.apiUrl + 'jobtitle_master/?' + '_sort=-jobtitleId'
+        const jobtitleGET = environment.apiUrl + 'jobtitle_master/?' + '&_sort=-jobtitleId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -209,10 +209,14 @@ class Jobtitlelist extends Component {
                     }
                 },
             ],
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-                return nRow;
+            "createdRow": function (row, data, index) {
+                
+                $('td', row).eq(1).html(index + 1 );
             },
+            // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+            //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
+            //     return nRow;
+            // },
             initComplete: (settings, json) => {
 
                 // $(".btnDeletejobtitle").on("click", e => {
