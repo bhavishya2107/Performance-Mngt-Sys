@@ -116,7 +116,6 @@ class AddUser extends Component {
                         "Address": this.state.Address
 
                     }
-                    alert(this.state.teamId)
                     var url = environment.apiUrl + moduleUrls.User
 
                     $.ajax({
@@ -147,7 +146,7 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.id + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.userId + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -190,7 +189,7 @@ class AddUser extends Component {
         });
     }
     UpdateUserDetails(data) {
-        var result = window.formValidation("#formscaleset1");
+        var result = window.formValidation("#createUser");
         if (result) {
             var res = this.isUserExistUpdateApi();
 
@@ -201,10 +200,13 @@ class AddUser extends Component {
                 else {
                     var res = this.updateAjaxCall(data);
                     res.done((response) => {
+                        debugger
                         this.setState({
+
                             isUpdate: true
 
                         })
+                      
                         toast.success("Update " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
@@ -343,19 +345,18 @@ class AddUser extends Component {
     //#endregion
     render() {
         if (this.state.RedirectToUserManagement) {
-
-            return <Redirect to={{ pathname: "/UserManagement", state: "2" }} />
+            return <Redirect to={{ pathname: "/user-management", state: "2" }} />
         }
         if (this.state.isUpdate === true) {
 
-            return <Redirect to="/UserManagement" />
+            return <Redirect to="/user-management" />
         }
         return (
             <div>
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
-                        <h2 className="col"> 
-                    {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
+                        <h2 className="col">
+                            {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
                         </h2>
                     </div>
                     <div className="row">

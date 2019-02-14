@@ -50,30 +50,31 @@ class UserManagement extends Component {
     singleDeleteUserConfirm(id) {
 
         if (id !== undefined) {
-            bootbox.confirm({
-                message: Notification.deleted,
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
+            if (id != 150) {
+                bootbox.confirm({
+                    message: Notification.deleted,
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
                     },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: (result) => {
-                    if (result === true) {
-                        this.singleDeleteUser(id);
-                    }
-                    else {
+                    callback: (result) => {
+                        if (result === true) {
+                            this.singleDeleteUser(id);
+                        }
+                        else {
 
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
-
     //#region multiple delete functionality
     multipleUserDeleteApi(userId) {
         var url = environment.apiUrl + moduleUrls.User + '/bulk?_ids=' + `${userId}`;
@@ -85,7 +86,7 @@ class UserManagement extends Component {
     multipleDeleteUserConfirm() {
         var userId = []
         $("#tblUser input:checkbox:checked").each((e, item) => {
-            if (item.value != 149) {
+            if (item.value != 150) {
                 if (item.name !== "checkAll") {
                     userId.push(item.value);
                 }

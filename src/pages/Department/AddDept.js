@@ -79,7 +79,7 @@ class AddDept extends Component {
     //#region Update department details
 
     getDepApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '/'+`${this.state.depId}`;
+        var url = environment.apiUrl + moduleUrls.Department + '/'+ `${this.state.depId}`;
         return $.ajax({
             url: url,
             type: Type.get,
@@ -109,7 +109,7 @@ class AddDept extends Component {
         });
     }
     isDeptExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User +'/'+ '?_where=(depName,eq,' + this.state.depName + ')' + '~and(depId,ne,' + this.state.depId + ')'
+        var url = environment.apiUrl + moduleUrls.Department +'/'+ '?_where=(depName,eq,' + this.state.depName + ')' + '~and(depId,ne,' + this.state.depId + ')'
         return $.ajax({
             url: url,
             type: Type.get
