@@ -37,18 +37,7 @@ class AddUser extends Component {
     }
     //#region  clear user fields
     reset() {
-        this.setState({
-
-            userName: "",
-            password: "",
-            firstName: "",
-            lastName: "",
-            emailAddress: "",
-            mobileNo: "",
-            profileImage: "",
-            Address: "",
-            Image: "",
-        })
+        window.location.reload();
     }
     //#endregion
 
