@@ -117,11 +117,11 @@ class kraListPage extends Component {
         message: Notification.deleteConfirm,
         buttons: {
           confirm: {
-            label: 'Yes',
+            label: 'Ok',
             className: 'btn-success'
           },
           cancel: {
-            label: 'No',
+            label: 'Cancel',
             className: 'btn-danger'
           }
         },
@@ -266,7 +266,7 @@ class kraListPage extends Component {
             
               <th width="50">Sr.No</th>
               <th width="150">Name</th>
-              <th width="800">Description</th>
+              <th width="600">Description</th>
               <th width="90">Action</th>
        
             </tr>

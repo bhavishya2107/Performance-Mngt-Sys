@@ -140,6 +140,8 @@ class kraHome extends Component {
 
         } else {
 
+            $(".hide").hide()
+
             return false;
         }
         
@@ -176,22 +178,23 @@ class kraHome extends Component {
 
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> {ModuleNames.kra} >
+                    <h2 className="col">
                 {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add {ModuleNames.kra}</span>}
                     </h2>
                 </div>
 
                 <form id="kraAddForm" action="" >
-
                     <div className="form-group">
                         <label className=" required" htmlFor="kraName">Name</label>
                         <div className="">
                             <input id="kraName" type="text" className="form-control col-6" name="kraName"
                                 value={this.state.kraName}
                                 onChange={(event) => {
+                                    $(".hide").hide()
                                     this.setState(
                                         {
                                             kraName: event.target.value
+                                            
                                         }
                                     )
                                 }} required /> <p className="hide" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
@@ -199,7 +202,7 @@ class kraHome extends Component {
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className=" required" htmlFor="kraDescription">Description</label>
+                        <label className=" " htmlFor="kraDescription">Description</label>
                         <div className="">
                             <textarea name="kraDescription" className="form-control col-6"
                                 value={this.state.description}
