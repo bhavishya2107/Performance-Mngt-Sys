@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-import { environment, moduleUrls, Type, Notification } from '../Environment'
+import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 var kpiData = []
@@ -26,14 +26,7 @@ class AddKpi extends Component {
 
     //#region Clear form details function
     resetForm() {
-        this.setState({
-            kpiTitle: "",
-            target: "",
-            weightage: "",
-            scaleSetId: ""
-
-        })
-    }
+        $('#kpiform').trigger("reset")    }
     //#endregion
     isKpiExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'+ this.state.kpiTitle + ')';
@@ -44,8 +37,7 @@ class AddKpi extends Component {
         });
     }
     isEditKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,'
-         + this.state.kpiTitle + ')' + '~and(kpiId,ne,' + this.state.id + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')' + '~and(kpiId,ne,' + this.state.kpiId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -72,9 +64,9 @@ class AddKpi extends Component {
                         "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
                     }
-                    const endpointPOST = environment.apiUrl + moduleUrls.Kpi + '/'
+                    const saveKpiUrl = environment.apiUrl + moduleUrls.Kpi + '/'
                     $.ajax({
-                        url: endpointPOST,
+                        url: saveKpiUrl,
                         type: Type.post,
                         data: Kpidata,
                         success: function (resultData) {
@@ -101,11 +93,13 @@ class AddKpi extends Component {
             type: Type.get,
         })
     }
+
     onChangeScaleSetId(event) {
         this.setState({
             scaleSetId: event.target.value
         })
     }
+    
     addKpi() {
         var kpiDataapi = {
             "scaleSetId": this.state.scaleSetId,
@@ -151,7 +145,6 @@ class AddKpi extends Component {
     }
 
     updateDetailsApi(data) {
-        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         var body =
         {
             "KpiTitle": data.kpiTitle,
@@ -159,6 +152,7 @@ class AddKpi extends Component {
             "weightage": data.weightage,
             "scaleSetId": data.scaleSetId
         }
+        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         return $.ajax({
             url: endpointPATCH,
             type: Type.patch,
@@ -180,12 +174,18 @@ class AddKpi extends Component {
 
                 } else {
                     var res = this.updateDetailsApi(data);
-                    this.setState({
-                        redirectToList: true
+                    res.done(()=>{
+                        this.setState({
+                            redirectToList: true
+                        })
+                        toast.success("KPI " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     })
-                    toast.success("KPI " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    res.fail((error)=>{
+
+                    })
+                   
                 }
             });
             res.fail((error) => {
@@ -196,6 +196,9 @@ class AddKpi extends Component {
         }
     }
     componentDidMount() {
+        this.setState({
+            title: ModuleNames.kpi
+        })
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
             res.done((response) => {
@@ -282,7 +285,10 @@ class AddKpi extends Component {
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveApiDetails(this.state);
                                             }}>Save</button>}
-                                        <button type="clear" className="btn btn-info mr-2" >Reset</button>
+                                        {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
+                                        <button type="reset" className="btn btn-success mr-2"  onClick={() => {
+                                                this.resetForm(this.state);
+                                            }}>Reset</button>}
                                         <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>

@@ -33,7 +33,7 @@ class AddProjectComplexity extends Component {
     }
     isEditProjectComplexityExistsApi() {
         const endpointGET = environment.apiUrl +  moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
-         + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.id + ')';
+         + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.projectTypeId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -54,7 +54,6 @@ class AddProjectComplexity extends Component {
                         var ProjectComplexitydata = {
                             "projectTypeName": this.state.projectTypeName,
                             "description": this.state.description,
-
                         }
                         const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
                         $.ajax({
@@ -63,7 +62,7 @@ class AddProjectComplexity extends Component {
                             data: ProjectComplexitydata,
                             success: function (resultData) {
                                 _this.setState({ redirectToList: true });
-                                toast.success("Record " + Notification.saved, {
+                                toast.success("Project Complexity " + Notification.saved, {
                                     position: toast.POSITION.TOP_RIGHT
                                 });
                             }
@@ -115,12 +114,15 @@ class AddProjectComplexity extends Component {
                     $(".recordexists").show()
                 } else {
                     var res = this.updateDetailsApi(data);
-                    this.setState({
-                        redirectToList: true
+                    res.done(()=>{
+                        this.setState({
+                            redirectToList: true
+                        })
+                        toast.success("Project Complexity " + Notification.updated, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     })
-                    toast.success("Project Complexity " + Notification.updated, {
-                        position: toast.POSITION.TOP_RIGHT
-                    });
+                    
                 }
             });
             res.fail((error) => {

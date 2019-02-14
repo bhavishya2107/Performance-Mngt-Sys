@@ -56,7 +56,7 @@ class ProjectComplexity extends Component {
         var res = this.DeleteProjectComplexityApi(projectTypeId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Project Complexity " + Notification.saved, {
+                toast.success("Project Complexity " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
