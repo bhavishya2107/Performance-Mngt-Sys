@@ -60,17 +60,18 @@ function formValidation(form) {
                     required: true,
                     digit:true
                 },
-              
+                jobtitlename: {
+                    required: 'maximum 50 characters'
+                },
                 messages:{
                     kraName:{
                         required:'required, Enter minimum 2 characters',
                     },
                     rolename: {
                         required: 'required,Enter minimum 2 characters',
-                    },
-                    scalesetname: {
-                        required: 'row exists'
                     }
+            
+
                 }
             }
         }}
