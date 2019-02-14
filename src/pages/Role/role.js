@@ -130,11 +130,11 @@ class UserRolePMS extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -220,9 +220,6 @@ class UserRolePMS extends Component {
     
 
             initComplete: (settings, json) => {
-                // $(".btnDelete").on("click", e => {
-                //     this.SingleDelete(e.currentTarget.id);
-                // });
             },
             drawCallback: (settings) => {
                 window.smallTable();
@@ -263,7 +260,7 @@ class UserRolePMS extends Component {
                                 />
                             </th>
                             <th width="50">Sr.No</th>
-                            <th>Name</th>
+                            <th width="">Name</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>

@@ -48,36 +48,39 @@ function formValidation(form) {
                     },
                     roleDropDown: {
                         required: true,
-                },
-               
-                rolename: {
-                    required: true,
-                },
-                scalesetname: {
-                    required: true,
-                },
-                weightage: {
-                    required: true,
-                    digit:true
-                },
-                 scaleSetdropdown: {
-                    required: true,
-                },
-                messages:{
-                    kraName:{
-                        required:'required, Enter minimum 2 characters',
                     },
+
                     rolename: {
-                        required: 'required,Enter minimum 2 characters',
+                        required: true,
                     },
                     scalesetname: {
-                        required: 'row exists'
+                        required: true,
+                    },
+                    weightage: {
+                        required: true,
+                        digit: true
+                    },
+                    jobtitlename: {
+                        required: 'maximum 50 characters'
+                    },
+                    scaleSetdropdown: {
+                        required: true,
+                    },
+                    messages: {
+                        kraName: {
+                            required: 'required, Enter minimum 2 characters',
+                        },
+                        rolename: {
+                            required: 'required,Enter minimum 2 characters',
+                        }
+
+
                     }
                 }
             }
-        }}
+        }
     );
-    
+
     return $(form).valid();
 }
 function smallTable() {

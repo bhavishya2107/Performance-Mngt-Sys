@@ -17,6 +17,7 @@ class Scaleset extends Component {
             title: ""
         }
     }
+   
     //#region Onclick function for Add
     isScalesetExistsApi() {
         const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')';
@@ -113,8 +114,10 @@ class Scaleset extends Component {
     UpdatescalesetDetails(data) {
         var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
+            
             var res = this.isScalesetExistsUpdateApi();
             res.done((response) => {
+                debugger;
                 if (response.length > 0) {
                     $(".recordexists").show()
 
@@ -141,7 +144,7 @@ class Scaleset extends Component {
             })
 
         } else {
-
+          $(".recordexists").hide()
             return false;
         }
     }
@@ -185,8 +188,9 @@ class Scaleset extends Component {
                         <form id="formscaleset1" onSubmit={this.handleSubmit}>
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="scalesetid" name="scalesetname" className="form-control" value={this.state.scaleSetName}
+                                <input type="text" id="scalesetid" name="scalesetname" maxLength="50" className="form-control" value={this.state.scaleSetName}
                                     onChange={(event) => {
+                                        $(".recordexists").hide()
                                         this.setState({
                                             scaleSetName: event.target.value
                                         })
@@ -198,8 +202,8 @@ class Scaleset extends Component {
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
-                                            description: event.target.value
-                                        })
+                                            description: event.target.value,
+                                       })
                                     }} ></textarea>
                             </div>
                             <div className="form-group">
