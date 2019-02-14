@@ -38,7 +38,7 @@ class Jobtitlelist extends Component {
                 }
             });
         }else(
-            alert("you cannot delete system generated department")
+            alert("you cannot delete system generated jobtitle")
         )
     }
     //#region delete details

@@ -87,6 +87,7 @@ class Scaleset extends Component {
         //     description: ""
 
         // })
+       
         window.location.reload();
     }
     //#endregion
@@ -154,7 +155,7 @@ class Scaleset extends Component {
     }
     //#endregion
 
-
+   
     componentDidMount() {
         this.setState({
             title: ModuleNames.ScaleSet
@@ -183,13 +184,13 @@ class Scaleset extends Component {
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> {this.state.title} >
+                    <h2 className="col">
                     {this.state.id !== undefined ? <span>Edit Scale Set</span> : <span>Add Scale Set</span>}
                     </h2>
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <form id="formscaleset1">
+                        <form id="formscaleset1" onSubmit={this.handleSubmit}>
                             <div className="form-group">
                                 <label className="required">Name</label>
                                 <input type="text" id="scalesetid" name="scalesetname" className="form-control" value={this.state.scaleSetName}
@@ -220,7 +221,7 @@ class Scaleset extends Component {
                                         this.savescaleset(this.state);
                                     }}>Save</button>}
 
-                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
+                                <button type="button" className="btn btn-info mr-2" onClick={() => {
                                         this.resetform()}}>Reset</button>
                                 {/* <button type="clear" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform()

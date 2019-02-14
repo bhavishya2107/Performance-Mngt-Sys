@@ -176,7 +176,7 @@ class Jobtitle extends Component {
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> {this.state.title} >
+                    <h2 className="col">
                 {this.state.id !== undefined ? <span>Edit Job Title</span> : <span>Add Job Title</span>}
                     </h2>
                 </div>
@@ -210,8 +210,8 @@ class Jobtitle extends Component {
                                         this.savejobtitle(this.state);
                                     }}>Save</button>}
 
-                                <button type="clear" className="btn btn-info mr-2" onClick={() => {
-                                    this.resetform()
+                                <button type="button" className="btn btn-info mr-2" onClick={() => {
+                                    this.resetform(this.state)
                                 }}>Reset</button>
                                 <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
                             </div>

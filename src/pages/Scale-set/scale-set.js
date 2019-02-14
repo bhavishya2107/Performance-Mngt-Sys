@@ -53,9 +53,14 @@ class Scalesetlist extends Component {
         });
 
         res.fail(error => {
-            toast.error(Notification.notdeleted, {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            if (error.status === 400) {
+                toast.error("reference issue", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("Scaleset" + Notification.notdeleted)
+            }
         });
     }
     DeletescalesetApi(scaleSetId) {
@@ -96,6 +101,14 @@ class Scalesetlist extends Component {
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
+            if (error.status === 400) {
+                toast.error("reference issue", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("Scaleset" + Notification.notdeleted)
+            }
         });
 
     }
@@ -127,7 +140,7 @@ class Scalesetlist extends Component {
                         this.multiDelete(scaleSetId);
                     }
                     else {
-                        toast.error("error")
+                       
                     }
                 }
             });
@@ -213,8 +226,8 @@ class Scalesetlist extends Component {
                 },
             ],
             "createdRow": function (row, data, index) {
-                
-                $('td', row).eq(1).html(index + 1 );
+
+                $('td', row).eq(1).html(index + 1);
             },
             // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
             //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
