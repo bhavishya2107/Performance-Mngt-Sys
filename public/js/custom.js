@@ -56,11 +56,6 @@ function formValidation(form) {
                     required: true,
                 },
 
-                weightage: {
-                    required: true,
-                    digit:true
-                },
-
                 scaleSetdropdown: {
                     required: true,
                 },
