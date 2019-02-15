@@ -6,7 +6,7 @@ import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
-class Jobtitlelist extends Component {
+class Designationlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,11 +42,11 @@ class Jobtitlelist extends Component {
         )
     }
     //#region delete details
-    SingleDelete(jobtitleId) {
-        var res = this.DeletejobtitleApi(jobtitleId);
+    SingleDelete(designationId) {
+        var res = this.DeletedesignationApi(designationId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Jobtitle " + Notification.deleted, {
+                toast.success("Designation " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -59,12 +59,12 @@ class Jobtitlelist extends Component {
             });
         });
     }
-    DeletejobtitleApi(jobtitleId) {
+    DeletedesignationApi(designationId) {
 
-        const deleteJobTitleApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${jobtitleId}`
+        const deleteDesignationApiUrl = environment.apiUrl + moduleUrls.Designation + '/' + `${designationId}`
 
         return $.ajax({
-            url: deleteJobTitleApiUrl,
+            url: deleteDesignationApiUrl,
             type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
@@ -72,9 +72,9 @@ class Jobtitlelist extends Component {
             }
         });
     }
-    multiDeletejobtitleApi(jobtitleId) {
+    multiDeletedesignationApi(designationId) {
 
-        const deleteJobTitleApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '/bulk?_ids=' + `${jobtitleId}`
+        const deleteJobTitleApiUrl = environment.apiUrl + moduleUrls.Designation + '/bulk?_ids=' + `${designationId}`
 
         return $.ajax({
             url: deleteJobTitleApiUrl,
@@ -86,16 +86,16 @@ class Jobtitlelist extends Component {
         });
     }
     //#endregion
-    Deletejobtitleconfirm() {
-        var jobtitleId = []
-        $("#tbljobtitle input:checkbox:checked").each((e, item) => {
+    Deletedesignationconfirm() {
+        var designationId = []
+        $("#tbldesignation input:checkbox:checked").each((e, item) => {
             if (item.name != 'checkAll' && item.value != 105) {
 
-                jobtitleId.push(item.value);
+                designationId.push(item.value);
             }
 
         });
-        if (jobtitleId.length > 0) {
+        if (designationId.length > 0) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
@@ -110,7 +110,7 @@ class Jobtitlelist extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.Deletejobtitle(jobtitleId);
+                        this.Deletedesignation(designationId);
                     }
                     else {
                     }
@@ -121,12 +121,12 @@ class Jobtitlelist extends Component {
             toast.info(Notification.selectOneRecord);
         }
     }
-    Deletejobtitle(jobtitleId) {
-        var item = jobtitleId.join(",")
-        var res = this.multiDeletejobtitleApi(item);
+    Deletedesignation(designationId) {
+        var item = designationId.join(",")
+        var res = this.multiDeletedesignationApi(item);
         res.done((response) => {
 
-            toast.success("Job Title " + Notification.deleted, {
+            toast.success("Designation " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             });
             this.$el.DataTable().ajax.reload();
@@ -137,7 +137,7 @@ class Jobtitlelist extends Component {
 
     }
     checkall(e) {
-        $("#tbljobtitle input:checkbox").each((index, item) => {
+        $("#tbldesignation input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
             } else {
@@ -149,11 +149,12 @@ class Jobtitlelist extends Component {
         this.setState({
             title: ModuleNames.Jobtitle
         })
-        const jobtitleGET = environment.apiUrl + 'jobtitle_master/?' + '&_sort=-jobtitleId'
+        const jobtitleGET = environment.apiUrl + moduleUrls.Designation + '/?' + '&_sort=-designationId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+
+            // "order": [[1, 'asc']],
 
             ajax: {
                 url: jobtitleGET,
@@ -165,12 +166,12 @@ class Jobtitlelist extends Component {
             columns: [
 
                 {
-                    data: "jobtitleId",
+                    data: "designationId",
                     "orderable": false,
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="scalesetId" value=' + row.jobtitleId + ">"
+                            '<input type="checkbox" name="designationId" value=' + row.designationId + ">"
                         );
                     }
                 },
@@ -181,7 +182,7 @@ class Jobtitlelist extends Component {
                 //     //width: '10'
                 // },
                 {
-                    data: "jobtitleName",
+                    data: "designationName",
                     targets: 1,
                     //width: '20%'
                 },
@@ -192,16 +193,16 @@ class Jobtitlelist extends Component {
                 },
 
                 {
-                    data: "jobtitleId",
+                    data: "designationId",
                     "orderable": false,
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/job-title/edit/id=' + row.jobtitleId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/designation/edit/id=' + row.designationId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
                             +
-                            '<a href="#" id="' + row.jobtitleId + '"class="btn btn-danger btnDelete btn-sm">' +
+                            '<a href="#" id="' + row.designationId + '"class="btn btn-danger btnDelete btn-sm">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -232,16 +233,16 @@ class Jobtitlelist extends Component {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col">{this.state.title}</h2>
+                    <h2 className="col">Designation</h2>
                     <div className="col text-right">
-                        <Link to="/job-title/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to="/designation/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => {
-                        this.Deletejobtitleconfirm()
+                        this.Deletedesignationconfirm()
                     }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
-                    id="tbljobtitle"
+                    id="tbldesignation"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr><th width="20">
@@ -266,4 +267,4 @@ class Jobtitlelist extends Component {
         )
     }
 }
-export default Jobtitlelist;
+export default Designationlist;

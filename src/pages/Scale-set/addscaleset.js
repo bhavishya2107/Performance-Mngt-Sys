@@ -20,7 +20,7 @@ class Scaleset extends Component {
 
     //#region Onclick function for Add
     isScalesetExistsApi() {
-        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')';
+        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName.trim() + ')';
         return $.ajax({
             url: scalesetExistsGET,
             type: Type.get,
@@ -28,7 +28,7 @@ class Scaleset extends Component {
         });
     }
     isScalesetExistsUpdateApi() {
-        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')' + '~and(scaleSetId,ne,' + this.state.id + ')';
+        const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName.trim() + ')' + '~and(scaleSetId,ne,' + this.state.id + ')';
         return $.ajax({
             url: scalesetExistsGET,
             type: Type.get,
@@ -48,7 +48,7 @@ class Scaleset extends Component {
                 } else {
                     var _this = this;
                     var formData = {
-                        "scaleSetName": this.state.scaleSetName,
+                        "scaleSetName": this.state.scaleSetName.trim(),
                         "description": this.state.description
                     }
                     const saveScalesetUrl = environment.apiUrl + moduleUrls.ScaleSet + '/'
@@ -97,7 +97,7 @@ class Scaleset extends Component {
     updateDetailsApi(data) {
         var body =
         {
-            "scaleSetName": data.scaleSetName,
+            "scaleSetName": data.scaleSetName.trim(),
             "description": data.description,
         }
         const endpointPOST = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${data.id}`
@@ -149,6 +149,36 @@ class Scaleset extends Component {
         }
     }
     //#endregion
+    onblurRowExists() {
+
+        if(this.state.id != undefined){
+            var res = this.isScalesetExistsUpdateApi();
+            res.done((response) => {
+                debugger;
+                if (response.length > 0) {
+                    $(".recordexists").show()
+
+                }else{
+                   
+                }
+
+        }
+        )}
+    
+        else{
+            var res = this.isScalesetExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
+                    $(".recordexists").show()
+    
+                } else {
+                    
+                }
+            })
+        }
+    
+    }
 
 
     componentDidMount() {
@@ -185,10 +215,10 @@ class Scaleset extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <form id="formscaleset1" onSubmit={this.handleSubmit}>
+                        <form id="formscaleset1">
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="scalesetid" name="scalesetname" maxLength="50" className="form-control" value={this.state.scaleSetName}
+                                <input type="text" id="scalesetid" name="scalesetname" onBlur={() => { this.onblurRowExists() }} maxLength="50" className="form-control" value={this.state.scaleSetName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
                                         this.setState({

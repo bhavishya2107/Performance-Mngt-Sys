@@ -162,7 +162,7 @@ class Scalesetlist extends Component {
     componentDidMount() {
         //#region Data table realted Block
         const scalesetGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000' + '&_sort=-scaleSetId'
-
+        
         this.setState({
             title: ModuleNames.ScaleSet
         })
@@ -170,7 +170,7 @@ class Scalesetlist extends Component {
 
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+          //  "order": [[1, 'asc']],
 
             ajax: {
                 url: scalesetGET,

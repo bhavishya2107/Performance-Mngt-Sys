@@ -77,8 +77,8 @@ export default {
                 icon: 'fa fa-balance-scale',
             },
             {
-                name: 'Job Title',
-                url: '/job-title',
+                name: 'Designation',
+                url: '/designation',
                 icon: 'fa fa-id-card-o',
             },
             // {

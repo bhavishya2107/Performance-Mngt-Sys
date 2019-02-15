@@ -4,39 +4,41 @@ import { ToastContainer, toast } from 'react-toastify';
 import { environment, Notification, moduleUrls, Type, ModuleNames } from '../Environment'
 import { Redirect } from 'react-router-dom';
 const $ = require('jquery');
-class Jobtitle extends Component {
+class Designation extends Component {
     constructor(props) {
         super(props);
         this.state = {
             id: props.match.params.id,
-            jobtitleName: "",
+            designationName: "",
             description: "",
             redirectToList: false,
             title: ""
         }
     }
     //#region onClick Add function
-    isJobtitleExistsApi() {
-        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '?_where=(jobtitleName,eq,' + this.state.jobtitleName + ')';
+    isDesignationExistsApi() {
+        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Designation + '?_where=(designationName,eq,' + this.state.designationName.trim() + ')';
         return $.ajax({
             url: isJobtitleExistsApiUrl,
             type: Type.get,
             data: ''
         });
     }
-    isJobtitleExistsUpdateApi() {
-        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Jobtitle + '?_where=(jobtitleName,eq,' + this.state.jobtitleName + ')' + '~and(jobtitleId,ne,' + this.state.id + ')';
+    isDesignationExistsUpdateApi() {
+        const isJobtitleExistsApiUrl = environment.apiUrl + moduleUrls.Designation + '?_where=(designationName,eq,' + this.state.designationName.trim() + ')' + '~and(designationId,ne,' + this.state.id + ')';
         return $.ajax({
             url: isJobtitleExistsApiUrl,
             type: Type.get,
             data: ''
         });
     }
-    savejobtitle() {
+    savedesignation() {
         $(".recordexists").hide()
         var isvalidate = window.formValidation("#formjobtitle");
+        
         if (isvalidate) {
-            var res = this.isJobtitleExistsApi();
+         
+            var res = this.isDesignationExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     
@@ -44,19 +46,18 @@ class Jobtitle extends Component {
 
                 } else {
                     var _this = this;
-
                     var formData = {
-                        "jobtitleName": this.state.jobtitleName,
+                        "designationName": this.state.designationName.trim(),
                         "description": this.state.description
                     }
-                    const savejobtitleUrl = environment.apiUrl + moduleUrls.Jobtitle + '/'
+                    const savejobtitleUrl = environment.apiUrl + moduleUrls.Designation + '/'
                     $.ajax({
                         url: savejobtitleUrl,
                         type: Type.post,
                         data: formData,
                         success: function (resultData) {
                             _this.setState({ redirectToList: true });
-                            toast.success("Job Title " + Notification.saved, {
+                            toast.success("Designation " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -76,8 +77,8 @@ class Jobtitle extends Component {
     resetform() {
         window.location.reload();
     }
-    getjobtitleDetilsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${this.state.id}`
+    getdesignationDetilsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.Designation + '/' + `${this.state.id}`
 
         return $.ajax({
             url: endpointGET,
@@ -89,12 +90,12 @@ class Jobtitle extends Component {
 
         var body =
         {
-            "jobtitleName": data.jobtitleName,
+            "designationName": data.designationName.trim(),
             "description": data.description
 
         }
 
-        const endpointPOST = environment.apiUrl + moduleUrls.Jobtitle + '/' + `${data.id}`
+        const endpointPOST = environment.apiUrl + moduleUrls.Designation + '/' + `${data.id}`
         return $.ajax({
             url: endpointPOST,
             type: "PATCH",
@@ -106,11 +107,11 @@ class Jobtitle extends Component {
             data: JSON.stringify(body)
         });
     }
-    UpdatejobtitleDetails(data) {
+    UpdatedesignationDetails(data) {
         
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
-            var res = this.isJobtitleExistsUpdateApi()
+            var res = this.isDesignationExistsUpdateApi()
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
@@ -122,7 +123,7 @@ class Jobtitle extends Component {
                         this.setState({
                             redirectToList: true
                         })
-                        toast.success("Job Title " + Notification.updated, {
+                        toast.success("Designation " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     });
@@ -140,16 +141,44 @@ class Jobtitle extends Component {
         }
 
     }
+    onblurRowExists(){
+        if(this.state.id != undefined){
+            var res = this.isDesignationExistsUpdateApi();
+            res.done((response) => {
+                debugger;
+                if (response.length > 0) {
+                    $(".recordexists").show()
+
+                }else{
+                   
+                }
+
+        }
+        )}
+    
+        else{
+            var res = this.isDesignationExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
+                    $(".recordexists").show()
+    
+                } else {
+                    
+                }
+            })
+        }
+    }
     componentDidMount() {
         this.setState({
             title: ModuleNames.Jobtitle
         })
         if (this.state.id !== undefined) {
-            var res = this.getjobtitleDetilsApi();
+            var res = this.getdesignationDetilsApi();
             res.done((response) => {
 
                 this.setState({
-                    jobtitleName: response[0].jobtitleName,
+                    designationName: response[0].designationName,
                     description: response[0].description
                 })
             });
@@ -165,13 +194,13 @@ class Jobtitle extends Component {
     render() {
         if (this.state.redirectToList === true) {
 
-            return <Redirect to={{ pathname: "/job-title" }} />
+            return <Redirect to={{ pathname: "/designation" }} />
         }
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit Job Title</span> : <span>Add Job Title</span>}
+                        {this.state.id !== undefined ? <span>Edit Designation</span> : <span>Add Designation</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -179,18 +208,18 @@ class Jobtitle extends Component {
                         <form id="formjobtitle">
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="jobtitleid" name="jobtitlename" minLength="" maxLength="50" className="form-control" value={this.state.jobtitleName}
+                                <input type="text" id="designationid" name="designationname" onBlur={() => { this.onblurRowExists() }} minLength="" maxLength="50" className="form-control" value={this.state.designationName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
                                         this.setState({
-                                            jobtitleName: event.target.value
+                                            designationName: event.target.value
                                         })
                                     }} required />
                                     
                                 <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
-                                <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}
+                                <label>Description</label> <textarea name="designationaddress" className="form-control" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
@@ -200,16 +229,16 @@ class Jobtitle extends Component {
                             <div className="form-group">
                                 {this.state.id !== undefined ?
                                     <button type="button" className="btn btn-success mr-2" onClick={() => {
-                                        this.UpdatejobtitleDetails(this.state);
+                                        this.UpdatedesignationDetails(this.state);
                                     }}>Update</button>
                                     : <button type="button" className="btn btn-success mr-2" onClick={() => {
-                                        this.savejobtitle(this.state);
+                                        this.savedesignation(this.state);
                                     }}>Save</button>}
 
                                 <button type="button" className="btn btn-info mr-2" onClick={() => {
                                     this.resetform(this.state)
                                 }}>Reset</button>
-                                <Link to="/job-title" className="btn btn-danger ">Cancel</Link>
+                                <Link to="/designation" className="btn btn-danger ">Cancel</Link>
                             </div>
                         </form>
                     </div>
@@ -219,4 +248,4 @@ class Jobtitle extends Component {
         )
     }
 }
-export default Jobtitle;
+export default Designation;
