@@ -70,7 +70,16 @@ function formValidation(form) {
                     kraName: {
                         required: 'required',
                         maxLength:'Please enter no more than 20 char',
+                    deptDropDown: {
+                        required: true,
                     },
+                    jobDropDown: {
+                        required: true,
+                    },
+                    roleDropDown: {
+                        required: true,
+                    },
+
                     rolename: {
                         required: 'required',
                         maxLength:'Please enter no more than 20 char',
@@ -78,11 +87,39 @@ function formValidation(form) {
                     scalesetname: {
                         required: 'row exists'
                     },
+                        required: true,
+                    },
+                    scalesetname: {
+                        required: true,
+                    },
+                    weightage: {
+                        required: true,
+                        digit: true
+                    },
+                    scaleSetdropdown: {
+                        required: true,
+                    },
+                    messages: {
+                        kraName: {
+                            required: 'required, Enter minimum 2 characters',
+                        },
+                        rolename: {
+                            required: 'required,Enter minimum 2 characters',
+                        },
+                        jobtitlename: {
+                            required: 'maximum 50 characters'
+                        },
+                        scalesetname: {
+                            required:'maximum 50 characters',
+                        },
+
+
+                    }
                 }
             }
         }
     );
-    
+
     return $(form).valid();
 }
 function smallTable() {

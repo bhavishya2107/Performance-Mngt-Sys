@@ -22,10 +22,8 @@ class AddDept extends Component {
     //#region clear department fields
     reset() {
 
-        this.setState({
-            depName: "",
-            description: ""
-        })
+     window.location.reload();
+       
     }
     //#endregion
 

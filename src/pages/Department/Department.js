@@ -22,7 +22,7 @@ class Department extends Component {
         var res = this.DeleteDepApi(depId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Department " + Notification.deleted);
+                toast.success( "Department" +Notification.deleted);
             }
             this.$el.DataTable().ajax.reload()
         });
@@ -35,7 +35,7 @@ class Department extends Component {
         if (id !== undefined) {
             if (id != 259) {
                 bootbox.confirm({
-                    message: Notification.deleted,
+                    message: Notification.deleteConfirm,
                     buttons: {
                         confirm: {
                             label: 'Yes',

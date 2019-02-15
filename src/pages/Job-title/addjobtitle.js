@@ -33,12 +33,13 @@ class Jobtitle extends Component {
         });
     }
     savejobtitle() {
+        $(".recordexists").hide()
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
             var res = this.isJobtitleExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-
+                    
                     $(".recordexists").show()
 
                 } else {
@@ -106,6 +107,7 @@ class Jobtitle extends Component {
         });
     }
     UpdatejobtitleDetails(data) {
+        
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
             var res = this.isJobtitleExistsUpdateApi()
@@ -133,7 +135,7 @@ class Jobtitle extends Component {
 
             })
         } else {
-
+            $(".recordexists").hide()
             return false;
         }
 
@@ -177,13 +179,15 @@ class Jobtitle extends Component {
                         <form id="formjobtitle">
                             <div className="form-group">
                                 <label className="required">Name</label>
-                                <input type="text" id="jobtitleid" name="jobtitlename" minLength="" className="form-control" value={this.state.jobtitleName}
+                                <input type="text" id="jobtitleid" name="jobtitlename" minLength="" maxLength="50" className="form-control" value={this.state.jobtitleName}
                                     onChange={(event) => {
+                                        $(".recordexists").hide()
                                         this.setState({
                                             jobtitleName: event.target.value
                                         })
                                     }} required />
-                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                    
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}

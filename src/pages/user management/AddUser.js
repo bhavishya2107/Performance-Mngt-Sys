@@ -37,18 +37,7 @@ class AddUser extends Component {
     }
     //#region  clear user fields
     reset() {
-        this.setState({
-
-            userName: "",
-            password: "",
-            firstName: "",
-            lastName: "",
-            emailAddress: "",
-            mobileNo: "",
-            profileImage: "",
-            Address: "",
-            Image: "",
-        })
+        window.location.reload();
     }
     //#endregion
 
@@ -131,6 +120,13 @@ class AddUser extends Component {
                     });
                 }
             });
+            res.fail(error=>{
+
+            })
+        }
+        else{
+            $(".dataExist").hide()
+            return false;
         }
     }
 
@@ -415,6 +411,7 @@ class AddUser extends Component {
                                                     <label htmlFor="userName" className="required" sm={2}>user Name</label>
                                                     <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
                                                         onChange={(event) => {
+                                                            $(".dataExist").hide()
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })

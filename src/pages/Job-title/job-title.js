@@ -174,27 +174,27 @@ class Jobtitlelist extends Component {
                         );
                     }
                 },
-                {
-                    data: null,
-                    targets: 1,
-                    "orderable": false,
-
-                },
+                // {
+                //     data: null,
+                //     targets: 1,
+                //     "orderable": false,
+                //     //width: '10'
+                // },
                 {
                     data: "jobtitleName",
-                    targets: 2
+                    targets: 1,
+                    //width: '20%'
                 },
                 {
                     data: "description",
                     "orderable": false,
-                    targets: 3
-
+                    targets: 2
                 },
 
                 {
                     data: "jobtitleId",
                     "orderable": false,
-                    targets: 4,
+                    targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a href="/job-title/edit/id=' + row.jobtitleId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -208,10 +208,11 @@ class Jobtitlelist extends Component {
                     }
                 },
             ],
-            "createdRow": function (row, data, index) {
+            //fixedColumns: true,
+            // "createdRow": function (row, data, index) {
 
-                $('td', row).eq(1).html(index + 1);
-            },
+            //     $('td', row).eq(1).html(index + 1);
+            // },
 
             initComplete: (settings, json) => {
 
@@ -252,7 +253,7 @@ class Jobtitlelist extends Component {
                                 }}
                             />
                         </th>
-                            <th width="5">Sr.No</th>
+                            {/* <th width="5">Sr.No</th> */}
                             <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
