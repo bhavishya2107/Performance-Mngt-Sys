@@ -31,7 +31,7 @@ class MyProfile extends Component {
       type: "POST",
       data: {
         query:
-          "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.depname,u.address,u.profileimage,j.jobtitlename,r.rolename, u1.firstname  as teamleader from user_master U join department_master d on U.depid = d.depid join jobtitle_master j on u.jobtitleId = j.jobtitleId join role_master r on u.roleid = r.roleid join user_master u1 on u.teamid = u1.userid where u.userid = 94"
+          "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.depname,u.address,u.profileimage,j.jobtitlename,r.rolename, u1.firstname  as teamleader from user_master U join department_master d on U.depid = d.depid join jobtitle_master j on u.jobtitleId = j.jobtitleId join role_master r on u.roleid = r.roleid join user_master u1 on u.teamid = u1.userid where u.userid = 150"
       }
     });
   }
@@ -72,7 +72,9 @@ class MyProfile extends Component {
             <div className="col-md-3 order-md-last text-center">
               <div>
                 <img
-                  src={this.state.profileImage}
+                  // src={this.state.profileImage}
+                  src= "https://media.voog.com/0000/0042/3119/photos/profile-picture.jpg"
+
                   style={{ width: "200px" }}
                   className="img-thumbnail"
                 />

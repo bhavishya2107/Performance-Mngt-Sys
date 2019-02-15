@@ -147,7 +147,7 @@ class kraListPage extends Component {
     const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId'
     this.$el.DataTable({
       autoWidth: false,
-      // aaSorting: [[1, "asc"]],
+      aaSorting: [[1, "asc"]],
       // aaSorting: [[2, "asc"]],          
       ajax: {
         url: endpointGET,
@@ -158,10 +158,10 @@ class kraListPage extends Component {
       },
 
       columnDefs: [
-        { width: '10px', targets: 0 },
-        { width: '300px', targets: 1 },
-        { width: '300px', targets: 2 },
-        { width: '10px', targets: 3 },  
+        { width: '1px', targets: 0 },
+        { width: '100px', targets: 1 },
+        { width: '600px', targets: 2 },
+        { width: '1px', targets: 3 },  
       
        ],
 
@@ -193,6 +193,7 @@ class kraListPage extends Component {
 
         {
           data: "action",
+          className: "text-center",
           orderable: false,
           targets: 3,
           render: function (data, type, row) {
