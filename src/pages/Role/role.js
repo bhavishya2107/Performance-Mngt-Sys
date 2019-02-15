@@ -76,7 +76,6 @@ class UserRolePMS extends Component {
     }
     DeleteAllRole(roleId) {
         
-
         var item = roleId.join(",");
         var res = this.multiDeleteRoleApi(item);
         res.done((response) => {

@@ -77,7 +77,20 @@ class AddUser extends Component {
         })
     }
 
+    isExistOnChange(data) {
+        var result = []
+        if (this.state !== undefined) {
+            var res = this.isUserExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+                else {
 
+                }
+            })
+        }
+    }
     saveUser() {
         var res = window.formValidation("#createUser");
         if (res) {
@@ -120,11 +133,11 @@ class AddUser extends Component {
                     });
                 }
             });
-            res.fail(error=>{
+            res.fail(error => {
 
             })
         }
-        else{
+        else {
             $(".dataExist").hide()
             return false;
         }
@@ -149,7 +162,8 @@ class AddUser extends Component {
         })
     }
 
-
+    
+    
     updateAjaxCall(data) {
 
         var userList =
@@ -202,8 +216,8 @@ class AddUser extends Component {
                             isUpdate: true
 
                         })
-                      
-                        toast.success("Update " + Notification.updated, {
+
+                        toast.success("User " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     });
@@ -384,7 +398,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} >first Name</label>
+                                                    <label htmlFor="firstName" className="required" sm={2} >First Name</label>
                                                     <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -395,7 +409,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="lastName" className="required" sm={2}>last Name</label>
+                                                    <label htmlFor="lastName" className="required" sm={2}>Last Name</label>
                                                     <input type="text" name="lastName" id="lastName" className="form-control" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -408,20 +422,22 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="userName" className="required" sm={2}>user Name</label>
+                                                    <label htmlFor="userName" className="required" sm={2}>User Name</label>
                                                     <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
+                                                        onBlur={() => { this.isExistOnChange() }}
+
                                                         onChange={(event) => {
                                                             $(".dataExist").hide()
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none" }}>{Notification.recordExists}></p>
+                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}></p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="emailAddress" className="required" sm={2}>email ID</label>
+                                                    <label htmlFor="emailAddress" className="required" sm={2}>email</label>
                                                     <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
                                                             this.setState({
