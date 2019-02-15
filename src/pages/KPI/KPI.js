@@ -186,7 +186,6 @@ class KPI extends Component {
                     data: "kpiId",
                     targets: 5,
                     render: function (data, type, row) {
-                        debugger;
                         return (
                             '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +

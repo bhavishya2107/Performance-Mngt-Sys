@@ -124,7 +124,6 @@ class AddProjectComplexity extends Component {
         var isvalidate = window.formValidation("#projectComplexityForm");
         if (isvalidate) {
             var res = this.isEditProjectComplexityExistsApi();
-            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
