@@ -152,7 +152,7 @@ class UserManagement extends Component {
         const url = environment.apiUrl + moduleUrls.User + '/?_size=1000' + '/&_sort=-userId';
         this.$el = $(this.el);
         this.$el.DataTable({
-            "sorting": [[1, 'asc']],
+            "sorting": [[0, 'asc']],
 
             "autoWidth": false,
             ajax: {

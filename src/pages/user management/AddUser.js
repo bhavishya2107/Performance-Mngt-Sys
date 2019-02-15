@@ -267,7 +267,7 @@ class AddUser extends Component {
                         roleId: res.roleId,
                         teamId: res.teamId
                     })
-                
+            
                 }
             });
             res.fail((error) => {

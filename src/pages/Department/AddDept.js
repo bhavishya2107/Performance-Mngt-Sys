@@ -27,7 +27,7 @@ class AddDept extends Component {
 
     //#region check whether the record is exist or not
     isDeptExistApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName + ')'
+        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName.trim() + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -80,7 +80,7 @@ class AddDept extends Component {
                     var deptList =
                     {
 
-                        "depName": this.state.depName,
+                        "depName": this.state.depName.trim(),
                         "description": this.state.description,
                     }
                     var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
@@ -135,7 +135,7 @@ class AddDept extends Component {
         });
     }
     isDeptExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(depName,eq,' + this.state.depName + ')' + '~and(depId,ne,' + this.state.depId + ')'
+        var url = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(depName,eq,' + this.state.depName.trim() + ')' + '~and(depId,ne,' + this.state.depId + ')'
         return $.ajax({
             url: url,
             type: Type.get
