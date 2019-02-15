@@ -156,6 +156,15 @@ class kraListPage extends Component {
         dataSrc: "",
         error: function (xhr, status, error) { }
       },
+
+      columnDefs: [
+        { width: '10px', targets: 0 },
+        { width: '300px', targets: 1 },
+        { width: '300px', targets: 2 },
+        { width: '10px', targets: 3 },  
+      
+       ],
+
       columns: [
         {
           data: "kraId",
@@ -167,24 +176,25 @@ class kraListPage extends Component {
             );
           }
         },
-        {
-          data: null,
-          targets: 1,
-          orderable: false
-        },
+        // {
+        //   data: null,
+        //   targets: 1,
+        //   orderable: false
+        // },
         {
           data: "kraName",
-          targets: 2
+          targets: 1
         },
         {
           data: "description",
-          targets: 3
+          targets: 2,
+          orderable: false
         },
 
         {
           data: "action",
           orderable: false,
-          targets: 4,
+          targets: 3,
           render: function (data, type, row) {
             return (
               '<a href="/Editkra/id=' +
@@ -201,10 +211,10 @@ class kraListPage extends Component {
           }
         }
       ],
-      "createdRow": function (row, data, index) {
+    //   "createdRow": function (row, data, index) {
                 
-        $('td', row).eq(1).html(index + 1 );
-    },
+    //     $('td', row).eq(1).html(index + 1 );
+    // },
       
       // fnRowCallback: function (nRow, aData, iDisplayIndex) {
       //   $("td:eq(1)", nRow).html(iDisplayIndex + 1);
@@ -264,10 +274,10 @@ class kraListPage extends Component {
                 />
               </th>
             
-              <th width="50">Sr.No</th>
-              <th width="150">Name</th>
-              <th width="600">Description</th>
-              <th width="90">Action</th>
+              {/* <th>Sr.No</th> */}
+              <th>Name</th>
+              <th>Description</th>
+              <th>Action</th>
        
             </tr>
           </thead>

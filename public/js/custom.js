@@ -28,54 +28,59 @@ function formValidation(form) {
             rules: {
                 kraName: {
                     required: true,
+                    maxLength: 20,
                 },
-                rolename: {
-                    required: true,
-                },
-                messages: {
-                    kraName: {
-                        required: 'required, Enter minimum 2 characters',
-                    },
-                    rolename: {
-                        required: 'required,Enter minimum 2 characters',
-                    },
 
-                    deptDropDown: {
-                        required: true,
-                    },
-                    jobDropDown: {
-                        required: true,
-                    },
-                    roleDropDown: {
-                        required: true,
+                rolename: {
+                    required: true,
+                    maxLength: 20,
                 },
-               
+
+                deptDropDown: {
+                    required: true,
+                },
+
+                jobDropDown: {
+                    required: true,
+                },
+
+                roleDropDown: {
+                    required: true,
+                },
+
                 rolename: {
                     required: true,
                 },
+
                 scalesetname: {
                     required: true,
                 },
+
                 weightage: {
                     required: true,
                     digit:true
                 },
-                 scaleSetdropdown: {
+
+                scaleSetdropdown: {
                     required: true,
                 },
-                messages:{
-                    kraName:{
-                        required:'required, Enter minimum 2 characters',
+
+                messages:
+                {
+                    kraName: {
+                        required: 'required',
+                        maxLength:'Please enter no more than 20 char',
                     },
                     rolename: {
-                        required: 'required,Enter minimum 2 characters',
+                        required: 'required',
+                        maxLength:'Please enter no more than 20 char',
                     },
                     scalesetname: {
                         required: 'row exists'
-                    }
+                    },
                 }
             }
-        }}
+        }
     );
     
     return $(form).valid();

@@ -204,7 +204,7 @@ class kraHome extends Component {
                     <div className="form-group">
                         <label className=" " htmlFor="kraDescription">Description</label>
                         <div className="">
-                            <textarea name="kraDescription" className="form-control col-6"
+                            <textarea name="kraDescription" className="form-control col-6" rows="3"
                                 value={this.state.description}
                                 onChange={(event) => {
                                     this.setState(
