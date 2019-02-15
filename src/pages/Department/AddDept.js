@@ -21,9 +21,7 @@ class AddDept extends Component {
     }
     //#region clear department fields
     reset() {
-
         window.location.reload();
-
     }
     //#endregion
 
@@ -47,19 +45,24 @@ class AddDept extends Component {
                 if (response.length > 0) {
                     $(".dataExist").show()   //check record exist or not
                 }
-                else{
-                    
+                else {
+
                 }
-              
+
             });
 
             res.fail((error) => {
             })
         }
         else {
-            return false;
-        }
+            var res = this.isDeptExistUpdateApi();
 
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+            })
+        }
     }
     ////#endregion
     //#region save department details  
@@ -114,7 +117,7 @@ class AddDept extends Component {
         var _this = this;
         var deptList =
         {
-            "depName": data.depName,
+            "depName": data.depName.trim(),
             "description": data.description
         }
         return $.ajax({
@@ -177,7 +180,6 @@ class AddDept extends Component {
         if (this.state.depId !== undefined) {
             var res = this.getDepApi();
             res.done((response) => {
-                // console.log(response, 'res');
                 var res = response[0];
                 this.setState({
                     depName: res.depName,
@@ -216,14 +218,15 @@ class AddDept extends Component {
                         <form id="createDepartment">
                             <div className="form-group">
                                 <label htmlFor="depName" className="required">Name</label>
-                                <input type="text" name="depName" className="form-control" id="depName" value={this.state.depName}
+                                <input type="text" name="depName" className="form-control" maxLength="50" id="depName" value={this.state.depName}
                                     onBlur={() => { this.isExistOnChange(); }}
                                     onChange={(event) => {
+                                        $(".dataExist").hide()
                                         this.setState({
                                             depName: event.target.value
                                         })
                                     }} required />
-                                <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}></p>
+                                <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
 
 
                             </div>

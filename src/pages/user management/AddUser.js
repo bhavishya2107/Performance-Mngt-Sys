@@ -88,9 +88,21 @@ class AddUser extends Component {
                 else {
 
                 }
+            });
+            res.fail((error) => {
+            })
+        }
+        else {
+            var res = this.isDeptExistUpdateApi();
+
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
             })
         }
     }
+
     saveUser() {
         var res = window.formValidation("#createUser");
         if (res) {
@@ -162,8 +174,8 @@ class AddUser extends Component {
         })
     }
 
-    
-    
+
+
     updateAjaxCall(data) {
 
         var userList =
@@ -255,6 +267,7 @@ class AddUser extends Component {
                         roleId: res.roleId,
                         teamId: res.teamId
                     })
+                
                 }
             });
             res.fail((error) => {
@@ -385,6 +398,7 @@ class AddUser extends Component {
                                             <div className="upload-img">
                                                 <Input type="file" name="profileImage" id="profileImage" className=""
                                                     onChange={(event) => {
+                                                        debugger
                                                         this.setState({
                                                             profileImage: event.target.value
                                                         })
@@ -432,7 +446,7 @@ class AddUser extends Component {
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}></p>
+                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -461,7 +475,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Department</label>
+                                                    <label className="required">Department</label>
                                                     <select required name="deptDropDown" value={this.state.depId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayDeptData}
@@ -472,7 +486,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Job Title</label>
+                                                    <label className="required">Job Title</label>
                                                     <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.jobtitleId} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayJobData}
@@ -481,7 +495,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Role</label>
+                                                    <label className="required">Role</label>
                                                     <select required name="roleDropDown" onChange={(e) => { this.onChangeRole(e) }} value={this.state.roleId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayRoleData}
@@ -492,8 +506,8 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Team Leader</label>
-                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <label className="required">Team Leader</label>
+                                                    <select required  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>
