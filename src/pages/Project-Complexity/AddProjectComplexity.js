@@ -37,6 +37,22 @@ class AddProjectComplexity extends Component {
             data: ''
         });
     }
+    onchangeBlur(){
+        var res = this.isProjectComplexityExistsApi();
+        res.done((response) => {
+            if (response.length > 0) {
+                $(".recordexists").show()
+            } else {
+                var _this = this;
+                var ProjectComplexitydata = {
+                    "projectTypeName": this.state.projectTypeName,
+                    "description": this.state.description,
+                }
+            }
+        });
+        res.fail(error => {
+        });
+    }
 
 
     saveProjectComplexityDetails() {
@@ -72,6 +88,9 @@ class AddProjectComplexity extends Component {
             return false;
         }
     }
+
+
+
 
     getProjectComplexityDeatilsApi(projectTypeId) {
         const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${this.state.projectTypeId}`
@@ -164,7 +183,7 @@ class AddProjectComplexity extends Component {
                         <form id="projectComplexityForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
-                                <input type="text" id="projectTypeName" className="form-control" maxLength="50" name="projectTypeName" value={this.state.projectTypeName}
+                                <input type="text" id="projectTypeName" className="form-control" maxLength="50" onBlur={()=>{this.onchangeBlur()}} name="projectTypeName" value={this.state.projectTypeName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
                                         this.setState({

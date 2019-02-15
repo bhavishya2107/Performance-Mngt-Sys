@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
+$.DataTable = require('datatables.net-bs4');
+
 var kpiData = []
 
 class AddKpi extends Component {
@@ -52,7 +54,6 @@ class AddKpi extends Component {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hide").show()
                     //alert("")
                     $(".recordexists").show()
                     // toast.error("KPI Already exists!", {
@@ -102,6 +103,28 @@ class AddKpi extends Component {
         this.setState({
             scaleSetId: event.target.value
         })
+    }
+    onChangeBlur(){
+        var res = this.isKpiExistsApi();
+        res.done((response) => {
+            if (response.length > 0) {
+                //alert("")
+                $(".recordexists").show()
+                // toast.error("KPI Already exists!", {
+                //     position: toast.POSITION.TOP_RIGHT
+                // });
+            } else {
+                var _this = this;
+                var Kpidata = {
+                    "KpiTitle": this.state.kpiTitle,
+                    "weightage": this.state.weightage,
+                    "scaleSetId": this.state.scaleSetId,
+                    "target": this.state.target,
+                }
+            }
+        });
+        res.fail(error => {
+        });
     }
 
     addKpi() {
@@ -171,7 +194,6 @@ class AddKpi extends Component {
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {
             var res = this.isEditKpiExistsApi();
-            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
@@ -236,7 +258,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input type="text" className="form-control" rows="4" name="kpiTitle" type="text" value={this.state.kpiTitle}
+                                        <input type="text" className="form-control" rows="4" name="kpiTitle" type="text" onBlur={()=>(this.onChangeBlur())} value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 $(".recordexists").hide()
                                                 this.setState({
@@ -249,7 +271,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="weightage">Weight</label>
-                                        <input className="form-control" rows="4" name="weightage" minLength="1" maxLength="99" type="number" value={this.state.weightage}
+                                        <input className="form-control" name="weightage" minLength="1"  maxLength="99" type="number" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
                                                     weightage: event.target.value
