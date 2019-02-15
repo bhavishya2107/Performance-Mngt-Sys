@@ -258,7 +258,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input type="text" className="form-control" rows="4" name="kpiTitle" type="text" onBlur={()=>(this.onChangeBlur())} value={this.state.kpiTitle}
+                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={()=>(this.onChangeBlur())} value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 $(".recordexists").hide()
                                                 this.setState({

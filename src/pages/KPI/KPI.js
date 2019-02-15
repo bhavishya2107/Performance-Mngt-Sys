@@ -158,7 +158,6 @@ class KPI extends Component {
             columns: [
                 {
                     data: "kpiId",
-                    "orderable": false,
                     targets: 0,
                     render: (data, type, row) => {
                         return (
@@ -181,8 +180,7 @@ class KPI extends Component {
                 },
                 {
                     data: "target",
-                    targets: 4,
-                    "orderable": false,
+                    targets: 4
                 },
                 {
                     data: "kpiId",

@@ -159,13 +159,13 @@ class ProjectComplexity extends Component {
             columns: [
                 {
                     data: "projectTypeId",
-                    "orderable": false,
                     targets: 0,
                     render: (data, type, row) => {
                         return (
                             '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + ' />'
                         )
                     },
+                    "orderable": false,
                 },
                 {
                     data: "projectTypeName",
