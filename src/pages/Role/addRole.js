@@ -13,6 +13,7 @@ class UserRoleForm extends Component {
         this.state = {
             Redirect: false,
             roleName: "",
+            description:"",
             id: props.match.params.id,
 
         };
@@ -30,7 +31,8 @@ class UserRoleForm extends Component {
                     var _this = this;
                     var roleFormData =
                     {
-                        "roleName": this.state.roleName
+                        "roleName": this.state.roleName,
+                        "description":this.state.description
                     }
                 }
             });
@@ -53,7 +55,9 @@ class UserRoleForm extends Component {
                     var _this = this;
                     var roleFormData =
                     {
-                        "roleName": this.state.roleName
+                        "roleName": this.state.roleName,
+                        "description":this.state.description
+
                     }
                     const endpointPOST = environment.apiUrl + moduleUrls.Role + '/'
                     $.ajax({
@@ -220,6 +224,20 @@ class UserRoleForm extends Component {
                                     )
                                 }} required />
                             <p className="hiderole" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className=" " htmlFor="roleDescription">Description</label>
+                        <div className="">
+                            <textarea name="roleDescription" className="form-control col-6" rows="3"
+                                value={this.state.description}
+                                onChange={(event) => {
+                                    this.setState(
+                                        {
+                                            description: event.target.value
+                                        }
+                                    )
+                                }}></textarea><br />
                         </div>
                     </div>
                     {this.state.id !== undefined ?

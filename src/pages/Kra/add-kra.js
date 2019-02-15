@@ -18,9 +18,9 @@ class kraHome extends Component {
 
     submitDataFromKra() {
         debugger;
-        alert('sub')
+        
         var isvalidate = window.formValidation("#kraAddForm");
-        alert(isvalidate)
+     
         if (isvalidate) {
 
             var res = this.kraAlreadyExistApi();
@@ -136,9 +136,8 @@ class kraHome extends Component {
 
     UpdateKraDetails(data) {
         debugger;
-        alert(1)
         var isvalidate = window.formValidation("#kraAddForm");
-        alert(isvalidate)
+   
         if (isvalidate) {
             var res = this.updatekraEditExistApi();
             res.done((response) => {

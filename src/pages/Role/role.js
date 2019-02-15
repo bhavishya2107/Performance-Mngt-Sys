@@ -172,9 +172,10 @@ class UserRolePMS extends Component {
             },
 
             columnDefs: [
-                { width: '10px', targets: 0 },
-                { width: '300px', targets: 1 },
-                { width: '5px', targets: 2 },
+                { width: '1px', targets: 0 },
+                { width: '100px', targets: 1 },
+                { width: '600px', targets: 2 },
+                { width: '1px', targets: 3 },
             
                ],
         
@@ -201,11 +202,16 @@ class UserRolePMS extends Component {
                     data: "roleName",
                     targets: 1
                 },
+                {
+                    data: "description",
+                    "orderable": false,
+                    targets:2
+                },
 
                 {
                     data: "action",
-                    targets: 2,
-                    className: "text-right",
+                    targets: 3,
+                    className: "text-center",
                     render: function (data, type, row) {
                         return (
                             '<a href="/EditRoleForm/id=' + row.roleId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
@@ -268,6 +274,7 @@ class UserRolePMS extends Component {
                             </th>
                             {/* <th>Sr.No</th> */}
                             <th >Name</th>
+                            <th>Description</th>
                             <th >Action</th>
                         </tr>
                     </thead>
