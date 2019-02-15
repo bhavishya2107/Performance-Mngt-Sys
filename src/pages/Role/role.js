@@ -76,7 +76,6 @@ class UserRolePMS extends Component {
     }
     DeleteAllRole(roleId) {
         
-
         var item = roleId.join(",");
         var res = this.multiDeleteRoleApi(item);
         res.done((response) => {
@@ -171,6 +170,14 @@ class UserRolePMS extends Component {
                 error: function (xhr, status, error) {
                 },
             },
+
+            columnDefs: [
+                { width: '10px', targets: 0 },
+                { width: '300px', targets: 1 },
+                { width: '5px', targets: 2 },
+            
+               ],
+        
             columns: [
                 {
 
@@ -184,20 +191,20 @@ class UserRolePMS extends Component {
                     },
 
                 },
-                {
-                    data: null,
-                    targets: 1,
-                    "orderable": false,
+                // {
+                //     data: null,
+                //     targets: 1,
+                //     "orderable": false,
 
-                },
+                // },
                 {
                     data: "roleName",
-                    targets: 2
+                    targets: 1
                 },
 
                 {
                     data: "action",
-                    targets: 3,
+                    targets: 2,
                     className: "text-right",
                     render: function (data, type, row) {
                         return (
@@ -213,10 +220,10 @@ class UserRolePMS extends Component {
                 }
             ],
          
-            "createdRow": function (row, data, index) {
+            // "createdRow": function (row, data, index) {
                 
-                $('td', row).eq(1).html(index + 1 );
-            },
+            //     $('td', row).eq(1).html(index + 1 );
+            // },
     
 
             initComplete: (settings, json) => {
@@ -259,9 +266,9 @@ class UserRolePMS extends Component {
                                     onClick={e => { this.checkallrole(e); }}
                                 />
                             </th>
-                            <th width="50">Sr.No</th>
-                            <th width="">Name</th>
-                            <th width="90">Action</th>
+                            {/* <th>Sr.No</th> */}
+                            <th >Name</th>
+                            <th >Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

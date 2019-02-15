@@ -107,7 +107,7 @@ class Jobtitle extends Component {
         });
     }
     UpdatejobtitleDetails(data) {
-        $(".recordexists").hide()
+        
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
             var res = this.isJobtitleExistsUpdateApi()
@@ -135,7 +135,7 @@ class Jobtitle extends Component {
 
             })
         } else {
-
+            $(".recordexists").hide()
             return false;
         }
 
@@ -181,12 +181,13 @@ class Jobtitle extends Component {
                                 <label className="required">Name</label>
                                 <input type="text" id="jobtitleid" name="jobtitlename" minLength="" maxLength="50" className="form-control" value={this.state.jobtitleName}
                                     onChange={(event) => {
+                                        $(".recordexists").hide()
                                         this.setState({
                                             jobtitleName: event.target.value
                                         })
                                     }} required />
                                     
-                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}

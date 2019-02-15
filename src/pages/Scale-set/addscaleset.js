@@ -17,7 +17,7 @@ class Scaleset extends Component {
             title: ""
         }
     }
-   
+
     //#region Onclick function for Add
     isScalesetExistsApi() {
         const scalesetExistsGET = environment.apiUrl + moduleUrls.ScaleSet + '?_where=(scaleSetName,eq,' + this.state.scaleSetName + ')';
@@ -114,7 +114,7 @@ class Scaleset extends Component {
     UpdatescalesetDetails(data) {
         var isvalidate = window.formValidation("#formscaleset1");
         if (isvalidate) {
-            
+
             var res = this.isScalesetExistsUpdateApi();
             res.done((response) => {
                 debugger;
@@ -144,7 +144,7 @@ class Scaleset extends Component {
             })
 
         } else {
-          $(".recordexists").hide()
+            $(".recordexists").hide()
             return false;
         }
     }
@@ -196,14 +196,14 @@ class Scaleset extends Component {
                                         })
                                     }} required />
 
-                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="scalesetid" name="scalesetaddress" className="form-control" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value,
-                                       })
+                                        })
                                     }} ></textarea>
                             </div>
                             <div className="form-group">

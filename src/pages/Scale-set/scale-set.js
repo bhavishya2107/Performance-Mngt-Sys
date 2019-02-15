@@ -191,26 +191,26 @@ class Scalesetlist extends Component {
                         );
                     }
                 },
-                {
-                    data: null,
-                    targets: 1,
-                    "orderable": false,
-                },
+                // {
+                //     data: null,
+                //     targets: 1,
+                //     "orderable": false,
+                // },
                 {
                     data: "scaleSetName",
-                    targets: 2
+                    targets: 1
                 },
                 {
                     data: "description",
                     "orderable": false,
-                    targets: 3
+                    targets: 2
 
                 },
 
                 {
                     data: "scaleSetId",
                     "orderable": false,
-                    targets: 4,
+                    targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a href="/scale-set/edit/id=' + row.scaleSetId + '"class=" btn mr-2 btn-edit btn-info btn-sm">' +
@@ -223,10 +223,10 @@ class Scalesetlist extends Component {
                     }
                 },
             ],
-            "createdRow": function (row, data, index) {
+            // "createdRow": function (row, data, index) {
 
-                $('td', row).eq(1).html(index + 1);
-            },
+            //     $('td', row).eq(1).html(index + 1);
+            // },
             // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
             //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
             //     return nRow;
@@ -286,7 +286,7 @@ class Scalesetlist extends Component {
                                     }}
                                 />
                             </th>
-                            <th width="5">Sr.No</th>
+                            {/* <th width="5">Sr.No</th> */}
                             <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
