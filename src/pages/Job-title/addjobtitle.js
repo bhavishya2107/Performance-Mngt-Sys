@@ -187,7 +187,7 @@ class Jobtitle extends Component {
                                         })
                                     }} required />
                                     
-                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea name="jobtitleaddress" className="form-control" rows="4" value={this.state.description}
