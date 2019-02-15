@@ -169,25 +169,25 @@ class Department extends Component {
                     orderable: false
 
                 },
-                {
-                    data: null,
-                    targets: 1,
-                    "orderable": false,
+                // {
+                //     data: null,
+                //     targets: 1,
+                //     "orderable": false,
 
-                },
+                // },
                 {
                     data: "depName",
-                    targets: 2,
+                    targets: 1,
 
                 },
                 {
                     data: "description",
-                    targets: 3,
+                    targets: 2,
                     orderable: false
                 },
                 {
                     data: "depId",
-                    targets: 4,
+                    targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
@@ -198,10 +198,10 @@ class Department extends Component {
                     "orderable": false
                 }
             ],
-            "createdRow": function (row, data, index) {
+            // "createdRow": function (row, data, index) {
 
-                $('td', row).eq(1).html(index + 1);
-            },
+            //     $('td', row).eq(1).html(index + 1);
+            // },
 
             initComplete: (settings, json) => {
             },
@@ -234,15 +234,15 @@ class Department extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr className="container-fluid">
-                            <th width="50">
+                            <th width="10">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
                                     onClick={e => { this.checkAll(e); }} />
                             </th>
-                            <th width="50">Sr.No</th>
-                            <th> Name</th>
-                            <th> Description</th>
+                            {/* <th width="50">Sr.No</th> */}
+                            <th width="100"> Name</th>
+                            <th width="100"> Description</th>
                             <th width="90">Action</th>
                         </tr>
                     </thead>
