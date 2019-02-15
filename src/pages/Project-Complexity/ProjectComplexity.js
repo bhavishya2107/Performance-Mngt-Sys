@@ -162,7 +162,7 @@ class ProjectComplexity extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + ' />'
+                            '<input type="checkbox" name="projectTypeId" value=' + row.projectTypeId + ' />'
                         )
                     },
                     "orderable": false,

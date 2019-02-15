@@ -164,8 +164,8 @@ class KPI extends Component {
                             '<input type="checkbox" name="kpiId" value=' + row.kpiId + ' />'
                         )
                     },
+                    "orderable": false,
                 },
-              
                 {
                     data: "kpiTitle",
                     targets: 1
