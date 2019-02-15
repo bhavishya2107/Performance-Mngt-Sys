@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { environment, moduleUrls, Type , Notification,ModuleNames } from '../Environment';
+import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 const $ = require('jquery');
 
 
@@ -18,6 +18,28 @@ class UserRoleForm extends Component {
         };
     }
 
+    isExistRoleonChange() {
+
+        var isvalidate = window.formValidation("#userRoleForm");
+        if (isvalidate) {
+            var res = this.RoleAlreadyExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".hiderole").show()
+                } else {
+                    var _this = this;
+                    var roleFormData =
+                    {
+                        "roleName": this.state.roleName
+                    }
+                }
+            });
+            res.fail(error => {
+
+            });
+
+        }
+    }
 
     submitDataFromRoleform() {
 
@@ -26,10 +48,6 @@ class UserRoleForm extends Component {
             var res = this.RoleAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
-                    // toast.error("Role Already exists!", {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    // // });
                     $(".hiderole").show()
                 } else {
                     var _this = this;
@@ -45,7 +63,7 @@ class UserRoleForm extends Component {
                         success: function (resultData) {
 
                             _this.setState({ Redirect: true });
-                            toast.success("Role "+ Notification.saved, {
+                            toast.success("Role " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -66,7 +84,7 @@ class UserRoleForm extends Component {
 
     RoleAlreadyExistApi() {
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const endpoint = environment.apiUrl + moduleUrls.Role +'?_where=(roleName,eq,' + this.state.roleName + ')';
+        const endpoint = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')';
         return $.ajax({
             url: endpoint,
             type: Type.get,
@@ -103,12 +121,13 @@ class UserRoleForm extends Component {
             data: JSON.stringify(body)
         });
     }
-    updateroleEditExistApi(){
+
+    updateroleEditExistApi() {
         const updateroleExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')' + '~and(roleId,ne,' + this.state.id + ')';
         return $.ajax({
             url: updateroleExist,
             type: Type.get,
-            data:''
+            data: ''
         })
     }
     UpdateRoleDetails(data) {
@@ -123,7 +142,7 @@ class UserRoleForm extends Component {
 
                 } else {
                     var res = this.updateRoleDetailsApi(data);
-                    res.done((result)=>{
+                    res.done((result) => {
                         this.setState({
                             Redirect: true
                         })
@@ -132,9 +151,9 @@ class UserRoleForm extends Component {
                         });
 
                     });
-                    res.fail((error)=>{})
+                    res.fail((error) => { })
 
-                  
+
                 }
             });
             res.fail((error) => {
@@ -142,19 +161,19 @@ class UserRoleForm extends Component {
             })
 
         } else {
-
+            $(".hiderole").hide()
             return false;
         }
 
     }
 
 
-     myFunction() {
+    myFunction() {
         window.location.reload();
-      }
-  
+    }
 
-    
+
+
 
     componentDidMount() {
         if (this.state.id !== undefined) {
@@ -181,8 +200,8 @@ class UserRoleForm extends Component {
         return (
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> 
-                {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
+                    <h2 className="col">
+                        {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
                     </h2>
                 </div>
 
@@ -190,16 +209,17 @@ class UserRoleForm extends Component {
                     <div className="form-group">
                         <label htmlFor="roleName" className="required">Name</label>
                         <div className="">
-                            <input id="roleName" type="text" className="form-control col-6" name="rolename"
+                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }}
                                 value={this.state.roleName}
                                 onChange={(event) => {
+                                    $(".hiderole").hide()
                                     this.setState(
                                         {
                                             roleName: event.target.value
                                         }
                                     )
                                 }} required />
-                                <p className="hiderole" style={{ "display": "none" , "color" : "red"}}>{Notification.recordExists}</p>
+                            <p className="hiderole" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
                     {this.state.id !== undefined ?
@@ -209,11 +229,11 @@ class UserRoleForm extends Component {
                         : <button className="btn btn-success " type="button" onClick={() => {
                             this.submitDataFromRoleform(this.state);
                         }}>Save</button>}&nbsp;
-                    <button type="button" className="btn btn-info" onClick={()=>{this.myFunction()}}>Reset</button>&nbsp;
+                    <button type="button" className="btn btn-info" onClick={() => { this.myFunction() }}>Reset</button>&nbsp;
                     <Link to="/role" className="btn btn-danger">Cancel</Link>
                     <br />
                 </form>
-<ToastContainer/>
+                <ToastContainer />
             </div>
         )
     }
