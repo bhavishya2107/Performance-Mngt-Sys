@@ -77,6 +77,31 @@ class AddUser extends Component {
         })
     }
 
+    isExistOnChange(data) {
+        var result = []
+        if (this.state !== undefined) {
+            var res = this.isUserExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+                else {
+
+                }
+            });
+            res.fail((error) => {
+            })
+        }
+        else {
+            var res = this.isDeptExistUpdateApi();
+
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+            })
+        }
+    }
 
     saveUser() {
         var res = window.formValidation("#createUser");
@@ -120,11 +145,11 @@ class AddUser extends Component {
                     });
                 }
             });
-            res.fail(error=>{
+            res.fail(error => {
 
             })
         }
-        else{
+        else {
             $(".dataExist").hide()
             return false;
         }
@@ -148,6 +173,7 @@ class AddUser extends Component {
             type: Type.get
         })
     }
+
 
 
     updateAjaxCall(data) {
@@ -202,8 +228,8 @@ class AddUser extends Component {
                             isUpdate: true
 
                         })
-                      
-                        toast.success("Update " + Notification.updated, {
+
+                        toast.success("User " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     });
@@ -241,6 +267,7 @@ class AddUser extends Component {
                         roleId: res.roleId,
                         teamId: res.teamId
                     })
+            
                 }
             });
             res.fail((error) => {
@@ -371,6 +398,7 @@ class AddUser extends Component {
                                             <div className="upload-img">
                                                 <Input type="file" name="profileImage" id="profileImage" className=""
                                                     onChange={(event) => {
+                                                        debugger
                                                         this.setState({
                                                             profileImage: event.target.value
                                                         })
@@ -384,7 +412,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} >first Name</label>
+                                                    <label htmlFor="firstName" className="required" sm={2} >First Name</label>
                                                     <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -395,7 +423,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="lastName" className="required" sm={2}>last Name</label>
+                                                    <label htmlFor="lastName" className="required" sm={2}>Last Name</label>
                                                     <input type="text" name="lastName" id="lastName" className="form-control" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -408,20 +436,22 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="userName" className="required" sm={2}>user Name</label>
+                                                    <label htmlFor="userName" className="required" sm={2}>User Name</label>
                                                     <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
+                                                        onBlur={() => { this.isExistOnChange() }}
+
                                                         onChange={(event) => {
                                                             $(".dataExist").hide()
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none" }}>{Notification.recordExists}></p>
+                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="emailAddress" className="required" sm={2}>email ID</label>
+                                                    <label htmlFor="emailAddress" className="required" sm={2}>email</label>
                                                     <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -445,7 +475,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Department</label>
+                                                    <label className="required">Department</label>
                                                     <select required name="deptDropDown" value={this.state.depId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayDeptData}
@@ -456,7 +486,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Job Title</label>
+                                                    <label className="required">Job Title</label>
                                                     <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.jobtitleId} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayJobData}
@@ -465,7 +495,7 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Role</label>
+                                                    <label className="required">Role</label>
                                                     <select required name="roleDropDown" onChange={(e) => { this.onChangeRole(e) }} value={this.state.roleId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayRoleData}
@@ -476,8 +506,8 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label>Team Leader</label>
-                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <label className="required">Team Leader</label>
+                                                    <select required  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>

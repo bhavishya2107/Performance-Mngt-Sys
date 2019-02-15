@@ -14,7 +14,6 @@ function navigation() {
     if (height > topOffset) {
         $("#page-wrapper").css("min-height", (height) + "px");
     }
-
 }
 
 //...For Form validation
@@ -32,28 +31,36 @@ function formValidation(form) {
                 rolename: {
                     required: true,
                 },
-                messages: {
+                deptDropDown: {
+                    required: true,
+                },
+                jobDropDown: {
+                    required: true,
+                },
+                roleDropDown: {
+                    required: true,
+                },
+                scalesetname: {
+                    required: true,
+                },
+                scaleSetdropdown: {
+                    required: true,
+                },
+
+                messages:
+                {
                     kraName: {
-                        required: 'required, Enter minimum 2 characters',
+                        required: 'required',
+                        maxLength: 'Please enter no more than 20 char'
                     },
                     rolename: {
-                        required: 'required,Enter minimum 2 characters',
+                        required: 'required',
+                        maxLength: 'Please enter no more than 20 char',
+                    },
+                    jobtitlename: {
+                        required: 'maximum 50 characters'
                     },
 
-                    deptDropDown: {
-                        required: true,
-                    },
-                    jobDropDown: {
-                        required: true,
-                    },
-                    roleDropDown: {
-                        required: true,
-                    },
-
-                    rolename: {
-                        required: true,
-                    },
-               
                     weightage: {
                         required: true,
                         digit: true
@@ -67,9 +74,12 @@ function formValidation(form) {
                         },
                         rolename: {
                             required: 'required,Enter minimum 2 characters',
+                        }, 
+                        scalesetname: {
+                            required: 'maximum 50 characters',
                         },
-                }
-                }
+                    }
+                },
             }
         }
     );

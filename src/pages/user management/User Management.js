@@ -52,7 +52,7 @@ class UserManagement extends Component {
         if (id !== undefined) {
             if (id != 150) {
                 bootbox.confirm({
-                    message: Notification.deleted,
+                    message: Notification.deleteConfirm,
                     buttons: {
                         confirm: {
                             label: 'Yes',
@@ -72,6 +72,9 @@ class UserManagement extends Component {
                         }
                     }
                 });
+            }
+            else{
+                alert("you cannot delete system user")
             }
         }
     }
@@ -149,7 +152,7 @@ class UserManagement extends Component {
         const url = environment.apiUrl + moduleUrls.User + '/?_size=1000' + '/&_sort=-userId';
         this.$el = $(this.el);
         this.$el.DataTable({
-            "sorting": [[1, 'asc']],
+            "sorting": [[0, 'asc']],
 
             "autoWidth": false,
             ajax: {
@@ -165,7 +168,7 @@ class UserManagement extends Component {
             columns: [
                 {
                     data: "userId",
-                    targets: 0,
+                    targets: 0, 
                     render: function (data, type, row) {
                         return (
                             '<input type="checkbox" name="userId" value=' + row.userId + ">"
@@ -173,38 +176,32 @@ class UserManagement extends Component {
                     },
                     orderable: false
                 },
-                {
-                    data: null,
-                    targets: 1,
-                    "orderable": false
-
-                },
-
+               
                 {
                     data: "firstName",
-                    targets: 2,
+                    targets: 1,
 
                 },
                 {
                     data: "lastName",
-                    targets: 3,
+                    targets: 2,
                 },
                 {
                     data: "userName",
-                    targets: 4,
+                    targets: 3,
                 },
                 {
                     data: "emailAddress",
-                    targets: 5,
+                    targets: 4,
                 },
 
                 {
                     data: "mobileNo",
-                    targets: 6,
+                    targets: 5,
                 },
                 {
                     data: "userId",
-                    targets: 7,
+                    targets: 6,
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditUser/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
@@ -215,10 +212,10 @@ class UserManagement extends Component {
                     "orderable": false
                 }
             ],
-            "createdRow": function (row, data, index) {
+            // "createdRow": function (row, data, index) {
 
-                $('td', row).eq(1).html(index + 1);
-            },
+            //     $('td', row).eq(1).html(index + 1);
+            // },
             initComplete: (settings, json) => {
 
             },
@@ -250,19 +247,18 @@ class UserManagement extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th width="50">
+                            <th width="10">
                                 <input
                                     type="checkbox"
                                     name="checkAll"
                                     onClick={e => { this.checkall(e) }} />
                             </th>
-                            <th >Sr.No</th>
-                            <th >First Name</th>
-                            <th >Last Name</th>
-                            <th >User Name</th>
-                            <th >Email Address</th>
-                            <th>Mobile No</th>
-                            <th width="90">Action</th>
+                            <th width="100">First Name</th>
+                            <th width="100">Last Name</th>
+                            <th width="100" >User Name</th>
+                            <th width="100">Email Address</th>
+                            <th width="100">Mobile No</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

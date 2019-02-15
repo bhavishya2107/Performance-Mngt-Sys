@@ -147,7 +147,7 @@ class KPI extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+            "order": [[0, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -158,39 +158,33 @@ class KPI extends Component {
             columns: [
                 {
                     data: "kpiId",
-                    "orderable": false,
                     targets: 0,
                     render: (data, type, row) => {
                         return (
                             '<input type="checkbox" name="kpiId" value=' + row.kpiId + ' />'
                         )
                     },
-                },
-                {
-                    data: null,
-                    targets: 1,
                     "orderable": false,
                 },
                 {
                     data: "kpiTitle",
-                    targets: 2
+                    targets: 1
                 },
                 {
                     data: "weightage",
-                    targets: 3
+                    targets: 2
                 },
                 {
                     data: "scalesetId",
-                    targets: 4
+                    targets: 3
                 },
                 {
                     data: "target",
-                    targets: 5,
-                    "orderable": false,
+                    targets: 4
                 },
                 {
                     data: "kpiId",
-                    targets: 6,
+                    targets: 5,
                     render: function (data, type, row) {
                         return (
                             '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -204,10 +198,7 @@ class KPI extends Component {
                     orderable: false
                 }
             ],
-            "createdRow": function (row, data, index) {
-
-                $('td', row).eq(1).html(index + 1);
-            },
+            
             //#endregion
             drawCallback: (settings) => {
                 window.smallTable();
@@ -237,7 +228,7 @@ class KPI extends Component {
                         <thead>
                             <tr>
                                 <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="5">Sr.No</th>
+                               
                                 <th width="100">Name</th>
                                 <th width="80">Weightage</th>
                                 <th width="100">Scale Set</th>

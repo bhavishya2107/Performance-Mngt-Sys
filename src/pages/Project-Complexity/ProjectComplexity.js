@@ -27,6 +27,7 @@ class ProjectComplexity extends Component {
             }
         });
     }
+
     SingleDeleteConfirm(id) {
         bootbox.confirm({
             message: Notification.deleteConfirm,
@@ -86,13 +87,13 @@ class ProjectComplexity extends Component {
         res.done((response) => {
             toast.success("Project Complexity " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
-            });
+            }); 
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
         });
-
     }
+
     multipleDeleteProjectComplexityConfirm() {
         var projectTypeId = []
         $("#tblProjectComplexity input:checkbox:checked").each((e, item) => {
@@ -123,7 +124,7 @@ class ProjectComplexity extends Component {
             });
         }
         else {
-            toast.info("please select atleast one record!");
+            toast.info(Notification.selectOneRecord);
         }
     }
     //#endregion
@@ -147,7 +148,7 @@ class ProjectComplexity extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+            "order": [[0, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -158,32 +159,27 @@ class ProjectComplexity extends Component {
             columns: [
                 {
                     data: "projectTypeId",
-                    "orderable": false,
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="kpiId" value=' + row.projectTypeId + ' />'
+                            '<input type="checkbox" name="projectTypeId" value=' + row.projectTypeId + ' />'
                         )
                     },
-                },
-                {
-                    data: null,
-                    targets: 1,
                     "orderable": false,
                 },
                 {
                     data: "projectTypeName",
-                    targets: 2
+                    targets: 1
                     
                 },
                 {
                     data: "description",
-                    targets: 3,
+                    targets: 2,
                     "orderable": false,
                 },
                 {
                     data: "projectTypeId",
-                    targets: 4,
+                    targets: 3,
                     render: function (data, type, row) {
                         return (
                             '<a href="/project-complexity/edit/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -197,18 +193,16 @@ class ProjectComplexity extends Component {
                     orderable: false
                 }
             ],
-            "createdRow": function (row, data, index) {
-
-                $('td', row).eq(1).html(index + 1);
-            },
+            
             //#endregion 
 
             //#region detete function id
-            initComplete: (settings, json) => {
+            drawCallback: (settings) => {
+                window.smallTable();
                 $(".btnDelete").on("click", e => {
                     this.SingleDeleteConfirm(e.currentTarget.id);
                 });
-            },
+            }
         });
     }
     //#endregion
@@ -232,7 +226,6 @@ class ProjectComplexity extends Component {
                         <thead>
                             <tr>
                                 <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="5">Sr.No</th>
                                 <th width="100">Project Name</th>
                                 <th>Description</th>
                                 <th width="100">Action</th>
