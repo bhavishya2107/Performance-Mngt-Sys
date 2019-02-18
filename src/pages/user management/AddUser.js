@@ -35,7 +35,7 @@ class AddUser extends Component {
             displayTeamLeaderData: '',
             departmentId: "",
             jobtitleId: "",
-            imageSrc:""
+            imageSrc: ""
 
         }
 
@@ -170,7 +170,7 @@ class AddUser extends Component {
                         "depId": this.state.depId,
                         "jobtitleId": this.state.jobtitleId,
                         "Address": this.state.Address,
-                        "profileUrl":this.state.imageSrc
+                        "profileUrl": this.state.imageSrc
 
                     }
                     var url = environment.apiUrl + moduleUrls.User
@@ -205,9 +205,9 @@ class AddUser extends Component {
         })
     }
 
-    removeimg(){
+    removeimg() {
         this.setState({
-            imageSrc:""
+            imageSrc: ""
         })
     }
     //#endregion 
@@ -411,7 +411,7 @@ class AddUser extends Component {
             },
         });
     }
-  
+
     componentDidMount() {
         this.getUserDetails();
         this.getDeptData();
@@ -437,7 +437,7 @@ class AddUser extends Component {
                             {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
                         </h2>
 
-                     </div>
+                    </div>
                     <div className="row">
                         <div className="col-md-12">
                             <form id="createUser">
@@ -448,7 +448,7 @@ class AddUser extends Component {
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
                                                     <img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />
-                                                    <a href="#" onClick={()=>{this.removeimg()}} className="btn-image-remove">x</a>
+                                                    <a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>
                                                 </div>
                                             </div>
                                             <div className="upload-img">
@@ -460,10 +460,10 @@ class AddUser extends Component {
                                                     }} 
                                                     /> */}
                                                 <ReactFileReader base64={true} handleFiles={this.handleFiles}>
-                                                <label className="btn btn-primary btn-block">Upload Image</label>
+                                                    <label className="btn btn-primary btn-block">Upload Image</label>
                                                 </ReactFileReader>
 
-                                               
+
                                             </div>
                                         </div>
                                     </div>
