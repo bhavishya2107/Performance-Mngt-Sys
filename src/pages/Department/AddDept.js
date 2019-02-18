@@ -13,8 +13,8 @@ class AddDept extends Component {
         this.state = {
             RedirectToDept: false,
             isUpdate: false,
-            depId: props.match.params.depId,
-            depName: "",
+            departmentId: props.match.params.departmentId,
+            departmentName: "",
             description: "",
 
         }
@@ -27,9 +27,9 @@ class AddDept extends Component {
 
     //#region check whether the record is exist or not
     isDeptExistApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName.trim() + ')'
+        var DeptExist = environment.apiUrl + moduleUrls.Department + '?_where=(departmentName,eq,' + this.state.departmentName.trim() + ')'
         return $.ajax({
-            url: url,
+            url: DeptExist,
             type: Type.get
         })
     }
@@ -80,7 +80,7 @@ class AddDept extends Component {
                     var deptList =
                     {
 
-                        "depName": this.state.depName.trim(),
+                        "departmentName": this.state.departmentName.trim(),
                         "description": this.state.description,
                     }
                     var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
@@ -105,23 +105,23 @@ class AddDept extends Component {
 
     getDepApi() {
 
-        var url = environment.apiUrl + moduleUrls.Department + '/' + `${this.state.depId}`;
+        var getDept = environment.apiUrl + moduleUrls.Department + '/' + `${this.state.departmentId}`;
         return $.ajax({
-            url: url,
+            url: getDept,
             type: Type.get,
 
         })
     }
     updateDetailsApi(data) {
-        var url = environment.apiUrl + moduleUrls.Department + '/' + `${data.depId}`
+        var updateDeptDetails = environment.apiUrl + moduleUrls.Department + '/' + `${data.departmentId}`
         var _this = this;
         var deptList =
         {
-            "depName": data.depName.trim(),
+            "departmentName": data.departmentName.trim(),
             "description": data.description
         }
         return $.ajax({
-            url: url,
+            url: updateDeptDetails,
             type: Type.patch,
 
             headers: {
@@ -135,9 +135,9 @@ class AddDept extends Component {
         });
     }
     isDeptExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(depName,eq,' + this.state.depName.trim() + ')' + '~and(depId,ne,' + this.state.depId + ')'
+        var deptExistOnUpdate = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(departmentName,eq,' + this.state.departmentName.trim() + ')' + '~and(departmentId,ne,' + this.state.departmentId + ')'
         return $.ajax({
-            url: url,
+            url: deptExistOnUpdate,
             type: Type.get
         })
     }
@@ -177,12 +177,12 @@ class AddDept extends Component {
         }
     }
     componentDidMount() {
-        if (this.state.depId !== undefined) {
+        if (this.state.departmentId !== undefined) {
             var res = this.getDepApi();
             res.done((response) => {
                 var res = response[0];
                 this.setState({
-                    depName: res.depName,
+                    departmentName: res.departmentName,
                     description: res.description
                 })
             });
@@ -209,7 +209,7 @@ class AddDept extends Component {
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col">
-                            {this.state.depId !== undefined ? <span>Edit Department</span> : <span>Add Department</span>}
+                            {this.state.departmentId !== undefined ? <span>Edit Department</span> : <span>Add Department</span>}
                         </h2>
                     </div>
                 </div>
@@ -218,12 +218,12 @@ class AddDept extends Component {
                         <form id="createDepartment">
                             <div className="form-group">
                                 <label htmlFor="depName" className="required">Name</label>
-                                <input type="text" name="depName" className="form-control" maxLength="50" id="depName" value={this.state.depName}
+                                <input type="text" name="depName" className="form-control" maxLength="50" id="depName" value={this.state.departmentName}
                                     onBlur={() => { this.isExistOnChange(); }}
                                     onChange={(event) => {
                                         $(".dataExist").hide()
                                         this.setState({
-                                            depName: event.target.value
+                                            departmentName: event.target.value
                                         })
                                     }} required />
                                 <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
@@ -240,16 +240,16 @@ class AddDept extends Component {
                                     }} />
                             </div>
                             <div className="form-group">
-                                {this.state.depId !== undefined ?
-                                    <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                {this.state.departmentId !== undefined ?
+                                    <button type="button" className="btn  btn-success mr-2" onClick={() => {
                                         this.UpdateDeptDetails(this.state);
                                     }}>Update</button>
-                                    : <button type="button" className="btn btn-sm btn-success mr-2" onClick={() => {
+                                    : <button type="button" className="btn btn-success mr-2" onClick={() => {
                                         this.saveDept(this.state);
                                     }}>Save</button>}
 
-                                <button type="button" value="reset" className="btn btn-sm btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
-                                <Link to='/Department' className="btn btn-sm btn-danger mr-2">Cancel</Link>
+                                <button type="button" value="reset" className="btn  btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
+                                <Link to='/Department' className="btn btn-danger mr-2">Cancel</Link>
                             </div>
                         </form>
                     </div>

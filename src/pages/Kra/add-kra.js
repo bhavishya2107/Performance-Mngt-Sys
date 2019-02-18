@@ -34,9 +34,9 @@ class kraHome extends Component {
                         "kraName": this.state.kraName.trim(),
                         "description": this.state.description,
                     };
-                    const endpointPOST = environment.apiUrl + moduleUrls.Kra + '/'
+                    const apiKraPost = environment.apiUrl + moduleUrls.Kra + '/'
                     $.ajax({
-                        url: endpointPOST,
+                        url: apiKraPost,
                         type: "POST",
                         data: kraFormData,
                         success: function (resultData) {
@@ -86,9 +86,9 @@ class kraHome extends Component {
     kraAlreadyExistApi() {
 
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')';
+        const apiForKraAlreadyExist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')';
         return $.ajax({
-            url: endpoint,
+            url: apiForKraAlreadyExist,
             type: Type.get,
             data: ''
         });
@@ -96,17 +96,17 @@ class kraHome extends Component {
 
     getKraDetailsApi() {
 
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
+        const apiForKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
-            url: endpoint,
+            url: apiForKraDetails,
             type: Type.get,
         })
     }
 
     updatekraDetailsApi(data) {
 
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
+        const apiForUpdateKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
         var body =
         {
             "kraName": data.kraName.trim(),
@@ -114,7 +114,7 @@ class kraHome extends Component {
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/kra_master/${data.id}`,
-            url: endpoint,
+            url: apiForUpdateKraDetails,
             type: Type.patch,
             headers: {
                 "Content-Type": "application/json",

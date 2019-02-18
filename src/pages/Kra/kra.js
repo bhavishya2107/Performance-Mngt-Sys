@@ -35,9 +35,9 @@ class kraListPage extends Component {
 
   DeleteKraApi(kraId) {
     // const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
-    const endpoint = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
+    const deleteKra = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
     return $.ajax({
-      url: endpoint,
+      url: deleteKra,
       type: Type.deletetype,
       headers: {
         "content-type": "application/json",
@@ -46,9 +46,9 @@ class kraListPage extends Component {
     });
   }
   multiDeleteKraApi(kraId) {
-    const endpoint = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
+    const multiDelKra = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
     return $.ajax({
-      url: endpoint,
+      url: multiDelKra,
       type: Type.deletetype,
       headers: {
         "content-type": "application/json",

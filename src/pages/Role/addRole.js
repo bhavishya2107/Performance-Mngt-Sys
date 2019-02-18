@@ -55,7 +55,7 @@ class UserRoleForm extends Component {
                     var _this = this;
                     var roleFormData =
                     {
-                        "roleName": this.state.roleName,
+                        "roleName": this.state.roleName.trim(),
                         "description":this.state.description
 
                     }
@@ -88,9 +88,9 @@ class UserRoleForm extends Component {
 
     RoleAlreadyExistApi() {
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const endpoint = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')';
+        const roleAlreadyExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName.trim() + ')';
         return $.ajax({
-            url: endpoint,
+            url: roleAlreadyExist,
             type: Type.get,
             data: ''
         });
@@ -98,26 +98,26 @@ class UserRoleForm extends Component {
 
 
     getRoleDetailsApi() {
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${this.state.id}`
+        const getRoleDetails = environment.apiUrl + moduleUrls.Role + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${this.state.id}`;
         return $.ajax({
-            url: endpoint,
+            url: getRoleDetails,
             type: Type.get,
 
         })
     }
     updateRoleDetailsApi(data) {
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${data.id}`
+        const updateRoleDetails = environment.apiUrl + moduleUrls.Role + '/' + `${data.id}`
         // '/?_size=1000' + '&_sort=-kraId' 
 
         var body =
         {
-            "roleName": data.roleName,
+            "roleName": data.roleName.trim(),
             "description":data.description,
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/role_master/${data.id}`,
-            url: endpoint,
+            url: updateRoleDetails,
             type: Type.patch,
             headers: {
                 "Content-Type": "application/json",
@@ -128,7 +128,7 @@ class UserRoleForm extends Component {
     }
 
     updateroleEditExistApi() {
-        const updateroleExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName + ')' + '~and(roleId,ne,' + this.state.id + ')';
+        const updateroleExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName.trim() + ')' + '~and(roleId,ne,' + this.state.id + ')';
         return $.ajax({
             url: updateroleExist,
             type: Type.get,

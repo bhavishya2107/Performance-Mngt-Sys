@@ -38,11 +38,11 @@ class UserRolePMS extends Component {
     }
     DeleteRoleApi(roleId) {
 
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
+        const delRole = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
 
         return $.ajax({
-            url: endpoint,
+            url: delRole,
             type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
@@ -54,9 +54,9 @@ class UserRolePMS extends Component {
 
     multiDeleteRoleApi(roleId) {
         
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
+        const multiDelRole = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
         return $.ajax({
-            url: endpoint,
+            url: multiDelRole,
             type: Type.deletetype,
             headers: {
                 "content-type": "application/json",

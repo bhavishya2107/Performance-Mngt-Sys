@@ -10,7 +10,7 @@ class Department extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            depName: "",
+            departmentName: "",
             description: "",
             selectedIds: []
         }
@@ -18,8 +18,8 @@ class Department extends Component {
 
 
     //#region single delete functionality
-    SingleDeleteDept(depId) {
-        var res = this.DeleteDepApi(depId);
+    SingleDeleteDept(departmentId) {
+        var res = this.DeleteDepApi(departmentId);
         res.done(response => {
             if (response.affectedRows > 0) {
                 toast.success( "Department" +Notification.deleted);
@@ -38,11 +38,11 @@ class Department extends Component {
                     message: Notification.deleteConfirm,
                     buttons: {
                         confirm: {
-                            label: 'Yes',
+                            label: 'Ok',
                             className: 'btn-success'
                         },
                         cancel: {
-                            label: 'No',
+                            label: 'Cancel',
                             className: 'btn-danger'
                         }
                     },
@@ -60,49 +60,49 @@ class Department extends Component {
             }
         }
     }
-    DeleteDepApi(depId) {
-        var url = environment.apiUrl + moduleUrls.Department + '/' + `${depId}`
+    DeleteDepApi(departmentId) {
+        var delDepartment = environment.apiUrl + moduleUrls.Department + '/' + `${departmentId}`
         return $.ajax({
-            url: url,
+            url: delDepartment,
             type: Type.deletetype
         });
     }
     //#endregion
     //#region multiple delete functionality
-    multipleDeleteDeptApi(depId) {
-        var url = environment.apiUrl + moduleUrls.Department + '/bulk?_ids=' + `${depId}`;
+    multipleDeleteDeptApi(departmentId) {
+        var multiDelDept = environment.apiUrl + moduleUrls.Department + '/bulk?_ids=' + `${departmentId}`;
         return $.ajax({
-            url: url,
+            url: multiDelDept,
             type: Type.deletetype
         })
     }
     multipleDeleteDeptConfirm() {
 
         debugger;
-        var depId = []
+        var departmentId = []
         $("#tblDepartment input:checkbox:checked").each((e, item) => {
             if (item.value != 259) {
                 if (item.name !== "checkAll") {
-                    depId.push(item.value);
+                    departmentId.push(item.value);
                 }
             }
         });
-        if (depId.length > 0) {
+        if (departmentId.length > 0) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.multiDeleteDept(depId);
+                        this.multiDeleteDept(departmentId);
                     }
                     else {
                     }
@@ -114,9 +114,9 @@ class Department extends Component {
         }
 
     }
-    multiDeleteDept(depId) {
+    multiDeleteDept(departmentId) {
 
-        var item = depId.join(",")
+        var item = departmentId.join(",")
         var res = this.multipleDeleteDeptApi(item);
         res.done(response => {
             toast.success("Department " + Notification.deleted, {
@@ -142,7 +142,7 @@ class Department extends Component {
     }
     //#endregion
     componentDidMount() {
-        var url = environment.apiUrl + moduleUrls.Department + '/?_size=1000' + '/&_sort=-depId';
+        var url = environment.apiUrl + moduleUrls.Department + '/?_size=1000' + '/&_sort=-departmentId';
         this.$el = $(this.el);
         this.$el.DataTable({
             "sorting": [[0, 'asc']],
@@ -163,7 +163,7 @@ class Department extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="depId" value=' + row.depId + ">"
+                            '<input type="checkbox" name="departmentId" value=' + row.departmentId + ">"
                         )
                     },
                     orderable: false
@@ -171,7 +171,7 @@ class Department extends Component {
                 },
                 
                 {
-                    data: "depName",
+                    data: "departmentName",
                     targets: 1,
 
                 },
@@ -181,22 +181,18 @@ class Department extends Component {
                     orderable: false
                 },
                 {
-                    data: "depId",
+                    data: "departmentId",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/depId=' + row.depId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
-                            '<a href="#" id="' + row.depId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/departmentId=' + row.departmentId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
+                            '<a href="#" id="' + row.departmentId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
                     },
                     "orderable": false
                 }
             ],
-            // "createdRow": function (row, data, index) {
-
-            //     $('td', row).eq(1).html(index + 1);
-            // },
 
             initComplete: (settings, json) => {
             },
