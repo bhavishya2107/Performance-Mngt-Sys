@@ -31,8 +31,8 @@ import AddProjectComplexity from './pages/Project-Complexity/AddProjectComplexit
 import Templatelist from './pages/Template/templateList';
 import Scaleset from './pages/Scale-set/addscaleset';
 import Scalesetlist from './pages/Scale-set/scale-set';
-import Jobtitlelist from './pages/Job-title/job-title';
-import Jobtitle from './pages/Job-title/addjobtitle';
+import Designationlist from './pages/Designation/designation';
+import Designation from './pages/Designation/adddesignation';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/My-Profile/myProfile';
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
@@ -128,11 +128,11 @@ class App extends Component {
 
                         <Route exact path="/scale-set/add" component={Scaleset} />
                         <Route exact path="/scale-set" component={Scalesetlist} />
-                        <Route exact path="/job-title" component={Jobtitlelist} />
-                        <Route exact path="/job-title/add" component={Jobtitle} />
+                        <Route exact path="/designation" component={Designationlist} />
+                        <Route exact path="/designation/add" component={Designation} />
                         <Route exact path="/addtemplate" component={Addtemplate} />
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
-                        <Route exact path="/job-title/edit/id=:id" component={Jobtitle} />
+                        <Route exact path="/designation/edit/id=:id" component={Designation} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
 
 

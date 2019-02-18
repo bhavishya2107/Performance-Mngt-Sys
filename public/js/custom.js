@@ -52,9 +52,25 @@ function formValidation(form) {
                     jobtitlename: {
                         required: 'maximum 50 characters'
                     },
-                    scalesetname: {
-                        required: 'maximum 50 characters',
+
+                    weightage: {
+                        required: true,
+                        digit: true
                     },
+                    scaleSetdropdown: {
+                        required: true,
+                    },
+                    messages: {
+                        kraName: {
+                            required: 'required, Enter minimum 2 characters',
+                        },
+                        rolename: {
+                            required: 'required,Enter minimum 2 characters',
+                        }, 
+                        scalesetname: {
+                            required: 'maximum 50 characters',
+                        },
+                    }
                 },
             }
         }

@@ -145,7 +145,7 @@ class Department extends Component {
         var url = environment.apiUrl + moduleUrls.Department + '/?_size=1000' + '/&_sort=-depId';
         this.$el = $(this.el);
         this.$el.DataTable({
-            "sorting": [[1, 'asc']],
+            "sorting": [[0, 'asc']],
             "autoWidth": false,
             ajax: {
                 url: url,
@@ -169,12 +169,7 @@ class Department extends Component {
                     orderable: false
 
                 },
-                // {
-                //     data: null,
-                //     targets: 1,
-                //     "orderable": false,
-
-                // },
+                
                 {
                     data: "depName",
                     targets: 1,
@@ -240,10 +235,9 @@ class Department extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkAll(e); }} />
                             </th>
-                            {/* <th width="50">Sr.No</th> */}
-                            <th width="100"> Name</th>
-                            <th width="100"> Description</th>
-                            <th width="90">Action</th>
+                            <th width="150"> Name</th>
+                            <th> Description</th>
+                            <th width="76">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

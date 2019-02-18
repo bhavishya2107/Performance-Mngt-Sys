@@ -148,7 +148,7 @@ class ProjectComplexity extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+            "order": [[0, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,

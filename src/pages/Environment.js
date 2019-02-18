@@ -8,7 +8,7 @@ export const environment = {
 export const moduleUrls = {
   Kra: "kra_master",
   Kpi: "kpi_master",
-  Jobtitle: "jobtitle_master",
+  Designation: "designation_master",
   ProjectComplexity: "project_type_master",
   Department: "department_master",
   ScaleSet: "scale_set_master",
@@ -36,7 +36,7 @@ export const Notification = {
 export const ModuleNames = {
   kra: "KRA",
   kpi: "KPI",
-  Jobtitle: "Job Title",
+  Designation: "Designation",
   Project: "Project",
   User: "User",
   Role: "Role",

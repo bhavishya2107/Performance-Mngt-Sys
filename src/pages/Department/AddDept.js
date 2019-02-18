@@ -21,15 +21,13 @@ class AddDept extends Component {
     }
     //#region clear department fields
     reset() {
-
         window.location.reload();
-
     }
     //#endregion
 
     //#region check whether the record is exist or not
     isDeptExistApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName + ')'
+        var url = environment.apiUrl + moduleUrls.Department + '?_where=(depName,eq,' + this.state.depName.trim() + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -47,19 +45,24 @@ class AddDept extends Component {
                 if (response.length > 0) {
                     $(".dataExist").show()   //check record exist or not
                 }
-                else{
-                    
+                else {
+
                 }
-              
+
             });
 
             res.fail((error) => {
             })
         }
         else {
-            return false;
-        }
+            var res = this.isDeptExistUpdateApi();
 
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".dataExist").show()
+                }
+            })
+        }
     }
     ////#endregion
     //#region save department details  
@@ -77,7 +80,7 @@ class AddDept extends Component {
                     var deptList =
                     {
 
-                        "depName": this.state.depName,
+                        "depName": this.state.depName.trim(),
                         "description": this.state.description,
                     }
                     var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
@@ -114,7 +117,7 @@ class AddDept extends Component {
         var _this = this;
         var deptList =
         {
-            "depName": data.depName,
+            "depName": data.depName.trim(),
             "description": data.description
         }
         return $.ajax({
@@ -132,7 +135,7 @@ class AddDept extends Component {
         });
     }
     isDeptExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(depName,eq,' + this.state.depName + ')' + '~and(depId,ne,' + this.state.depId + ')'
+        var url = environment.apiUrl + moduleUrls.Department + '/' + '?_where=(depName,eq,' + this.state.depName.trim() + ')' + '~and(depId,ne,' + this.state.depId + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -177,7 +180,6 @@ class AddDept extends Component {
         if (this.state.depId !== undefined) {
             var res = this.getDepApi();
             res.done((response) => {
-                // console.log(response, 'res');
                 var res = response[0];
                 this.setState({
                     depName: res.depName,
@@ -216,14 +218,15 @@ class AddDept extends Component {
                         <form id="createDepartment">
                             <div className="form-group">
                                 <label htmlFor="depName" className="required">Name</label>
-                                <input type="text" name="depName" className="form-control" id="depName" value={this.state.depName}
+                                <input type="text" name="depName" className="form-control" maxLength="50" id="depName" value={this.state.depName}
                                     onBlur={() => { this.isExistOnChange(); }}
                                     onChange={(event) => {
+                                        $(".dataExist").hide()
                                         this.setState({
                                             depName: event.target.value
                                         })
                                     }} required />
-                                <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}></p>
+                                <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
 
 
                             </div>

@@ -31,6 +31,8 @@ class AddKpi extends Component {
         window.location.reload();
     }
     //#endregion
+
+    //#region 
     isKpiExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
         return $.ajax({
@@ -170,6 +172,7 @@ class AddKpi extends Component {
     componentWillMount() {
         this.getscaleSetIdData();
     }
+//#region update related api
 
     updateDetailsApi(data) {
         var body =
@@ -221,6 +224,8 @@ class AddKpi extends Component {
             return false;
         }
     }
+
+    //#endregion
     componentDidMount() {
         this.setState({
             title: ModuleNames.kpi
@@ -245,6 +250,7 @@ class AddKpi extends Component {
             return <Redirect to={{ pathname: "/KPI" }} />
         }
         return (
+            //#region datatable
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
@@ -326,6 +332,7 @@ class AddKpi extends Component {
                 <ToastContainer />
             </div>
         );
+        //#endregion
     }
 }
 export default AddKpi;
