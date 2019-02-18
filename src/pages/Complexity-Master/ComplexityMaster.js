@@ -6,18 +6,18 @@ import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
-class ProjectComplexity extends Component {
+class ComplexityMaster extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            saveProjectComplexityDetails: "",
+            saveComplexityMasterDetails: "",
             selectedIds: []
         };
     }
 
     //#region Delete functionality with single and multiple both
-    DeleteProjectComplexityApi(projectId) {
-        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${projectId}`;
+    DeleteComplexityMasterApi(complexityId) {
+        const endpoint = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + `${complexityId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -43,7 +43,7 @@ class ProjectComplexity extends Component {
             },
             callback: (result) => {
                 if (result === true) {
-                    this.SingleDeleteProjectComplexity(id);
+                    this.SingleDeleteComplexityMaster(id);
                 }
                 else {
 
@@ -52,11 +52,11 @@ class ProjectComplexity extends Component {
         });
 
     }
-    SingleDeleteProjectComplexity(projectTypeId) {
-        var res = this.DeleteProjectComplexityApi(projectTypeId);
+    SingleDeleteComplexityMaster(complexityId) {
+        var res = this.DeleteComplexityMasterApi(complexityId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("Project Complexity " + Notification.deleted, {
+                toast.success("Complexity " + Notification.deleted, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -69,8 +69,8 @@ class ProjectComplexity extends Component {
             });
         });
     }
-    multiDeleteProjectComplexityApi(projectTypeId) {
-        const endpoint = environment.apiUrl + moduleUrls.ProjectComplexity + `/bulk?_ids=${projectTypeId}`;
+    multiDeleteComplexityMasterApi(complexityId) {
+        const endpoint = environment.apiUrl + moduleUrls.ComplexityMaster + `/bulk?_ids=${complexityId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -81,11 +81,11 @@ class ProjectComplexity extends Component {
         });
     }
 
-    multiDeleteProjectComplexity(projectTypeId) {
-        var item = projectTypeId.join(",")
-        var res = this.multiDeleteProjectComplexityApi(item);
+    multiDeleteComplexityMaster(complexityId) {
+        var item = complexityId.join(",")
+        var res = this.multiDeleteComplexityMasterApi(item);
         res.done((response) => {
-            toast.success("Project Complexity " + Notification.deleted, {
+            toast.success("Complexity " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
             }); 
             this.$el.DataTable().ajax.reload();
@@ -94,14 +94,14 @@ class ProjectComplexity extends Component {
         });
     }
 
-    multipleDeleteProjectComplexityConfirm() {
-        var projectTypeId = []
-        $("#tblProjectComplexity input:checkbox:checked").each((e, item) => {
+    multipleDeleteComplexityMasterConfirm() {
+        var complexityId = []
+        $("#tblComplexityMaster input:checkbox:checked").each((e, item) => {
             if (item.name != 'checkAll') {
-                projectTypeId.push(item.value);
+                complexityId.push(item.value);
             }
         });
-        if (projectTypeId.length > 0) {
+        if (complexityId.length > 0) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
@@ -116,7 +116,7 @@ class ProjectComplexity extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.multiDeleteProjectComplexity(projectTypeId);
+                        this.multiDeleteComplexityMaster(complexityId);
                     }
                     else {
                     }
@@ -130,7 +130,7 @@ class ProjectComplexity extends Component {
     //#endregion
 
     checkall(e) {
-        $("#tblProjectComplexity input:checkbox").each((index, item) => {
+        $("#tblComplexityMaster input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
             } else {
@@ -141,9 +141,9 @@ class ProjectComplexity extends Component {
 
     componentDidMount() {
         //#region datatable 
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + '?&_sort=-projectTypeId'
+        const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + '?&_sort=-complexityId'
         this.setState({
-            title: ModuleNames.ProjectComplexity
+            title: ModuleNames.ComplexityMaster
         })
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -158,17 +158,17 @@ class ProjectComplexity extends Component {
             },
             columns: [
                 {
-                    data: "projectTypeId",
+                    data: "complexityId",
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="projectTypeId" value=' + row.projectTypeId + ' />'
+                            '<input type="checkbox" name="complexityId" value=' + row.complexityId + ' />'
                         )
                     },
                     "orderable": false,
                 },
                 {
-                    data: "projectTypeName",
+                    data: "complexityName",
                     targets: 1
                     
                 },
@@ -178,14 +178,14 @@ class ProjectComplexity extends Component {
                     "orderable": false,
                 },
                 {
-                    data: "projectTypeId",
+                    data: "complexityId",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/project-complexity/edit/id=' + row.projectTypeId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/complexity-master/edit/id=' + row.complexityId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#" id="' + row.projectTypeId + '"class="btn btn-danger btnDelete btn-sm";"">' +
+                            '<a href="#" id="' + row.complexityId + '"class="btn btn-danger btnDelete btn-sm";"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
@@ -208,25 +208,25 @@ class ProjectComplexity extends Component {
     //#endregion
     render() {
         return (
-            //#region ProjectComplexity table(listed items)
+            //#region ComplexityMaster table(listed items)
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">{this.state.title}</h2>
                     <div className="col text-right">
-                        <Link to="/project-complexity/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to="/complexity-master/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => {
-                        this.multipleDeleteProjectComplexityConfirm()
+                        this.multipleDeleteComplexityMasterConfirm()
                     }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
                 <div className="page-header">
                     <table className="table table-striped table-bordered table-hover customDataTable"
-                        id="tblProjectComplexity"
+                        id="tblComplexityMaster"
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
                                 <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="100">Project Name</th>
+                                <th width="100">Complexity Name</th>
                                 <th>Description</th>
                                 <th width="100">Action</th>
 
@@ -242,4 +242,4 @@ class ProjectComplexity extends Component {
         )
     }
 }
-export default ProjectComplexity;
+export default ComplexityMaster;

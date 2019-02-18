@@ -201,7 +201,7 @@ class AddProject extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="projectName">Project Name(required, at least 3 characters)</label>
+                                        <label for="projectName">Project Name</label>
                                         <input className="form-control" minlength="5" type="text" value={this.state.projectName}
                                             onChange={(event) => {
                                                 this.setState({
@@ -223,7 +223,7 @@ class AddProject extends Component {
                             </div>
                             <div className="row">
                                 <div className="col-md-4">
-                                    <label className="mr-2">Project Complexity:</label>
+                                    <label className="mr-2">Complexity Master:</label>
                                     <select onChange={(e) => { this.onChangeProjectComplexity(e) }} className="form-control">
                                         <option>select</option>
                                         {this.state.displayProjectComplexity}
@@ -236,6 +236,18 @@ class AddProject extends Component {
                                         {this.state.displayProjectStatus}
                                     </select>
                                 </div>
+
+                                <div className="col-md-4">
+                         
+                         <div className="form-group">
+                             <label for="projectName">Managed By</label>
+                             <select onChange={(e) => { this.onChangeManagedBy(e) }} className="form-control">
+                                        <option>select</option>
+                                        {this.state.displayProjectStatus}
+                                    </select>
+                         </div>
+                     </div>
+
                             </div>
                             <div className="row">
                                 <div className="col">

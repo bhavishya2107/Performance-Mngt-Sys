@@ -34,7 +34,7 @@ class AddKpi extends Component {
 
     //#region 
     isKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle.trim() + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -42,7 +42,7 @@ class AddKpi extends Component {
         });
     }
     isEditKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')' + '~and(kpiId,ne,' + this.state.kpiId + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle.trim() + ')' + '~and(kpiId,ne,' + this.state.kpiId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -64,7 +64,7 @@ class AddKpi extends Component {
                 } else {
                     var _this = this;
                     var Kpidata = {
-                        "KpiTitle": this.state.kpiTitle,
+                        "KpiTitle": this.state.kpiTitle.trim(),
                         "weightage": this.state.weightage,
                         "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
@@ -177,7 +177,7 @@ class AddKpi extends Component {
     updateDetailsApi(data) {
         var body =
         {
-            "KpiTitle": data.kpiTitle,
+            "KpiTitle": data.kpiTitle.trim(),
             "target": data.target,
             "weightage": data.weightage,
             "scaleSetId": data.scaleSetId
