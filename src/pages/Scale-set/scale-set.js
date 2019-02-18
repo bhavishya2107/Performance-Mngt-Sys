@@ -54,7 +54,7 @@ class Scalesetlist extends Component {
 
         res.fail(error => {
             if (error.status === 400) {
-                toast.error("reference issue", {
+                toast.error("Some of Scale Set were not deleted as they are being used", {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
@@ -102,7 +102,7 @@ class Scalesetlist extends Component {
         });
         res.fail(error => {
             if (error.status === 400) {
-                toast.error("reference issue", {
+                toast.error("Some of Scale Set were not deleted as they are being used", {
                     position: toast.POSITION.TOP_RIGHT
                 });
             }
