@@ -49,14 +49,6 @@ function formValidation(form) {
 
                 messages:
                 {
-                    kraName: {
-                        required: 'required',
-                        maxLength: 'Please enter no more than 20 char'
-                    },
-                    rolename: {
-                        required: 'required',
-                        maxLength: 'Please enter no more than 20 char',
-                    },
                     jobtitlename: {
                         required: 'maximum 50 characters'
                     },

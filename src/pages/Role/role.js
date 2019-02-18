@@ -38,11 +38,11 @@ class UserRolePMS extends Component {
     }
     DeleteRoleApi(roleId) {
 
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
+        const delRole = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
 
         return $.ajax({
-            url: endpoint,
+            url: delRole,
             type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
@@ -54,9 +54,9 @@ class UserRolePMS extends Component {
 
     multiDeleteRoleApi(roleId) {
         
-        const endpoint = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
+        const multiDelRole = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
         return $.ajax({
-            url: endpoint,
+            url: multiDelRole,
             type: Type.deletetype,
             headers: {
                 "content-type": "application/json",
@@ -160,7 +160,7 @@ class UserRolePMS extends Component {
         const endpointGET = environment.apiUrl + moduleUrls.Role + '/?_size=1000' + '&_sort=-roleId'
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
+            aaSorting: [[0, 'asc']],
             // aaSorting: [[2, 'asc']],
             ajax: {
                 // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
@@ -172,10 +172,10 @@ class UserRolePMS extends Component {
             },
 
             columnDefs: [
-                { width: '1px', targets: 0 },
-                { width: '100px', targets: 1 },
-                { width: '600px', targets: 2 },
-                { width: '1px', targets: 3 },
+                { width: '5%', targets: 0 },
+                { width: '20%', targets: 1 },
+                { width: '65%', targets: 2 },
+                { width: '10%', targets: 3 },
             
                ],
         
@@ -273,9 +273,9 @@ class UserRolePMS extends Component {
                                 />
                             </th>
                             {/* <th>Sr.No</th> */}
-                            <th >Name</th>
+                            <th  >Name</th>
                             <th>Description</th>
-                            <th >Action</th>
+                            <th  >Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

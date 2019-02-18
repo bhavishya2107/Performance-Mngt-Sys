@@ -31,12 +31,12 @@ class kraHome extends Component {
                     var _this = this;
                     var kraFormData =
                     {
-                        "kraName": this.state.kraName,
+                        "kraName": this.state.kraName.trim(),
                         "description": this.state.description,
                     };
-                    const endpointPOST = environment.apiUrl + moduleUrls.Kra + '/'
+                    const apiKraPost = environment.apiUrl + moduleUrls.Kra + '/'
                     $.ajax({
-                        url: endpointPOST,
+                        url: apiKraPost,
                         type: "POST",
                         data: kraFormData,
                         success: function (resultData) {
@@ -86,9 +86,9 @@ class kraHome extends Component {
     kraAlreadyExistApi() {
 
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName + ')';
+        const apiForKraAlreadyExist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')';
         return $.ajax({
-            url: endpoint,
+            url: apiForKraAlreadyExist,
             type: Type.get,
             data: ''
         });
@@ -96,25 +96,25 @@ class kraHome extends Component {
 
     getKraDetailsApi() {
 
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
+        const apiForKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
-            url: endpoint,
+            url: apiForKraDetails,
             type: Type.get,
         })
     }
 
     updatekraDetailsApi(data) {
 
-        const endpoint = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
+        const apiForUpdateKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
         var body =
         {
-            "kraName": data.kraName,
+            "kraName": data.kraName.trim(),
             "description": data.description,
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/kra_master/${data.id}`,
-            url: endpoint,
+            url: apiForUpdateKraDetails,
             type: Type.patch,
             headers: {
                 "Content-Type": "application/json",
@@ -125,7 +125,7 @@ class kraHome extends Component {
     }
     updatekraEditExistApi() {
 
-        const updatekraexist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName + ')' + '~and(kraId,ne,' + this.state.id + ')';
+        const updatekraexist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')' + '~and(kraId,ne,' + this.state.id + ')';
         return $.ajax({
             url: updatekraexist,
             type: Type.get,
@@ -213,7 +213,7 @@ class kraHome extends Component {
                     <div className="form-group">
                         <label className=" required" htmlFor="kraName">Name</label>
                         <div className="">
-                            <input id="kraName" type="text" className="form-control col-6" name="kraName" onBlur={() => { this.kraExistonBlur() }}
+                            <input id="kraName" type="text" className="form-control col-6" name="kraName" onBlur={() => { this.kraExistonBlur() }} maxLength="20"
                                 value={this.state.kraName}
                                 onChange={(event) => {
                                     $(".hide").hide()

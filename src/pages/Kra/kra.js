@@ -35,9 +35,9 @@ class kraListPage extends Component {
 
   DeleteKraApi(kraId) {
     // const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
-    const endpoint = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
+    const deleteKra = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
     return $.ajax({
-      url: endpoint,
+      url: deleteKra,
       type: Type.deletetype,
       headers: {
         "content-type": "application/json",
@@ -46,9 +46,9 @@ class kraListPage extends Component {
     });
   }
   multiDeleteKraApi(kraId) {
-    const endpoint = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
+    const multiDelKra = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
     return $.ajax({
-      url: endpoint,
+      url: multiDelKra,
       type: Type.deletetype,
       headers: {
         "content-type": "application/json",
@@ -86,11 +86,11 @@ class kraListPage extends Component {
         message: Notification.deleteConfirm,
         buttons: {
           confirm: {
-            label: "Yes",
+            label: "Ok",
             className: "btn-success"
           },
           cancel: {
-            label: "No",
+            label: "Cancel",
             className: "btn-danger"
           }
         },
@@ -147,7 +147,7 @@ class kraListPage extends Component {
     const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId'
     this.$el.DataTable({
       autoWidth: false,
-      aaSorting: [[1, "asc"]],
+      aaSorting: [[0, "asc"]],
       // aaSorting: [[2, "asc"]],          
       ajax: {
         url: endpointGET,
@@ -158,10 +158,10 @@ class kraListPage extends Component {
       },
 
       columnDefs: [
-        { width: '1px', targets: 0 },
-        { width: '100px', targets: 1 },
-        { width: '600px', targets: 2 },
-        { width: '1px', targets: 3 },  
+        { width: '5%', targets: 0 },
+        { width: '20%', targets: 1 },
+        { width: '65%', targets: 2 },
+        { width: '10%', targets: 3 },
       
        ],
 
