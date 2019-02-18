@@ -78,6 +78,7 @@ class UserManagement extends Component {
             }
         }
     }
+    //#endregion
     //#region multiple delete functionality
     multipleUserDeleteApi(userId) {
         var url = environment.apiUrl + moduleUrls.User + '/bulk?_ids=' + `${userId}`;
@@ -148,6 +149,8 @@ class UserManagement extends Component {
             }
         });
     }
+    //#endregion
+    
     componentDidMount() {
         const url = environment.apiUrl + moduleUrls.User + '/?_size=1000' + '/&_sort=-userId';
         this.$el = $(this.el);
