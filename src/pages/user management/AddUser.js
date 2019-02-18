@@ -5,6 +5,9 @@ import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { Link } from 'react-router-dom';
+import axios from 'axios'
+import ReactFileReader from 'react-file-reader';
+
 
 class AddUser extends Component {
     constructor(props) {
@@ -23,7 +26,7 @@ class AddUser extends Component {
             roleId: "",
             depId: "",
             teamId: "",
-            profileImage: "",
+            profileImage: null,
             isUpdate: false,
             selectDept: "",
             selectJobTitle: "",
@@ -32,9 +35,48 @@ class AddUser extends Component {
             displayTeamLeaderData: '',
             departmentId: "",
             jobtitleId: "",
+            imageSrc: ""
 
         }
+
     }
+
+    // readURL() {
+
+    //     var file = document.getElementById("profileImage").files[0];
+    //     // this.setState({
+    //     //     profileImage: event.target.files[0]
+    //     // })
+    //     if (file) {
+    //         debugger;
+    //         var reader = new FileReader();
+    //         var imageSrc;
+    //         reader.onload = function (e) {
+    //             debugger;
+    //             imageSrc = reader.result
+    //         };
+    //         reader.readAsDataURL(file);
+    //         $('#imgB')
+    //             .attr('src', imageSrc)
+    //             .width(150)
+    //             .height(200);
+    //         //     reader.readAsDataURL(this.state.profileImage.files[0]);
+    //     }
+    // }
+
+    // imageUpload(){
+    //     const fd = FormData();
+    //     fd.append('image',this.state.profileImage,this.state.profileImage.name);
+    //     axios.post(environment.apiUrl + moduleUrls.User + fd)
+    //     .then(res =>{
+    //         console.log(res)
+    //     })
+    // }
+
+
+
+
+
     //#region  clear user fields
     reset() {
         window.location.reload();
@@ -127,7 +169,8 @@ class AddUser extends Component {
                         "teamId": this.state.teamId,
                         "depId": this.state.depId,
                         "jobtitleId": this.state.jobtitleId,
-                        "Address": this.state.Address
+                        "Address": this.state.Address,
+                        "profileUrl": this.state.imageSrc
 
                     }
                     var url = environment.apiUrl + moduleUrls.User
@@ -155,7 +198,18 @@ class AddUser extends Component {
         }
     }
 
+    handleFiles = files => {
+        debugger;
+        this.setState({
+            imageSrc: files.base64
+        })
+    }
 
+    removeimg() {
+        this.setState({
+            imageSrc: ""
+        })
+    }
     //#endregion 
     //#region  Update the user details
     getUserApi() {
@@ -267,7 +321,7 @@ class AddUser extends Component {
                         roleId: res.roleId,
                         teamId: res.teamId
                     })
-            
+
                 }
             });
             res.fail((error) => {
@@ -357,6 +411,7 @@ class AddUser extends Component {
             },
         });
     }
+
     componentDidMount() {
         this.getUserDetails();
         this.getDeptData();
@@ -381,6 +436,7 @@ class AddUser extends Component {
                         <h2 className="col">
                             {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
                         </h2>
+
                     </div>
                     <div className="row">
                         <div className="col-md-12">
@@ -391,20 +447,23 @@ class AddUser extends Component {
                                             <label htmlFor="profileImage" className="required">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
-                                                    <img src="https://via.placeholder.com/150" className="img-thumbnail" />
-                                                    <a href="#" className="btn-image-remove">x</a>
+                                                    <img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />
+                                                    <a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>
                                                 </div>
                                             </div>
                                             <div className="upload-img">
-                                                <Input type="file" name="profileImage" id="profileImage" className=""
+                                                {/* <Input type="file" name="profileImage" id="profileImage" className=""
                                                     onChange={(event) => {
-                                                        debugger
-                                                        this.setState({
-                                                            profileImage: event.target.value
-                                                        })
-                                                    }} />
+                                                        debugger;
+                                                        this. readURL()
+                                                       
+                                                    }} 
+                                                    /> */}
+                                                <ReactFileReader base64={true} handleFiles={this.handleFiles}>
+                                                    <label className="btn btn-primary btn-block">Upload Image</label>
+                                                </ReactFileReader>
 
-                                                <label className="btn btn-primary btn-block">Upload Image</label>
+
                                             </div>
                                         </div>
                                     </div>
@@ -507,7 +566,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Team Leader</label>
-                                                    <select required  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>
