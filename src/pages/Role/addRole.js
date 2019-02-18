@@ -113,6 +113,7 @@ class UserRoleForm extends Component {
         var body =
         {
             "roleName": data.roleName,
+            "description":data.description,
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/role_master/${data.id}`,
@@ -213,7 +214,7 @@ class UserRoleForm extends Component {
                     <div className="form-group">
                         <label htmlFor="roleName" className="required">Name</label>
                         <div className="">
-                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }}
+                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }} maxLength="20"
                                 value={this.state.roleName}
                                 onChange={(event) => {
                                     $(".hiderole").hide()
