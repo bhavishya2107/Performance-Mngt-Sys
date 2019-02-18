@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { Redirect } from "react-router-dom";
 const $ = require('jquery');
+
+$.DataTable = require('datatables.net-bs4');
 var templateData = []
 
 class AddProject extends Component {
@@ -19,47 +22,105 @@ class AddProject extends Component {
             redirectToList: false
         };
     }
-    saveProjectDetails() {
-        var _this = this;
-        var projectdata = {
-            "projectName": this.state.projectName,
-            "description": this.state.description,
-            "scalesetId": 5
+    resetForm() {
+        window.location.reload();
+    }
+    isProjectExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
+        });
+    }
+    isEditProjectExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')' + '~and(projectId,ne,' + this.state.projectId + ')';
+        return $.ajax({
+            url: endpointGET,
+            type: Type.get,
+            data: ''
+        });
+    }
+
+
+    saveApiDetails() {
+        var isvalidate = window.formValidation("#projectForm");
+        if (isvalidate) {
+            var res = this.isProjectExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                    var _this = this;
+                    var projectData = {
+                        "projectName": this.state.projectName.trim(),
+                        "startDate": this.state.startDate,
+                        "endDate": this.state.endDate,
+                        "description": this.state.description,
+                        "complexityId": this.state.complexityId,
+                        "status": this.state.status,
+                        "manageBy": this.state.manageBy
+                    }
+                    const saveKpiUrl = environment.apiUrl + moduleUrls.Project + '/'
+                    $.ajax({
+                        url: saveKpiUrl,
+                        type: Type.post,
+                        data: projectData,
+                        success: function (resultData) {
+                            _this.setState({ redirectToList: true });
+                            toast.success("Project " + Notification.saved, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                        }
+                    });
+                }
+            });
+            res.fail(error => {
+            });
         }
-        var re = window.formValidation("#projectForm");
-        if (re) {
-            alert("Success")
-        } else {
+        else {
+            $(".hide").hide()
 
             return false;
         }
-        $.ajax({
-            url: "http://192.168.10.109:3000/api/project_master",
-            type: "POST",
-            data: projectdata,
-            success: function (resultData) {
-                alert("Save Complete");
-                _this.setState({ redirectToList: true });
-                toast.success("Success Notification !", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-            }
-        });
     }
-    getKpiDetailsApi(KpiId) {
-        const endpoint = `http://192.168.10.109:3000/api/project_master/${this.state.kpiId}`;
+    getProjectDetailsApi(projectId) {
+        const endpointGET = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
         return $.ajax({
-            url: endpoint,
-            type: "GET",
+            url: endpointGET,
+            type: Type.get,
         })
     }
+
+    onChangeBlur() {
+        var res = this.isProjectExistsApi();
+        res.done((response) => {
+            if (response.length > 0) {
+                $(".recordexists").show()
+            } else {
+                var _this = this;
+                var Kpidata = {
+                    "projectName": this.state.projectName.trim(),
+                    "startDate": this.state.startDate,
+                    "endDate": this.state.endDate,
+                    "description": this.state.description,
+                    "complexityId": this.state.complexityId,
+                    "status": this.state.status,
+                    "manageBy": this.state.manageBy
+                }
+            }
+        });
+        res.fail(error => {
+        });
+    }
+
     updateDetailsApi(data) {
         var body =
         {
             "KpiTitle": data.kpiTitle,
             "target": data.target,
         }
-        ;
+            ;
         return $.ajax({
             url: `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`,
             type: "PATCH",
@@ -238,16 +299,15 @@ class AddProject extends Component {
                                 </div>
 
                                 <div className="col-md-4">
-                         
-                         <div className="form-group">
-                             <label for="projectName">Managed By</label>
-                             <select onChange={(e) => { this.onChangeManagedBy(e) }} className="form-control">
-                                        <option>select</option>
-                                        {this.state.displayProjectStatus}
-                                    </select>
-                         </div>
-                     </div>
 
+                                    <div className="form-group">
+                                        <label for="projectName">Managed By</label>
+                                        <select className="form-control">
+                                            <option>select</option>
+                                            {this.state.displayProjectStatus}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div className="row">
                                 <div className="col">
@@ -268,10 +328,13 @@ class AddProject extends Component {
                                             <button type="button" class="btn btn-success mr-2" onClick={() => {
                                                 this.UpdateKpiDetails(this.state);
                                             }}>Save</button>
+
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
                                                 this.saveProjectDetails(this.state);
                                             }}>ADD</button>}
-                                        <button className="btn btn-info mr-2">Clear</button>
+                                        <button type="button" className="btn btn-info mr-2" onClick={() => {
+                                            this.resetForm();
+                                        }}>Reset</button>
                                         <Link to={{ pathname: '/Projects', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>

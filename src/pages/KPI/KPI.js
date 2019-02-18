@@ -140,19 +140,20 @@ class KPI extends Component {
    
     componentDidMount() {
          //#region Datatable 
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + '?&_sort=-kpiId'
+        const endpointGET = environment.dynamicUrl + 'dynamic'
         this.setState({
             title: ModuleNames.kpi
         })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[0, 'asc']],
+            "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
-                type: Type.get,
+                type: "POST",
                 dataSrc: "",
-                error: function (xhr, status, error) {
+                data: {
+                    query: "select Kpi_Master.kpiTitle,Kpi_Master.target, Kpi_Master.weightage, scale_set_master.scalesetName FROM Kpi_Master left join scale_set_master On Kpi_master.scalesetid = scale_set_master.scalesetId order by kpiTitle"
                 },
             },
             columns: [
@@ -175,11 +176,11 @@ class KPI extends Component {
                     targets: 2
                 },
                 {
-                    data: "scalesetId",
+                    data: "target",
                     targets: 3
                 },
                 {
-                    data: "target",
+                    data: "scalesetName",
                     targets: 4
                 },
                 {
@@ -231,8 +232,8 @@ class KPI extends Component {
                                
                                 <th width="100">Name</th>
                                 <th width="80">Weightage</th>
-                                <th width="100">Scale Set</th>
                                 <th>Target</th>
+                                <th width="100">Scale Set</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
