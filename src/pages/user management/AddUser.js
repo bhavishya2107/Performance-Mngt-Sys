@@ -533,7 +533,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input refs="phone" type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    <input  type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 mobileNo: event.target.value
