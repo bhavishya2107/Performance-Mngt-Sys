@@ -4,8 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { Redirect } from "react-router-dom";
 const $ = require('jquery');
-
 $.DataTable = require('datatables.net-bs4');
+
 var templateData = []
 var ProjectData = []
 class AddProject extends Component {
@@ -14,19 +14,20 @@ class AddProject extends Component {
         this.state = {
             projectId: props.match.params.id,
             RedirectToSample: false,
-            displayProjectComplexity: "",
+            displayComplexityMaster: "",
             displayProjectStatus: "",
-            selectProjectComplexity: "",
+            selectComplexityMaster: "",
             selectProjectStatus: "",
             templateDataTable: [],
-            displayManageBy:"",
-            manageBy:"",
+            displayManageBy: "",
+            manageBy: "",
             redirectToList: false
         };
     }
     resetForm() {
         window.location.reload();
     }
+    
     isProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')';
         return $.ajax({
@@ -35,6 +36,7 @@ class AddProject extends Component {
             data: ''
         });
     }
+
     isEditProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')' + '~and(projectId,ne,' + this.state.projectId + ')';
         return $.ajax({
@@ -43,7 +45,6 @@ class AddProject extends Component {
             data: ''
         });
     }
-
 
     saveApiDetails() {
         var isvalidate = window.formValidation("#projectForm");
@@ -55,13 +56,13 @@ class AddProject extends Component {
                 } else {
                     var _this = this;
                     var projectData = {
-                        "projectName": this.state.projectName.trim(),
+                        "projectName": this.state.projectName,
                         "startDate": this.state.startDate,
                         "endDate": this.state.endDate,
-                        "description": this.state.description,
                         "complexityId": this.state.complexityId,
                         "status": this.state.status,
-                        "manageBy": this.state.manageBy
+                        "manageBy": this.state.manageBy,
+                        "description": this.state.description,
                     }
                     const saveKpiUrl = environment.apiUrl + moduleUrls.Project + '/'
                     $.ajax({
@@ -86,6 +87,7 @@ class AddProject extends Component {
             return false;
         }
     }
+
     getProjectDetailsApi(projectId) {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
         return $.ajax({
@@ -108,42 +110,20 @@ class AddProject extends Component {
                     "description": this.state.description,
                     "complexityId": this.state.complexityId,
                     "status": this.state.status,
-                    "manageBy": this.state.manageBy
+                    "userId": this.state.userId
                 }
             }
         });
         res.fail(error => {
         });
     }
-
-    addProjectManageBy() {
-        var ProjectDataKpi = {
-            "manageBy": this.state.manageBy,
-        }
-        ProjectData.push(ProjectDataKpi)
+    onChangeComplexityMaster(event) {
         this.setState({
-            ProjectDataTable: ProjectData
-        })
-        this.$el = $(this.el);
-        this.$el.DataTable({
-            datasrc: ProjectData,
-            data: ProjectData,
-            columns: [
-                {
-                    data: "userName",
-                    target: 0
-                },
-            ]
+            complexityName: event.target.value
         })
     }
-
-    onChangeManageBy(event) {
-        this.setState({
-            manageBy: event.target.value
-        })
-    }
-    getmanageByData() {
-        const endpointGET = environment.apiUrl + moduleUrls.Project + '/'
+    getComplexityIdData() {
+        const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '/'
         $.ajax({
             type: Type.get,
             url: endpointGET,
@@ -151,7 +131,32 @@ class AddProject extends Component {
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
-                        <option key={i.manageBy} value={i.manageBy}>{i.userName}</option>
+                        <option key={i.complexityId} value={i.complexityId}>{i.complexityName}</option>
+                    )
+                });
+                this.setState({
+                    displayComplexityMaster : displayDataReturn
+                })
+            },
+        });
+    }
+  
+    onChangeManageBy(event) {
+        this.setState({
+            manageBy: event.target.value
+        })
+    }
+
+    getmanageByData() {
+        const endpointGET = environment.apiUrl + moduleUrls.User + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option key={i.userId} value={i.userId}>{i.userName}</option>
                     )
                 });
                 this.setState({
@@ -160,25 +165,28 @@ class AddProject extends Component {
             },
         });
     }
-
-
-    componentWillMount() {
-        this.getmanageByData();
-    }
-
-
-
-
-
+   
     componentDidMount() {
-        if (this.state.kpiId !== undefined) {
-            var res = this.getKpiDetailsApi();
-            console.log(res);
+        this.getComplexityIdData();
+        this.getmanageByData();
+        this.setState({
+            title: ModuleNames.Project
+        })
+
+        if (this.state.projectId !== undefined) {
+            var res = this.getProjectDetailsApi();
+
             res.done((response) => {
-                ;
+                console.log(res);
                 this.setState({
-                    kpiTitle: response[0].kpiTitle,
-                    target: response[0].target
+                    projectName: response[0].projectName,
+                    startDate: response[0].startDate,
+                    endDate: response[0].endDate,
+                    complexityId: response[0].complexityId,
+                    status: response[0].status,
+                    manageBy: response[0].manageBy,
+                    description: response[0].description,
+
                 })
             });
             res.fail((error) => {
@@ -187,97 +195,97 @@ class AddProject extends Component {
         }
     }
 
-    onChangeProjectComplexity(event) {
-        ;
-        this.setState({
-            selectProjectComplexity: event.target.value
-        })
-    }
-    onChangeProjectStatus(event) {
-        ;
-        this.setState({
-            selectProjectStatus: event.target.value
-        })
-    }
-    addProject() {
-        ;
-        var templateDataapi = {
-            "projectName": this.state.selectProjectComplexity,
-            "status": this.state.selectProjectStatus
-        }
-        templateData.push(templateDataapi)
+    // onChangeComplexityMaster(event) {
+        
+    //     this.setState({
+    //         selectComplexityMaster: event.target.value
+    //     })
+    // }
+    // onChangeProjectStatus(event) {
+    //     ;
+    //     this.setState({
+    //         selectProjectStatus: event.target.value
+    //     })
+    // }
+    // addProject() {
+    //     ;
+    //     var templateDataapi = {
+    //         "projectName": this.state.selectComplexityMaster,
+    //         "status": this.state.selectProjectStatus
+    //     }
+    //     templateData.push(templateDataapi)
 
-        this.setState({
-            templateDataTable: templateData
-        })
-        this.$el = $(this.el);
-        this.$el.DataTable({
-            datasrc: templateData,
-            data: templateData,
-            columns: [
-                {
-                    data: "projectName",
-                    target: 0
-                },
-                {
-                    data: "status",
-                    target: 1
-                },
-            ]
-        })
-    }
-    getProjectComplexityData() {
-        $.ajax({
-            type: 'GET',
-            url: 'http://192.168.10.109:3000/api/project_master',
-            complete: (temp) => {
-                console.log(temp);
-                var temp = temp.responseJSON;
-                var displayDataReturn = temp.map((i) => {
-                    return (
-                        <option value={i.projectName}>{i.projectName}</option>
-                    )
-                });
-                this.setState({
-                    displayProjectComplexity: displayDataReturn
-                })
-            },
-        });
-    }
-    getProjectStatusData() {
-        $.ajax({
-            type: 'GET',
-            url: 'http://192.168.10.109:3000/api/project_master',
-            complete: (temp) => {
-                console.log(temp);
-                var temp = temp.responseJSON;
-                var displayDataReturn = temp.map((i) => {
-                    return (
-                        <option value={i.status}>{i.status}</option>
-                    )
-                });
-                this.setState({
-                    displayProjectStatus: displayDataReturn
-                })
-            },
-        });
-    }
+    //     this.setState({
+    //         templateDataTable: templateData
+    //     })
+    //     this.$el = $(this.el);
+    //     this.$el.DataTable({
+    //         datasrc: templateData,
+    //         data: templateData,
+    //         columns: [
+    //             {
+    //                 data: "projectName",
+    //                 target: 0
+    //             },
+    //             {
+    //                 data: "status",
+    //                 target: 1
+    //             },
+    //         ]
+    //     })
+    // }
+    // getProjectComplexityData() {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://192.168.10.109:3000/api/project_master',
+    //         complete: (temp) => {
+    //             console.log(temp);
+    //             var temp = temp.responseJSON;
+    //             var displayDataReturn = temp.map((i) => {
+    //                 return (
+    //                     <option value={i.projectName}>{i.projectName}</option>
+    //                 )
+    //             });
+    //             this.setState({
+    //                 displayProjectComplexity: displayDataReturn
+    //             })
+    //         },
+    //     });
+    // }
+    // getProjectStatusData() {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: 'http://192.168.10.109:3000/api/project_master',
+    //         complete: (temp) => {
+    //             console.log(temp);
+    //             var temp = temp.responseJSON;
+    //             var displayDataReturn = temp.map((i) => {
+    //                 return (
+    //                     <option value={i.status}>{i.status}</option>
+    //                 )
+    //             });
+    //             this.setState({
+    //                 displayProjectStatus: displayDataReturn
+    //             })
+    //         },
+    //     });
+    // }
 
-    componentWillMount() {
-        this.getProjectComplexityData();
-        this.getProjectStatusData();
+    // componentWillMount() {
+    //     this.getProjectComplexityData();
+    //     this.getProjectStatusData();
 
-    }
+    // }
     render() {
         if (this.state.redirectToList == true) {
 
-            return <Redirect to={{ pathname: "/Projects" }} />
+            return <Redirect to={{ pathname: "/projects" }} />
         }
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
-                    <h2 className="col"> Project >
-                    {this.state.projectId !== undefined ? <span>Edit</span> : <span>Add</span>}
+                    <h2 className="col">
+                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add   {ModuleNames.Project}</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -286,50 +294,60 @@ class AddProject extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="projectName">Project Name</label>
-                                        <input className="form-control" minlength="5" type="text" value={this.state.projectName}
+                                        <label className="required" htmlFor="projectName">Project Name</label>
+                                        <input className="form-control" maxLength="50" type="text" onBlur={() => (this.onChangeBlur())} value={this.state.projectName}
                                             onChange={(event) => {
+                                                $(".recordexists").hide()
                                                 this.setState({
                                                     projectName: event.target.value
                                                 })
-                                            }} />
+                                            }} required />
+                                        <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label>Start Date</label>
-                                        <input type="date" className="form-control" />
+                                        <label className="required" htmlFor="startDate">Start Date</label>
+                                        <input type="date" className="form-control" name="startDate" value={this.state.startDate}
+                                            onChange={(event) => {
+                                                this.setState({
+                                                    startDate: event.target.value
+                                                })
+                                            }} required />
                                     </div>
                                 </div>
                                 <div className="col-md-4">
-                                    <label>End Date</label>
-                                    <input type="date" className="form-control" />
+                                    <label className="required" htmlFor="endDate">End Date</label>
+                                    <input type="date" className="form-control" name="endDate" value={this.state.endDate}
+                                        onChange={(event) => {
+                                            this.setState({
+                                                endDate: event.target.value
+                                            })
+                                        }} required />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-4">
-                                    <label className="mr-2">Complexity Master:</label>
-                                    <select onChange={(e) => { this.onChangeProjectComplexity(e) }} className="form-control">
-                                        <option>select</option>
-                                        {this.state.displayProjectComplexity}
+                                    <label className="required mr-2" htmlFor="complexitymaster">Complexity</label>
+                                    <select required name="complexitydropdown" className="form-control" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
+                                        <option value="">select</option>
+                                        {this.state.displayComplexityMaster}
                                     </select>
                                 </div>
-                                <div className="col-md-4">
-                                    <label className="mr-2">Project Status:</label>
-                                    <select onChange={(e) => { this.onChangeProjectStatus(e) }} className="form-control">
-                                        <option>select</option>
+                                {/* <div className="col-md-4">
+                                    <label>Project Status</label>
+                                    <select required name="projectStatusdropdown" className="form-control" onChange={(e) => { this.onChangeProjectStatus(e) }} value={this.state.status}  >
+                                        <option value="">select</option>
                                         {this.state.displayProjectStatus}
                                     </select>
-                                </div>
-
+                                </div> */}
                                 <div className="col-md-4">
-
                                     <div className="form-group">
-                                        <label for="managedBy">Managed By</label>
-                                        <select required name="manageBydropdown"  onChange={(e) => { this.onChangeManageBy(e) }}  className="form-control" value={this.state.manageBy}>
-                                            <option>select</option>
-                                            {this.state.displayManageBy}
-                                        </select>
+                                        <label className="required" htmlFor="manageBy">Managed By</label>
+                                        <select required name="manageBydropdown" className="form-control" onChange={(e) => { this.onChangeManageBy(e) }} value={this.state.manageBy}  >
+                                        <option value="">select</option>
+                                        {this.state.displayManageBy}
+                                    </select>
                                     </div>
                                 </div>
                             </div>
@@ -351,15 +369,14 @@ class AddProject extends Component {
                                         {this.state.projectId !== undefined ?
                                             <button type="button" class="btn btn-success mr-2" onClick={() => {
                                                 this.UpdateKpiDetails(this.state);
-                                            }}>Save</button>
-
+                                            }}>Update</button>
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
-                                                this.saveProjectDetails(this.state);
-                                            }}>ADD</button>}
+                                                this.saveApiDetails(this.state);
+                                            }}>Save</button>}
                                         <button type="button" className="btn btn-info mr-2" onClick={() => {
                                             this.resetForm();
                                         }}>Reset</button>
-                                        <Link to={{ pathname: '/Projects', }} className="btn btn-danger mr-2">Cancel</Link>
+                                        <Link to={{ pathname: '/projects', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>
                             </div>

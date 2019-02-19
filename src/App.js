@@ -21,8 +21,8 @@ import UserManagement from './pages/user management/User Management';
 import AddUser from './pages/user management/AddUser'
 import Department from './pages/Department/Department';
 import AddDept from './pages/Department/AddDept'
-import Projects from './pages/Projects/Projects';
-import AddProject from './pages/Projects/AddProject';
+import Projects from './pages/Project/Projects';
+import AddProject from './pages/Project/AddProject';
 import AddKpi from './pages/KPI/AddKpi';
 import KPI from './pages/KPI/KPI';
 
@@ -100,10 +100,9 @@ class App extends Component {
                         <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
                         <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
-                        <Route path="/Projects" component={Projects} />
-                        <Route exact path="/EditProject/id=:id" component={AddProject} />
-                        <Route exact path="/AddProject" component={AddProject} />
-
+                        <Route exact path="/Projects" component={Projects} />
+                        <Route exact path="/Project/editproject/id=:id" component={AddProject} />
+                        <Route exact path="/Projects/add" component={AddProject} />
 
                         <Route path="/user-management" component={UserManagement} />
                         <Route path="/user-managemnet/add" component={AddUser} />

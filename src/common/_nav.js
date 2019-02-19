@@ -88,7 +88,7 @@ export default {
             // },
             {
                 name: 'Projects',
-                url: '/Projects',
+                url: '/projects',
                 icon: 'fa fa-sitemap',
             },
 
