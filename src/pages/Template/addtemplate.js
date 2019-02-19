@@ -36,25 +36,25 @@ class Addtemplate extends Component {
         success: function(resultData) {
           alert("Save Complete");
           _this.setState({ redirectToList: true });
-          // toast.success("Success Notification !", {
-          //     position: toast.POSITION.TOP_RIGHT
-          // });
+      
+          
         }
       });
     } else {
       return false;
     }
-    const saveTemplateUrl = environment.apiUrl + moduleUrls.Templatedetail + '/'
-    
+    const saveTemplateUrl =
+      environment.apiUrl + moduleUrls.Templatedetail + "/";
+
     $.ajax({
-        url: saveTemplateUrl,
-        type: Type.post,
-        data: "",
-        success: function (resultData) {
-console.log(resultData)
+      url: saveTemplateUrl,
+      type: Type.post,
+      data: "",
+      success: function(resultData) {
+        console.log(resultData);
       }
     });
-}
+  }
 
   getjobtitleDetilsApi() {
     const designationApi =
@@ -82,7 +82,7 @@ console.log(resultData)
       kraName: this.state.selectkra,
       kpiTitle: this.state.selectkpi
     };
-    templateData.push(templateDataapi);
+    this.state.templateDataTable.push(templateDataapi);
     this.$el
       .DataTable()
       .clear()
@@ -133,7 +133,6 @@ console.log(resultData)
   resetform() {
     window.location.reload();
   }
-  
 
   componentDidMount() {
     this.$el = $(this.el);
@@ -182,7 +181,6 @@ console.log(resultData)
                     required
                   />
                 </div>
-                
               </form>
             </div>
           </div>
@@ -213,7 +211,7 @@ console.log(resultData)
             </select>
           </div>
           <br />
-          <button
+          <button id="btnTemplateDetail"
             onClick={() => this.addtemplate(this.state)}
             type="button"
             className="btn btn-success mr-5"
@@ -234,27 +232,27 @@ console.log(resultData)
             <tbody />
           </table>
           <div className="form-group">
-                <button
-                  onClick={() => this.savetemplatenameApi()}
-                  type="button"
-                  className="btn btn-success mr-2"
-                >
-                  SAVE
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-info mr-2"
-                  onClick={() => {
-                    this.resetform();
-                  }}
-                >
-                  Reset
-                </button>
+            <button
+              onClick={() => this.savetemplatenameApi()}
+              type="button"
+              className="btn btn-success mr-2"
+            >
+              SAVE
+            </button>
+            <button
+              type="button"
+              className="btn btn-info mr-2"
+              onClick={() => {
+                this.resetform();
+              }}
+            >
+              Reset
+            </button>
 
-                <Link to="/templatelist" className="btn btn-danger ">
-                  Cancel
-                </Link>
-                </div>
+            <Link to="/templatelist" className="btn btn-danger ">
+              Cancel
+            </Link>
+          </div>
         </div>
       </div>
     );
