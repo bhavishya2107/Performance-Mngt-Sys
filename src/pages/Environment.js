@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   // apiUrl: "http://180.211.103.189:3000/api/",
   apiUrl: 'http://192.168.10.110:3000/api/',
-  dynamicUrl: "http://192.168.10.109:3000/",
+  dynamicUrl: "http://192.168.10.110:3000/",
   publicUrl: "http://180.211.103.189:3000/api/"
 };
 export const moduleUrls = {
@@ -31,7 +31,8 @@ export const Notification = {
   deleteError:"Data is not deleted",
   notdeleted:"Not Deleted Successfully",
   selectOneRecord:"Please select atleast one record!",
-  recordExists:"Record already exists"
+  recordExists:"Record already exists",
+  loginError:"Credentials are Invalid",
 };
 export const ModuleNames = {
   kra: "KRA",
