@@ -274,8 +274,6 @@ class kraListPage extends Component {
                   }}
                 />
               </th>
-            
-              {/* <th>Sr.No</th> */}
               <th>Name</th>
               <th>Description</th>
               <th>Action</th>

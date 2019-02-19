@@ -5,6 +5,10 @@ import user from './img/user-image.png';
 
 
 class Header extends Component {
+  constructor(props){
+    super(props);
+    console.log(props)
+  }
   render() {
     return (
       <div>

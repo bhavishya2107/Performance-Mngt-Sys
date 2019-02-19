@@ -14,7 +14,9 @@ export const moduleUrls = {
   ScaleSet: "scale_set_master",
   Role: "role_master",
   User: "user_master",
-  Project: "project_master"
+  Project: "project_master",
+  Template:"template_master",
+  Templatedetail:"template_detail"
 };
 export const Type = {
   get: "GET",
@@ -31,7 +33,8 @@ export const Notification = {
   deleteError:"Data is not deleted",
   notdeleted:"Not Deleted Successfully",
   selectOneRecord:"Please select atleast one record!",
-  recordExists:"Record already exists"
+  recordExists:"Record already exists",
+  loginError:"Invalid username and password",
 };
 export const ModuleNames = {
   kra: "KRA",
