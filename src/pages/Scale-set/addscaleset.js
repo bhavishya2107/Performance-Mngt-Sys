@@ -42,7 +42,7 @@ class Scaleset extends Component {
             var res = this.isScalesetExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
+                    
                     $(".recordexists").show()
 
                 } else {
@@ -117,7 +117,7 @@ class Scaleset extends Component {
 
             var res = this.isScalesetExistsUpdateApi();
             res.done((response) => {
-                debugger;
+                
                 if (response.length > 0) {
                     $(".recordexists").show()
 

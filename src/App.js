@@ -21,14 +21,19 @@ import UserManagement from './pages/user management/User Management';
 import AddUser from './pages/user management/AddUser'
 import Department from './pages/Department/Department';
 import AddDept from './pages/Department/AddDept'
-import Projects from './pages/Projects';
-import AddProject from './pages/AddProject';
+import Projects from './pages/Projects/Projects';
+import AddProject from './pages/Projects/AddProject';
 import AddKpi from './pages/KPI/AddKpi';
 import KPI from './pages/KPI/KPI';
 
+<<<<<<< HEAD
 
 import ProjectComplexity from './pages/Project-Complexity/ProjectComplexity';
 import AddProjectComplexity from './pages/Project-Complexity/AddProjectComplexity';
+=======
+import ComplexityMaster from './pages/Complexity-Master/ComplexityMaster';
+import AddComplexityMaster from './pages/Complexity-Master/AddComplexityMaster';
+>>>>>>> db735aa1aa61b6aca982cbd197c164231b8220a3
 import Templatelist from './pages/Template/templateList';
 import Scaleset from './pages/Scale-set/addscaleset';
 import Scalesetlist from './pages/Scale-set/scale-set';
@@ -97,9 +102,9 @@ class App extends Component {
                         <Route exact path="/KPI/editkpi/id=:id" component={AddKpi} />
                         <Route exact path="/KPI/add" component={AddKpi} />
 
-                        <Route exact path="/project-complexity" component={ProjectComplexity} />
-                        <Route exact path="/project-complexity/edit/id=:id" component={AddProjectComplexity} />
-                        <Route exact path="/project-complexity/add" component={AddProjectComplexity} />
+                        <Route exact path="/complexity-master" component={ComplexityMaster} />
+                        <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
+                        <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
                         <Route path="/Projects" component={Projects} />
                         <Route exact path="/EditProject/id=:id" component={AddProject} />

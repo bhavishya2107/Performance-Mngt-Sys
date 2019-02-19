@@ -50,7 +50,7 @@ class UserManagement extends Component {
     singleDeleteUserConfirm(id) {
 
         if (id !== undefined) {
-            if (id != 150) {
+            if (id != 2) {
                 bootbox.confirm({
                     message: Notification.deleteConfirm,
                     buttons: {
@@ -78,6 +78,7 @@ class UserManagement extends Component {
             }
         }
     }
+    //#endregion
     //#region multiple delete functionality
     multipleUserDeleteApi(userId) {
         var url = environment.apiUrl + moduleUrls.User + '/bulk?_ids=' + `${userId}`;
@@ -89,7 +90,7 @@ class UserManagement extends Component {
     multipleDeleteUserConfirm() {
         var userId = []
         $("#tblUser input:checkbox:checked").each((e, item) => {
-            if (item.value != 150) {
+            if (item.value != 2) {
                 if (item.name !== "checkAll") {
                     userId.push(item.value);
                 }
@@ -148,6 +149,8 @@ class UserManagement extends Component {
             }
         });
     }
+    //#endregion
+    
     componentDidMount() {
         const url = environment.apiUrl + moduleUrls.User + '/?_size=1000' + '/&_sort=-userId';
         this.$el = $(this.el);

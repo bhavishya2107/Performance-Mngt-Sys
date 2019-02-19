@@ -168,6 +168,12 @@ html {
 .user-img-block{
     display: inline-block;
     position: relative;
+    height: 150px;
+    width: 150px;
+    img{
+        max-height: 100%;
+        max-width: 100%;
+    }
     .btn-image-remove{
         background: #ff8585;
         width: 24px;

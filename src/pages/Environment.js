@@ -9,7 +9,7 @@ export const moduleUrls = {
   Kra: "kra_master",
   Kpi: "kpi_master",
   Designation: "designation_master",
-  ProjectComplexity: "project_type_master",
+  ComplexityMaster: "complexity_master",
   Department: "department_master",
   ScaleSet: "scale_set_master",
   Role: "role_master",
@@ -43,5 +43,5 @@ export const ModuleNames = {
   Role: "Role",
   Department: "Department",
   ScaleSet: "Scale Set",
-  ProjectComplexity:"Project Complexity"
+  ComplexityMaster:"Complexity Master"
 };

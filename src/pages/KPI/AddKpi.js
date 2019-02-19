@@ -32,9 +32,10 @@ class AddKpi extends Component {
     }
     //#endregion
 
+
     //#region 
     isKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle.trim() + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -42,7 +43,7 @@ class AddKpi extends Component {
         });
     }
     isEditKpiExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle + ')' + '~and(kpiId,ne,' + this.state.kpiId + ')';
+        const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle.trim() + ')' + '~and(kpiId,ne,' + this.state.kpiId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -64,7 +65,7 @@ class AddKpi extends Component {
                 } else {
                     var _this = this;
                     var Kpidata = {
-                        "KpiTitle": this.state.kpiTitle,
+                        "KpiTitle": this.state.kpiTitle.trim(),
                         "weightage": this.state.weightage,
                         "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
@@ -101,11 +102,6 @@ class AddKpi extends Component {
         })
     }
 
-    onChangeScaleSetId(event) {
-        this.setState({
-            scaleSetId: event.target.value
-        })
-    }
     onChangeBlur(){
         var res = this.isKpiExistsApi();
         res.done((response) => {
@@ -150,6 +146,11 @@ class AddKpi extends Component {
         })
     }
 
+    onChangeScaleSetId(event) {
+        this.setState({
+            scaleSetId: event.target.value
+        })
+    }
     getscaleSetIdData() {
         const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/'
         $.ajax({
@@ -163,6 +164,7 @@ class AddKpi extends Component {
                     )
                 });
                 this.setState({
+                    
                     displayScaleSetId: displayDataReturn
                 })
             },
@@ -177,7 +179,7 @@ class AddKpi extends Component {
     updateDetailsApi(data) {
         var body =
         {
-            "KpiTitle": data.kpiTitle,
+            "KpiTitle": data.kpiTitle.trim(),
             "target": data.target,
             "weightage": data.weightage,
             "scaleSetId": data.scaleSetId
@@ -277,7 +279,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="weightage">Weight</label>
-                                        <input className="form-control" name="weightage" minLength="1"  maxLength="99" type="number" value={this.state.weightage}
+                                        <input className="form-control" name="weightage" min="1"  max="99" type="number" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
                                                     weightage: event.target.value

@@ -5,12 +5,12 @@ import { environment, moduleUrls, Type, Notification } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
 
-class AddProjectComplexity extends Component {
+class AddComplexityMaster extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            projectTypeId: props.match.params.id,
-            projectTypeName: "",
+            complexityId: props.match.params.id,
+            complexityName: "",
             description: "",
             redirectToList: false
         };
@@ -18,34 +18,34 @@ class AddProjectComplexity extends Component {
     resetForm() {
         window.location.reload();
     }
-    //#region  save projectcomplexity details
-    isProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
-            + this.state.projectTypeName + ')';
+    //#region  save ComplexityMaster details
+    isComplexityMasterExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '?_where=(complexityName,eq,'
+            + this.state.complexityName.trim() + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
             data: ''
         });
     }
-    isEditProjectComplexityExistsApi() {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '?_where=(projectTypeName,eq,'
-            + this.state.projectTypeName + ')' + '~and(projectTypeId,ne,' + this.state.projectTypeId + ')';
+    isEditComplexityMasterExistsApi() {
+        const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '?_where=(complexityName,eq,'
+            + this.state.complexityName.trim() + ')' + '~and(complexityId,ne,' + this.state.complexityId + ')';
         return $.ajax({
             url: endpointGET,
             type: Type.get,
             data: ''
         });
     }
-    onchangeBlur(){
-        var res = this.isProjectComplexityExistsApi();
+    onchangeBlur() {
+        var res = this.isComplexityMasterExistsApi();
         res.done((response) => {
             if (response.length > 0) {
                 $(".recordexists").show()
             } else {
                 var _this = this;
-                var ProjectComplexitydata = {
-                    "projectTypeName": this.state.projectTypeName,
+                var ComplexityMasterdata = {
+                    "complexityName": this.state.complexityName,
                     "description": this.state.description,
                 }
             }
@@ -55,27 +55,27 @@ class AddProjectComplexity extends Component {
     }
 
 
-    saveProjectComplexityDetails() {
-        var isvalidate = window.formValidation("#projectComplexityForm");
+    saveComplexityMasterDetails() {
+        var isvalidate = window.formValidation("#ComplexityMasterForm");
         if (isvalidate) {
-            var res = this.isProjectComplexityExistsApi();
+            var res = this.isComplexityMasterExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
                 } else {
                     var _this = this;
-                    var ProjectComplexitydata = {
-                        "projectTypeName": this.state.projectTypeName,
+                    var ComplexityMasterdata = {
+                        "complexityName": this.state.complexityName.trim(),
                         "description": this.state.description,
                     }
-                    const endpointPOST = environment.apiUrl + moduleUrls.ProjectComplexity + '/'
+                    const endpointPOST = environment.apiUrl + moduleUrls.ComplexityMaster + '/'
                     $.ajax({
                         url: endpointPOST,
                         type: Type.post,
-                        data: ProjectComplexitydata,
+                        data: ComplexityMasterdata,
                         success: function (resultData) {
                             _this.setState({ redirectToList: true });
-                            toast.success("Project Complexity " + Notification.saved, {
+                            toast.success("Complexity " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -92,8 +92,8 @@ class AddProjectComplexity extends Component {
 
 
 
-    getProjectComplexityDeatilsApi(projectTypeId) {
-        const endpointGET = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${this.state.projectTypeId}`
+    getComplexityMasterDeatilsApi(complexityId) {
+        const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + `${this.state.complexityId}`
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -104,10 +104,10 @@ class AddProjectComplexity extends Component {
 
     //#region update fucntionality details
     updateDetailsApi(data) {
-        const endpointPATCH = environment.apiUrl + moduleUrls.ProjectComplexity + '/' + `${this.state.projectTypeId}`
+        const endpointPATCH = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + `${this.state.complexityId}`
         var body =
         {
-            "projectTypeName": data.projectTypeName,
+            "complexityName": data.complexityName.trim(),
             "description": data.description,
         }
         return $.ajax({
@@ -120,10 +120,10 @@ class AddProjectComplexity extends Component {
             data: JSON.stringify(body)
         });
     }
-    UpdateProjectComplexityDetails(data) {
-        var isvalidate = window.formValidation("#projectComplexityForm");
+    UpdateComplexityMasterDetails(data) {
+        var isvalidate = window.formValidation("#ComplexityMasterForm");
         if (isvalidate) {
-            var res = this.isEditProjectComplexityExistsApi();
+            var res = this.isEditComplexityMasterExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
@@ -133,7 +133,7 @@ class AddProjectComplexity extends Component {
                         this.setState({
                             redirectToList: true
                         })
-                        toast.success("Project Complexity " + Notification.updated, {
+                        toast.success("Complexity " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     })
@@ -151,11 +151,11 @@ class AddProjectComplexity extends Component {
     //#endregion
 
     componentDidMount() {
-        if (this.state.projectTypeId !== undefined) {
-            var res = this.getProjectComplexityDeatilsApi();
+        if (this.state.complexityId !== undefined) {
+            var res = this.getComplexityMasterDeatilsApi();
             res.done((response) => {
                 this.setState({
-                    projectTypeName: response[0].projectTypeName,
+                    complexityName: response[0].complexityName,
                     description: response[0].description
                 })
             });
@@ -167,26 +167,26 @@ class AddProjectComplexity extends Component {
 
     render() {
         if (this.state.redirectToList == true) {
-            return <Redirect to={{ pathname: "/project-complexity" }} />
+            return <Redirect to={{ pathname: "/complexity-master" }} />
         }
         return (
-            //#region form of project complexity
+            //#region form of complexity master
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.projectTypeId !== undefined ? <span>Edit Project Complexity</span> : <span>Add Project Complexity</span>}
+                        {this.state.complexityId !== undefined ? <span>Edit Complexity Master</span> : <span>Add Complexity Master</span>}
                     </h2>
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <form id="projectComplexityForm">
+                        <form id="ComplexityMasterForm">
                             <div className="form-group">
                                 <label className="required">Project Name</label>
-                                <input type="text" id="projectTypeName" className="form-control" maxLength="50" onBlur={()=>{this.onchangeBlur()}} name="projectTypeName" value={this.state.projectTypeName}
+                                <input type="text" id="complexityName" className="form-control" maxLength="50" onBlur={() => { this.onchangeBlur() }} name="complexityName" value={this.state.complexityName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
                                         this.setState({
-                                            projectTypeName: event.target.value
+                                            complexityName: event.target.value
                                         })
                                     }} required />
                                 <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
@@ -200,19 +200,19 @@ class AddProjectComplexity extends Component {
                                     }} ></textarea>
                             </div>
                             <div className="form-group">
-                                {this.state.projectTypeId !== undefined ?
+                                {this.state.complexityId !== undefined ?
                                     <button type="button" className="btn btn-success mr-2" onClick={() => {
-                                        this.UpdateProjectComplexityDetails(this.state);
+                                        this.UpdateComplexityMasterDetails(this.state);
                                     }}>Update</button>
 
                                     : <button type="button" className="btn btn-success mr-2" onClick={() => {
-                                        this.saveProjectComplexityDetails(this.state);
+                                        this.saveComplexityMasterDetails(this.state);
                                     }}>Save</button>}
                                 <button type="button" className="btn btn-info mr-2" value="submit" onClick={() => {
                                     this.resetForm(this.state);
                                 }}>Reset</button>
                                 {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
-                                <Link to="/project-complexity" className="btn btn-danger ">Cancel</Link>
+                                <Link to="/complexity-master" className="btn btn-danger ">Cancel</Link>
                             </div>
                         </form>
                     </div>
@@ -223,4 +223,4 @@ class AddProjectComplexity extends Component {
         );
     }
 }
-export default AddProjectComplexity;
+export default AddComplexityMaster;

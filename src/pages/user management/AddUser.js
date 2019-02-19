@@ -5,6 +5,8 @@ import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { Link } from 'react-router-dom';
+import ReactFileReader from 'react-file-reader';
+
 
 class AddUser extends Component {
     constructor(props) {
@@ -19,11 +21,11 @@ class AddUser extends Component {
             lastName: "",
             emailAddress: "",
             mobileNo: "",
-            Address: "",
+            address: "",
             roleId: "",
-            depId: "",
-            teamId: "",
-            profileImage: "",
+            departmentId: "",
+            reportingManagerId: "",
+            profileImage: null,
             isUpdate: false,
             selectDept: "",
             selectJobTitle: "",
@@ -31,10 +33,13 @@ class AddUser extends Component {
             displayDataReturn: "",
             displayTeamLeaderData: '',
             departmentId: "",
-            jobtitleId: "",
+            designationId: "",
+            imageSrc: ""
 
         }
+
     }
+
     //#region  clear user fields
     reset() {
         window.location.reload();
@@ -44,13 +49,13 @@ class AddUser extends Component {
     //#region  bind the dropdown list on onChange event
     onChangeDepartment(event) {
         this.setState({
-            depId: event.target.value
+            departmentId: event.target.value
 
         })
     }
     onChangeJob(event) {
         this.setState({
-            jobtitleId: event.target.value
+            designationId: event.target.value
         })
     }
     onChangeRole(event) {
@@ -63,7 +68,7 @@ class AddUser extends Component {
     onChangeTeamLeader(event) {
 
         this.setState({
-            teamId: event.target.value
+            reportingManagerId: event.target.value
         })
     }
     //#endregion
@@ -76,28 +81,38 @@ class AddUser extends Component {
             type: Type.get
         })
     }
+    isUserEmailExistApi() {
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
 
-    isExistOnChange(data) {
-        var result = []
-        if (this.state !== undefined) {
-            var res = this.isUserExistApi();
+    isExistUserNameOnChange() {
+        if (this.state.userId != undefined) {
+            var res = this.isUserExistUpdateApi();
+            console.log(res, 2)
             res.done((response) => {
+
                 if (response.length > 0) {
                     $(".dataExist").show()
-                }
-                else {
 
+                } else {
                 }
-            });
-            res.fail((error) => {
-            })
+            }
+            )
         }
         else {
-            var res = this.isDeptExistUpdateApi();
-
+            var res = this.isUserExistApi();
+            console.log(res, 1)
             res.done((response) => {
                 if (response.length > 0) {
+
                     $(".dataExist").show()
+
+                } else {
+
                 }
             })
         }
@@ -114,6 +129,7 @@ class AddUser extends Component {
 
                 else {
                     var _this = this;
+
                     var DataList =
                     {
                         "userName": this.state.userName,
@@ -123,11 +139,12 @@ class AddUser extends Component {
                         "emailAddress": this.state.emailAddress,
                         "roleId": this.state.roleId,
                         "mobileNo": this.state.mobileNo,
-                        "profileImage": this.state.profileImage,
-                        "teamId": this.state.teamId,
-                        "depId": this.state.depId,
-                        "jobtitleId": this.state.jobtitleId,
-                        "Address": this.state.Address
+                        //"profileImage": this.state.imageSrc,
+                        "reportingManagerId": this.state.reportingManagerId,
+                        "departmentId": this.state.departmentId,
+                        "designationId": this.state.designationId,
+                        "address": this.state.address,
+                        "profileImage": this.state.imageSrc
 
                     }
                     var url = environment.apiUrl + moduleUrls.User
@@ -150,12 +167,23 @@ class AddUser extends Component {
             })
         }
         else {
-            $(".dataExist").hide()
+            // $(".dataExist").hide()
             return false;
         }
     }
 
+    handleFiles = files => {
+        debugger;
+        this.setState({
+            imageSrc: files.base64
+        })
+    }
 
+    removeimg() {
+        this.setState({
+            imageSrc: ""
+        })
+    }
     //#endregion 
     //#region  Update the user details
     getUserApi() {
@@ -173,15 +201,43 @@ class AddUser extends Component {
             type: Type.get
         })
     }
+    isUserExistEmailUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
 
-
+    //email row Exists
+    isExistEmailOnChange() {
+        if (this.state.userId != undefined) { //id is undefinded edit 
+            var res = this.isUserExistEmailUpdateApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            }
+            )
+        }
+        else {
+            var res = this.isUserEmailExistApi(); //save
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            })
+        }
+    }
 
     updateAjaxCall(data) {
 
         var userList =
         {
-            "jobtitleId": data.jobtitleId,
-            "depId": data.depId,
+            "designationId": data.designationId,
+            "departmentId": data.departmentId,
             "roleId": data.roleId,
             "userName": data.userName,
             "password": "12345",
@@ -189,10 +245,9 @@ class AddUser extends Component {
             "lastName": data.lastName,
             "emailAddress": data.emailAddress,
             "mobileNo": data.mobileNo,
-            "profileImage": data.profileImage,
-            "teamId": data.teamId,
-            "Address": data.Address,
-
+            "reportingManagerId": data.reportingManagerId,
+            "address": data.address,
+            "profileImage": data.imageSrc
         }
 
         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
@@ -260,14 +315,14 @@ class AddUser extends Component {
                         emailAddress: res.emailAddress,
                         mobileNo: res.mobileNo,
                         roleId: res.roleId,
-                        Address: res.Address,
-                        profileImage: res.profileImage,
-                        jobtitleId: res.jobtitleId,
-                        depId: res.depId,
+                        address: res.address,
+                        imageSrc: res.profileImage,
+                        designationId: res.designationId,
+                        departmentId: res.departmentId,
                         roleId: res.roleId,
-                        teamId: res.teamId
+                        reportingManagerId: res.reportingManagerId
                     })
-            
+
                 }
             });
             res.fail((error) => {
@@ -287,7 +342,7 @@ class AddUser extends Component {
                 console.log(temp);
                 var displayDataReturn = temp.map(function (item) {
                     return (
-                        <option key={item.depId} value={item.depId}>{item.depName}</option>
+                        <option key={item.departmentId} value={item.departmentId}>{item.departmentName}</option>
 
                     )
                 });
@@ -299,14 +354,14 @@ class AddUser extends Component {
 
     }
     getJobData() {
-        var url = environment.apiUrl + moduleUrls.Jobtitle
+        var url = environment.apiUrl + moduleUrls.Designation
         $.ajax({
             url: url,
             type: Type.get,
             success: (tempJob) => {
                 var displayDataReturn = tempJob.map(function (i) {
                     return (
-                        <option key={i.jobtitleId} value={i.jobtitleId}>{i.jobtitleName}</option>
+                        <option key={i.designationId} value={i.designationId}>{i.designationName}</option>
 
 
                     )
@@ -345,9 +400,9 @@ class AddUser extends Component {
             success: (res) => {
                 console.log(res);
                 var displayDataReturn = res.map(function (item) {
-                    if (item.roleId === 134) {
+                    if (item.roleId === 1) {
                         return (
-                            <option value={item.userId}>{item.userName}</option>
+                            <option key={item.userId} value={item.userId}>{item.userName}</option>
                         )
                     }
                 });
@@ -357,6 +412,7 @@ class AddUser extends Component {
             },
         });
     }
+
     componentDidMount() {
         this.getUserDetails();
         this.getDeptData();
@@ -381,6 +437,7 @@ class AddUser extends Component {
                         <h2 className="col">
                             {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
                         </h2>
+
                     </div>
                     <div className="row">
                         <div className="col-md-12">
@@ -388,23 +445,30 @@ class AddUser extends Component {
                                 <div className="row">
                                     <div className="col-md-3 order-md-last text-left">
                                         <div className="form-group">
-                                            <label htmlFor="profileImage" className="required">Image</label>
+                                            <label htmlFor="profileImage">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
-                                                    <img src="https://via.placeholder.com/150" className="img-thumbnail" />
-                                                    <a href="#" className="btn-image-remove">x</a>
+                                                    {this.state.imageSrc == "" ?
+                                                        (<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"  id="imgB" className="img-thumbnail" />)
+                                                        :
+                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail"  />)
+                                                    }
+                                                    {this.state.imageSrc !== "" ?
+                                                        (<a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>)
+                                                        :
+                                                        (<div>
+
+                                                        </div>)
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="upload-img">
-                                                <Input type="file" name="profileImage" id="profileImage" className=""
-                                                    onChange={(event) => {
-                                                        debugger
-                                                        this.setState({
-                                                            profileImage: event.target.value
-                                                        })
-                                                    }} />
 
-                                                <label className="btn btn-primary btn-block">Upload Image</label>
+                                                <ReactFileReader base64={true} handleFiles={this.handleFiles}>
+                                                    <label className="btn btn-primary btn-sm">Upload Image</label>
+                                                </ReactFileReader>
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -412,7 +476,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} >First Name</label>
+                                                    <label htmlFor="firstName" className="required" sm={2} maxLength="50" >First Name</label>
                                                     <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -423,8 +487,8 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="lastName" className="required" sm={2}>Last Name</label>
-                                                    <input type="text" name="lastName" id="lastName" className="form-control" value={this.state.lastName}
+                                                    <label htmlFor="lastName" className="required" sm={2} >Last Name</label>
+                                                    <input type="text" name="lastName" id="lastName" maxLength="50" className="form-control" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 lastName: event.target.value
@@ -437,8 +501,8 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="userName" className="required" sm={2}>User Name</label>
-                                                    <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
-                                                        onBlur={() => { this.isExistOnChange() }}
+                                                    <input type="text" name="userName" id="userName"  maxLength="50" className="form-control" value={this.state.userName}
+                                                        onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
                                                             $(".dataExist").hide()
@@ -446,18 +510,22 @@ class AddUser extends Component {
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                                                    <p className="dataExist" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="emailAddress" className="required" sm={2}>email</label>
-                                                    <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
+                                                    <input type="email" name="emailAddress" id="emailAddress" maxLength="50"
+                                                        onBlur={() => { this.isExistEmailOnChange() }}
+                                                        className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
+                                                            $(".recordexists").hide()
                                                             this.setState({
                                                                 emailAddress: event.target.value
                                                             })
                                                         }} required />
+                                                    <p className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -465,7 +533,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input type="phone" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    <input refs="phone" type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 mobileNo: event.target.value
@@ -476,7 +544,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Department</label>
-                                                    <select required name="deptDropDown" value={this.state.depId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
+                                                    <select required name="deptDropDown" value={this.state.departmentId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayDeptData}
                                                     </select>
@@ -486,8 +554,8 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label className="required">Job Title</label>
-                                                    <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.jobtitleId} className="form-control" >
+                                                    <label className="required">Designation</label>
+                                                    <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.designationId} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayJobData}
                                                     </select>
@@ -507,7 +575,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Team Leader</label>
-                                                    <select required  onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.reportingManagerId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>
@@ -518,10 +586,10 @@ class AddUser extends Component {
                                             <div className="col">
                                                 <div className="form-group">
                                                     <label className="required">Address</label>
-                                                    <textarea name="Address" id="Address" rows="3" className="form-control" value={this.state.Address}
+                                                    <textarea name="Address" id="Address" rows="3" maxLength="100" className="form-control" value={this.state.address}
                                                         onChange={(event) => {
                                                             this.setState({
-                                                                Address: event.target.value
+                                                                address: event.target.value
                                                             })
                                                         }} required>
                                                     </textarea>

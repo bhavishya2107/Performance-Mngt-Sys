@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom'
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 class Projects extends Component {
@@ -98,8 +99,10 @@ class Projects extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>depName</th>
-                            <th>description</th>
+                            <th>Project Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Complexity</th>
                             <th>Action</th>
                         </tr>
                     </thead>

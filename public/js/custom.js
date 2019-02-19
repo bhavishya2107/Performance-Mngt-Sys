@@ -46,7 +46,9 @@ function formValidation(form) {
                 scaleSetdropdown: {
                     required: true,
                 },
-
+                mobileNo:{
+                    digit:true
+                },
                 messages:
                 {
                     jobtitlename: {

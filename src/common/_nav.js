@@ -56,8 +56,8 @@ export default {
                 icon: 'fa fa-key',
             },
             {
-                name: 'Project Complexity',
-                url: '/project-complexity',
+                name: 'Complexity Master',
+                url: '/complexity-master',
                 icon: 'fa fa-snowflake-o',
             },
             {
