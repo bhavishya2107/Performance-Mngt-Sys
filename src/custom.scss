@@ -170,6 +170,10 @@ html {
     position: relative;
     height: 100px;
     width: 100px;
+    img{
+        max-height: 100%;
+        max-width: 100%;
+    }
     .btn-image-remove{
         background: #ff8585;
         width: 24px;

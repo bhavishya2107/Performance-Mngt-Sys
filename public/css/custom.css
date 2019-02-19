@@ -172,6 +172,10 @@ html {
   height: 100px;
   width: 100px;
 }
+.user-img-block img {
+  max-height: 100%;
+  max-width: 100%;
+}
 .user-img-block .btn-image-remove {
   background: #ff8585;
   width: 24px;
