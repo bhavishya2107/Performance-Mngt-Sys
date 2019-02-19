@@ -32,7 +32,7 @@ export const Notification = {
   notdeleted:"Not Deleted Successfully",
   selectOneRecord:"Please select atleast one record!",
   recordExists:"Record already exists",
-  loginError:"Credentials are Invalid",
+  loginError:"Invalid username and password",
 };
 export const ModuleNames = {
   kra: "KRA",
