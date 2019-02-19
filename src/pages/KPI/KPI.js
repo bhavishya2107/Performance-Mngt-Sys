@@ -147,13 +147,13 @@ class KPI extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            "order": [[1, 'asc']],
+           // "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    query: "select Kpi_Master.kpiTitle,Kpi_Master.target, Kpi_Master.weightage, scale_set_master.scalesetName FROM Kpi_Master left join scale_set_master On Kpi_master.scalesetid = scale_set_master.scalesetId order by kpiTitle"
+                    query: "select Kpi_Master.kpiTitle,Kpi_Master.target, Kpi_Master.weightage, scale_set_master.scalesetName FROM Kpi_Master left join scale_set_master On Kpi_master.scalesetid = scale_set_master.scalesetId order by kpiId desc"
                 },
             },
             columns: [

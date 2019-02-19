@@ -7,7 +7,7 @@ const $ = require('jquery');
 
 $.DataTable = require('datatables.net-bs4');
 var templateData = []
-
+var ProjectData = []
 class AddProject extends Component {
     constructor(props) {
         super(props);
@@ -19,6 +19,8 @@ class AddProject extends Component {
             selectProjectComplexity: "",
             selectProjectStatus: "",
             templateDataTable: [],
+            displayManageBy:"",
+            manageBy:"",
             redirectToList: false
         };
     }
@@ -114,38 +116,60 @@ class AddProject extends Component {
         });
     }
 
-    updateDetailsApi(data) {
-        var body =
-        {
-            "KpiTitle": data.kpiTitle,
-            "target": data.target,
+    addProjectManageBy() {
+        var ProjectDataKpi = {
+            "manageBy": this.state.manageBy,
         }
-            ;
-        return $.ajax({
-            url: `http://192.168.10.109:3000/api/kpi_master/${this.state.kpiId}`,
-            type: "PATCH",
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
-            },
-            data: JSON.stringify(body)
-        });
-    }
-    UpdateKpiDetails(data) {
-        ;
-        var res = this.updateDetailsApi(data);
-        res.done((response) => {
-            ;
-            this.setState({
-                redirectToList: true
-            })
-            toast.info("Updated!", {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        });
-        res.fail((error) => {
+        ProjectData.push(ProjectDataKpi)
+        this.setState({
+            ProjectDataTable: ProjectData
+        })
+        this.$el = $(this.el);
+        this.$el.DataTable({
+            datasrc: ProjectData,
+            data: ProjectData,
+            columns: [
+                {
+                    data: "userName",
+                    target: 0
+                },
+            ]
         })
     }
+
+    onChangeManageBy(event) {
+        this.setState({
+            manageBy: event.target.value
+        })
+    }
+    getmanageByData() {
+        const endpointGET = environment.apiUrl + moduleUrls.Project + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option key={i.manageBy} value={i.manageBy}>{i.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayManageBy: displayDataReturn
+                })
+            },
+        });
+    }
+
+
+    componentWillMount() {
+        this.getmanageByData();
+    }
+
+
+
+
+
     componentDidMount() {
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
@@ -301,10 +325,10 @@ class AddProject extends Component {
                                 <div className="col-md-4">
 
                                     <div className="form-group">
-                                        <label for="projectName">Managed By</label>
-                                        <select className="form-control">
+                                        <label for="managedBy">Managed By</label>
+                                        <select required name="manageBydropdown"  onChange={(e) => { this.onChangeManageBy(e) }}  className="form-control" value={this.state.manageBy}>
                                             <option>select</option>
-                                            {this.state.displayProjectStatus}
+                                            {this.state.displayManageBy}
                                         </select>
                                     </div>
                                 </div>

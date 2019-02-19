@@ -164,6 +164,7 @@ class AddKpi extends Component {
                     )
                 });
                 this.setState({
+                    
                     displayScaleSetId: displayDataReturn
                 })
             },
