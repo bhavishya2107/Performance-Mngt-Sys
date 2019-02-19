@@ -26,14 +26,8 @@ import AddProject from './pages/Projects/AddProject';
 import AddKpi from './pages/KPI/AddKpi';
 import KPI from './pages/KPI/KPI';
 
-<<<<<<< HEAD
-
-import ProjectComplexity from './pages/Project-Complexity/ProjectComplexity';
-import AddProjectComplexity from './pages/Project-Complexity/AddProjectComplexity';
-=======
 import ComplexityMaster from './pages/Complexity-Master/ComplexityMaster';
 import AddComplexityMaster from './pages/Complexity-Master/AddComplexityMaster';
->>>>>>> db735aa1aa61b6aca982cbd197c164231b8220a3
 import Templatelist from './pages/Template/templateList';
 import Scaleset from './pages/Scale-set/addscaleset';
 import Scalesetlist from './pages/Scale-set/scale-set';
