@@ -15,7 +15,7 @@ class MyProfile extends Component {
       depname: "",
       address: "",
       profileimage: "",
-      jobtitlename: "",
+      designationName: "",
       rolename: "",
       teamleader: ""
     };
@@ -31,7 +31,7 @@ class MyProfile extends Component {
       type: "POST",
       data: {
         query:
-          "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.depname,u.address,u.profileimage,j.jobtitlename,r.rolename, u1.firstname  as teamleader from user_master U join department_master d on U.depid = d.depid join jobtitle_master j on u.jobtitleId = j.jobtitleId join role_master r on u.roleid = r.roleid join user_master u1 on u.teamid = u1.userid where u.userid = 150"
+        "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = 2"
       }
     });
   }
@@ -48,7 +48,7 @@ class MyProfile extends Component {
           mobileno: response[0].mobileno,
           depname: response[0].depname,
           address: response[0].address,
-          jobtitlename: response[0].jobtitlename,
+          designationName: response[0].designationName,
           rolename: response[0].rolename,
           teamleader: response[0].teamleader,
           profileImage: response[0].profileimage
@@ -63,7 +63,7 @@ class MyProfile extends Component {
     return (
       <div className="container-fluid">
         <div className="clearfix d-flex align-items-center row page-title">
-          <h2 className="col">My-Profile</h2>
+          <h2 className="col">MyProfile</h2>
           <div className="col text-right" />
         </div>
 
@@ -204,7 +204,7 @@ class MyProfile extends Component {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label className="" htmlFor="userLastName">
-                      Job Title
+                    Designation Name
                     </label>
                     <div>
                       <input
@@ -212,7 +212,7 @@ class MyProfile extends Component {
                         type="text"
                         className="form-control "
                         readonly
-                        value={this.state.jobtitlename}
+                        value={this.state.designationName}
                       />
                     </div>
                   </div>

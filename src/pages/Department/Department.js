@@ -156,6 +156,13 @@ class Department extends Component {
                 },
 
             },
+            columnDefs: [
+                { width: '5%', targets: 0 },
+                { width: '20%', targets: 1 },
+                { width: '65%', targets: 2 },
+                { width: '10%', targets: 3 },
+              
+               ],
             columns: [
                 {
                     data: "depId",
@@ -169,6 +176,7 @@ class Department extends Component {
                     orderable: false
 
                 },
+            
                 
                 {
                     data: "departmentName",
@@ -181,7 +189,8 @@ class Department extends Component {
                     orderable: false
                 },
                 {
-                    data: "departmentId",
+                    data: "action",
+                    className: "text-center",
                     targets: 3,
                     render: function (data, type, row) {
                         return (
@@ -231,9 +240,9 @@ class Department extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkAll(e); }} />
                             </th>
-                            <th width="150"> Name</th>
+                            <th> Name</th>
                             <th> Description</th>
-                            <th width="76">Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
