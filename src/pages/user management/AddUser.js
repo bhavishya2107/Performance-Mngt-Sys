@@ -5,7 +5,6 @@ import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { Link } from 'react-router-dom';
-import axios from 'axios'
 import ReactFileReader from 'react-file-reader';
 
 
@@ -22,10 +21,10 @@ class AddUser extends Component {
             lastName: "",
             emailAddress: "",
             mobileNo: "",
-            Address: "",
+            address: "",
             roleId: "",
-            depId: "",
-            teamId: "",
+            departmentId: "",
+            reportingManagerId: "",
             profileImage: null,
             isUpdate: false,
             selectDept: "",
@@ -34,48 +33,12 @@ class AddUser extends Component {
             displayDataReturn: "",
             displayTeamLeaderData: '',
             departmentId: "",
-            jobtitleId: "",
+            designationId: "",
             imageSrc: ""
 
         }
 
     }
-
-    // readURL() {
-
-    //     var file = document.getElementById("profileImage").files[0];
-    //     // this.setState({
-    //     //     profileImage: event.target.files[0]
-    //     // })
-    //     if (file) {
-    //         debugger;
-    //         var reader = new FileReader();
-    //         var imageSrc;
-    //         reader.onload = function (e) {
-    //             debugger;
-    //             imageSrc = reader.result
-    //         };
-    //         reader.readAsDataURL(file);
-    //         $('#imgB')
-    //             .attr('src', imageSrc)
-    //             .width(150)
-    //             .height(200);
-    //         //     reader.readAsDataURL(this.state.profileImage.files[0]);
-    //     }
-    // }
-
-    // imageUpload(){
-    //     const fd = FormData();
-    //     fd.append('image',this.state.profileImage,this.state.profileImage.name);
-    //     axios.post(environment.apiUrl + moduleUrls.User + fd)
-    //     .then(res =>{
-    //         console.log(res)
-    //     })
-    // }
-
-
-
-
 
     //#region  clear user fields
     reset() {
@@ -86,13 +49,13 @@ class AddUser extends Component {
     //#region  bind the dropdown list on onChange event
     onChangeDepartment(event) {
         this.setState({
-            depId: event.target.value
+            departmentId: event.target.value
 
         })
     }
     onChangeJob(event) {
         this.setState({
-            jobtitleId: event.target.value
+            designationId: event.target.value
         })
     }
     onChangeRole(event) {
@@ -105,14 +68,14 @@ class AddUser extends Component {
     onChangeTeamLeader(event) {
 
         this.setState({
-            teamId: event.target.value
+            reportingManagerId: event.target.value
         })
     }
     //#endregion
     //#region save the details on click button
 
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')'
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(emailAddress,eq,' + this.state.emailAddress + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -120,7 +83,6 @@ class AddUser extends Component {
     }
 
     isExistOnChange(data) {
-        var result = []
         if (this.state !== undefined) {
             var res = this.isUserExistApi();
             res.done((response) => {
@@ -156,6 +118,7 @@ class AddUser extends Component {
 
                 else {
                     var _this = this;
+
                     var DataList =
                     {
                         "userName": this.state.userName,
@@ -165,12 +128,12 @@ class AddUser extends Component {
                         "emailAddress": this.state.emailAddress,
                         "roleId": this.state.roleId,
                         "mobileNo": this.state.mobileNo,
-                        "profileImage": this.state.profileImage,
-                        "teamId": this.state.teamId,
-                        "depId": this.state.depId,
-                        "jobtitleId": this.state.jobtitleId,
-                        "Address": this.state.Address,
-                        "profileUrl": this.state.imageSrc
+                        //"profileImage": this.state.imageSrc,
+                        "reportingManagerId": this.state.reportingManagerId,
+                        "departmentId": this.state.departmentId,
+                        "designationId": this.state.designationId,
+                        "address": this.state.address,
+                        "profileImage": this.state.imageSrc
 
                     }
                     var url = environment.apiUrl + moduleUrls.User
@@ -221,7 +184,7 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(emailAddress,eq,' + this.state.emailAddress + ')' + '~and(userId,ne,' + this.state.userId + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -234,8 +197,8 @@ class AddUser extends Component {
 
         var userList =
         {
-            "jobtitleId": data.jobtitleId,
-            "depId": data.depId,
+            "designationId": data.designationId,
+            "departmentId": data.departmentId,
             "roleId": data.roleId,
             "userName": data.userName,
             "password": "12345",
@@ -243,10 +206,9 @@ class AddUser extends Component {
             "lastName": data.lastName,
             "emailAddress": data.emailAddress,
             "mobileNo": data.mobileNo,
-            "profileImage": data.profileImage,
-            "teamId": data.teamId,
-            "Address": data.Address,
-
+            "reportingManagerId": data.reportingManagerId,
+            "address": data.address,
+            "profileImage": data.imageSrc
         }
 
         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
@@ -314,12 +276,12 @@ class AddUser extends Component {
                         emailAddress: res.emailAddress,
                         mobileNo: res.mobileNo,
                         roleId: res.roleId,
-                        Address: res.Address,
-                        profileImage: res.profileImage,
-                        jobtitleId: res.jobtitleId,
-                        depId: res.depId,
+                        address: res.address,
+                        imageSrc: res.profileImage,
+                        designationId: res.designationId,
+                        departmentId: res.departmentId,
                         roleId: res.roleId,
-                        teamId: res.teamId
+                        reportingManagerId: res.reportingManagerId
                     })
 
                 }
@@ -341,7 +303,7 @@ class AddUser extends Component {
                 console.log(temp);
                 var displayDataReturn = temp.map(function (item) {
                     return (
-                        <option key={item.depId} value={item.depId}>{item.depName}</option>
+                        <option key={item.departmentId} value={item.departmentId}>{item.departmentName}</option>
 
                     )
                 });
@@ -353,14 +315,14 @@ class AddUser extends Component {
 
     }
     getJobData() {
-        var url = environment.apiUrl + moduleUrls.Jobtitle
+        var url = environment.apiUrl + moduleUrls.Designation
         $.ajax({
             url: url,
             type: Type.get,
             success: (tempJob) => {
                 var displayDataReturn = tempJob.map(function (i) {
                     return (
-                        <option key={i.jobtitleId} value={i.jobtitleId}>{i.jobtitleName}</option>
+                        <option key={i.designationId} value={i.designationId}>{i.designationName}</option>
 
 
                     )
@@ -399,7 +361,7 @@ class AddUser extends Component {
             success: (res) => {
                 console.log(res);
                 var displayDataReturn = res.map(function (item) {
-                    if (item.roleId === 134) {
+                    if (item.roleId === 1) {
                         return (
                             <option value={item.userId}>{item.userName}</option>
                         )
@@ -447,18 +409,17 @@ class AddUser extends Component {
                                             <label htmlFor="profileImage" className="required">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
-                                                    <img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />
+                                                    {this.state.imageSrc == "" ?
+                                                        (<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" id="imgB" className="img-thumbnail" />)
+                                                        :
+                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />)
+                                                    }
+
                                                     <a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>
                                                 </div>
                                             </div>
                                             <div className="upload-img">
-                                                {/* <Input type="file" name="profileImage" id="profileImage" className=""
-                                                    onChange={(event) => {
-                                                        debugger;
-                                                        this. readURL()
-                                                       
-                                                    }} 
-                                                    /> */}
+
                                                 <ReactFileReader base64={true} handleFiles={this.handleFiles}>
                                                     <label className="btn btn-primary btn-block">Upload Image</label>
                                                 </ReactFileReader>
@@ -517,6 +478,7 @@ class AddUser extends Component {
                                                                 emailAddress: event.target.value
                                                             })
                                                         }} required />
+                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -535,7 +497,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Department</label>
-                                                    <select required name="deptDropDown" value={this.state.depId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
+                                                    <select required name="deptDropDown" value={this.state.departmentId} onChange={(e) => { this.onChangeDepartment(e) }} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayDeptData}
                                                     </select>
@@ -546,7 +508,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Job Title</label>
-                                                    <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.jobtitleId} className="form-control" >
+                                                    <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.designationId} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayJobData}
                                                     </select>
@@ -566,7 +528,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Team Leader</label>
-                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.teamId} className="form-control">
+                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.reportingManagerId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>
@@ -577,10 +539,10 @@ class AddUser extends Component {
                                             <div className="col">
                                                 <div className="form-group">
                                                     <label className="required">Address</label>
-                                                    <textarea name="Address" id="Address" rows="3" className="form-control" value={this.state.Address}
+                                                    <textarea name="Address" id="Address" rows="3" className="form-control" value={this.state.address}
                                                         onChange={(event) => {
                                                             this.setState({
-                                                                Address: event.target.value
+                                                                address: event.target.value
                                                             })
                                                         }} required>
                                                     </textarea>
