@@ -402,7 +402,7 @@ class AddUser extends Component {
                 var displayDataReturn = res.map(function (item) {
                     if (item.roleId === 1) {
                         return (
-                            <option value={item.userId}>{item.userName}</option>
+                            <option key={item.userId} value={item.userId}>{item.userName}</option>
                         )
                     }
                 });
@@ -465,7 +465,7 @@ class AddUser extends Component {
                                             <div className="upload-img">
 
                                                 <ReactFileReader base64={true} handleFiles={this.handleFiles}>
-                                                    <label className="btn btn-primary btn-block">Upload Image</label>
+                                                    <label className="btn btn-primary btn-sm">Upload Image</label>
                                                 </ReactFileReader>
 
 
@@ -476,7 +476,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} >First Name</label>
+                                                    <label htmlFor="firstName" className="required" sm={2} maxLength="50" >First Name</label>
                                                     <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
@@ -487,8 +487,8 @@ class AddUser extends Component {
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="lastName" className="required" sm={2}>Last Name</label>
-                                                    <input type="text" name="lastName" id="lastName" className="form-control" value={this.state.lastName}
+                                                    <label htmlFor="lastName" className="required" sm={2} >Last Name</label>
+                                                    <input type="text" name="lastName" id="lastName" maxLength="50" className="form-control" value={this.state.lastName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 lastName: event.target.value
@@ -501,7 +501,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="userName" className="required" sm={2}>User Name</label>
-                                                    <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
+                                                    <input type="text" name="userName" id="userName"  maxLength="50" className="form-control" value={this.state.userName}
                                                         onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
@@ -533,7 +533,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input type="phone" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    <input refs="phone" type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 mobileNo: event.target.value
@@ -554,7 +554,7 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label className="required">Job Title</label>
+                                                    <label className="required">Designation</label>
                                                     <select required name="jobDropDown" onChange={(e) => { this.onChangeJob(e) }} value={this.state.designationId} className="form-control" >
                                                         <option value="">select</option>
                                                         {this.state.displayJobData}
@@ -586,7 +586,7 @@ class AddUser extends Component {
                                             <div className="col">
                                                 <div className="form-group">
                                                     <label className="required">Address</label>
-                                                    <textarea name="Address" id="Address" rows="3" className="form-control" value={this.state.address}
+                                                    <textarea name="Address" id="Address" rows="3" maxLength="100" className="form-control" value={this.state.address}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 address: event.target.value
