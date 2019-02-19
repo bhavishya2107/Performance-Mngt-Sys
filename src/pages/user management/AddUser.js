@@ -75,33 +75,44 @@ class AddUser extends Component {
     //#region save the details on click button
 
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(emailAddress,eq,' + this.state.emailAddress + ')'
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+    isUserEmailExistApi() {
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')'
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
 
-    isExistOnChange(data) {
-        if (this.state !== undefined) {
-            var res = this.isUserExistApi();
+    isExistUserNameOnChange() {
+        if (this.state.userId != undefined) {
+            var res = this.isUserExistUpdateApi();
+            console.log(res, 2)
             res.done((response) => {
+
                 if (response.length > 0) {
                     $(".dataExist").show()
-                }
-                else {
 
+                } else {
                 }
-            });
-            res.fail((error) => {
-            })
+            }
+            )
         }
         else {
-            var res = this.isDeptExistUpdateApi();
-
+            var res = this.isUserExistApi();
+            console.log(res, 1)
             res.done((response) => {
                 if (response.length > 0) {
+
                     $(".dataExist").show()
+
+                } else {
+
                 }
             })
         }
@@ -156,7 +167,7 @@ class AddUser extends Component {
             })
         }
         else {
-            $(".dataExist").hide()
+            // $(".dataExist").hide()
             return false;
         }
     }
@@ -184,14 +195,42 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(emailAddress,eq,' + this.state.emailAddress + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+    isUserExistEmailUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')' + '~and(userId,ne,' + this.state.userId + ')'
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
 
-
+    //email row Exists
+    isExistEmailOnChange() {
+        if (this.state.userId != undefined) { //id is undefinded edit 
+            var res = this.isUserExistEmailUpdateApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            }
+            )
+        }
+        else {
+            var res = this.isUserEmailExistApi(); //save
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            })
+        }
+    }
 
     updateAjaxCall(data) {
 
@@ -406,16 +445,21 @@ class AddUser extends Component {
                                 <div className="row">
                                     <div className="col-md-3 order-md-last text-left">
                                         <div className="form-group">
-                                            <label htmlFor="profileImage" className="required">Image</label>
+                                            <label htmlFor="profileImage">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
                                                     {this.state.imageSrc == "" ?
-                                                        (<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" id="imgB" className="img-thumbnail" />)
+                                                        (<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"  id="imgB" className="img-thumbnail" />)
                                                         :
-                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />)
+                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail"  />)
                                                     }
+                                                    {this.state.imageSrc !== "" ?
+                                                        (<a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>)
+                                                        :
+                                                        (<div>
 
-                                                    <a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>
+                                                        </div>)
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="upload-img">
@@ -458,7 +502,7 @@ class AddUser extends Component {
                                                 <div className="form-group">
                                                     <label htmlFor="userName" className="required" sm={2}>User Name</label>
                                                     <input type="text" name="userName" id="userName" className="form-control" value={this.state.userName}
-                                                        onBlur={() => { this.isExistOnChange() }}
+                                                        onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
                                                             $(".dataExist").hide()
@@ -466,19 +510,22 @@ class AddUser extends Component {
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                                                    <p className="dataExist" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="emailAddress" className="required" sm={2}>email</label>
-                                                    <input type="email" name="emailAddress" id="emailAddress" maxLength="50" className="form-control" value={this.state.emailAddress}
+                                                    <input type="email" name="emailAddress" id="emailAddress" maxLength="50"
+                                                        onBlur={() => { this.isExistEmailOnChange() }}
+                                                        className="form-control" value={this.state.emailAddress}
                                                         onChange={(event) => {
+                                                            $(".recordexists").hide()
                                                             this.setState({
                                                                 emailAddress: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                                                    <p className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                         </div>
