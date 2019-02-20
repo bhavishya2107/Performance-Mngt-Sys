@@ -5,11 +5,21 @@ import user from './img/user-image.png';
 
 
 class Header extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    console.log(props)
+    
+    this.state = {
+      userName: "",
+      firstName: "",
+      lastName: "",
+      userId: "",
+      profileImage:"",
+    }
+    
   }
+
   render() {
+    
     return (
       <div>
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
@@ -20,7 +30,7 @@ class Header extends Component {
           <ul className="navbar-nav flex-row ml-md-auto d-none d-md-flex">
             <li className="nav-item dropdown">
               <a className="nav-item nav-link dropdown-toggle mr-md-2 text-white" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src={user} className="rounded-circle" /> Lalji Tadhani
+                <img src={localStorage.getItem('profileImage')} className="rounded-circle img-responsive" height="40px" width="40px"/> {localStorage.getItem('firstName')} {localStorage.getItem('lastName')}
               </a>
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
                 <a className="dropdown-item" href="/myProfile">Profile</a>

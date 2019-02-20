@@ -46,6 +46,13 @@ function formValidation(form) {
                 scaleSetdropdown: {
                     required: true,
                 },
+                emailRequired:{
+                    required: true,
+                },
+                passwordRequired:{
+                    required:true
+                },
+
                 messages:
                 {
                     jobtitlename: {
