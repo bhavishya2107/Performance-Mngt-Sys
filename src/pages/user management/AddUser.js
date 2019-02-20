@@ -75,14 +75,14 @@ class AddUser extends Component {
     //#region save the details on click button
 
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName + ')'
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')' 
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
     isUserEmailExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')'
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -92,7 +92,7 @@ class AddUser extends Component {
     isExistUserNameOnChange() {
         if (this.state.userId != undefined) {
             var res = this.isUserExistUpdateApi();
-            console.log(res, 2)
+        
             res.done((response) => {
 
                 if (response.length > 0) {
@@ -119,9 +119,10 @@ class AddUser extends Component {
     }
 
     saveUser() {
-        var res = window.formValidation("#createUser");
-        if (res) {
+        var isvalidate = window.formValidation("#createUser");
+        if (isvalidate) {
             var res = this.isUserExistApi();
+            var res = this.isUserEmailExistApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".dataExist").show()
@@ -132,11 +133,11 @@ class AddUser extends Component {
 
                     var DataList =
                     {
-                        "userName": this.state.userName,
+                        "userName": this.state.userName.trim(),
                         "password": this.state.password,
                         "firstName": this.state.firstName,
                         "lastName": this.state.lastName,
-                        "emailAddress": this.state.emailAddress,
+                        "emailAddress": this.state.emailAddress.trim(),
                         "roleId": this.state.roleId,
                         "mobileNo": this.state.mobileNo,
                         //"profileImage": this.state.imageSrc,
@@ -164,10 +165,10 @@ class AddUser extends Component {
             });
             res.fail(error => {
 
-            })
+            });
         }
         else {
-            // $(".dataExist").hide()
+           
             return false;
         }
     }
@@ -195,14 +196,14 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
     isUserExistEmailUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -239,11 +240,11 @@ class AddUser extends Component {
             "designationId": data.designationId,
             "departmentId": data.departmentId,
             "roleId": data.roleId,
-            "userName": data.userName,
+            "userName": data.userName.trim(),
             "password": "12345",
             "firstName": data.firstName,
             "lastName": data.lastName,
-            "emailAddress": data.emailAddress,
+            "emailAddress": data.emailAddress.trim(),
             "mobileNo": data.mobileNo,
             "reportingManagerId": data.reportingManagerId,
             "address": data.address,
@@ -269,7 +270,7 @@ class AddUser extends Component {
         var result = window.formValidation("#createUser");
         if (result) {
             var res = this.isUserExistUpdateApi();
-
+            var res =this.isUserExistEmailUpdateApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".dataExist").show()

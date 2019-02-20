@@ -11,12 +11,16 @@ class Addtemplate extends Component {
     this.state = {
       displayDatakra: "",
       displayDatakpi: "",
-      selectkra: "",
-      selectkpi: "",
+      selectkra: {},
+      selectkpi: {},
       templateDataTable: [],
       templateName: "",
       id: props.match.params.id,
-      redirectToList: false
+      redirectToList: false,
+      templateId:"",
+      kpiId:"",
+      kraId:""
+
     };
   }
   savetemplatenameApi() {
@@ -25,7 +29,8 @@ class Addtemplate extends Component {
       var _this = this;
 
       var formData = {
-        templateName: this.state.templateName
+        templateName: this.state.templateName,
+        // insertId:this.state.templateId
       };
       const templateSaveApi = environment.apiUrl + moduleUrls.Template;
       $.ajax({
@@ -33,56 +38,72 @@ class Addtemplate extends Component {
         type: Type.post,
         data: formData,
         // dataType:"text",
-        success: function(resultData) {
+        success: function (resultData) {
+          debugger;
           alert("Save Complete");
           _this.setState({ redirectToList: true });
-      
-          
+          $("#tblKraKpi").each((e, item) => {
+
+            templateData.push(item.value)
+            
+        });
+
         }
       });
     } else {
       return false;
     }
-    const saveTemplateUrl =
-      environment.apiUrl + moduleUrls.Templatedetail + "/";
+  //   const saveTemplateUrl =
+  //     environment.apiUrl + moduleUrls.Templatedetail + "/";
 
-    $.ajax({
-      url: saveTemplateUrl,
-      type: Type.post,
-      data: "",
-      success: function(resultData) {
-        console.log(resultData);
-      }
-    });
-  }
+  //   $.ajax({
+  //     url: saveTemplateUrl,
+  //     type: Type.post,
+  //     data: "",
+  //     success: function (resultData) {
+  //       console.log(resultData);
+  //     }
+  //   });
+  // }
 
-  getjobtitleDetilsApi() {
-    const designationApi =
-      environment.apiUrl + moduleUrls.Designation + "/" + `${this.state.id}`;
+  // getjobtitleDetilsApi() {
+  //   const designationApi =
+  //     environment.apiUrl + moduleUrls.Designation + "/" + `${this.state.id}`;
 
-    return $.ajax({
-      url: designationApi,
-      type: Type.get
-    });
+  //   return $.ajax({
+  //     url: designationApi,
+  //     type: Type.get
+  //   });
   }
 
   onChangekra(event) {
+    
     this.setState({
-      selectkra: event.target.value
+      selectkra: 
+      {
+       ID : event.target.value,
+       Name :event.target.options[event.target.selectedIndex].text
+
+      }
     });
   }
-  onChangekpi(event) {
+  onChangekpi(event) {debugger
     this.setState({
-      selectkpi: event.target.value
-    });
+      selectkpi:
+      {
+        ID : event.target.value,
+        Name :event.target.options[event.target.selectedIndex].text
+ 
+      }  });
   }
 
   addtemplate() {
+    debugger;
     var templateDataapi = {
       kraName: this.state.selectkra,
       kpiTitle: this.state.selectkpi
     };
-    this.state.templateDataTable.push(templateDataapi);
+    templateData.push(templateDataapi);
     this.$el
       .DataTable()
       .clear()
@@ -99,7 +120,7 @@ class Addtemplate extends Component {
         var tempvar = temp.responseJSON;
         var displayDataReturn = tempvar.map(i => {
           return (
-            <option key={i.value} value={i.kpiTitle}>
+            <option key={i.kpiId} value={i.kpiId}>
               {i.kpiTitle}
             </option>
           );
@@ -119,7 +140,7 @@ class Addtemplate extends Component {
         var tempvar = temp.responseJSON;
         var displayDataReturn = tempvar.map(i => {
           return (
-            <option key={i.value} value={i.kraName}>
+            <option key={i.kraId} value={i.kraId}>
               {i.kraName}
             </option>
           );
@@ -135,17 +156,17 @@ class Addtemplate extends Component {
   }
 
   componentDidMount() {
-    this.$el = $(this.el);
+    this.$el = $(this.el);debugger;
     this.$el.DataTable({
       datasrc: templateData,
       data: templateData,
       columns: [
         {
-          data: "kraName",
+          data: "kraName.Name",
           target: 0
         },
         {
-          data: "kpiTitle",
+          data: "kpiTitle.Name",
           target: 1
         }
       ]
@@ -188,40 +209,48 @@ class Addtemplate extends Component {
         <div>
           <br />
           <br />
-          <div className="dropdown">
-            <label className="mr-2">Kra:</label>
+          <div className="row">
+               <div className="col-md-4">
+           
             <select
               onChange={e => {
                 this.onChangekra(e);
               }}
-              className="btn btn-info dropdown-toggle md mr-3"
+              className="form-control"
             >
-              <option>select</option>
+              <option>select Kra</option>
               {this.state.displayDatakra}
             </select>
-            <label className="mr-2">Kpi:</label>
+            </div>
+           
+              <div className="col-md-4">
+           
             <select
               onChange={e => {
                 this.onChangekpi(e);
               }}
-              className="btn btn-info dropdown-toggle md mr-3"
+              className="form-control"
             >
-              <option>select</option>
+              <option>select Kpi</option>
               {this.state.displayDatakpi}
             </select>
-          </div>
-          <br />
-          <button id="btnTemplateDetail"
+         </div>
+         <div className="col-md-4">
+         <button id="btnTemplateDetail"
             onClick={() => this.addtemplate(this.state)}
             type="button"
-            className="btn btn-success mr-5"
+            className="btn btn-primary"
           >
-            <i className="fa fa-plus" /> Add
+            <i className="fa fa-plus" />
           </button>
+          </div></div>
+          <br />
+         
           <br />
           <table
             className="table table-striped table-bordered table-hover"
             ref={el => (this.el = el)}
+            id="tblKraKpi"
           >
             <thead>
               <tr>
