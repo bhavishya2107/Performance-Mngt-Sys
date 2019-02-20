@@ -89,7 +89,7 @@ class AddKpi extends Component {
         }
         else {
             $(".hide").hide()
-
+ 
             return false;
         }
     }
@@ -102,7 +102,7 @@ class AddKpi extends Component {
         })
     }
 
-    onChangeBlur() {
+    onChangeBlur(){
         var res = this.isKpiExistsApi();
         res.done((response) => {
             if (response.length > 0) {
@@ -146,35 +146,7 @@ class AddKpi extends Component {
     //     })
     // }
 
-    onChangeScaleSetId(event) {
-        this.setState({
-            scaleSetId: event.target.value
-        })
-    }
-    getscaleSetIdData() {
-        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/'
-        $.ajax({
-            type: Type.get,
-            url: endpointGET,
-            complete: (temp) => {
-                console.log(temp);
-                var temp = temp.responseJSON;
-                var displayDataReturn = temp.map((i) => {
-                    return (
-                        <option key={i.scaleSetId} value={i.scaleSetId}>{i.scaleSetName}</option>
-                    )
-                });
-                this.setState({
-                    displayScaleSetId: displayDataReturn
-                })
-            },
-        });
-    }
-
-    componentWillMount() {
-        this.getscaleSetIdData();
-    }
-    //#region update related api
+//#region update related api
 
     updateDetailsApi(data) {
         var body =
@@ -202,7 +174,6 @@ class AddKpi extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
-
                 } else {
                     var res = this.updateDetailsApi(data);
                     res.done(() => {
@@ -214,9 +185,7 @@ class AddKpi extends Component {
                         });
                     })
                     res.fail((error) => {
-
                     })
-
                 }
             });
             res.fail((error) => {
@@ -228,6 +197,39 @@ class AddKpi extends Component {
     }
 
     //#endregion
+
+    onChangeScaleSetId(event) {
+        this.setState({
+            scaleSetId: event.target.value
+        })
+    }
+    getscaleSetIdData() {
+        const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option key={i.scaleSetId} value={i.scaleSetId}>{i.scaleSetName}</option>
+                    )
+                });
+                this.setState({
+                    
+                    displayScaleSetId: displayDataReturn
+                })
+            },
+        });
+    }
+
+    componentWillMount() {
+        this.getscaleSetIdData();
+    }
+
+
+
+
     componentDidMount() {
         this.setState({
             title: ModuleNames.kpi
@@ -266,7 +268,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={() => (this.onChangeBlur())} value={this.state.kpiTitle}
+                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={()=>(this.onChangeBlur())} value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 $(".recordexists").hide()
                                                 this.setState({
@@ -279,7 +281,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="weightage">Weight</label>
-                                        <input className="form-control" name="weightage" min="1" max="99" type="number" value={this.state.weightage}
+                                        <input className="form-control" name="weightage" min="1"  max="99" type="number" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
                                                     weightage: event.target.value

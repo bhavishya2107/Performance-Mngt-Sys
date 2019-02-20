@@ -128,13 +128,20 @@ class Projects extends Component {
     //#endregion
 
     componentDidMount() {
+        const endpointGET = environment.dynamicUrl + 'dynamic' 
+        // this.setState({
+        //     title: ModuleNames.kpi
+        // })
         this.$el = $(this.el);
         this.$el.DataTable({
+            "autoWidth": false,
+           // "order": [[1, 'asc']],
             ajax: {
-                url: "http://192.168.10.109:3000/api/project_master",
-                type: "get",
+                url: endpointGET,
+                type: "POST",
                 dataSrc: "",
-                error: function (xhr, status, error) {
+                data: {
+                    query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId"
                 },
             },
             columns: [
@@ -166,14 +173,13 @@ class Projects extends Component {
                 {
                     data: "complexityName",
                     targets: 4,
-
                 },
                 {
                     data: "projectId",
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/projects/editprojects/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/Project/editproject/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.projectId + '"class="btn btn-danger btnDelete btn-sm";"">' +
@@ -182,19 +188,18 @@ class Projects extends Component {
                             )
                     },
                     orderable: false
-
                 }
             ],
-            initComplete: (settings, json) => {
-                $(".btnDelete").on("click", e => {
-                    ;
-                    this.SingleDelete(e.currentTarget.id);
-                });
-            },
+            // initComplete: (settings, json) => {
+            //     $(".btnDelete").on("click", e => {
+            //         ;
+            //         this.SingleDelete(e.currentTarget.id);
+            //     });
+            // },
             drawCallback: (settings) => {
+                window.smallTable();
                 $(".btnDelete").on("click", e => {
-                    ;
-                    this.SingleDelete(e.currentTarget.id);
+                    this.SingleDeleteConfirm(e.currentTarget.id);
                 });
             }
         });
@@ -212,7 +217,7 @@ class Projects extends Component {
         return (
             <div >
             <div className="clearfix d-flex align-items-center row page-title">
-                <h2 className="col"></h2>
+                <h2 className="col">Projects</h2>
                 <div className="col text-right">
                     <Link to="/projects/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>

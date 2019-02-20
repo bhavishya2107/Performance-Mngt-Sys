@@ -11,14 +11,14 @@ class KPI extends Component {
         super(props);
         this.state = {
             saveKpiDetails: "",
-            selectedIds: []
+            // selectedIds: []
 
         };
     }
 
     //#region delete functionality with single and multiple api
-    DeleteKpiApi(KpiId) {
-        const endpoint = environment.apiUrl + moduleUrls.Kpi + '/' + `${KpiId}`;
+    DeleteKpiApi(kpiId) {
+        const endpoint = environment.apiUrl + moduleUrls.Kpi + '/' + `${kpiId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -68,8 +68,8 @@ class KPI extends Component {
             });
         });
     }
-    multiDeleteKpiApi(KpiId) {
-        const endpoint = environment.apiUrl + moduleUrls.Kpi + `/bulk?_ids=${KpiId}`;
+    multiDeleteKpiApi(kpiId) {
+        const endpoint = environment.apiUrl + moduleUrls.Kpi + `/bulk?_ids=${kpiId}`;
         return $.ajax({
             url: endpoint,
             type: Type.deletetype,
@@ -80,8 +80,8 @@ class KPI extends Component {
         });
     }
 
-    multiDeleteKpi(KpiId) {
-        var item = KpiId.join(",")
+    multiDeleteKpi(kpiId) {
+        var item = kpiId.join(",")
         var res = this.multiDeleteKpiApi(item);
         res.done((response) => {
             toast.success("KPI " + Notification.deleted, {
@@ -94,13 +94,13 @@ class KPI extends Component {
 
     }
     multipleDeleteKpiconfirm() {
-        var KpiId = []
+        var kpiId = []
         $("#tblKpi input:checkbox:checked").each((e, item) => {
             if (item.name != 'checkAll') {
-                KpiId.push(item.value);
+                kpiId.push(item.value);
             }
         });
-        if (KpiId.length > 0) {
+        if (kpiId.length > 0) {
             bootbox.confirm({
                 message: Notification.deleteConfirm,
                 buttons: {
@@ -115,7 +115,7 @@ class KPI extends Component {
                 },
                 callback: (result) => {
                     if (result === true) {
-                        this.multiDeleteKpi(KpiId);
+                        this.multiDeleteKpi(kpiId);
                     }
                     else {
                     }
@@ -140,7 +140,7 @@ class KPI extends Component {
    
     componentDidMount() {
          //#region Datatable 
-        const endpointGET = environment.dynamicUrl + 'dynamic'
+        const endpointGET = environment.dynamicUrl + 'dynamic' 
         this.setState({
             title: ModuleNames.kpi
         })
@@ -153,7 +153,7 @@ class KPI extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    query: "select Kpi_Master.kpiTitle,Kpi_Master.target, Kpi_Master.weightage, scale_set_master.scalesetName FROM Kpi_Master left join scale_set_master On Kpi_master.scalesetid = scale_set_master.scalesetId order by kpiId desc"
+                    query: "select Kpi_Master.kpiId, Kpi_Master.kpiTitle,Kpi_Master.target, Kpi_Master.weightage, scale_set_master.scalesetName FROM Kpi_Master left join scale_set_master On Kpi_master.scalesetid = scale_set_master.scalesetId order by kpiId desc"
                 },
             },
             columns: [
@@ -187,6 +187,7 @@ class KPI extends Component {
                     data: "kpiId",
                     targets: 5,
                     render: function (data, type, row) {
+                        debugger;
                         return (
                             '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
