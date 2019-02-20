@@ -14,6 +14,7 @@ class loginPage extends Component {
             lastName:"",
             userName:"",
             userId:'',
+            profileImage:"",
             RedirectLoginDetails:false,
            
         };
@@ -47,8 +48,10 @@ class loginPage extends Component {
 
 
     checkCredential = (event) => {
+
+        var isvalidate=window.formValidation("#loginForm")
        
-     
+     if(isvalidate){
             var res = this.loginCheckIsValid();
 
             res.done((response)=>{
@@ -59,6 +62,7 @@ class loginPage extends Component {
                     lastName: response[0].lastName,
                     emailAddress: response[0].emailaddress,
                     userId:response[0].userId,
+                    profileImage:response[0].profileImage,
                     RedirectLoginDetails:true,
                 })
                 this.fetchingValueInLocalStorage(response[0]);
@@ -72,7 +76,10 @@ class loginPage extends Component {
             res.fail((error)=>{
 
             })
+    }else{
+        return false;
     }
+}
 
     fetchingValueInLocalStorage(response) {
     
@@ -81,6 +88,7 @@ class loginPage extends Component {
         localStorage.setItem('userName',response.userName);
         localStorage.setItem('firstName',response.firstName);
         localStorage.setItem('lastName',response.lastName);
+        localStorage.setItem('profileImage',response.profileImage);
     }
     resetLoginForm=(event)=> {
         window.location.reload();
@@ -90,25 +98,26 @@ class loginPage extends Component {
 
     render() {
         if (this.state.RedirectLoginDetails) {
-            return <Redirect to={{ pathname: "/dashboard", formdetails:this.state }} />
+            return <Redirect to={{ pathname: "/dashboard"}} />
+           
         }
         return (
             <div>
-                <form className="form-signin p-3 shadow" id="loginform">
+                <form className="form-signin p-3 shadow" id="loginForm">
                     <h2 className="form-signin-heading text-center">
                         <img src={logo} alt="Prakash" className="img-fluid" />
                     </h2>
                     <div className="form-group">
                         <label className="sr-only">Email address</label>
-                        <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required
+                        <input type="email" id="inputEmail" name="emailRequired" className="form-control" placeholder="Email address"
                             onChange={this.emailAddressOnChange}
-                            value={this.state.emailAddress} />
+                            value={this.state.emailAddress} required/>
                     </div>
                     <div className="form-group">
                         <label className="sr-only">Password</label>
-                        <input type="password" id="inputPassword" className="form-control" placeholder="Password" required
+                        <input type="password" id="inputPassword" name="passwordRequired" className="form-control" placeholder="Password" 
                             onChange={this.passwordOnChange}
-                            value={this.state.password} />
+                            value={this.state.password} required/>
                     </div><br/>
                     <p className="errorIfInvalIdInput" style={{ "display": "none", "color": "red" }}>{Notification.loginError}</p>
                     <div className="form-group">

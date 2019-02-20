@@ -58,6 +58,9 @@ class MyProfile extends Component {
     } else {
     }
   }
+  // localStorage.getItem('userId', response.userId);
+  // localStorage.getItem('firstName', response.firstName);
+  // localStorage.getItem('lastName', response.lastName);
 
   render() {
     return (
@@ -72,9 +75,7 @@ class MyProfile extends Component {
             <div className="col-md-3 order-md-last text-center">
               <div>
                 <img
-                  // src={this.state.profileImage}
-                  src= "https://media.voog.com/0000/0042/3119/photos/profile-picture.jpg"
-
+                  src={this.state.profileImage}
                   style={{ width: "200px" }}
                   className="img-thumbnail"
                 />
