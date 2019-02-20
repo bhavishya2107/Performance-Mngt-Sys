@@ -19,7 +19,6 @@ class loginPage extends Component {
            
         };
     }
-
     loginCheckIsValid() {
 
         // console.log(this.state.emailAddress);
@@ -50,7 +49,7 @@ class loginPage extends Component {
     checkCredential = (event) => {
 
         var isvalidate=window.formValidation("#loginForm")
-       
+      
      if(isvalidate){
             var res = this.loginCheckIsValid();
 
@@ -79,6 +78,7 @@ class loginPage extends Component {
     }else{
         return false;
     }
+
 }
 
     fetchingValueInLocalStorage(response) {
@@ -93,6 +93,17 @@ class loginPage extends Component {
     resetLoginForm=(event)=> {
         window.location.reload();
     }
+
+   
+    onPressEnterLogin = (event) => {
+        document.querySelector('#loginbutton').addEventListener("keyPress",this.checkCredential)
+        if(event.keyCode === '13'){
+        alert(1)
+      
+        }
+    }   
+   
+  
 
 
 
@@ -128,7 +139,7 @@ class loginPage extends Component {
                         </div>
                     </div>
                     <div className="form-group">
-                    <a href="/dashboard" className="btn btn-lg btn-success" type="button" onClick={this.checkCredential}>Login</a>&nbsp;
+                    <a className="btn btn-lg btn-success" type="button" id= "loginbutton" onKeyPress={this.onPressEnterLogin} onClick={this.checkCredential}>Login</a>&nbsp;
                     <a className="btn btn-lg btn-danger" type="button" onClick={this.resetLoginForm}>Reset</a><br/>
                     </div>
                     <div className="divider">
