@@ -12,9 +12,9 @@ class MyProfile extends Component {
       lastname: "",
       emailaddress: "",
       mobileno: "",
-      depname: "",
+      departmentName: "",
       address: "",
-      profileimage: "",
+      profileImage: "",
       designationName: "",
       rolename: "",
       teamleader: ""
@@ -40,13 +40,14 @@ class MyProfile extends Component {
     if (this.state.userId !== undefined) {
       var res = this.getUserDetailsApi();
       res.done(response => {
+        console.log(response)
         this.setState({
           userName: response[0].username,
           firstName: response[0].firstname,
           lastName: response[0].lastname,
           emailAddress: response[0].emailaddress,
           mobileno: response[0].mobileno,
-          depname: response[0].depname,
+          departmentName: response[0].departmentName,
           address: response[0].address,
           designationName: response[0].designationName,
           rolename: response[0].rolename,
@@ -197,7 +198,7 @@ class MyProfile extends Component {
                         type="text"
                         className="form-control "
                         readonly
-                        value={this.state.depname}
+                        value={this.state.departmentName}
                       />
                     </div>
                   </div>
