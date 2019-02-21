@@ -5,6 +5,7 @@ import { environment, moduleUrls, Type } from "../Environment";
 const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
 var templateData = [];
+var templateTblId = [];
 class Addtemplate extends Component {
   constructor(props) {
     super(props);
@@ -17,84 +18,89 @@ class Addtemplate extends Component {
       templateName: "",
       id: props.match.params.id,
       redirectToList: false,
-      templateId:"",
-      kpiId:"",
-      kraId:""
-
+      templateId: "",
+      kpiId: "",
+      kraId: "",
+      tempDetailId: []
     };
   }
   savetemplatenameApi() {
+
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
       var _this = this;
 
       var formData = {
         templateName: this.state.templateName,
-        // insertId:this.state.templateId
+
       };
       const templateSaveApi = environment.apiUrl + moduleUrls.Template;
       $.ajax({
         url: templateSaveApi,
         type: Type.post,
         data: formData,
-        // dataType:"text",
         success: function (resultData) {
-          debugger;
-          alert("Save Complete");
-          _this.setState({ redirectToList: true });
-          $("#tblKraKpi").each((e, item) => {
-
-            templateData.push(item.value)
-            
-        });
-
+        
+          var saveTemplateDetailIds = [];
+       
+          $(templateTblId).each((e, item) => {
+            var singleObjId = {
+              templateId: resultData.insertId,
+              kraId: item.kraId,
+              kpiId: item.kpiId
+            };
+            saveTemplateDetailIds.push(singleObjId);
+          });
+  
+          const templatedetailData = JSON.stringify(saveTemplateDetailIds);
+         
+          const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+         
+          $.ajax({
+            url: templateSaveApi,
+            type: Type.post,
+            data: templatedetailData,
+        
+            headers: {
+              "content-type": "application/json",
+              "x-requested-with": "XMLHttpRequest"
+            },
+          
+            success: function (resultData) {
+              _this.setState({ redirectToList: true })
+            }
+          });
         }
       });
     } else {
       return false;
     }
-  //   const saveTemplateUrl =
-  //     environment.apiUrl + moduleUrls.Templatedetail + "/";
 
-  //   $.ajax({
-  //     url: saveTemplateUrl,
-  //     type: Type.post,
-  //     data: "",
-  //     success: function (resultData) {
-  //       console.log(resultData);
-  //     }
-  //   });
-  // }
-
-  // getjobtitleDetilsApi() {
-  //   const designationApi =
-  //     environment.apiUrl + moduleUrls.Designation + "/" + `${this.state.id}`;
-
-  //   return $.ajax({
-  //     url: designationApi,
-  //     type: Type.get
-  //   });
   }
 
   onChangekra(event) {
-    
-    this.setState({
-      selectkra: 
-      {
-       ID : event.target.value,
-       Name :event.target.options[event.target.selectedIndex].text
 
-      }
+    this.setState({
+      selectkra:
+      {
+        ID: event.target.value,
+        Name: event.target.options[event.target.selectedIndex].text
+
+      },
+      kraId: event.target.value
     });
   }
-  onChangekpi(event) {debugger
+  onChangekpi(event) {
+    debugger
     this.setState({
       selectkpi:
       {
-        ID : event.target.value,
-        Name :event.target.options[event.target.selectedIndex].text
- 
-      }  });
+        ID: event.target.value,
+        Name: event.target.options[event.target.selectedIndex].text
+
+      },
+      kpiId: event.target.value
+    });
   }
 
   addtemplate() {
@@ -103,6 +109,12 @@ class Addtemplate extends Component {
       kraName: this.state.selectkra,
       kpiTitle: this.state.selectkpi
     };
+    var templateDataId = {
+      kraId: this.state.kraId,
+      kpiId: this.state.kpiId
+    }
+
+    templateTblId.push(templateDataId);
     templateData.push(templateDataapi);
     this.$el
       .DataTable()
@@ -154,9 +166,22 @@ class Addtemplate extends Component {
   resetform() {
     window.location.reload();
   }
+  // data(){
+  //   var temp = templateTblId.map((i) => {
+  //     return (
+  //         <>
+  //            <li>{i.Id}</li> 
+  //             </>
 
+  //     )
+  // });
+  // this.setState({
+  //     tempDetailId: temp
+  // })
+  // }
   componentDidMount() {
-    this.$el = $(this.el);debugger;
+    this.$el = $(this.el); debugger;
+
     this.$el.DataTable({
       datasrc: templateData,
       data: templateData,
@@ -173,12 +198,14 @@ class Addtemplate extends Component {
     });
     this.getKPIData();
     this.getKRAData();
+
   }
   render() {
     // const{templateData}=this.state;
     if (this.state.redirectToList === true) {
       return <Redirect to={{ pathname: "/templateList" }} />;
     }
+
     return (
       <div>
         <div className="clearfix">
@@ -210,42 +237,42 @@ class Addtemplate extends Component {
           <br />
           <br />
           <div className="row">
-               <div className="col-md-4">
-           
-            <select
-              onChange={e => {
-                this.onChangekra(e);
-              }}
-              className="form-control"
-            >
-              <option>select Kra</option>
-              {this.state.displayDatakra}
-            </select>
+            <div className="col-md-4">
+
+              <select
+                onChange={e => {
+                  this.onChangekra(e);
+                }}
+                className="form-control"
+              >
+                <option>select Kra</option>
+                {this.state.displayDatakra}
+              </select>
             </div>
-           
-              <div className="col-md-4">
-           
-            <select
-              onChange={e => {
-                this.onChangekpi(e);
-              }}
-              className="form-control"
-            >
-              <option>select Kpi</option>
-              {this.state.displayDatakpi}
-            </select>
-         </div>
-         <div className="col-md-4">
-         <button id="btnTemplateDetail"
-            onClick={() => this.addtemplate(this.state)}
-            type="button"
-            className="btn btn-primary"
-          >
-            <i className="fa fa-plus" />
-          </button>
-          </div></div>
+
+            <div className="col-md-4">
+
+              <select
+                onChange={e => {
+                  this.onChangekpi(e);
+                }}
+                className="form-control"
+              >
+                <option>select Kpi</option>
+                {this.state.displayDatakpi}
+              </select>
+            </div>
+            <div className="col-md-4">
+              <button id="btnTemplateDetail"
+                onClick={() => this.addtemplate(this.state)}
+                type="button"
+                className="btn btn-primary"
+              >
+                <i className="fa fa-plus" />
+              </button>
+            </div></div>
           <br />
-         
+
           <br />
           <table
             className="table table-striped table-bordered table-hover"
