@@ -169,8 +169,8 @@ html {
 .user-img-block {
   display: inline-block;
   position: relative;
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
 }
 .user-img-block img {
   max-height: 100%;

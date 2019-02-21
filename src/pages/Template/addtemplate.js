@@ -21,7 +21,7 @@ class Addtemplate extends Component {
       templateId: "",
       kpiId: "",
       kraId: "",
-      tempDetailId:[]
+      tempDetailId: []
     };
   }
   savetemplatenameApi() {
@@ -40,21 +40,34 @@ class Addtemplate extends Component {
         type: Type.post,
         data: formData,
         success: function (resultData) {
-          debugger;
-          var formData1 = {
-            templateId: resultData.insertId,
-            kraId:templateTblId[0].kraId,
-            kpiId:templateTblId[0].kpiId
-          };
-          const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail;
+        
+          var saveTemplateDetailIds = [];
+       
+          $(templateTblId).each((e, item) => {
+            var singleObjId = {
+              templateId: resultData.insertId,
+              kraId: item.kraId,
+              kpiId: item.kpiId
+            };
+            saveTemplateDetailIds.push(singleObjId);
+          });
+  
+          const templatedetailData = JSON.stringify(saveTemplateDetailIds);
+         
+          const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+         
           $.ajax({
             url: templateSaveApi,
             type: Type.post,
-            data: formData1,
+            data: templatedetailData,
+        
+            headers: {
+              "content-type": "application/json",
+              "x-requested-with": "XMLHttpRequest"
+            },
+          
             success: function (resultData) {
-              debugger;
-              _this.setState({ redirectToList: true });
-
+              _this.setState({ redirectToList: true })
             }
           });
         }
@@ -74,7 +87,7 @@ class Addtemplate extends Component {
         Name: event.target.options[event.target.selectedIndex].text
 
       },
-      kraId:event.target.value
+      kraId: event.target.value
     });
   }
   onChangekpi(event) {
@@ -86,7 +99,7 @@ class Addtemplate extends Component {
         Name: event.target.options[event.target.selectedIndex].text
 
       },
-      kpiId:event.target.value
+      kpiId: event.target.value
     });
   }
 
@@ -153,19 +166,19 @@ class Addtemplate extends Component {
   resetform() {
     window.location.reload();
   }
-// data(){
-//   var temp = templateTblId.map((i) => {
-//     return (
-//         <>
-//            <li>{i.Id}</li> 
-//             </>
+  // data(){
+  //   var temp = templateTblId.map((i) => {
+  //     return (
+  //         <>
+  //            <li>{i.Id}</li> 
+  //             </>
 
-//     )
-// });
-// this.setState({
-//     tempDetailId: temp
-// })
-// }
+  //     )
+  // });
+  // this.setState({
+  //     tempDetailId: temp
+  // })
+  // }
   componentDidMount() {
     this.$el = $(this.el); debugger;
 
@@ -192,7 +205,7 @@ class Addtemplate extends Component {
     if (this.state.redirectToList === true) {
       return <Redirect to={{ pathname: "/templateList" }} />;
     }
-  
+
     return (
       <div>
         <div className="clearfix">
