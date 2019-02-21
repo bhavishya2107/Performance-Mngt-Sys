@@ -15,6 +15,7 @@ export const moduleUrls = {
   Role: "role_master",
   User: "user_master",
   Project: "project_master",
+  ProjectResources:"project_resources",
   Template:"template_master",
   Templatedetail:"template_detail"
 };

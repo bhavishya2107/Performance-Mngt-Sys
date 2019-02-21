@@ -20,13 +20,15 @@ class AddProject extends Component {
             selectProjectStatus: "",
             templateDataTable: [],
             displayManageBy: "",
+            displayResources: "",
             projectName: "",
             startDate: "",
             endDate: "",
             complexityId: "",
-            complexityName:"",
+            complexityName: "",
             manageBy: "",
-            redirectToList: false   
+            resources: "",
+            redirectToList: false
         };
     }
 
@@ -53,7 +55,7 @@ class AddProject extends Component {
     }
 
     saveApiDetails() {
-        var isvalidate = window.formValidation("#projectForm");
+        var isvalidate = window.formValidation("#projectform");
         if (isvalidate) {
             var res = this.isProjectExistsApi();
             res.done((response) => {
@@ -179,6 +181,34 @@ class AddProject extends Component {
 
     //#endregion
 
+
+    onChangeResources(event) {
+        this.setState({
+            manageBy: event.target.value
+        })
+    }
+
+    getResourcesData() {
+        const endpointGET = environment.apiUrl + moduleUrls.User + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayManageBy: displayDataReturn
+                })
+            },
+        });
+    }
+
+
+
     onChangeComplexityMaster(event) {
         this.setState({
             complexityId: event.target.value
@@ -198,6 +228,32 @@ class AddProject extends Component {
                 });
                 this.setState({
                     displayComplexityId: displayDataReturn
+                })
+            },
+        });
+    }
+
+
+    onChangeResources(event) {
+        this.setState({
+            resources: event.target.value
+        })
+    }
+
+    getResourcesData() {
+        const endpointGET = environment.apiUrl + moduleUrls.User + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayResources: displayDataReturn
                 })
             },
         });
@@ -228,36 +284,38 @@ class AddProject extends Component {
         });
     }
 
-    onChangeProjectStatus(event) {
 
-        this.setState({
-            selectProjectStatus: event.target.value
-        })
-    }
-    getProjectStatusData() {
-        const endpointGET = environment.apiUrl + moduleUrls.Project + '/'
-        $.ajax({
-            type: Type.get,
-            url: endpointGET,
-            complete: (temp) => {
-                console.log(temp);
-                var temp = temp.responseJSON;
-                var displayDataReturn = temp.map((i) => {
-                    return (
-                        <option value={i.status}>{i.status}</option>
-                    )
-                });
-                this.setState({
-                    displayProjectStatus: displayDataReturn
-                })
-            },
-        });
-    }
+    // onChangeProjectStatus(event) {
+
+    //     this.setState({
+    //         selectProjectStatus: event.target.value
+    //     })
+    // }
+    // getProjectStatusData() {
+    //     const endpointGET = environment.apiUrl + moduleUrls.Project + '/'
+    //     $.ajax({
+    //         type: Type.get,
+    //         url: endpointGET,
+    //         complete: (temp) => {
+    //             console.log(temp);
+    //             var temp = temp.responseJSON;
+    //             var displayDataReturn = temp.map((i) => {
+    //                 return (
+    //                     <option value={i.status}>{i.status}</option>
+    //                 )
+    //             });
+    //             this.setState({
+    //                 displayProjectStatus: displayDataReturn
+    //             })
+    //         },
+    //     });
+    // }
 
 
     componentDidMount() {
         this.getmanageByData();
         this.getcomplexityIdData();
+        this.getResourcesData();
         this.setState({
             title: ModuleNames.Project
         })
@@ -280,8 +338,6 @@ class AddProject extends Component {
         } else {
         }
     }
-
-
 
     // onChangeComplexityMaster(event) {
 
@@ -354,7 +410,7 @@ class AddProject extends Component {
                 </div>
                 <div className="row">
                     <div className="col">
-                        <form id="projectForm">
+                        <form id="projectform">
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
@@ -372,7 +428,7 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="startDate">Start Date</label>
-                                        <input type="date" className="form-control" name="startDate" value={this.state.startDate}
+                                        <input type="date" dateformat="dd-mm-yy" className="form-control" name="startDate" value={this.state.startDate}
                                             onChange={(event) => {
                                                 this.setState({
                                                     startDate: event.target.value
@@ -393,7 +449,7 @@ class AddProject extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <label >Complexity</label>
-                                    <select required name="complexitydropdown"  className="form-control" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
+                                    <select required name="complexitydropdown" className="form-control" htmlFor="complexityId" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
                                         <option value="">select</option>
                                         {this.state.displayComplexityId}
                                     </select>
@@ -401,12 +457,13 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <label>Project Status</label>
-                                    <select required name="projectStatusdropdown" className="form-control" onChange={(e) => { this.onChangeProjectStatus(e) }} value={this.state.status}  >
+                                    <select required name="projectStatusdropdown" className="form-control" value={this.state.status}  >
                                         <option value="">select</option>
-                                            <option>Not Started</option>
-                                            <option>On Going</option>
-                                            <option>Completed</option>
-                                       </select>
+                                        {this.state.displayProjectStatus}
+                                        <option>Not Started</option>
+                                        <option>On Going</option>
+                                        <option>Completed</option>
+                                    </select>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
@@ -419,9 +476,12 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <label>Resources</label>
-                                    <select required name="projectStatusdropdown" className="form-control" onChange={(e) => { this.onChangeProjectStatus(e) }} value={this.state.status}  >
-                                        <option value="">select</option>
-                                        {this.state.displayProjectStatus}
+                                    <select multiple id="multipleResource" className="chosen-select" required name="resourcesdropdown" className="form-control"
+                                     onChange={(e) => { this.onChangeResources(e) }} 
+                                    //  value={this.state.resources} 
+                                      >
+                                       
+                                        {this.state.displayResources}
                                     </select>
                                 </div>
 
