@@ -12,12 +12,12 @@ class Templatelist extends Component {
             submitDataFromKra: "",
         };
     }
-    checkall(){}
+    checkall() { }
     componentDidMount() {
-       
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
+
             aaSorting: [[1, 'asc']],
             aaSorting: [[2, 'asc']],
             ajax: {
@@ -25,8 +25,7 @@ class Templatelist extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    "query": "SELECT TM.templateId,TM.templateName,KM.kraName  FROM template_detail as TKKA JOIN template_master as TM   ON TKKA.templateId= TM.templateId    JOIN kra_master as KM ON  TKKA.kraid = KM.kraid "
-
+                    "query": "SELECT TM.templateId,TM.templateName,KM.kraName FROM template_detail as TKKA JOIN template_master as TM ON TKKA.templateId = TM.templateId JOIN kra_master as KM ON  TKKA.kraid = KM.kraid"
                 },
             },
             columns: [
@@ -54,7 +53,7 @@ class Templatelist extends Component {
                     data: "kraName",
                     targets: 3
                 },
-               
+
                 {
                     data: "templateId",
                     targets: 4,
@@ -113,7 +112,7 @@ class Templatelist extends Component {
                         <th width="50">Sr.No</th>
                         <th>Template Name</th>
                         <th>Kra Name</th>
-                        
+
                         <th>Action</th>
                     </tr>
                 </thead>
