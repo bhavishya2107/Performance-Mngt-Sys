@@ -21,9 +21,14 @@ class Addtemplate extends Component {
       templateId: "",
       kpiId: "",
       kraId: "",
-      tempDetailId: []
+      tempDetailId: [],
+      kraName: {},
+      kpiName: {}
     };
   }
+
+
+
   savetemplatenameApi() {
 
     var isvalidate = window.formValidation("#formtemplate");
@@ -32,7 +37,6 @@ class Addtemplate extends Component {
 
       var formData = {
         templateName: this.state.templateName,
-
       };
       const templateSaveApi = environment.apiUrl + moduleUrls.Template;
       $.ajax({
@@ -40,9 +44,7 @@ class Addtemplate extends Component {
         type: Type.post,
         data: formData,
         success: function (resultData) {
-        
           var saveTemplateDetailIds = [];
-       
           $(templateTblId).each((e, item) => {
             var singleObjId = {
               templateId: resultData.insertId,
@@ -51,21 +53,21 @@ class Addtemplate extends Component {
             };
             saveTemplateDetailIds.push(singleObjId);
           });
-  
+
           const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-         
+
           const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
-         
+
           $.ajax({
             url: templateSaveApi,
             type: Type.post,
             data: templatedetailData,
-        
+
             headers: {
               "content-type": "application/json",
               "x-requested-with": "XMLHttpRequest"
             },
-          
+
             success: function (resultData) {
               _this.setState({ redirectToList: true })
             }
@@ -87,11 +89,14 @@ class Addtemplate extends Component {
         Name: event.target.options[event.target.selectedIndex].text
 
       },
-      kraId: event.target.value
+      kraId: event.target.value,
+      
+  
     });
+
   }
   onChangekpi(event) {
-    debugger
+
     this.setState({
       selectkpi:
       {
@@ -99,12 +104,13 @@ class Addtemplate extends Component {
         Name: event.target.options[event.target.selectedIndex].text
 
       },
-      kpiId: event.target.value
+      kpiId: event.target.value,
+      kpiName: event.target.options[event.target.selectedIndex].text
     });
   }
 
   addtemplate() {
-    debugger;
+
     var templateDataapi = {
       kraName: this.state.selectkra,
       kpiTitle: this.state.selectkpi
@@ -166,32 +172,150 @@ class Addtemplate extends Component {
   resetform() {
     window.location.reload();
   }
-  // data(){
-  //   var temp = templateTblId.map((i) => {
-  //     return (
-  //         <>
-  //            <li>{i.Id}</li> 
-  //             </>
+  getTemplateMasterId() {
+    const endpointGET = environment.apiUrl + moduleUrls.Template + '/' + `${this.state.id}`
+    return $.ajax({
+      url: endpointGET,
+      type: Type.get,
 
-  //     )
-  // });
-  // this.setState({
-  //     tempDetailId: temp
-  // })
-  // }
+    })
+  }
+  getTemplateDetailsId() {
+    //const endpointGET = environment.apiUrl + moduleUrls.Templatedetail 
+    return $.ajax({
+      url: "http://192.168.10.110:3000/dynamic",
+      type: Type.post,
+      data: {
+        "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
+      },
+    })
+  }
+
+
+  updateTemplateMasterApi(data) {
+    var body =
+    {
+      "templateName": data.templateName.trim(),
+    }
+    const endpointPOST = environment.apiUrl + moduleUrls.Template + '/' + `${data.id}`
+    return $.ajax({
+      url: endpointPOST,
+      type: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      data: JSON.stringify(body)
+    });
+  }
+  updateTemplateDetailApi(data) {
+    var body =
+    {
+      "templateId": 1,
+      "kraId": 1,
+      "kpiId": 1
+    }
+    const endpointPOST = environment.apiUrl + moduleUrls.Templatedetail + '/' + `${data.id}`
+    return $.ajax({
+      url: endpointPOST,
+      type: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      data: JSON.stringify(body)
+    });
+  }
+  UpdateTemplateDetail(data) {
+    var isvalidate = window.formValidation("#formtemplate");
+    if (isvalidate) {
+      var res = this.updateTemplateDetailApi(data);
+
+      res.done((result) => {
+        this.setState({
+          redirectToList: true,
+
+        })
+
+      });
+      res.fail((error) => {
+        console.log(error)
+      })
+
+    } else {
+
+      return false;
+    }
+  }
+
+  UpdateTemplateMaster(data) {
+    var isvalidate = window.formValidation("#formtemplate");
+    if (isvalidate) {
+      var res = this.updateTemplateMasterApi(data);
+
+      res.done((result) => {
+        this.setState({
+          redirectToList: true,
+
+        })
+
+      });
+      res.fail((error) => {
+        console.log(error)
+      })
+
+    } else {
+
+      return false;
+    }
+  }
+
+
+
   componentDidMount() {
-    this.$el = $(this.el); debugger;
+    if (this.state.id !== undefined) {
+      var resTemplate = this.getTemplateMasterId();
+      resTemplate.done((response) => {
+        this.setState({
+          templateName: response[0].templateName,
 
+        })
+        var res = this.getTemplateDetailsId(this.state.id);
+        res.done((res) => {
+
+          var saveTemplateDetailIds = [];
+          $(res).each((e, item) => {
+            var templateDetail = {
+              kraName: item.kraName,
+              kpiTitle: item.kpiTitle
+            };
+            saveTemplateDetailIds.push(templateDetail);
+          });
+
+          this.$el
+            .DataTable()
+            .clear()
+            .rows.add(saveTemplateDetailIds)
+            .draw();
+        })
+      });
+      resTemplate.fail((error) => {
+
+      })
+    } else {
+
+    }
+    this.$el = $(this.el);
     this.$el.DataTable({
       datasrc: templateData,
       data: templateData,
       columns: [
         {
-          data: "kraName.Name",
+          data: "kraName",
           target: 0
         },
         {
-          data: "kpiTitle.Name",
+          data: "kpiTitle",
           target: 1
         }
       ]
@@ -210,7 +334,9 @@ class Addtemplate extends Component {
       <div>
         <div className="clearfix">
           <div className="clearfix d-flex align-items-center row page-title">
-            <h2 className="col">Add Template</h2>
+            <h2 className="col">
+              {this.state.id !== undefined ? <span>Edit  Template</span> : <span>Add Template</span>}
+            </h2>
           </div>
           <div className="row">
             <div className="col-md-6">
@@ -287,29 +413,29 @@ class Addtemplate extends Component {
             </thead>
             <tbody />
           </table>
-          <div className="form-group">
-            <button
-              onClick={() => this.savetemplatenameApi()}
-              type="button"
-              className="btn btn-success mr-2"
-            >
-              SAVE
-            </button>
-            <button
-              type="button"
-              className="btn btn-info mr-2"
-              onClick={() => {
-                this.resetform();
-              }}
-            >
-              Reset
+          {this.state.id !== undefined ?
+            <button type="button" className="btn btn-success mr-2" onClick={() => {
+              this.UpdateTemplateMaster(this.state);
+            }}>Update</button>
+
+            : <button type="button" className="btn btn-success mr-2" onClick={() => {
+              this.savetemplatenameApi(this.state);
+            }}>Save</button>}
+          <button
+            type="button"
+            className="btn btn-info mr-2"
+            onClick={() => {
+              this.resetform();
+            }}
+          >
+            Reset
             </button>
 
-            <Link to="/templatelist" className="btn btn-danger ">
-              Cancel
+          <Link to="/templatelist" className="btn btn-danger ">
+            Cancel
             </Link>
-          </div>
         </div>
+
       </div>
     );
   }
