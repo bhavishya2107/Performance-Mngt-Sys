@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { environment, moduleUrls, Type } from "../Environment";
+import { environment, moduleUrls, Type, Notification, ModuleNames } from "../Environment";
+import { ToastContainer, toast } from 'react-toastify';
 const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
 var templateData = [];
@@ -26,54 +27,112 @@ class Addtemplate extends Component {
       kpiName: {}
     };
   }
+  isTemplateNameExistsApi() {
+    const templateNameexistsUrl = environment.apiUrl + moduleUrls.Template + '?_where=(templateName,eq,' + this.state.templateName.trim() + ')';
+    return $.ajax({
+      url: templateNameexistsUrl,
+      type: Type.get,
+      data: ''
+    });
+  }
+  isTemplateNameExistsUpdateApi() {
+    const templateNameexistsUrl = environment.apiUrl + moduleUrls.Template + '?_where=(templateName,eq,' + this.state.templateName.trim() + ')' + '~and(templateId,ne,' + this.state.id + ')';
+    return $.ajax({
+      url: templateNameexistsUrl,
+      type: Type.get,
+      data: ''
+    });
+  }
+  singleDeletefromDatatableApi(){
+    const singleDataUrl = environment.apiUrl + moduleUrls.Templatedetail
+    return $.ajax({
+      url: singleDataUrl,
+      type: Type.get,
+      data: ''
+    });
+  }
+  
 
+  onblurRowExists() {
+    if (this.state.id != undefined) {
+      var res = this.isTemplateNameExistsUpdateApi();
+      res.done((response) => {
 
+        if (response.length > 0) {
+          $(".recordexists").show()
+        } else {
+        }
+      }
+      )
+    }
+    else {
+      var res = this.isTemplateNameExistsApi();
+      res.done((response) => {
+        if (response.length > 0) {
+          $(".recordexists").show()
+        } else {
+
+        }
+      })
+    }
+
+  }
 
   savetemplatenameApi() {
-
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
-      var _this = this;
+      var res = this.isTemplateNameExistsApi()
+      res.done((response) => {
+        if (response.length > 0) {
+          $(".recordexists").show()
+        } else {
+          var _this = this;
 
-      var formData = {
-        templateName: this.state.templateName,
-      };
-      const templateSaveApi = environment.apiUrl + moduleUrls.Template;
-      $.ajax({
-        url: templateSaveApi,
-        type: Type.post,
-        data: formData,
-        success: function (resultData) {
-          var saveTemplateDetailIds = [];
-          $(templateTblId).each((e, item) => {
-            var singleObjId = {
-              templateId: resultData.insertId,
-              kraId: item.kraId,
-              kpiId: item.kpiId
-            };
-            saveTemplateDetailIds.push(singleObjId);
-          });
-
-          const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-
-          const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
-
+          var formData = {
+            templateName: this.state.templateName.trim(),
+          };
+          const templateSaveApi = environment.apiUrl + moduleUrls.Template;
           $.ajax({
             url: templateSaveApi,
             type: Type.post,
-            data: templatedetailData,
-
-            headers: {
-              "content-type": "application/json",
-              "x-requested-with": "XMLHttpRequest"
-            },
-
+            data: formData,
             success: function (resultData) {
-              _this.setState({ redirectToList: true })
+              var saveTemplateDetailIds = [];
+              $(templateTblId).each((e, item) => {
+                var singleObjId = {
+                  templateId: resultData.insertId,
+                  kraId: item.kraId,
+                  kpiId: item.kpiId
+                };
+                saveTemplateDetailIds.push(singleObjId);
+              });
+
+              const templatedetailData = JSON.stringify(saveTemplateDetailIds);
+
+              const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+
+              $.ajax({
+                url: templateSaveApi,
+                type: Type.post,
+                data: templatedetailData,
+
+                headers: {
+                  "content-type": "application/json",
+                  "x-requested-with": "XMLHttpRequest"
+                },
+
+                success: function (resultData) {
+                  _this.setState({ redirectToList: true })
+                  toast.success("Template " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                  });
+                }
+              });
             }
           });
         }
-      });
+      })
+
     } else {
       return false;
     }
@@ -90,8 +149,8 @@ class Addtemplate extends Component {
 
       },
       kraId: event.target.value,
-      
-  
+
+
     });
 
   }
@@ -190,8 +249,6 @@ class Addtemplate extends Component {
       },
     })
   }
-
-
   updateTemplateMasterApi(data) {
     var body =
     {
@@ -205,61 +262,61 @@ class Addtemplate extends Component {
         "content-type": "application/json",
         "x-requested-with": "XMLHttpRequest"
       },
-      data: JSON.stringify(body)
+      data: JSON.stringify(body),
     });
   }
-  updateTemplateDetailApi(data) {
-    var body =
-    {
-      "templateId": 1,
-      "kraId": 1,
-      "kpiId": 1
-    }
-    const endpointPOST = environment.apiUrl + moduleUrls.Templatedetail + '/' + `${data.id}`
-    return $.ajax({
-      url: endpointPOST,
-      type: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      data: JSON.stringify(body)
-    });
-  }
-  UpdateTemplateDetail(data) {
-    var isvalidate = window.formValidation("#formtemplate");
-    if (isvalidate) {
-      var res = this.updateTemplateDetailApi(data);
-
-      res.done((result) => {
-        this.setState({
-          redirectToList: true,
-
-        })
-
-      });
-      res.fail((error) => {
-        console.log(error)
-      })
-
-    } else {
-
-      return false;
-    }
-  }
-
   UpdateTemplateMaster(data) {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
-      var res = this.updateTemplateMasterApi(data);
+      var res = this.isTemplateNameExistsUpdateApi();
+      res.done((response) => {
+        if (response.length > 0) {
+          $(".recordexists").show()
+        } else {
+          var res = this.updateTemplateMasterApi(data);
+          res.done((result) => {
+            debugger;
+            console.log(result)
+            var saveTemplateDetailIds = [];
+            $(templateTblId).each((e, item) => {
+              var singleObjId = {
+                templateId: data.id,
+                kraId: data.kraId,
+                kpiId: data.kpiId
+              };
+              saveTemplateDetailIds.push(singleObjId);
+            });
 
-      res.done((result) => {
-        this.setState({
-          redirectToList: true,
+            const templatedetailData = JSON.stringify(saveTemplateDetailIds);
 
-        })
+            const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
 
-      });
+            $.ajax({
+              url: templateSaveApi,
+              type: Type.post,
+              data: templatedetailData,
+
+              headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest"
+              },
+              success: () => {
+                this.setState({
+
+                  redirectToList: true,
+
+                });
+                toast.success("Template " + Notification.updated, {
+                  position: toast.POSITION.TOP_RIGHT
+                });
+              }
+            });
+
+
+          });
+        }
+      })
+
       res.fail((error) => {
         console.log(error)
       })
@@ -283,19 +340,26 @@ class Addtemplate extends Component {
         var res = this.getTemplateDetailsId(this.state.id);
         res.done((res) => {
 
-          var saveTemplateDetailIds = [];
           $(res).each((e, item) => {
             var templateDetail = {
-              kraName: item.kraName,
-              kpiTitle: item.kpiTitle
+
+              kraName: {
+                Name: item.kraName,
+                id: item.kraId
+              },
+              kpiTitle: {
+                Name: item.kpiTitle,
+                id: item.kpiId
+              }
             };
-            saveTemplateDetailIds.push(templateDetail);
+            debugger;
+            templateData.push(templateDetail);
           });
 
           this.$el
             .DataTable()
             .clear()
-            .rows.add(saveTemplateDetailIds)
+            .rows.add(templateData)
             .draw();
         })
       });
@@ -310,22 +374,48 @@ class Addtemplate extends Component {
       datasrc: templateData,
       data: templateData,
       columns: [
+        // {
+        //   data: "kraName.id",
+        //   target: 0
+        // },
+        // {
+        //   data: "kpiTitle.id",
+        //   target: 1
+        // },
+
         {
-          data: "kraName",
+          data: "kraName.Name",
           target: 0
         },
         {
-          data: "kpiTitle",
+          data: "kpiTitle.Name",
           target: 1
-        }
-      ]
+        },
+        {
+          data: "kraId",
+          "orderable": false,
+          targets: 2,
+          render: function (data, type, row) {
+            return (
+              '<a href="#" id="' + row.kraId + '"class="btn btn-danger btnDelete btn-sm">' +
+              '<i class="fa fa-trash" aria-hidden="true"></i>' +
+              "</a>"
+            )
+          }
+        },
+      ],
+      drawCallback: (settings) => {
+
+        $(".btnDelete").on("click", e => {
+
+        });
+      }
     });
     this.getKPIData();
     this.getKRAData();
 
   }
   render() {
-    // const{templateData}=this.state;
     if (this.state.redirectToList === true) {
       return <Redirect to={{ pathname: "/templateList" }} />;
     }
@@ -346,14 +436,18 @@ class Addtemplate extends Component {
                   <input
                     id="templateid"
                     className="form-control"
+                    onBlur={() => { this.onblurRowExists() }}
+                    maxLength="50"
                     value={this.state.templateName}
                     onChange={event => {
+                      $(".recordexists").hide()
                       this.setState({
                         templateName: event.target.value
                       });
                     }}
                     required
                   />
+                  <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                 </div>
               </form>
             </div>
@@ -407,8 +501,11 @@ class Addtemplate extends Component {
           >
             <thead>
               <tr>
+                {/* <th>kraid</th>
+                <th>kpiid</th> */}
                 <th>KRA Name</th>
                 <th>KPI Name</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody />
