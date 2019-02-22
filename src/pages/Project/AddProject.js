@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { Redirect } from "react-router-dom";
 const $ = require('jquery');
@@ -8,6 +9,7 @@ $.DataTable = require('datatables.net-bs4');
 
 var templateData = []
 var ProjectData = []
+
 class AddProject extends Component {
     constructor(props) {
         super(props);
@@ -35,6 +37,23 @@ class AddProject extends Component {
     resetForm() {
         window.location.reload();
     }
+
+    date() {
+        var startDate = "11/05/2017";
+        var moment = require('moment');
+        moment(startDate).format("YYYY-MM-DD");
+        alert(startDate)
+    }
+
+    // date() {
+    //     var newdate;
+    //     var dateObj = new Date();
+    //     var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    //     var day = dateObj.getUTCDate();
+    //     var year = dateObj.getUTCFullYear();
+
+    //     newdate = year + "/" + month + "/" + day;
+    // }
 
     isProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')';
@@ -182,6 +201,7 @@ class AddProject extends Component {
     //#endregion
 
 
+
     onChangeResources(event) {
         this.setState({
             manageBy: event.target.value
@@ -313,6 +333,11 @@ class AddProject extends Component {
 
 
     componentDidMount() {
+        var startDate = "11/05/2017";
+        var moment = require('moment');
+        startDate = moment(startDate).format("YYYY-MM-DD");
+        // alert(startDate)
+        
         this.getmanageByData();
         this.getcomplexityIdData();
         this.getResourcesData();
@@ -320,17 +345,22 @@ class AddProject extends Component {
             title: ModuleNames.Project
         })
         if (this.state.projectId !== undefined) {
+         
             var res = this.getProjectDetailsApi();
             res.done((response) => {
                 console.log(res);
+                // this.setDate({
+                //     startDate: response[0].startDate,
+                //     endDate: response[0].endDate,
+                // });
                 this.setState({
                     projectName: response[0].projectName,
-                    startDate: response[0].startDate,
-                    endDate: response[0].endDate,
                     complexityId: response[0].complexityId,
                     status: response[0].status,
                     manageBy: response[0].manageBy,
                     description: response[0].description,
+                    startDate: response[0].startDate,
+                    endDate: response[0].endDate,
                 })
             });
             res.fail((error) => {
@@ -428,9 +458,9 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="startDate">Start Date</label>
-                                        <input type="date" dateformat="dd-mm-yy" className="form-control" name="startDate" value={this.state.startDate}
+                                        <input type="date" className="form-control" name="startDate" onChange={(e) => { this.date(e) }} value={this.state.startDate}
                                             onChange={(event) => {
-                                                this.setState({
+                                                this.setDate({
                                                     startDate: event.target.value
                                                 })
                                             }} required />
@@ -440,7 +470,7 @@ class AddProject extends Component {
                                     <label className="required" htmlFor="endDate">End Date</label>
                                     <input type="date" className="form-control" name="endDate" value={this.state.endDate}
                                         onChange={(event) => {
-                                            this.setState({
+                                            this.setDate({
                                                 endDate: event.target.value
                                             })
                                         }} required />
@@ -476,11 +506,10 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <label>Resources</label>
-                                    <select multiple id="multipleResource" className="chosen-select" required name="resourcesdropdown" className="form-control"
-                                     onChange={(e) => { this.onChangeResources(e) }} 
-                                    //  value={this.state.resources} 
-                                      >
-                                       
+                                    <select multiple id className="chosen-select" required name="resourcesdropdown" className="form-control"
+                                        onChange={(e) => { this.onChangeResources(e) }}
+                                    //    value={this.state.resources} 
+                                    >
                                         {this.state.displayResources}
                                     </select>
                                 </div>
