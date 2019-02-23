@@ -7,6 +7,7 @@ const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
 var templateData = [];
 var templateTblId = [];
+var templateDataapi = []
 class Addtemplate extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +44,7 @@ class Addtemplate extends Component {
       data: ''
     });
   }
-  singleDeletefromDatatableApi(){
+  singleDeletefromDatatableApi() {
     const singleDataUrl = environment.apiUrl + moduleUrls.Templatedetail
     return $.ajax({
       url: singleDataUrl,
@@ -51,7 +52,7 @@ class Addtemplate extends Component {
       data: ''
     });
   }
-  
+
 
   onblurRowExists() {
     if (this.state.id != undefined) {
@@ -98,7 +99,7 @@ class Addtemplate extends Component {
             data: formData,
             success: function (resultData) {
               var saveTemplateDetailIds = [];
-              $(templateTblId).each((e, item) => {
+              $(templateData).each((e, item) => {
                 var singleObjId = {
                   templateId: resultData.insertId,
                   kraId: item.kraId,
@@ -108,7 +109,6 @@ class Addtemplate extends Component {
               });
 
               const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-
               const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
 
               $.ajax({
@@ -172,14 +172,15 @@ class Addtemplate extends Component {
 
     var templateDataapi = {
       kraName: this.state.selectkra,
-      kpiTitle: this.state.selectkpi
-    };
-    var templateDataId = {
+      kpiTitle: this.state.selectkpi,
       kraId: this.state.kraId,
       kpiId: this.state.kpiId
-    }
+    };
+    // var templateDataId = {
 
-    templateTblId.push(templateDataId);
+    // }
+
+    //templateTblId.push(templateDataId);
     templateData.push(templateDataapi);
     this.$el
       .DataTable()
@@ -250,9 +251,10 @@ class Addtemplate extends Component {
     })
   }
   updateTemplateMasterApi(data) {
+    debugger
     var body =
     {
-      "templateName": data.templateName.trim(),
+      "templateName": data.templateName,
     }
     const endpointPOST = environment.apiUrl + moduleUrls.Template + '/' + `${data.id}`
     return $.ajax({
@@ -265,6 +267,62 @@ class Addtemplate extends Component {
       data: JSON.stringify(body),
     });
   }
+  deleteTemplateDetail(templateDetailId) {
+    const multiDeleteAPIUrl = environment.apiUrl + moduleUrls.Templatedetail + '/bulk?_ids=' + `${templateDetailId}`;
+    return $.ajax({
+      url: multiDeleteAPIUrl,
+      type: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest",
+      }
+    });
+  }
+  updateDetails(saveTemplateDetailIds) {
+    const templatedetailData = JSON.stringify(saveTemplateDetailIds);
+    console.log(templatedetailData)
+    const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+
+    $.ajax({
+      url: templateSaveApi,
+      type: Type.post,
+      data: templatedetailData,
+
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      success: () => {
+        this.setState({
+
+          redirectToList: true,
+
+        });
+        toast.success("Template " + Notification.updated, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      }
+    });
+  }
+  deleteDetails() {
+   
+    var deleteTempDetailIds = ''
+    $(templateData).each((e, item) => {
+      
+      if (item.templateDetailId != undefined) {
+        if (deleteTempDetailIds == '') {
+          deleteTempDetailIds = item.templateDetailId
+        } else {
+          deleteTempDetailIds = deleteTempDetailIds + ',' + item.templateDetailId
+        }
+      }
+
+    });
+    var res= this.deleteTemplateDetail(deleteTempDetailIds) 
+    res.done((result)=>{
+
+    })
+  }
   UpdateTemplateMaster(data) {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -275,44 +333,20 @@ class Addtemplate extends Component {
         } else {
           var res = this.updateTemplateMasterApi(data);
           res.done((result) => {
-            debugger;
-            console.log(result)
             var saveTemplateDetailIds = [];
-            $(templateTblId).each((e, item) => {
+            $(templateData).each((e, item) => {
               var singleObjId = {
-                templateId: data.id,
-                kraId: data.kraId,
-                kpiId: data.kpiId
+                templateId: result.insertId,
+                kraId: item.kraId,
+                kpiId: item.kpiId,
+                templateDetailId: item.templateDetailId,
               };
               saveTemplateDetailIds.push(singleObjId);
+              console.log(saveTemplateDetailIds)
             });
-
-            const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-
-            const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
-
-            $.ajax({
-              url: templateSaveApi,
-              type: Type.post,
-              data: templatedetailData,
-
-              headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
-              },
-              success: () => {
-                this.setState({
-
-                  redirectToList: true,
-
-                });
-                toast.success("Template " + Notification.updated, {
-                  position: toast.POSITION.TOP_RIGHT
-                });
-              }
-            });
-
-
+            // bulk dlt temp d id
+           this.deleteDetails();
+            this.updateDetails(saveTemplateDetailIds);
           });
         }
       })
@@ -350,10 +384,14 @@ class Addtemplate extends Component {
               kpiTitle: {
                 Name: item.kpiTitle,
                 id: item.kpiId
-              }
+              },
+              templateId: item.templateId,
+              templateDetailId: item.templateDetailId,
+              isDeleted: 0
             };
-            debugger;
+
             templateData.push(templateDetail);
+
           });
 
           this.$el
