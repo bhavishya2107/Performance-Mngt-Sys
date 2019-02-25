@@ -88,8 +88,8 @@ class AddKpi extends Component {
             });
         }
         else {
-            $(".hide").hide()
- 
+           
+            $(".recordexists").hide()
             return false;
         }
     }
@@ -103,26 +103,33 @@ class AddKpi extends Component {
     }
 
     onChangeBlur(){
-        var res = this.isKpiExistsApi();
-        res.done((response) => {
-            if (response.length > 0) {
-                //alert("")
-                $(".recordexists").show()
-                // toast.error("KPI Already exists!", {
-                //     position: toast.POSITION.TOP_RIGHT
-                // });
-            } else {
-                var _this = this;
-                var Kpidata = {
-                    "KpiTitle": this.state.kpiTitle,
-                    "weightage": this.state.weightage,
-                    "scaleSetId": this.state.scaleSetId,
-                    "target": this.state.target,
+        if(this.state.kpiId != undefined){
+            var res = this.isEditKpiExistsApi();
+            res.done((response) => {
+                debugger;
+                if (response.length > 0) {
+                    $(".recordexists").show()
+
+                }else{
+                   
                 }
-            }
-        });
-        res.fail(error => {
-        });
+
+        }
+        )}
+    
+        else{
+            var res = this.isKpiExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    //alert("")
+                    $(".recordexists").show()
+    
+                } else {
+                    
+                }
+            })
+        }
+    
     }
 
     // addKpi() {
