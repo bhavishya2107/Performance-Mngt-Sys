@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
-import { ToastContainer, toast } from 'react-toastify';
+    import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -113,7 +113,6 @@ class Scalesetlist extends Component {
 
     }
     multipleDeleteScalesetconfirm() {
-        debugger;
         var scaleSetId = []
         $("#tblscaleset  input:checkbox:checked ").each((e, item) => {
             if (item.name != 'checkAll') {
@@ -191,11 +190,7 @@ class Scalesetlist extends Component {
                         );
                     }
                 },
-                // {
-                //     data: null,
-                //     targets: 1,
-                //     "orderable": false,
-                // },
+              
                 {
                     data: "scaleSetName",
                     targets: 1

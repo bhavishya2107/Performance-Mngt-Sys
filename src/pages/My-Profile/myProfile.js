@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { environment } from "../Environment";
+import { environment, moduleUrls, Type, Notification } from '../Environment';
+import { Redirect } from "react-router-dom";
 const $ = require("jquery");
 
 class MyProfile extends Component {
@@ -17,21 +18,22 @@ class MyProfile extends Component {
       profileImage: "",
       designationName: "",
       rolename: "",
-      teamleader: ""
+      teamleader: "",
+      redirectToEdit: false,
     };
   }
 
   getUserDetailsApi() {
-     var endpoint = environment.dynamicUrl + 'dynamic';
+    var endpoint = environment.dynamicUrl + 'dynamic';
 
     // const endpoint = "http://180.211.103.189:3000/dynamic";
 
     return $.ajax({
       url: endpoint,
-      type: "POST",
+      type: Type.post,
       data: {
         query:
-        "select u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = 2"
+          "select u.userid,u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = 2"
       }
     });
   }
@@ -42,6 +44,8 @@ class MyProfile extends Component {
       res.done(response => {
         console.log(response)
         this.setState({
+
+          userId: response[0].userId,
           userName: response[0].username,
           firstName: response[0].firstname,
           lastName: response[0].lastname,
@@ -52,18 +56,36 @@ class MyProfile extends Component {
           designationName: response[0].designationName,
           rolename: response[0].rolename,
           teamleader: response[0].teamleader,
-          profileImage: response[0].profileimage
+          profileImage: response[0].profileimage,
+
         });
       });
-      res.fail(error => {});
+      res.fail(error => { });
     } else {
     }
   }
   // localStorage.getItem('userId', response.userId);
   // localStorage.getItem('firstName', response.firstName);
   // localStorage.getItem('lastName', response.lastName);
+  // this.state.userId == 
+ 
+
+  redirectToEdit = () => {
+   
+    this.setState({
+      redirectToEdit: true
+    })
+
+  }
+
 
   render() {
+    if (this.state.redirectToEdit) {
+      var redirect = "/EditUser/userId=" + localStorage.getItem("userId")
+      return (
+         <Redirect to={redirect}  /> 
+      )
+    }
     return (
       <div className="container-fluid">
         <div className="clearfix d-flex align-items-center row page-title">
@@ -77,10 +99,12 @@ class MyProfile extends Component {
               <div>
                 <img
                   src={this.state.profileImage}
-                  style={{ width: "200px" }}
+                  style={{ width: "150px" , height:"150px" }}
                   className="img-thumbnail"
                 />
-              </div>
+
+              </div><br />
+              <label className="btn btn-primary btn-sm" onClick={this.redirectToEdit}>Edit Profile</label>
             </div>
             <div className="col-md-9 order-md-first">
               <div className="row">
@@ -206,7 +230,7 @@ class MyProfile extends Component {
                 <div className="col-md-6">
                   <div className="form-group">
                     <label className="" htmlFor="userLastName">
-                    Designation Name
+                      Designation Name
                     </label>
                     <div>
                       <input

@@ -91,6 +91,7 @@ export default {
                 url: '/projects',
                 icon: 'fa fa-sitemap',
             },
+            
 
                 // {
                 //     name: 'My Profile',
