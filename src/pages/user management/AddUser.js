@@ -450,7 +450,8 @@ class AddUser extends Component {
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
                                                     {this.state.imageSrc == "" ?
-                                                        (<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSorNcVIaDvgYYgWSazOUmVgYrSUNr9BetaG7JPRI3pzawK0HxM"  id="imgB" className="img-thumbnail" />)
+                                                    
+                                                        (<img src="../img/download.png"  id="imgB" className="img-thumbnail" />)
                                                         :
                                                         (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail"  />)
                                                     }

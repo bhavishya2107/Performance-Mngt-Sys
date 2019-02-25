@@ -167,6 +167,7 @@ class AddKpi extends Component {
             data: JSON.stringify(body)
         });
     }
+    
     UpdateKpiDetails(data) {
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {

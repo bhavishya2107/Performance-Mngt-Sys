@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
+
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
+var moment = require('moment');
 
 class Projects extends Component {
     constructor(props) {
@@ -128,6 +130,7 @@ class Projects extends Component {
     //#endregion
 
     componentDidMount() {
+    
         const endpointGET = environment.dynamicUrl + 'dynamic' 
         // this.setState({
         //     title: ModuleNames.kpi
@@ -141,7 +144,7 @@ class Projects extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId"
+                    query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId order by projectId desc"
                 },
             },
             columns: [
@@ -158,17 +161,24 @@ class Projects extends Component {
                 {
                     data: "projectName",
                     targets: 1,
-
                 },
                 {
                     data: "startDate",
                     targets: 2,
-
+                    render: (data, type, row) => {
+                        return (
+                            `<label id="startDate" value=>${moment(row.startDate).format("MM-DD-YYYY")}</label>`
+                        )
+                    },
                 },
                 {
                     data: "endDate",
                     targets: 3,
-
+                    render: (data, type, row) => {
+                        return (
+                            `<label id="endDate" value=>${moment(row.endDate).format("MM-DD-YYYY")}</label>`
+                        )
+                    },
                 },
                 {
                     data: "complexityName",
