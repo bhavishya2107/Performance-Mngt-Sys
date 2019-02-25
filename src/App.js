@@ -35,13 +35,26 @@ import Designationlist from './pages/Designation/designation';
 import Designation from './pages/Designation/adddesignation';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/My-Profile/myProfile';
+
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
+import Dashboard from './pages/dashboard';
+import ForgotPW from './pages/forgotPassword';
+import ResetPW from './pages/resetPassword';
+import ChangePW from './pages/changePassword';
 
 class App extends Component {
+constructor(props){
+super(props)
 
+this.state={
+  url :""
+}
+}
   render() {
+
     var urlData = window.location.pathname;
-    if (urlData === "/") {
+
+    if (urlData === "/" || urlData === "/forgotPassword" || urlData === "/resetPassword" || urlData === "/changePassword") {
       return (
         <Router>
           <div className="container-fluid h-100 bg-light">
@@ -49,6 +62,9 @@ class App extends Component {
               <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
                 <Switch>
                   <Route exact path="/" component={Login} />
+                  <Route exact path="/forgotPassword" component={ForgotPW} />
+                  <Route exact path="/resetPassword" component={ResetPW} />
+                  <Route exact path="/changePassword" component={ChangePW} />
                 </Switch>
               </div>
             </div>
@@ -123,6 +139,8 @@ class App extends Component {
                         <Route path="/Editkra/id=:id" component={kraHome}></Route>
                         <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
                         <Route exact path="/myProfile" component={MyProfile} />
+                        <Route path="/dashboard" component={Dashboard} />              
+                     
 
 
                         <Route exact path="/scale-set/add" component={Scaleset} />
@@ -133,6 +151,7 @@ class App extends Component {
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
                         <Route exact path="/designation/edit/id=:id" component={Designation} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                  
 
 
                       </Switch>
