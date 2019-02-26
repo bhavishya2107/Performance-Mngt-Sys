@@ -26,18 +26,19 @@ function navigation() {
 // }, 'Your password must be at least 5 characters long\'.')
 
 
-jQuery.validator.addMethod('passwordMatch', function (value, element) {
-    debugger;
-    var password = $("#ChangePW").val();
-    var confirmPassword = $("#ConfirmPW").val();
-    if (password === confirmPassword && ((password && confirmPassword) != NULL)) {
-  alert('match')
-        return true;
-    }
-    else {
-        return false;
-    }
-}, "Please match with above Password");
+// jQuery.validator.addMethod('passwordMatch', function (value, element) {
+//     debugger;
+//     var password = $("#ChangePW").val();
+//     var confirmPassword = $("#ConfirmPW").val();
+//     if (password === confirmPassword && ((password && confirmPassword) != NULL)) {
+//   alert('match')
+//         return true;
+//     }
+//     else {
+//         return false;
+//     }
+// }, "Please match with above Password");
+
 
 //...For Form validation
 function formValidation(form) {
@@ -77,17 +78,26 @@ function formValidation(form) {
                 },
                 FPWemailRequired: {
                     required: true
-                },
+                },//change password
                 ChangePWemail: {
                     required: true
                 },
                 ConfirmPWemail: {
-                    equalTo:"#ChangePWemail"
+                    required:true,
+                    // equalTo:"#ChangePWemail"
                 },
                 CurrentPWemail:{
                     required:true
                 },
-
+                //reset password
+                ResetNewPWRequired:{
+                    required:true
+                },
+                ConfirmNewPWRequired:{
+                    required:true,
+                    // passwordMatch:true
+                    // equalTo:'#ResetNewPWRequired'
+                },
                 messages: {
                     // ChangePWemail:{required: " Enter Password"},
                     // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},

@@ -1,67 +1,155 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import logo from '../common/img/logo-100.png';
-import { Redirect,Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import $ from 'jquery';
 import { environment, moduleUrls, Type, Notification } from './Environment';
 
-class ResetPW extends Component{
-    constructor(props){
-        debugger;
-        super(props);
-        this.state={
-        resetPassword:""
-        }
+class ResetPW extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      resetPassword: "",
+      reEnterPassword: "",
+      getResetToken: '',
     }
-UpdatePassword(){
-    var UpdatePasswordAPI = environment.dynamicUrl + 'dynamic2';
-    // const endpoint = "http://180.211.103.189:3000/dynamic";
+  }
+  // url.searchParams.get("c");
+  // getTokenFromURL=$(location).attr('search');
 
+  UpdatePassword() {
+    debugger;
+    var UpdatePasswordAPI = environment.dynamicUrl + 'dynamic';
+    var resetPassword = {
+      query: `UPDATE user_master SET password = '${this.state.resetPassword}', resetToken = NULL WHERE resetToken = '${this.state.getResetToken}'`
+    }
     return $.ajax({
       url: UpdatePasswordAPI,
       type: Type.post,
-      data: {
-        query:"UPDATE user_master u SET u.PASSWORD = 'NEW' WHERE emailAddress='psspl.trainee32@outlook.com'"
+      data: JSON.stringify(resetPassword),
+      headers: {
+        "Content-Type": "application/json",
       }
     });
-}
-resetPasswordvalidate=()=>{
-  var res= this.UpdatePassword();
+  }
+  // UPDATE user_master SET password = '11111', resetToken = NULL WHERE resetToken = ''
 
-}
+  //function to get token from the URL
+  getUrlParameter = (sParam) => {
+    var sPageURL = window.location.search.substring(1),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+    for (i = 0; i < sURLVariables.length; i++) {
+      sParameterName = sURLVariables[i].split('=');
 
-render(){
+      if (sParameterName[0] === sParam) {
+        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+      }
+    }
+  };
+
+  //password validation
+  resetPasswordvalidate = () => {
     debugger;
-    return(
-        <div>
-            <form className="form-signin p-3 shadow" id="RPWform">
-                    <h2 className="form-signin-heading text-center">
-                        <img src={logo} alt="Prakash" className="img-fluid" />
-                    </h2>
-                    <div className="form-group">
-                        <label className="sr-only">New Password</label>
-                        <input type="password" id="ResetNewPW" name="ResetNewPWRequired" className="form-control" placeholder="Type New PassWord"
-                          onChange={this.emailForFPWonChange}
-                            value={this.state.emailForFPW} required/>
-                    </div>
-                    <div className="form-group">
-                        <label className="sr-only">Confirm Password</label>
-                        <input type="password" id="ConfirmNewPW" name="ConfirmNewPWRequired" className="form-control" placeholder="Retype New PassWord"
-                          onChange={this.emailForFPWonChange}
-                            value={this.state.emailForFPW} required/>
-                    </div>
-                    <div className="form-group">
-                    <a className="btn btn-lg btn-success" type="button" id= "loginbutton" onClick={""} >Update</a>&nbsp;
-                    <a className="btn btn-lg btn-danger" type="button" onClick={""}>Reset</a><br/>
-                    </div>
-                    <div className="divider">
-                     <Link to="/">Login Page</Link>
-                    </div>
-                   
-                </form>
-                <ToastContainer/>
-        </div>
-    )
+    var isvalidate = window.formValidation("#RPWform")
+    if (isvalidate) {
+      if(this.state.resetPassword === this.state.reEnterPassword){
+      var res = this.UpdatePassword()
+      res.done((result) => {
+        toast.success(" " + Notification.ChangePassword, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      });
+      res.fail((error) => {
+
+      })
+    }else{
+      $(".matchPassword").show();
+    }
+  }
+  else{
+    $(".matchPassword").hide();
+  }
 }
+
+
+//   if (this.state.password === this.state.retypePassword) {
+
+//     var changePassword= this.updatePassword();
+//     changePassword.done((response)=>{
+//         toast.success(" " + Notification.ChangePassword, {
+//             position: toast.POSITION.TOP_RIGHT
+//         });
+//         this.setState({
+//             redirectTologin:true
+//         })
+
+//     });
+//     changePassword.fail((error)=>{
+//         console.log("password not changed")
+
+//     })
+// }
+
+// else {
+//     return $(".matchPassword").show();
+// }
+
+  //reset form
+  clearResetform() {
+    window.location.reload();
+  }
+
+
+  render() {
+    return (
+      <div>
+        <form className="form-signin p-3 shadow" id="RPWform">
+          <h2 className="form-signin-heading text-center">
+            <img src={logo} alt="Prakash" className="img-fluid" />
+          </h2>
+          <div className="form-group">
+            <label className="sr-only">New Password</label>
+            <input type="password" id="ResetNewPW" name="ResetNewPWRequired" className="form-control" placeholder="Type New PassWord"
+              onChange={
+                (event) => {
+
+                  this.setState(
+                    {
+                      getResetToken: this.getUrlParameter('token'),
+                      resetPassword: event.target.value
+                    }
+                  )
+                }}
+              value={this.state.resetPassword} />
+          </div>
+          <div className="form-group">
+            <label className="sr-only">Confirm Password</label>
+            <input type="password" id="ConfirmNewPW" name="ConfirmNewPWRequired" className="form-control" placeholder="Retype New PassWord"
+              onChange={
+                (event) => {
+
+                  this.setState(
+                    {
+                      reEnterPassword: event.target.value
+                    }
+                  )
+                }}
+              value={this.state.reEnterPassword} />
+          </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password Does Not Match</p>
+          <div className="form-group">
+            <a className="btn btn-lg btn-success" type="button" id="loginbutton" onClick={this.resetPasswordvalidate} >Update</a>&nbsp;
+                    <a className="btn btn-lg btn-danger" type="button" onClick={this.clearResetform}>Reset</a><br />
+          </div>
+          <div className="divider">
+            <Link to="/">Login Page</Link>
+          </div>
+
+        </form>
+        <ToastContainer />
+      </div>
+    )
+  }
 }
 export default ResetPW;

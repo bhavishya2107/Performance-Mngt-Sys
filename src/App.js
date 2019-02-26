@@ -124,7 +124,7 @@ this.state={
                         <Route path="/user-managemnet/add" component={AddUser} />
                         <Route path="/EditUser/userId=:userId" component={AddUser} />
                         <Route path="/Department" component={Department} />
-                        <Route  path="/EditDept/depId=:depId" component={AddDept} />
+                        <Route  path="/EditDept/departmentId=:departmentId" component={AddDept} />
                         {/* <Route exact path="/Department/add" component={AddDept} /> */}
                         <Route path="/AddDept" component={AddDept} />
                         <Route path="/AddProject" component={AddProject} />

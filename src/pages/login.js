@@ -135,7 +135,7 @@ class loginPage extends Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <a href="/dashboard" className="btn btn-lg btn-success" type="button" id="loginbutton" onClick={this.checkCredential}>Login</a>&nbsp;
+                            <a className="btn btn-lg btn-success" type="button" id="loginbutton" onClick={this.checkCredential}>Login</a>&nbsp;
                         <a className="btn btn-lg btn-danger" type="button" onClick={this.resetLoginForm}>Reset</a><br/>
                         </div>
                         <div className="divider">
