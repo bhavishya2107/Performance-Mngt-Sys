@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
-
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -12,8 +11,9 @@ var moment = require('moment');
 class Projects extends Component {
     constructor(props) {
         super(props);
-        this.setState = {
-            selectedIds: []
+        this.state = {
+            selectedIds: [],
+           
         }
     }
 
@@ -167,7 +167,7 @@ class Projects extends Component {
                     targets: 2,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format("MM-DD-YYYY")}</label>`
+                            `<label id="startDate" value=>${moment(row.startDate).format("YYYY-MM-DD")}</label>`
                         )
                     },
                 },
@@ -176,7 +176,7 @@ class Projects extends Component {
                     targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="endDate" value=>${moment(row.endDate).format("MM-DD-YYYY")}</label>`
+                            `<label id="endDate" value=>${moment(row.endDate).format("YYYY-MM-DD")}</label>`
                         )
                     },
                 },
