@@ -374,7 +374,14 @@ console.log(event.target.name)
                 </html>`,
                 toemailadress: "prashant.khanderia@prakashinfotech.com"
             }
-            var result=this.getTeamLeaderAPI();
+            var result=this.getTeamLeaderAPI()
+            result.done((teamLeaderSent)=>{
+                
+
+            })
+            result.fail((error)=>{
+
+            })
             var res = this.updatedMailApi(body);
            
             res.done((response) => {
