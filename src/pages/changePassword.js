@@ -139,7 +139,6 @@ class ChangePW extends Component {
                         <input type="password" id="ChangePW" name="ChangePWemail" className="form-control" placeholder="Enter Your New Password"
                             onChange={this.updatedPassword}
                             value={this.state.password} required />
-
                     </div>
 
                     <div className="form-group">

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { environment, moduleUrls, Type, Notification } from '../Environment';
 import { Redirect } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 const $ = require("jquery");
 
 class MyProfile extends Component {
@@ -281,6 +282,7 @@ class MyProfile extends Component {
             </div>
           </div>
         </form>
+        <ToastContainer/>
       </div>
     );
   }

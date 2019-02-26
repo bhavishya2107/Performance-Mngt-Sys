@@ -26,20 +26,6 @@ function navigation() {
 // }, 'Your password must be at least 5 characters long\'.')
 
 
-// jQuery.validator.addMethod('passwordMatch', function (value, element) {
-//     debugger;
-//     var password = $("#ChangePW").val();
-//     var confirmPassword = $("#ConfirmPW").val();
-//     if (password === confirmPassword && ((password && confirmPassword) != NULL)) {
-//   alert('match')
-//         return true;
-//     }
-//     else {
-//         return false;
-//     }
-// }, "Please match with above Password");
-
-
 //...For Form validation
 function formValidation(form) {
     jQuery.validator.setDefaults({

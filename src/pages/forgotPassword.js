@@ -30,7 +30,7 @@ class ForgotPW extends Component {
         }
 
 
-        const azureURL = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+        const azureURL = environment.emailToSend;
         return $.ajax({
             url: azureURL,
             type: Type.post,
