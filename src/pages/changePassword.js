@@ -88,7 +88,7 @@ class ChangePW extends Component {
             })
         }
     }
-    
+
     updatedPassword = (event) => {
         this.setState({
             password: event.target.value
@@ -106,11 +106,11 @@ class ChangePW extends Component {
     }
 
     render() {
-        if (this.state.redirectTologin) {
-            window.location.href = '/myProfile'
-        }
-        else
-        {
+        // if (this.state.redirectTologin) {
+        //     window.location.href = '/myProfile'
+        // }
+        // else
+        // {
         return (
             <div>
                 <form className="form-signin p-3 shadow" id="CPWform">
@@ -149,7 +149,7 @@ class ChangePW extends Component {
                             onChange={this.confirmUpdatedPassword}
                             value={this.state.retypePassword} required />
 
-                    </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password Does Not Match</p>
+                    </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password Must be same in above two fields</p>
 
                     <div className="form-group">
                         <a className="btn btn-lg btn-success" type="button" id="submitbutton" onClick={this.userCurrentpwCheck} >Submit</a>&nbsp;
@@ -163,7 +163,7 @@ class ChangePW extends Component {
                 <ToastContainer />
             </div>
         )
-                            }
+                            // }
     }
 }
 export default ChangePW;
