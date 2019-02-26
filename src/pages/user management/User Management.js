@@ -126,7 +126,7 @@ class UserManagement extends Component {
         $("#tblUser input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
         });
-        var item = userId.join(",")
+        var item = userId.join(",") //for deleting multiple user
         var res = this.multipleUserDeleteApi(item);
         res.done(response => {
             toast.success("User " + Notification.deleted, {

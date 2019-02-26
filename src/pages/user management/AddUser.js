@@ -25,6 +25,8 @@ class AddUser extends Component {
             roleId: "",
             departmentId: "",
             reportingManagerId: "",
+            reportingManagerName : '',
+            oldreportingManagerId:"",
             profileImage: null,
             isUpdate: false,
             selectDept: "",
@@ -34,7 +36,9 @@ class AddUser extends Component {
             displayTeamLeaderData: '',
             departmentId: "",
             designationId: "",
-            imageSrc: ""
+            imageSrc: "",
+            gender: ""
+
 
         }
 
@@ -67,15 +71,20 @@ class AddUser extends Component {
 
     onChangeTeamLeader(event) {
 
+console.log(event.target)
+console.log(event.target.name)
+
         this.setState({
-            reportingManagerId: event.target.value
+            reportingManagerId: event.target.value,
+            reportingManagerName: event.target.value,
+
         })
     }
     //#endregion
     //#region save the details on click button
 
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')' 
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -92,7 +101,7 @@ class AddUser extends Component {
     isExistUserNameOnChange() {
         if (this.state.userId != undefined) {
             var res = this.isUserExistUpdateApi();
-        
+
             res.done((response) => {
 
                 if (response.length > 0) {
@@ -117,7 +126,81 @@ class AddUser extends Component {
             })
         }
     }
+    sendMailAPI(body) {
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
 
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+
+            },
+
+
+        })
+    }
+    userGender() {
+        if (this.state.gender == "Male") {
+            return "<span>His name is <b>" +this.state.userName  + "</b></span>"
+        }
+        else {
+            return "<span>Her name is <b>" + this.state.userName + "</b></span>"
+        }
+    }
+    sendMail() {
+
+        var body =
+        {
+            emailSubject: "Employee added in your team",
+            emailBody: `<html>
+             <body>
+                <p>Hello ${this.state.reportingManagerName},</p>
+                <p>${this.state.firstName} ${this.state.lastName} is added to your team. ${this.userGender()}</p>
+                
+                <p>Thanks,</p>
+                <p>PSSPL ADMIN</p>
+            </body>
+             </html>`,
+            toemailadress: "psspl.trainee32@outlook.com"
+        }
+
+        var res = this.sendMailAPI(body);
+        res.done((response) => {
+            this.setState({
+                RedirectToUserManagement: true
+            })
+        })
+        res.fail((error) => {
+            console.log(error);
+        })
+
+
+    }
+    saveUserDetailsApi(DataList) {
+        var url = environment.apiUrl + moduleUrls.User
+        return $.ajax({
+            url: url,
+            type: Type.post,
+            data: DataList,
+        })
+    }
+    saveUserDetails(DataList) {
+        var res = this.saveUserDetailsApi(DataList);
+        res.done((response) => {
+
+            this.sendMail();
+            toast.success("User " + Notification.saved, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+
+        });
+        res.fail((error) => {
+
+        })
+
+    }
     saveUser() {
         var isvalidate = window.formValidation("#createUser");
         if (isvalidate) {
@@ -127,10 +210,8 @@ class AddUser extends Component {
                 if (response.length > 0) {
                     $(".dataExist").show()
                 }
-
                 else {
                     var _this = this;
-
                     var DataList =
                     {
                         "userName": this.state.userName.trim(),
@@ -145,22 +226,11 @@ class AddUser extends Component {
                         "departmentId": this.state.departmentId,
                         "designationId": this.state.designationId,
                         "address": this.state.address,
-                        "profileImage": this.state.imageSrc
+                        "profileImage": this.state.imageSrc,
+                        "gender": this.state.gender,
 
                     }
-                    var url = environment.apiUrl + moduleUrls.User
-
-                    $.ajax({
-                        url: url,
-                        type: Type.post,
-                        data: DataList,
-                        success: function (response) {
-                            _this.setState({ RedirectToUserManagement: true });
-                            toast.success("User " + Notification.saved, {
-                                position: toast.POSITION.TOP_RIGHT
-                            });
-                        }
-                    });
+                    this.saveUserDetails(DataList);
                 }
             });
             res.fail(error => {
@@ -168,7 +238,7 @@ class AddUser extends Component {
             });
         }
         else {
-           
+
             return false;
         }
     }
@@ -248,7 +318,9 @@ class AddUser extends Component {
             "mobileNo": data.mobileNo,
             "reportingManagerId": data.reportingManagerId,
             "address": data.address,
-            "profileImage": data.imageSrc
+            "profileImage": data.imageSrc,
+            "gender": data.gender,
+
         }
 
         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
@@ -266,33 +338,84 @@ class AddUser extends Component {
             data: JSON.stringify(userList),
         });
     }
+    updatedUserGender() {
+        if (this.state.gender == "Male") {
+            return "<span>.His name is <b>" + this.state.userName + "</b></span>"
+        }
+        else {
+            return "<span>Her name is " + <b>this.state.userName </b>+ "</span>"
+        }
+    }
+    updatedMailApi(body) {
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+       })
+    }
+    updatedMail() {
+        
+        if (this.state.oldreportingManagerId !== this.state.reportingManagerId) {
+            
+            var body = {
+                emailSubject: "Employee updated",
+                emailBody: `<html>
+                <body>
+                <p>Hello ${this.state.reportingManagerName},</p>
+                <p>${this.state.firstName} ${this.state.lastName} is updated in your team ${this.updatedUserGender()}</p>
+                <p>Thanks,</p>
+                <p>PSSPL ADMIN</p>
+                </body>
+                </html>`,
+                toemailadress: "prashant.khanderia@prakashinfotech.com"
+            }
+            var result=this.getTeamLeaderAPI();
+            var res = this.updatedMailApi(body);
+           
+            res.done((response) => {
+                this.setState({
+                    isUpdate: true
+                })
+            })
+            res.fail((error) => {
+                console.log(error);
+            })
+
+
+        }
+    }
+
+    updateUser(data) {
+        var res = this.updateAjaxCall(data);
+        res.done((response) => {
+            this.updatedMail();
+            toast.success("User " + Notification.updated, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+
+        });
+        res.fail((error)=>{
+
+        })
+    }
+
+
     UpdateUserDetails(data) {
         var result = window.formValidation("#createUser");
         if (result) {
             var res = this.isUserExistUpdateApi();
-            var res =this.isUserExistEmailUpdateApi();
+            var res = this.isUserExistEmailUpdateApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".dataExist").show()
                 }
                 else {
-                    var res = this.updateAjaxCall(data);
-                    res.done((response) => {
-                        debugger
-                        this.setState({
-
-                            isUpdate: true
-
-                        })
-
-                        toast.success("User " + Notification.updated, {
-                            position: toast.POSITION.TOP_RIGHT
-                        });
-                    });
-                    res.fail((error) => {
-
-                    })
-
+                   this.updateUser(data)
                 }
             });
 
@@ -321,7 +444,10 @@ class AddUser extends Component {
                         designationId: res.designationId,
                         departmentId: res.departmentId,
                         roleId: res.roleId,
-                        reportingManagerId: res.reportingManagerId
+                        reportingManagerId: res.reportingManagerId,
+                        oldreportingManagerId:res.reportingManagerId,
+                        gender: res.gender,
+
                     })
 
                 }
@@ -393,6 +519,27 @@ class AddUser extends Component {
         });
     }
 
+
+    getTeamLeaderAPI=()=>{
+        // var changePWquery = {
+        //     query: `update user_master  set password =  '${this.state.password}'  where emailAddress = '${localStorage.getItem('emailAddress')}'`
+        // }
+        var getTL=environment.dynamicUrl + 'dynamic' ;
+        var TLquery={
+            query:`select firstName,lastName from user_master where userid='1'`
+        }
+        $.ajax({
+            url:getTL,
+            type:Type.post,
+            data:JSON.stringify(TLquery),
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+        })
+
+    }
+
     getTeamLeader() {
         var url = environment.apiUrl + moduleUrls.User
         $.ajax({
@@ -403,7 +550,7 @@ class AddUser extends Component {
                 var displayDataReturn = res.map(function (item) {
                     if (item.roleId === 1) {
                         return (
-                            <option key={item.userId} value={item.userId}>{item.userName}</option>
+                            <option key={item.userName} value={item.userId}>{item.userName}</option>
                         )
                     }
                 });
@@ -450,10 +597,10 @@ class AddUser extends Component {
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
                                                     {this.state.imageSrc == "" ?
-                                                    
-                                                        (<img src="../img/download.png"  id="imgB" className="img-thumbnail" />)
+
+                                                        (<img src="../img/download.png" id="imgB" className="img-thumbnail" />)
                                                         :
-                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail"  />)
+                                                        (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />)
                                                     }
                                                     {this.state.imageSrc !== "" ?
                                                         (<a href="#" onClick={() => { this.removeimg() }} className="btn-image-remove">x</a>)
@@ -503,7 +650,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="userName" className="required" sm={2}>User Name</label>
-                                                    <input type="text" name="userName" id="userName"  maxLength="50" className="form-control" value={this.state.userName}
+                                                    <input type="text" name="userName" id="userName" maxLength="50" className="form-control" value={this.state.userName}
                                                         onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
@@ -535,7 +682,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input  type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    <input type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 mobileNo: event.target.value
@@ -583,6 +730,24 @@ class AddUser extends Component {
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div className="col-md-6">
+                                                <div className="form-group">
+                                                    <label className="required">Gender</label><br></br>
+                                                    <label> <input type="radio" name="gender" value="Male" checked={this.state.gender === "Male"} onChange={(event) => {
+                                                        this.setState({
+                                                            gender: event.target.value
+                                                        })
+                                                    }} />Male</label>
+                                                    <label> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {
+                                                        this.setState({
+                                                            gender: event.target.value
+                                                        })
+                                                    }} />Female</label>
+
+
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div className="row">
                                             <div className="col">
