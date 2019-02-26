@@ -39,6 +39,7 @@ jQuery.validator.addMethod('passwordMatch', function (value, element) {
     }
 }, "Please match with above Password");
 
+
 //...For Form validation
 function formValidation(form) {
     jQuery.validator.setDefaults({
@@ -77,17 +78,26 @@ function formValidation(form) {
                 },
                 FPWemailRequired: {
                     required: true
-                },
+                },//change password
                 ChangePWemail: {
                     required: true
                 },
                 ConfirmPWemail: {
-                    equalTo:"#ChangePWemail"
+                    required:true,
+                    // equalTo:"#ChangePWemail"
                 },
                 CurrentPWemail:{
                     required:true
                 },
-
+                //reset password
+                ResetNewPWRequired:{
+                    required:true
+                },
+                ConfirmNewPWRequired:{
+                    required:true,
+                    passwordMatch:true
+                    // equalTo:'#ResetNewPWRequired'
+                },
                 messages: {
                     // ChangePWemail:{required: " Enter Password"},
                     // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},

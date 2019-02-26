@@ -12,46 +12,29 @@ class ChangePW extends Component {
             currentPassword: "",
             password: "",
             retypePassword: "",
+            redirectTologin:false,
         }
     }
+
+    //update password api call
     updatePassword = () => {
-        alert(2)
-        debugger;
-var q =  `"update user_master  set password =  '${this.state.password}'  where emailaddress = '${localStorage.getItem('emailAddress')}'"`
-alert(q)
         var updatePasswordAPI = environment.dynamicUrl + 'dynamic';
+        var changePWquery = {
+            query: `update user_master  set password =  '${this.state.password}'  where emailAddress = '${localStorage.getItem('emailAddress')}'`
+        }
         return $.ajax({
             url: updatePasswordAPI,
             type: Type.post,
-            data: {
-                query: `"update user_master  set password =  '${this.state.password}'  where emailaddress = '${localStorage.getItem('emailAddress')}'"`
+            headers: {
+                "Content-Type": "application/json",
             },
+            data: JSON.stringify(changePWquery),
+
         });
     }
-  
-    // ClickToSendEmailForCPW = () => {
-    //         // var res = this.updatePassword();
-    //         // $(".hide").show()
-    //         // $.validator.addMethod('passwordMatch', function (value, element) {
-    //         //     var password = $("#ChangePW").val();
-    //         //     var confirmPassword = $("#ConfirmPW").val();
-    //         //     if (password === confirmPassword) {
-    //         //         return this.updatePassword();
-    //         //     }
-    //         //     // else if (password === confirmPassword){
-    //         //     //     return $(".hide").show()
-    //         //     // }
-    //         //     else {
-    //         //         return false;
-    //         //     }
-    //         // }, "Please must match with above New Password");
-        
-  
-    //     }
-    
-    matchCurrentPasswordAPI = () => {
-        alert(1)
 
+    //match current password and password in API
+    matchCurrentPasswordAPI = () => {
         var url = environment.apiUrl + moduleUrls.User + '/' + `${localStorage.getItem('userId')}`
         return $.ajax({
             url: url,
@@ -59,60 +42,75 @@ alert(q)
             success: function (resultData) {
                 console.log(resultData)
             }
-
         })
-
-
-
     }
+    
+    //main function and validate function
     userCurrentpwCheck = () => {
+        debugger;
         var isvalidate = window.formValidation("#CPWform")
         if (isvalidate) {
-        var res = this.matchCurrentPasswordAPI()
-        var updatepw=this.updatePassword()
-        res.done((result) => {
-          
-            if (result[0].password === this.state.currentPassword) {
-                return true
-            }
-            else if (result[0].password != this.state.currentPassword) {
-                return ($(".matchPW").show())
-            }
-            else if(this.state.password===this.state.retypePassword){
-                return updatepw
-            }
-        
-            else {
-                return false
-            }
+            var res = this.matchCurrentPasswordAPI()
+            res.done((result) => {
 
-        });
-        res.fail((error) => {
+                if (result[0].password === this.state.currentPassword) {
+                    
+                    if (this.state.password === this.state.retypePassword) {
 
-        })
+                        var changePassword= this.updatePassword();
+                        changePassword.done((response)=>{
+                            toast.success(" " + Notification.ChangePassword, {
+                                position: toast.POSITION.TOP_RIGHT
+                            });
+                            this.setState({
+                                redirectTologin:true
+                            })
+    
+                        });
+                        changePassword.fail((error)=>{
+                            console.log("password not changed")
+    
+                        })
+                    }
+    
+                    else {
+                        return $(".matchPassword").show();
+                    }
+                }
+                else if (result[0].password != this.state.currentPassword) {
+                    return ($(".matchPW").show())
+                }
+               
+
+            });
+            res.fail((error) => {
+
+            })
+        }
     }
-}
-
-
+    
     updatedPassword = (event) => {
-
         this.setState({
             password: event.target.value
         })
-
     }
     confirmUpdatedPassword = (event) => {
-
         this.setState({
             retypePassword: event.target.value
         })
-
     }
+
+    //reset form
     resetCPWform() {
         window.location.reload();
     }
 
     render() {
+        if (this.state.redirectTologin) {
+            window.location.href = '/myProfile'
+        }
+        else
+        {
         return (
             <div>
                 <form className="form-signin p-3 shadow" id="CPWform">
@@ -120,6 +118,7 @@ alert(q)
                         <img src={logo} alt="Prakash" className="img-fluid" />
                     </h2>
                     <div className="form-group">
+
                         <label className="sr-only">Enter Current Password</label>
                         <input type="password" id="CurrentPW" name="CurrentPWemail" className="form-control" placeholder="Enter Your Current Password"
                             onChange={
@@ -129,23 +128,31 @@ alert(q)
                                         { currentPassword: event.target.value }
                                     )
                                 }}
-                            value={this.state.currentPassword} required /><br />
-                        <p className="matchPW" style={{ "display": "none", "color": "red" }}>cannot enter same password</p>
-                        <p className="requiredField" style={{ "display": "none", "color": "red" }}>Field Required</p>
+                            value={this.state.currentPassword} required />
+
+                    </div>
+                    <p className="matchPW" style={{ "display": "none", "color": "red" }}>password does not match check password</p>
+
+                    <div className="form-group">
 
                         <label className="sr-only">Enter Your New Password</label>
                         <input type="password" id="ChangePW" name="ChangePWemail" className="form-control" placeholder="Enter Your New Password"
                             onChange={this.updatedPassword}
-                            value={this.state.password} required /><br/>
+                            value={this.state.password} required />
+
+                    </div>
+
+                    <div className="form-group">
 
                         <label className="sr-only">Password Does Not Match</label>
                         <input type="password" id="ConfirmPW" name="ConfirmPWemail" className="form-control" placeholder="Confirm New Password"
                             onChange={this.confirmUpdatedPassword}
-                            value={this.state.retypePassword} required/>
+                            value={this.state.retypePassword} required />
 
-                    </div>
+                    </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password Does Not Match</p>
+
                     <div className="form-group">
-                        <a className="btn btn-lg btn-success" type="button" id="submitbutton" onClick={this.updatePassword} >Submit</a>&nbsp;
+                        <a className="btn btn-lg btn-success" type="button" id="submitbutton" onClick={this.userCurrentpwCheck} >Submit</a>&nbsp;
                     <a className="btn btn-lg btn-danger" type="button" onClick={this.resetCPWform}>Reset</a><br />
                     </div>
                     <div className="divider">
@@ -153,8 +160,10 @@ alert(q)
                     </div>
 
                 </form>
+                <ToastContainer />
             </div>
         )
+                            }
     }
 }
 export default ChangePW;

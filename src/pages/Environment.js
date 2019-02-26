@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   // apiUrl: "http://180.211.103.189:3000/api/",
+  // dynamicUrl: "http://180.211.103.189:3000/",
   apiUrl: 'http://192.168.10.110:3000/api/',
   dynamicUrl: "http://192.168.10.110:3000/",
   publicUrl: "http://180.211.103.189:3000/api/"
