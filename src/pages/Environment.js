@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   // apiUrl: "http://180.211.103.189:3000/api/",
+  // dynamicUrl: "http://180.211.103.189:3000/",
   apiUrl: 'http://192.168.10.110:3000/api/',
   dynamicUrl: "http://192.168.10.110:3000/",
   publicUrl: "http://180.211.103.189:3000/api/"
@@ -35,7 +36,10 @@ export const Notification = {
   notdeleted:"Not Deleted Successfully",
   selectOneRecord:"Please select atleast one record!",
   recordExists:"Record already exists",
-  loginError:"Invalid username and password",
+  loginError:"Invalid username or password",
+  EmailSent:"Email Sent Please Check your Email",
+  ChangePassword:"Password Changed Successfully",
+  MatchPassword:"Password Does Not Match"
 };
 export const ModuleNames = {
   kra: "KRA",

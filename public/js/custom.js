@@ -16,6 +16,30 @@ function navigation() {
     }
 }
 
+
+//validate function for custom password 
+// $.validator.addMethod('strongPassword', function (value, element) {
+//     return this.optional(element)
+//         || value.length >= 5
+//     //   && /\d/.test(value)
+//     //   && /[a-z]/i.test(value);
+// }, 'Your password must be at least 5 characters long\'.')
+
+
+// jQuery.validator.addMethod('passwordMatch', function (value, element) {
+//     debugger;
+//     var password = $("#ChangePW").val();
+//     var confirmPassword = $("#ConfirmPW").val();
+//     if (password === confirmPassword && ((password && confirmPassword) != NULL)) {
+//   alert('match')
+//         return true;
+//     }
+//     else {
+//         return false;
+//     }
+// }, "Please match with above Password");
+
+
 //...For Form validation
 function formValidation(form) {
     jQuery.validator.setDefaults({
@@ -46,19 +70,40 @@ function formValidation(form) {
                 scaleSetdropdown: {
                     required: true,
                 },
-                emailRequired:{
+                emailRequired: {
                     required: true,
                 },
-                passwordRequired:{
+                passwordRequired: {
+                    required: true
+                },
+                FPWemailRequired: {
+                    required: true
+                },//change password
+                ChangePWemail: {
+                    required: true
+                },
+                ConfirmPWemail: {
+                    required:true,
+                    // equalTo:"#ChangePWemail"
+                },
+                CurrentPWemail:{
                     required:true
                 },
-
-                messages:
-                {
+                //reset password
+                ResetNewPWRequired:{
+                    required:true
+                },
+                ConfirmNewPWRequired:{
+                    required:true,
+                    // passwordMatch:true
+                    // equalTo:'#ResetNewPWRequired'
+                },
+                messages: {
+                    // ChangePWemail:{required: " Enter Password"},
+                    // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},
                     jobtitlename: {
                         required: 'maximum 50 characters'
                     },
-
                     weightage: {
                         required: true,
                         digit: true
@@ -66,18 +111,17 @@ function formValidation(form) {
                     scaleSetdropdown: {
                         required: true,
                     },
-                    messages: {
-                        kraName: {
-                            required: 'required, Enter minimum 2 characters',
-                        },
-                        rolename: {
-                            required: 'required,Enter minimum 2 characters',
-                        }, 
-                        scalesetname: {
-                            required: 'maximum 50 characters',
-                        },
-                    }
-                },
+                    kraName: {
+                        required: 'required, Enter minimum 2 characters',
+                    },
+                    rolename: {
+                        required: 'required,Enter minimum 2 characters',
+                    },
+                    scalesetname: {
+                        required: 'maximum 50 characters',
+                    },
+                }
+
             }
         }
     );

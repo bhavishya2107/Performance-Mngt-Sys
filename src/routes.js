@@ -32,6 +32,7 @@ const routes = {
 
   '/user-management/add': 'add user',
   '/EditUser': 'user-management',
+  '/dashboard':'Dashboard'
 
 };
 {
