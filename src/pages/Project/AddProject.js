@@ -13,11 +13,7 @@ var moment = require('moment');
 var ProjectResourcesData = []
 var projectData = []
 
-const options = [
-    // { value: 'chocolate', label: 'Chocolate' },
-    // { value: 'strawberry', label: 'Strawberry' },
-    // { value: 'vanilla', label: 'Vanilla' }
-];
+const options = [];
 
 class AddProject extends Component {
     constructor(props) {
@@ -98,8 +94,9 @@ class AddProject extends Component {
     }
 
     isEditProjectExistsApi() {
+        
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')' + '~and(projectId,ne,' + this.state.projectId + ')';
-       
+        console.log(endpointGET)
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -109,6 +106,8 @@ class AddProject extends Component {
 
     saveProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);
+        console.log(resourcesApi)
+        debugger;
         const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
         return $.ajax({
             url: resourcesApi,
@@ -211,6 +210,7 @@ class AddProject extends Component {
     }
 
     updateProjectResource(projectId, userData) {
+        debugger;
         var tempData = [];
         userData.map(item => {
             var resources = {
@@ -246,6 +246,8 @@ class AddProject extends Component {
     }
 
     updateProjectDetails(updateData) {
+        debugger;
+        console.log(updateData)
         // var updateData = JSON.stringify(updateData);
         var res = this.updateProjectDetailsAPI(updateData);
         res.done((response) => {
@@ -254,7 +256,6 @@ class AddProject extends Component {
             this.updateProjectResource(response.insertId, this.state.selectedOption);
         })
         res.fail((error) => {
-
         })
         var updateData =
         {
@@ -402,6 +403,7 @@ class AddProject extends Component {
                     description: response[0].description,
                     startDate: response[0].startDate,
                     endDate: response[0].endDate,
+                    resources: response[0].resources
                     
                 })
             });
@@ -497,6 +499,11 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <label>Resources</label>
                                     <Select isMulti id="mySelect"
+                                     onChange={(event) => {
+                                        this.setState({
+                                           resources: event.target.value
+                                        })
+                                    }}
                                         value={selectedOption}
                                         onChange={this.handleChange}
                                         options={options}
