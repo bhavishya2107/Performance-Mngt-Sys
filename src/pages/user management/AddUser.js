@@ -25,8 +25,8 @@ class AddUser extends Component {
             roleId: "",
             departmentId: "",
             reportingManagerId: "",
-            reportingManagerName : '',
-            oldreportingManagerId:"",
+            reportingManagerName: '',
+            oldReportingManagerId: "",
             profileImage: null,
             isUpdate: false,
             selectDept: "",
@@ -37,7 +37,8 @@ class AddUser extends Component {
             departmentId: "",
             designationId: "",
             imageSrc: "",
-            gender: ""
+            gender: "",
+            temp: ""
 
 
         }
@@ -69,15 +70,9 @@ class AddUser extends Component {
         })
     }
 
-    onChangeTeamLeader(event) {
-
-console.log(event.target)
-console.log(event.target.name)
-
+    onChangeReportingManager(event) {
         this.setState({
             reportingManagerId: event.target.value,
-            reportingManagerName: event.target.value,
-
         })
     }
     //#endregion
@@ -114,7 +109,6 @@ console.log(event.target.name)
         }
         else {
             var res = this.isUserExistApi();
-            console.log(res, 1)
             res.done((response) => {
                 if (response.length > 0) {
 
@@ -141,40 +135,54 @@ console.log(event.target.name)
 
         })
     }
-    userGender() {
-        if (this.state.gender == "Male") {
-            return "<span>His name is <b>" +this.state.userName  + "</b></span>"
-        }
-        else {
-            return "<span>Her name is <b>" + this.state.userName + "</b></span>"
-        }
-    }
+
     sendMail() {
 
-        var body =
-        {
-            emailSubject: "Employee added in your team",
-            emailBody: `<html>
-             <body>
-                <p>Hello ${this.state.reportingManagerName},</p>
-                <p>${this.state.firstName} ${this.state.lastName} is added to your team. ${this.userGender()}</p>
-                
-                <p>Thanks,</p>
-                <p>PSSPL ADMIN</p>
-            </body>
-             </html>`,
-            toemailadress: "psspl.trainee32@outlook.com"
-        }
+        /* START - GET TL NAME AND EMAIL */
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+            success: (res) => {
+                /* START - SEND EMAIL */
+                var emailBody = `<html>
+                    <body>
+                    <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                    <p>New Employee added in your team.<span>`;
+                if (this.state.gender == "Male") {
+                    emailBody += `His`
+                }
+                else {
+                    emailBody += `Her`
+                }
+                emailBody += `
+                    name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                    </p>                        
+                    <p>Thanks,</p>
+                    <p>PSSPL ADMIN</p>
+                </body>
+                </html>`;
 
-        var res = this.sendMailAPI(body);
-        res.done((response) => {
-            this.setState({
-                RedirectToUserManagement: true
-            })
+                var body =
+                {
+                    emailSubject: "Employee added in your team",
+                    emailBody: emailBody,
+                    toemailadress: res[0].emailAddress
+                }
+                this.sendMailAPI(body);
+
+                this.setState({
+                    RedirectToUserManagement: true
+                })
+                /* END - SEND EMAIL */
+            }
+
         })
-        res.fail((error) => {
-            console.log(error);
-        })
+        /* END - GET TL NAME AND EMAIL */
+
+
+
+
 
 
     }
@@ -244,7 +252,6 @@ console.log(event.target.name)
     }
 
     handleFiles = files => {
-        debugger;
         this.setState({
             imageSrc: files.base64
         })
@@ -338,14 +345,7 @@ console.log(event.target.name)
             data: JSON.stringify(userList),
         });
     }
-    updatedUserGender() {
-        if (this.state.gender == "Male") {
-            return "<span>.His name is <b>" + this.state.userName + "</b></span>"
-        }
-        else {
-            return "<span>Her name is " + <b>this.state.userName </b>+ "</span>"
-        }
-    }
+
     updatedMailApi(body) {
         const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
 
@@ -356,57 +356,204 @@ console.log(event.target.name)
             headers: {
                 "Content-Type": "application/json",
             },
-       })
+        })
     }
+
+
+    removeEmpEmail() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.oldReportingManagerId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+
+        });
+
+    }
+
     updatedMail() {
-        
-        if (this.state.oldreportingManagerId !== this.state.reportingManagerId) {
-            
-            var body = {
-                emailSubject: "Employee updated",
-                emailBody: `<html>
-                <body>
-                <p>Hello ${this.state.reportingManagerName},</p>
-                <p>${this.state.firstName} ${this.state.lastName} is updated in your team ${this.updatedUserGender()}</p>
-                <p>Thanks,</p>
-                <p>PSSPL ADMIN</p>
-                </body>
-                </html>`,
-                toemailadress: "prashant.khanderia@prakashinfotech.com"
-            }
-            var result=this.getTeamLeaderAPI()
-            result.done((teamLeaderSent)=>{
-                
+        if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
+            /* START - SEND EMAIL TO OLD REPORTING MANAGER */
+            var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+            return $.ajax({
+                url: url,
+                type: Type.get,
+                success: (res) => {
+                    /* START - SEND EMAIL */
+                    var result = this.removeEmpEmail();
+                    result.done((response) => {
+                        var emailBody = `<html>
+                        <body>
+                        <p>Hello `+ response[0].firstName + ` ` + response[0].lastName + `,</p>
+                        <p>Employee removed from your team.<span>`;
+                        if (this.state.gender == "Male") {
+                            emailBody += `His`
+                        }
+                        else {
+                            emailBody += `Her`
+                        }
+                        emailBody += `
+                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        </p>                        
+                        <p>Thanks,</p>
+                        <p>PSSPL ADMIN</p>
+                    </body>
+                    </html>`;
+
+                        var body =
+                        {
+                            emailSubject: "Employee removed from your team",
+                            emailBody: emailBody,
+                            toemailadress: res[0].emailAddress
+                        }
+                        this.sendMailAPI(body);
+
+                        this.setState({
+                            RedirectToUserManagement: true
+                        })
+                    })
+                    result.fail((error) => {
+
+                    })
+                    var emailBody = `<html>
+                        <body>
+                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                        <p>Employee added in your team.<span>`;
+                    if (this.state.gender == "Male") {
+                        emailBody += `His`
+                    }
+                    else {
+                        emailBody += `Her`
+                    }
+                    emailBody += `
+                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        </p>                        
+                        <p>Thanks,</p>
+                        <p>PSSPL ADMIN</p>
+                    </body>
+                    </html>`;
+
+                    var body =
+                    {
+                        emailSubject: "Employee added in your team",
+                        emailBody: emailBody,
+                        toemailadress: res[0].emailAddress
+                    }
+                    this.sendMailAPI(body);
+
+                    this.setState({
+                        RedirectToUserManagement: true
+                    })
+                    /* END - SEND EMAIL */
+                }
 
             })
-            result.fail((error)=>{
+            /* END - SEND EMAIL TO OLD REPORTING MANAGER */
+            /* START - SEND EMAIL TO NEW REPORTING MANAGER */
+            var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+            return $.ajax({
+                url: url,
+                type: Type.get,
+                success: (res) => {
+                    /* START - SEND EMAIL */
+                    var emailBody = `<html>
+                        <body>
+                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                        <p>New Employee added in your team.<span>`;
+                    if (this.state.gender == "Male") {
+                        emailBody += `His`
+                    }
+                    else {
+                        emailBody += `Her`
+                    }
+                    emailBody += `
+                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        </p>                        
+                        <p>Thanks,</p>
+                        <p>PSSPL ADMIN</p>
+                    </body>
+                    </html>`;
+
+                    var body =
+                    {
+                        emailSubject: "Employee added in your team",
+                        emailBody: emailBody,
+                        toemailadress: res[0].emailAddress
+                    }
+                    this.sendMailAPI(body);
+
+                    this.setState({
+                        RedirectToUserManagement: true
+                    })
+                    /* END - SEND EMAIL */
+                }
 
             })
-            var res = this.updatedMailApi(body);
-           
-            res.done((response) => {
-                this.setState({
-                    isUpdate: true
-                })
-            })
-            res.fail((error) => {
-                console.log(error);
-            })
-
-
+            /* END - SEND EMAIL TO NEW REPORTING MANAGER */
         }
+        this.setState({
+            isUpdate: true
+        })
     }
+
+
+    //     var res = this.updatedMailApi(body);
+    //     res.done((result) => {
+    //         var result = this.getTeamLeaderAPI()
+
+    //         var emailBody = `<html>
+    //                      <body>
+    //                      <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+    //               <p>New Employee added in your team.<span>`;
+    //                 if (this.state.gender == "Male") {
+    //                     emailBody += `His`
+    //                 }
+    //                 else {
+    //                     emailBody += `Her`
+    //                 }
+    //                 emailBody += `
+    //                     name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+    //                     </p>                        
+    //                     <p>Thanks,</p>
+    //                     <p>PSSPL ADMIN</p>
+    //                 </body>
+    //                 </html>`;
+
+    //                 var body =
+    //                 {
+    //                     emailSubject: "Employee added in your team",
+    //                     emailBody: emailBody,
+    //                     toemailadress: res[0].emailAddress
+    //                 }
+
+
+    //         this.setState({
+    //             isUpdate: true
+    //         })
+    //     })
+    //     res.fail((error) => {
+    //         console.log(error);
+    //     })
+
+
+    // }
+
 
     updateUser(data) {
+
+
+
         var res = this.updateAjaxCall(data);
         res.done((response) => {
+
+
+
             this.updatedMail();
             toast.success("User " + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
 
         });
-        res.fail((error)=>{
+        res.fail((error) => {
 
         })
     }
@@ -422,7 +569,7 @@ console.log(event.target.name)
                     $(".dataExist").show()
                 }
                 else {
-                   this.updateUser(data)
+                    this.updateUser(data)
                 }
             });
 
@@ -452,7 +599,7 @@ console.log(event.target.name)
                         departmentId: res.departmentId,
                         roleId: res.roleId,
                         reportingManagerId: res.reportingManagerId,
-                        oldreportingManagerId:res.reportingManagerId,
+                        oldReportingManagerId: res.reportingManagerId,
                         gender: res.gender,
 
                     })
@@ -473,7 +620,6 @@ console.log(event.target.name)
             url: url,
             type: Type.get,
             success: (temp) => {
-                console.log(temp);
                 var displayDataReturn = temp.map(function (item) {
                     return (
                         <option key={item.departmentId} value={item.departmentId}>{item.departmentName}</option>
@@ -527,23 +673,11 @@ console.log(event.target.name)
     }
 
 
-    getTeamLeaderAPI=()=>{
-        // var changePWquery = {
-        //     query: `update user_master  set password =  '${this.state.password}'  where emailAddress = '${localStorage.getItem('emailAddress')}'`
-        // }
-        var getTL=environment.dynamicUrl + 'dynamic' ;
-        var TLquery={
-            query:`select firstName,lastName from user_master where userid='1'`
-        }
-        $.ajax({
-            url:getTL,
-            type:Type.post,
-            data:JSON.stringify(TLquery),
-            headers:{
-                "Content-Type":"application/json"
-            },
+    getTeamLeaderAPI() {
 
-        })
+
+
+
 
     }
 
@@ -553,11 +687,11 @@ console.log(event.target.name)
             url: url,
             type: Type.get,
             success: (res) => {
-                console.log(res);
                 var displayDataReturn = res.map(function (item) {
                     if (item.roleId === 1) {
                         return (
                             <option key={item.userName} value={item.userId}>{item.userName}</option>
+
                         )
                     }
                 });
@@ -730,8 +864,8 @@ console.log(event.target.name)
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label className="required">Team Leader</label>
-                                                    <select required onChange={(e) => { this.onChangeTeamLeader(e) }} value={this.state.reportingManagerId} className="form-control">
+                                                    <label className="required">Reporting Manager</label>
+                                                    <select required name="reportingManager" onChange={(e) => { this.onChangeReportingManager(e) }} value={this.state.reportingManagerId} className="form-control">
                                                         <option value="">select</option>
                                                         {this.state.displayTeamLeaderData}
                                                     </select>
