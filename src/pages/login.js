@@ -97,11 +97,6 @@ class loginPage extends Component {
 
         }
     }
-
-
-
-
-
     render() {
         debugger;
         if (this.state.RedirectLoginDetails) {

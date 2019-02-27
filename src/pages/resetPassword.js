@@ -54,47 +54,24 @@ class ResetPW extends Component {
     debugger;
     var isvalidate = window.formValidation("#RPWform")
     if (isvalidate) {
-      if(this.state.resetPassword === this.state.reEnterPassword){
-      var res = this.UpdatePassword()
-      res.done((result) => {
-        toast.success(" " + Notification.ChangePassword, {
-          position: toast.POSITION.TOP_RIGHT
+      if (this.state.resetPassword === this.state.reEnterPassword) {
+        var res = this.UpdatePassword()
+        res.done((result) => {
+          toast.success(" " + Notification.ChangePassword, {
+            position: toast.POSITION.TOP_RIGHT
+          });
         });
-      });
-      res.fail((error) => {
+        res.fail((error) => {
 
-      })
-    }else{
-      $(".matchPassword").show();
+        })
+      } else {
+        $(".matchPassword").show();
+      }
+    }
+    else {
+      $(".matchPassword").hide();
     }
   }
-  else{
-    $(".matchPassword").hide();
-  }
-}
-
-
-//   if (this.state.password === this.state.retypePassword) {
-
-//     var changePassword= this.updatePassword();
-//     changePassword.done((response)=>{
-//         toast.success(" " + Notification.ChangePassword, {
-//             position: toast.POSITION.TOP_RIGHT
-//         });
-//         this.setState({
-//             redirectTologin:true
-//         })
-
-//     });
-//     changePassword.fail((error)=>{
-//         console.log("password not changed")
-
-//     })
-// }
-
-// else {
-//     return $(".matchPassword").show();
-// }
 
   //reset form
   clearResetform() {
