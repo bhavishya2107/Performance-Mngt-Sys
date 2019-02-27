@@ -40,7 +40,9 @@ export const Notification = {
   loginError:"Invalid username or password",
   EmailSent:"Email Sent Please Check your Email",
   ChangePassword:"Password Changed Successfully",
-  MatchPassword:"Password Does Not Match"
+  MatchPassword:"Password Does Not Match",
+  emailExist:"Email Does Not Exist",
+  
 };
 export const ModuleNames = {
   kra: "KRA",
