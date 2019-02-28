@@ -163,7 +163,7 @@ class ForgotPW extends Component {
                         <input type="email" id="inputEmail" name="FPWemailRequired" className="form-control" placeholder="Email address"
                             onChange={this.emailForFPWonChange}
                             value={this.state.emailForFPW} required />
-                    </div>  <p className="existEmailinAPI" style={{ "display": "none", "color": "red" }}>Email Does Not Exist</p>
+                    </div>  <p className="existEmailinAPI" style={{ "display": "none", "color": "red" }}>{Notification.emailExist}</p>
                     <div className="form-group">
                         <a className="btn btn-lg btn-success" type="button" id="loginbutton" onClick={this.ClickToSendEmailForFPW} >Submit</a>&nbsp;
                     <a className="btn btn-lg btn-danger" type="button" onClick={this.resetFPWForm}>Reset</a><br />
