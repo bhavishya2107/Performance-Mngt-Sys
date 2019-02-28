@@ -210,7 +210,7 @@ class AddProject extends Component {
         //console.log(resourcesApi)
         return $.ajax({
             url: resourcesApi,
-            type: Type.patch,
+            type: Type.post,
             data: ResourcesData,
             headers: {
                 "content-type": "application/json",
@@ -229,6 +229,7 @@ class AddProject extends Component {
             }
             tempData.push(resources);
         })
+        
         var res = this.updateProjectResourceAPI(tempData);
         res.done((response) => {
             this.setState({ redirectToList: true });
@@ -260,7 +261,7 @@ class AddProject extends Component {
         // var updateData = JSON.stringify(updateData);
         var res = this.updateProjectDetailsAPI(updateData);
         res.done((response) => {
-                this.updateProjectResource(response.insertId, this.state.selectedOption);
+        	this.updateProjectResource(this.state.projectId, this.state.selectedOption);
         })
         res.fail((error) => {
         })
