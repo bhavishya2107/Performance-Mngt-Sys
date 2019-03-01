@@ -49,7 +49,7 @@ class Scaleset extends Component {
                     var formData = {
                         "scaleSetName": this.state.scaleSetName.trim(),
                         "description": this.state.description,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
                     }
                     const saveScalesetUrl = environment.apiUrl + moduleUrls.ScaleSet + '/'
                     $.ajax({
@@ -80,7 +80,6 @@ class Scaleset extends Component {
 
     //#region Reset function onclick
     resetform() {
-
         window.location.reload();
     }
     //#endregion
@@ -99,7 +98,7 @@ class Scaleset extends Component {
         {
             "scaleSetName": data.scaleSetName.trim(),
             "description": data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
 
         }
         const endpointPOST = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${data.id}`

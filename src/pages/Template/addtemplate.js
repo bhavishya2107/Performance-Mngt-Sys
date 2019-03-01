@@ -30,7 +30,8 @@ class Addtemplate extends Component {
       kpiName: {},
       isUpdated: false,
       templateDetailId: "",
-      isSelect: false
+      isSelect: false,
+      isSelectBoth: false
     };
     templateData = [];
     currentDetailData = [];
@@ -85,9 +86,7 @@ class Addtemplate extends Component {
         }
       })
     }
-
-  }
-
+}
   savetemplatenameApi() {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -151,7 +150,6 @@ class Addtemplate extends Component {
     } else {
       return false;
     }
-
   }
 
   onChangekra(event) {
@@ -164,13 +162,12 @@ class Addtemplate extends Component {
 
       },
       kraId: event.target.value,
-      isSelect: true
+      isSelect: true,
     });
 
 
   }
   onChangekpi(event) {
-
     this.setState({
       selectkpi:
       {
@@ -180,22 +177,22 @@ class Addtemplate extends Component {
       },
       kpiId: event.target.value,
       kpiName: event.target.options[event.target.selectedIndex].text,
-      isSelect: true
+      isSelect: true,
     });
   }
 
   addtemplate() {
-
     this.state.isUpdated = true;
     if (this.state.isSelect === true) {
-      var a = templateData.filter((i) => {
-        return (i.kpiTitle.id == this.state.kpiId) && (i.kraName.id == this.state.kraId)
+      var tempData = templateData.filter((i) => {
+        return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId:false)
       });
-      if (a.length > 0) {
+      if (tempData.length > 0) {
 
         $(".recordExistsTbl").show()
       }
       else {
+        if(this.state.kpiId && this.state.kraId){
         this.state.isUpdated = true;
         var templateDataapi = {
           kraName: this.state.selectkra,
@@ -211,9 +208,13 @@ class Addtemplate extends Component {
           .rows.add(templateData)
           .draw();
       }
+      else{
+        toast.info("Please select both values");
+      }
+    }
     }
     else {
-      toast.info(Notification.selectOneRecord);
+      toast.info("Please select kra & kpi");
     }
   }
 
@@ -257,6 +258,7 @@ class Addtemplate extends Component {
       }
     });
   }
+
   resetform() {
     window.location.reload();
   }
@@ -341,8 +343,7 @@ class Addtemplate extends Component {
                     templateId: this.state.id,
                     kraId: item.kraName.id,
                     kpiId: item.kpiTitle.id
-                    //  templateDetailId: item.templateDetailId,
-                  };
+                   };
                   saveTempDetail.push(singleObjId);
                 }
               });
@@ -574,7 +575,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option>select Kra</option>
+                <option disabled selected>Select Kra</option>
                 {this.state.displayDatakra}
               </select>
             </div>
@@ -587,7 +588,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option>select Kpi</option>
+                <option disabled selected>Select Kpi</option>
                 {this.state.displayDatakpi}
               </select>
             </div>
