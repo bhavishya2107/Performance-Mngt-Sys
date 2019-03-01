@@ -19,7 +19,8 @@ export const moduleUrls = {
   Project: "project_master",
   ProjectResources:"project_resources",
   Template:"template_master",
-  Templatedetail:"template_detail"
+  Templatedetail:"template_detail",
+  Quater:"quater_master"
 };
 export const Type = {
   get: "GET",
@@ -53,5 +54,6 @@ export const ModuleNames = {
   Role: "Role",
   Department: "Department",
   ScaleSet: "Scale Set",
-  ComplexityMaster:"Complexity Master"
+  ComplexityMaster:"Complexity Master",
+  quater:"Quarter"
 };

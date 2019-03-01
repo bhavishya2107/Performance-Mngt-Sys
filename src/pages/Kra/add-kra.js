@@ -15,6 +15,7 @@ class kraHome extends Component {
             kraName: "",
         };
     }
+// createdBy = ${localStorage.getItem('userId')}
 
     submitDataFromKra() {
         debugger;
@@ -33,6 +34,7 @@ class kraHome extends Component {
                     {
                         "kraName": this.state.kraName.trim(),
                         "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
                     };
                     const apiKraPost = environment.apiUrl + moduleUrls.Kra + '/'
                     $.ajax({
@@ -111,6 +113,7 @@ class kraHome extends Component {
         {
             "kraName": data.kraName.trim(),
             "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/kra_master/${data.id}`,

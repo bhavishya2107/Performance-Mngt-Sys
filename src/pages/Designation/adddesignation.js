@@ -48,7 +48,9 @@ class Designation extends Component {
                     var _this = this;
                     var formData = {
                         "designationName": this.state.designationName.trim(),
-                        "description": this.state.description
+                        "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
+
                     }
                     const savejobtitleUrl = environment.apiUrl + moduleUrls.Designation + '/'
                     $.ajax({
@@ -91,7 +93,8 @@ class Designation extends Component {
         var body =
         {
             "designationName": data.designationName.trim(),
-            "description": data.description
+            "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
 
         }
 

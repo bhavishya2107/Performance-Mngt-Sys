@@ -236,6 +236,7 @@ class AddUser extends Component {
                         "address": this.state.address,
                         "profileImage": this.state.imageSrc,
                         "gender": this.state.gender,
+                        "createdBy":localStorage.getItem('userId')
 
                     }
                     this.saveUserDetails(DataList);
@@ -327,6 +328,7 @@ class AddUser extends Component {
             "address": data.address,
             "profileImage": data.imageSrc,
             "gender": data.gender,
+            "modifiedBy":localStorage.getItem('userId')
 
         }
 
