@@ -41,19 +41,17 @@ import Dashboard from './pages/dashboard';
 import ForgotPW from './pages/forgotPassword';
 import ResetPW from './pages/resetPassword';
 import ChangePW from './pages/changePassword';
+import Quater from './pages/Quater/quater';
+import ADDQuater from './pages/Quater/add-quater';
 
 class App extends Component {
 constructor(props){
 super(props)
 
-this.state={
-  url :""
 }
-}
-  render() {
-
+render() {
+if(localStorage.getItem('isAuthenticated')){
     var urlData = window.location.pathname;
-
     if (urlData === "/" || urlData === "/forgotPassword" || urlData === "/resetPassword" || urlData === "/changePassword") {
       return (
         <Router>
@@ -75,9 +73,7 @@ this.state={
     }
     else {
       return (
-
         <Router>
-
           <div className="">
             <PrimaryHeader />
             <div className="wrapper">
@@ -103,7 +99,6 @@ this.state={
                           path="/innerpage"
                           component={innerpage}
                         />
-
                         <Route
                           path="/demo"
                           component={Demo}
@@ -135,6 +130,10 @@ this.state={
                         <Route path="/kra" component={kraListPage}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>
+                        <Route path="/quater" component={Quater}></Route>
+                        <Route path="/add-quater" component={ADDQuater}></Route>
+                        <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
+                    
                         <Route path="/templateList" component={Templatelist}></Route>
                         <Route path="/Editkra/id=:id" component={kraHome}></Route>
                         <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
@@ -151,9 +150,6 @@ this.state={
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
                         <Route exact path="/designation/edit/id=:id" component={Designation} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
-                  
-
-
                       </Switch>
                     </div>
                   </div>
@@ -167,6 +163,25 @@ this.state={
       );
     }
   }
-}
+    else{
+      return(
+      <Router>
+      <div className="container-fluid h-100 bg-light">
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <div className="col-lg-4 col-md-6 col-sm-8 col-12 mt-2 mb-2">
+            <Switch>
+            <Route exact path="/forgotPassword" component={ForgotPW} />
+            <Route exact path="/resetPassword" component={ResetPW} />
+            <Login/>
+            </Switch>
+        
 
+          </div>
+        </div>
+      </div>
+    </Router>
+      )
+    }
+  }
+}
 export default App;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './img/logo-100.png';
 import user from './img/user-image.png';
+import Redirect from 'react-router-dom';
 //import './app.css';
 
 
@@ -14,11 +15,14 @@ class Header extends Component {
       lastName: "",
       userId: "",
       profileImage: "",
+     
     }
 
   }
   logOutClearStorage() {
+    ///var myItem = localStorage.setItem('isAuthenticated',false);
     localStorage.clear();
+    window.location.href = '/'
   }
 
   render() {
@@ -38,7 +42,7 @@ class Header extends Component {
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
                 <a className="dropdown-item" href="/myProfile">Profile</a>
                 <a className="dropdown-item" href="/changePassword">Change Password</a>
-                <a className="dropdown-item" onClick={this.logOutClearStorage} href="/">LogOut</a>
+                <a className="dropdown-item" onClick={this.logOutClearStorage}>LogOut</a>
               </div>
             </li>
           </ul>

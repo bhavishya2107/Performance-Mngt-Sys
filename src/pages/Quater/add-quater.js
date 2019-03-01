@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
+import { Link , Redirect} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
+import bootbox from 'bootbox';
 const $ = require('jquery');
+$.DataTable = require('datatables.net-bs4');
 
-
-
-class UserRoleForm extends Component {
+class ADDQuater extends Component{
     constructor(props) {
         super(props);
         this.state = {
             Redirect: false,
-            roleName: "",
-            description:"",
+            quaterName: "",
             id: props.match.params.id,
 
         };
@@ -26,13 +24,12 @@ class UserRoleForm extends Component {
             var res = this.RoleAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hiderole").show()
+                    $(".hideQuater").show()
                 } else {
                     var _this = this;
                     var roleFormData =
                     {
-                        "roleName": this.state.roleName,
-                        "description":this.state.description
+                        "quaterName": this.state.quaterName,
                     }
                 }
             });
@@ -50,17 +47,16 @@ class UserRoleForm extends Component {
             var res = this.RoleAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hiderole").show()
+                    $(".hideQuater").show()
                 } else {
                     var _this = this;
                     var roleFormData =
                     {
-                        "roleName": this.state.roleName.trim(),
-                        "description":this.state.description,
+                        "quaterName": this.state.quaterName.trim(),
                         "createdBy":localStorage.getItem('userId')
 
                     }
-                    const endpointPOST = environment.apiUrl + moduleUrls.Role + '/'
+                    const endpointPOST = environment.apiUrl + moduleUrls.Quater + '/'
                     $.ajax({
                         url: endpointPOST,
                         type: Type.post,
@@ -68,7 +64,7 @@ class UserRoleForm extends Component {
                         success: function (resultData) {
 
                             _this.setState({ Redirect: true });
-                            toast.success("Role " + Notification.saved, {
+                            toast.success("Quarter " + Notification.saved, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                         }
@@ -89,7 +85,7 @@ class UserRoleForm extends Component {
 
     RoleAlreadyExistApi() {
         // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
-        const roleAlreadyExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName.trim() + ')';
+        const roleAlreadyExist = environment.apiUrl + moduleUrls.Quater + '?_where=(quaterName,eq,' + this.state.quaterName.trim() + ')';
         return $.ajax({
             url: roleAlreadyExist,
             type: Type.get,
@@ -99,7 +95,7 @@ class UserRoleForm extends Component {
 
 
     getRoleDetailsApi() {
-        const getRoleDetails = environment.apiUrl + moduleUrls.Role + '/' + `${this.state.id}`
+        const getRoleDetails = environment.apiUrl + moduleUrls.Quater + '/' + `${this.state.id}`
         // const endpoint = `http://180.211.103.189:3000/api/role_master/${this.state.id}`;
         return $.ajax({
             url: getRoleDetails,
@@ -108,14 +104,13 @@ class UserRoleForm extends Component {
         })
     }
     updateRoleDetailsApi(data) {
-        const updateRoleDetails = environment.apiUrl + moduleUrls.Role + '/' + `${data.id}`
+        const updateRoleDetails = environment.apiUrl + moduleUrls.Quater + '/' + `${data.id}`
         // '/?_size=1000' + '&_sort=-kraId' 
 
         var body =
         {
-            "roleName": data.roleName.trim(),
-            "description":data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "quaterName": data.quaterName.trim(),
+            "modifiedBy":localStorage.getItem('userId'),
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/role_master/${data.id}`,
@@ -130,7 +125,7 @@ class UserRoleForm extends Component {
     }
 
     updateroleEditExistApi() {
-        const updateroleExist = environment.apiUrl + moduleUrls.Role + '?_where=(roleName,eq,' + this.state.roleName.trim() + ')' + '~and(roleId,ne,' + this.state.id + ')';
+        const updateroleExist = environment.apiUrl + moduleUrls.Quater + '?_where=(quaterName,eq,' + this.state.quaterName.trim() + ')' + '~and(quaterId,ne,' + this.state.id + ')';
         return $.ajax({
             url: updateroleExist,
             type: Type.get,
@@ -145,7 +140,7 @@ class UserRoleForm extends Component {
             debugger;
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hiderole").show()
+                    $(".hideQuater").show()
 
                 } else {
                     var res = this.updateRoleDetailsApi(data);
@@ -153,7 +148,7 @@ class UserRoleForm extends Component {
                         this.setState({
                             Redirect: true
                         })
-                        toast.success("Role " + Notification.updated, {
+                        toast.success("Quarter " + Notification.updated, {
                             position: toast.POSITION.TOP_RIGHT
                         });
 
@@ -168,7 +163,7 @@ class UserRoleForm extends Component {
             })
 
         } else {
-            $(".hiderole").hide()
+            $(".hideQuater").hide()
             return false;
         }
 
@@ -188,7 +183,7 @@ class UserRoleForm extends Component {
             res.done((response) => {
 
                 this.setState({
-                    roleName: response[0].roleName,
+                    quaterName: response[0].quaterName,
                 })
             });
             res.fail((error) => {
@@ -202,47 +197,34 @@ class UserRoleForm extends Component {
 
     render() {
         if (this.state.Redirect) {
-            return <Redirect to={{ pathname: "/role", state: "2222" }} />
+            return <Redirect to={{ pathname: "/quater", state: "2222" }} />
         }
         return (
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
+                        {this.state.id !== undefined ? <span>Edit {ModuleNames.quater}</span> : <span>Add {ModuleNames.quater}</span>}
                     </h2>
                 </div>
 
                 <form id="userRoleForm" >
                     <div className="form-group">
-                        <label htmlFor="roleName" className="required">Name</label>
+                        <label htmlFor="quaterName" className="required">Name</label>
                         <div className="">
-                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }} maxLength="20"
-                                value={this.state.roleName}
+                            <input id="quaterName" type="text" className="form-control col-6" name="quaterName" onBlur={() => { this.isExistRoleonChange() }} maxLength="20"
+                                value={this.state.quaterName}
                                 onChange={(event) => {
-                                    $(".hiderole").hide()
+                                    $(".hideQuater").hide()
                                     this.setState(
                                         {
-                                            roleName: event.target.value
+                                            quaterName: event.target.value
                                         }
                                     )
                                 }} required />
-                            <p className="hiderole" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                            <p className="hideQuater" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <label className=" " htmlFor="roleDescription">Description</label>
-                        <div className="">
-                            <textarea name="roleDescription" className="form-control col-6" rows="3"
-                                value={this.state.description}
-                                onChange={(event) => {
-                                    this.setState(
-                                        {
-                                            description: event.target.value
-                                        }
-                                    )
-                                }}></textarea><br />
-                        </div>
-                    </div>
+
                     {this.state.id !== undefined ?
                         <button className="btn btn-success " type="button" onClick={() => {
                             this.UpdateRoleDetails(this.state);
@@ -251,7 +233,7 @@ class UserRoleForm extends Component {
                             this.submitDataFromRoleform(this.state);
                         }}>Save</button>}&nbsp;
                     <button type="button" className="btn btn-info" onClick={() => { this.myFunction() }}>Reset</button>&nbsp;
-                    <Link to="/role" className="btn btn-danger">Cancel</Link>
+                    <Link to="/quater" className="btn btn-danger">Cancel</Link>
                     <br />
                 </form>
                 <ToastContainer />
@@ -259,4 +241,4 @@ class UserRoleForm extends Component {
         )
     }
 }
-export default UserRoleForm;
+export default ADDQuater;

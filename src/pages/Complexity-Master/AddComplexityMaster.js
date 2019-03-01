@@ -67,6 +67,8 @@ class AddComplexityMaster extends Component {
                     var ComplexityMasterdata = {
                         "complexityName": this.state.complexityName.trim(),
                         "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
+
                     }
                     const endpointPOST = environment.apiUrl + moduleUrls.ComplexityMaster + '/'
                     $.ajax({
@@ -109,6 +111,7 @@ class AddComplexityMaster extends Component {
         {
             "complexityName": data.complexityName.trim(),
             "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
         }
         return $.ajax({
             url: endpointPATCH,

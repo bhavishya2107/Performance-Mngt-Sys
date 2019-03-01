@@ -14,11 +14,8 @@ class ResetPW extends Component {
       getResetToken: '',
     }
   }
-  // url.searchParams.get("c");
-  // getTokenFromURL=$(location).attr('search');
-
   UpdatePassword() {
-    debugger;
+  
     var UpdatePasswordAPI = environment.dynamicUrl + 'dynamic';
     var resetPassword = {
       query: `UPDATE user_master SET password = '${this.state.resetPassword}', resetToken = NULL WHERE resetToken = '${this.state.getResetToken}'`
@@ -32,7 +29,6 @@ class ResetPW extends Component {
       }
     });
   }
-  // UPDATE user_master SET password = '11111', resetToken = NULL WHERE resetToken = ''
 
   //function to get token from the URL
   getUrlParameter = (sParam) => {
@@ -51,7 +47,7 @@ class ResetPW extends Component {
 
   //password validation
   resetPasswordvalidate = () => {
-    debugger;
+  
     var isvalidate = window.formValidation("#RPWform")
     if (isvalidate) {
       if (this.state.resetPassword === this.state.reEnterPassword) {

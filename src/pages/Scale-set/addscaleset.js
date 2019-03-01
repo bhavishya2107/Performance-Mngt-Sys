@@ -48,7 +48,8 @@ class Scaleset extends Component {
                     var _this = this;
                     var formData = {
                         "scaleSetName": this.state.scaleSetName.trim(),
-                        "description": this.state.description
+                        "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
                     }
                     const saveScalesetUrl = environment.apiUrl + moduleUrls.ScaleSet + '/'
                     $.ajax({
@@ -98,6 +99,8 @@ class Scaleset extends Component {
         {
             "scaleSetName": data.scaleSetName.trim(),
             "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
+
         }
         const endpointPOST = environment.apiUrl + moduleUrls.ScaleSet + '/' + `${data.id}`
         return $.ajax({

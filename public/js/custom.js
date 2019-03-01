@@ -16,16 +16,6 @@ function navigation() {
     }
 }
 
-
-//validate function for custom password 
-// $.validator.addMethod('strongPassword', function (value, element) {
-//     return this.optional(element)
-//         || value.length >= 5
-//     //   && /\d/.test(value)
-//     //   && /[a-z]/i.test(value);
-// }, 'Your password must be at least 5 characters long\'.')
-
-
 //...For Form validation
 function formValidation(form) {
     jQuery.validator.setDefaults({

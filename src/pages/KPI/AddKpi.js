@@ -69,6 +69,8 @@ class AddKpi extends Component {
                         "weightage": this.state.weightage,
                         "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
+                        "createdBy":localStorage.getItem('userId')
+
                     }
                     const saveKpiUrl = environment.apiUrl + moduleUrls.Kpi + '/'
                     $.ajax({
@@ -161,7 +163,9 @@ class AddKpi extends Component {
             "KpiTitle": data.kpiTitle.trim(),
             "target": data.target,
             "weightage": data.weightage,
-            "scaleSetId": data.scaleSetId
+            "scaleSetId": data.scaleSetId,
+            "modifiedBy":localStorage.getItem('userId')
+
         }
         const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         return $.ajax({
