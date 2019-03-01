@@ -29,7 +29,8 @@ class Addtemplate extends Component {
       kraName: {},
       kpiName: {},
       isUpdated: false,
-      templateDetailId: ""
+      templateDetailId: "",
+      isSelect: false
     };
     templateData = [];
     currentDetailData = [];
@@ -86,6 +87,7 @@ class Addtemplate extends Component {
     }
 
   }
+
   savetemplatenameApi() {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -104,35 +106,43 @@ class Addtemplate extends Component {
             type: Type.post,
             data: formData,
             success: function (resultData) {
-              var saveTemplateDetailIds = [];
-              $(templateData).each((e, item) => {
-                var singleObjId = {
-                  templateId: resultData.insertId,
-                  kraId: item.kraId,
-                  kpiId: item.kpiId
-                };
-                saveTemplateDetailIds.push(singleObjId);
-              });
+              if (_this.state.isUpdated == true) {
+                var saveTemplateDetailIds = [];
+                $(templateData).each((e, item) => {
+                  var singleObjId = {
+                    templateId: resultData.insertId,
+                    kraId: item.kraId,
+                    kpiId: item.kpiId
+                  };
+                  saveTemplateDetailIds.push(singleObjId);
+                });
 
-              const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-              const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
-              return $.ajax({
-                url: templateSaveApi,
-                type: Type.post,
-                data: templatedetailData,
+                const templatedetailData = JSON.stringify(saveTemplateDetailIds);
+                const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+                return $.ajax({
+                  url: templateSaveApi,
+                  type: Type.post,
+                  data: templatedetailData,
 
-                headers: {
-                  "content-type": "application/json",
-                  "x-requested-with": "XMLHttpRequest"
-                },
+                  headers: {
+                    "content-type": "application/json",
+                    "x-requested-with": "XMLHttpRequest"
+                  },
 
-                success: function (resultData) {
-                  _this.setState({ redirectToList: true })
-                  toast.success("Template " + Notification.saved, {
-                    position: toast.POSITION.TOP_RIGHT
-                  });
-                }
-              });
+                  success: function (resultData) {
+                    _this.setState({ redirectToList: true })
+                    toast.success("Template " + Notification.saved, {
+                      position: toast.POSITION.TOP_RIGHT
+                    });
+                  }
+
+                });
+              } else {
+                _this.setState({ redirectToList: true })
+                toast.success("Template " + Notification.saved, {
+                  position: toast.POSITION.TOP_RIGHT
+                });
+              }
             }
           });
         }
@@ -154,7 +164,7 @@ class Addtemplate extends Component {
 
       },
       kraId: event.target.value,
-
+      isSelect: true
     });
 
 
@@ -170,41 +180,46 @@ class Addtemplate extends Component {
       },
       kpiId: event.target.value,
       kpiName: event.target.options[event.target.selectedIndex].text,
-
+      isSelect: true
     });
   }
 
   addtemplate() {
-    var a = templateData.filter((i) => {
-      return (i.kpiTitle.id == this.state.kpiId) && (i.kraName.id == this.state.kraId)
-    });
-    if (a.length > 0) {
-      alert("Combination already exist.....");
+
+    this.state.isUpdated = true;
+    if (this.state.isSelect === true) {
+      var a = templateData.filter((i) => {
+        return (i.kpiTitle.id == this.state.kpiId) && (i.kraName.id == this.state.kraId)
+      });
+      if (a.length > 0) {
+
+        $(".recordExistsTbl").show()
+      }
+      else {
+        this.state.isUpdated = true;
+        var templateDataapi = {
+          kraName: this.state.selectkra,
+          kpiTitle: this.state.selectkpi,
+          kraId: this.state.kraId,
+          kpiId: this.state.kpiId,
+          templateDetailId: this.state.templateDetailId
+        };
+        templateData.push(templateDataapi);
+        this.$el
+          .DataTable()
+          .clear()
+          .rows.add(templateData)
+          .draw();
+      }
     }
     else {
-      this.state.isUpdated = true;
-      var templateDataapi = {
-        kraName: this.state.selectkra,
-        kpiTitle: this.state.selectkpi,
-        kraId: this.state.kraId,
-        kpiId: this.state.kpiId,
-        templateDetailId: this.state.templateDetailId
-      };
-      templateData.push(templateDataapi);
-
-      console.log(templateData);
-
-      this.$el
-        .DataTable()
-        .clear()
-        .rows.add(templateData)
-        .draw();
+      toast.info(Notification.selectOneRecord);
     }
   }
 
   getKPIData() {
     const kpiApi = environment.apiUrl + moduleUrls.Kpi + "/?_size=1000";
-    $.ajax({
+    return $.ajax({
       type: Type.get,
       url: kpiApi,
       complete: temp => {
@@ -224,7 +239,7 @@ class Addtemplate extends Component {
   }
   getKRAData() {
     const kraApi = environment.apiUrl + moduleUrls.Kra + "/?_size=1000";
-    $.ajax({
+    return $.ajax({
       type: Type.get,
       url: kraApi,
       complete: temp => {
@@ -314,17 +329,12 @@ class Addtemplate extends Component {
               });
               var _DeletedRecords = [];
               currentDetailData.forEach(function (i) {
-                debugger;
                 tempDeleteRecordsFromDatatable.forEach(function (j) {
                   if (j.kraNameid == i.kraId && j.kpiTitleid == i.kpiId) {
-                    console.log(i)
                     _DeletedRecords.push(i.templateDetailId)
                   }
                 });
               });
-              console.log("Existing Records.....");
-              console.log(currentDetailData);
-
               $(templateData).each((e, item) => {
                 if (item.templateDetailId < 1 || item.templateDetailId == "") {
                   var singleObjId = {
@@ -336,10 +346,7 @@ class Addtemplate extends Component {
                   saveTempDetail.push(singleObjId);
                 }
               });
-              console.log("temp data base")
-              console.log(saveTempDetail);
               if (_DeletedRecords.length > 0) {
-                console.log(_DeletedRecords.join());
                 this.deleteTemplateDetail(_DeletedRecords.join()).done(() => {
                   this.saveUpdatedValues(saveTempDetail);
                 })
@@ -348,31 +355,6 @@ class Addtemplate extends Component {
                 this.saveUpdatedValues(saveTempDetail);
               }
             });
-
-            // if (this.state.isUpdated == true) {
-
-            // $(templateData).each((e, item) => {
-            //   var singleObjId = {
-            //     templateId: result.templateId,
-            //     kraId: item.kraId,
-            //     kpiId: item.kpiId,
-            //     templateDetailId: item.templateDetailId,
-            //   };
-            //   saveTempDetail.push(singleObjId);
-
-            // });
-
-
-            // this.updateTemplateDetails(saveTempDetail)
-            //}
-            // else {
-            //   this.setState({
-            //     redirectToList: true
-            //   })
-            //   toast.success("Template " + Notification.updated, {
-            //     position: toast.POSITION.TOP_RIGHT
-            //   });
-            // }
           });
         }
       })
@@ -387,7 +369,6 @@ class Addtemplate extends Component {
   saveUpdatedValues(saveTempDetail) {
     if (saveTempDetail.length > 0) {
       this.updateTemplateDetails(saveTempDetail).done((result) => {
-        console.log(result);
         this.setState({
           redirectToList: true,
         });
@@ -434,33 +415,7 @@ class Addtemplate extends Component {
       }
     });
   }
-
-  deleteTemplatDetails(saveTemplateDetailIds) {
-    var deleteTempDetailIds = ''
-    $(templateData).each((e, item) => {
-      if (item.templateDetailId !== undefined) {
-        if (deleteTempDetailIds === '') {
-          deleteTempDetailIds = item.templateDetailId
-        } else {
-          deleteTempDetailIds = deleteTempDetailIds + ',' + item.templateDetailId
-        }
-      }
-    });
-    if (deleteTempDetailIds !== "") {
-      var res = this.deleteTemplateDetail(deleteTempDetailIds)
-      res.done((result) => {
-        // this.updateTemplateDetails(saveTemplateDetailIds);
-      })
-      res.fail((error) => {
-        console.log(error)
-      })
-    }
-    else {
-    }
-  }
-
   componentDidMount() {
-
     if (this.state.id !== undefined) {
       var resTemplate = this.getTemplateMasterId();
       resTemplate.done((response) => {
@@ -496,8 +451,6 @@ class Addtemplate extends Component {
             oldTemplateValues.push(singleObjId);
           });
 
-          console.log(templateData);
-
           this.$el
             .DataTable()
             .clear()
@@ -529,28 +482,30 @@ class Addtemplate extends Component {
           "orderable": false,
           targets: 2,
           render: function (data, type, row) {
-            debugger;
             return (
-              '<a href="#" id="' + row.kraId + '" data-kraId="' + row.kraName.id + '" data-kpiId="' + row.kpiTitle.id + '" class="btn btn-danger btnDelete btn-sm">DELETE</a>'
+              '<a href="#" id="' + row.kraId + '" data-kraId="' + row.kraName.id + '" data-kpiId="' + row.kpiTitle.id + '" class="btn btn-danger btnDelete btn-sm">Delete</a>'
             )
           }
         },
+
       ],
+      "paging": false,
+      "ordering": false,
+      "info": false,
+      "searching": false,
       drawCallback: (settings) => {
         $(".btnDelete").on("click", e => {
-          console.log(e)
           var tempKraID = e.target.getAttribute('data-kraId');
           var tempKpiID = e.target.getAttribute('data-kpiId');
           this.deleteDataTableRow(parseInt(tempKraID), parseInt(tempKpiID));
         });
+
       }
     });
     this.getKPIData();
     this.getKRAData();
   }
   deleteDataTableRow(kraNameid, kpiTitleid) {
-    debugger;
-    console.log(templateData);
     var tempDeleteRecordArray = {
       kraNameid: kraNameid,
       kpiTitleid: kpiTitleid
@@ -638,12 +593,18 @@ class Addtemplate extends Component {
             </div>
             <div className="col-md-4">
               <button id="btnTemplateDetail"
+                onChange={
+                  $(".recordExistsTbl").hide()
+                }
                 onClick={() => this.addtemplate(this.state)}
                 type="button"
                 className="btn btn-primary"
               >
                 <i className="fa fa-plus" />
               </button>
+              <span></span>
+              &nbsp; &nbsp;
+              <label className="recordExistsTbl" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
             </div></div>
           <br />
 
@@ -655,9 +616,9 @@ class Addtemplate extends Component {
           >
             <thead>
               <tr>
-                <th>KRA Name</th>
-                <th>KPI Name</th>
-                <th>Action</th>
+                <th width="200">KRA Name</th>
+                <th width="200">KPI Name</th>
+                <th width="50">Action</th>
               </tr>
             </thead>
             <tbody />
@@ -684,7 +645,7 @@ class Addtemplate extends Component {
             Cancel
             </Link>
         </div>
-
+        <ToastContainer />
       </div>
     );
   }

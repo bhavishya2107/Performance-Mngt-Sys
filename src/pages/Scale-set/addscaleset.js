@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import { ToastContainer, toast } from 'react-toastify';
 const $ = require('jquery');
-//var scalesetData = []
 class Scaleset extends Component {
     constructor(props) {
         super(props);

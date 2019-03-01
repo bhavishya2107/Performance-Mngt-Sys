@@ -101,10 +101,8 @@ class Templatelist extends Component {
                 toast.error("Template" + Notification.notdeleted)
             }
         });
-
     }
     multipleDeleteTemplateconfirm() {
-        debugger;
         var templateId = []
         $("#tblTemplate  input:checkbox:checked ").each((e, item) => {
             if (item.name != 'checkAll') {
@@ -208,14 +206,12 @@ class Templatelist extends Component {
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
-
                     this.SingleDeleteConfirm(e.currentTarget.id);
-
                 });
             }
         });
     }
-    resetform(){
+    resetform() {
         window.location.reload();
     }
 
@@ -244,10 +240,8 @@ class Templatelist extends Component {
                                 }}
                             />
                         </th>
-
                         <th width="100">Name</th>
                         <th>Kra Name</th>
-
                         <th width="100">Action</th>
                     </tr>
                 </thead>
