@@ -161,7 +161,7 @@ class Templatelist extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_detail as TKKA JOIN template_master as TM ON TKKA.templateId = TM.templateId JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId"
+                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_detail as TKKA LEFT JOIN template_master as TM ON TKKA.templateId = TM.templateId LEFT JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId"
                 },
             },
             columns: [
@@ -245,10 +245,10 @@ class Templatelist extends Component {
                             />
                         </th>
 
-                        <th>Template Name</th>
+                        <th width="100">Name</th>
                         <th>Kra Name</th>
 
-                        <th>Action</th>
+                        <th width="100">Action</th>
                     </tr>
                 </thead>
             </table>

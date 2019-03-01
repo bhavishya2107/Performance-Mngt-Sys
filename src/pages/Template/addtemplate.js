@@ -6,8 +6,10 @@ import { ToastContainer, toast } from 'react-toastify';
 const $ = require("jquery");
 $.DataTable = require("datatables.net-bs4");
 var templateData = [];
-var templateTblId = [];
-var templateDataapi = []
+var oldTemplateValues = [];
+var currentDetailData = [];
+var saveTempDetail = [];
+var tempDeleteRecordsFromDatatable = [];
 class Addtemplate extends Component {
   constructor(props) {
     super(props);
@@ -25,8 +27,15 @@ class Addtemplate extends Component {
       kraId: "",
       tempDetailId: [],
       kraName: {},
-      kpiName: {}
+      kpiName: {},
+      isUpdated: false,
+      templateDetailId: ""
     };
+    templateData = [];
+    currentDetailData = [];
+    saveTempDetail = [];
+    oldTemplateValues = [];
+    tempDeleteRecordsFromDatatable = [];
   }
   isTemplateNameExistsApi() {
     const templateNameexistsUrl = environment.apiUrl + moduleUrls.Template + '?_where=(templateName,eq,' + this.state.templateName.trim() + ')';
@@ -53,7 +62,6 @@ class Addtemplate extends Component {
     });
   }
 
-
   onblurRowExists() {
     if (this.state.id != undefined) {
       var res = this.isTemplateNameExistsUpdateApi();
@@ -78,7 +86,6 @@ class Addtemplate extends Component {
     }
 
   }
-
   savetemplatenameApi() {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -88,12 +95,11 @@ class Addtemplate extends Component {
           $(".recordexists").show()
         } else {
           var _this = this;
-
           var formData = {
             templateName: this.state.templateName.trim(),
           };
           const templateSaveApi = environment.apiUrl + moduleUrls.Template;
-          $.ajax({
+          return $.ajax({
             url: templateSaveApi,
             type: Type.post,
             data: formData,
@@ -110,8 +116,7 @@ class Addtemplate extends Component {
 
               const templatedetailData = JSON.stringify(saveTemplateDetailIds);
               const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
-
-              $.ajax({
+              return $.ajax({
                 url: templateSaveApi,
                 type: Type.post,
                 data: templatedetailData,
@@ -144,14 +149,14 @@ class Addtemplate extends Component {
     this.setState({
       selectkra:
       {
-        ID: event.target.value,
+        id: event.target.value,
         Name: event.target.options[event.target.selectedIndex].text
 
       },
       kraId: event.target.value,
 
-
     });
+
 
   }
   onChangekpi(event) {
@@ -159,34 +164,42 @@ class Addtemplate extends Component {
     this.setState({
       selectkpi:
       {
-        ID: event.target.value,
+        id: event.target.value,
         Name: event.target.options[event.target.selectedIndex].text
 
       },
       kpiId: event.target.value,
-      kpiName: event.target.options[event.target.selectedIndex].text
+      kpiName: event.target.options[event.target.selectedIndex].text,
+
     });
   }
 
   addtemplate() {
+    var a = templateData.filter((i) => {
+      return (i.kpiTitle.id == this.state.kpiId) && (i.kraName.id == this.state.kraId)
+    });
+    if (a.length > 0) {
+      alert("Combination already exist.....");
+    }
+    else {
+      this.state.isUpdated = true;
+      var templateDataapi = {
+        kraName: this.state.selectkra,
+        kpiTitle: this.state.selectkpi,
+        kraId: this.state.kraId,
+        kpiId: this.state.kpiId,
+        templateDetailId: this.state.templateDetailId
+      };
+      templateData.push(templateDataapi);
 
-    var templateDataapi = {
-      kraName: this.state.selectkra,
-      kpiTitle: this.state.selectkpi,
-      kraId: this.state.kraId,
-      kpiId: this.state.kpiId
-    };
-    // var templateDataId = {
+      console.log(templateData);
 
-    // }
-
-    //templateTblId.push(templateDataId);
-    templateData.push(templateDataapi);
-    this.$el
-      .DataTable()
-      .clear()
-      .rows.add(templateData)
-      .draw();
+      this.$el
+        .DataTable()
+        .clear()
+        .rows.add(templateData)
+        .draw();
+    }
   }
 
   getKPIData() {
@@ -250,8 +263,17 @@ class Addtemplate extends Component {
       },
     })
   }
+
+  tempgetTemplateDetailsId() {
+    return $.ajax({
+      url: "http://192.168.10.110:3000/dynamic",
+      type: Type.post,
+      data: {
+        "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
+      },
+    })
+  }
   updateTemplateMasterApi(data) {
-    debugger
     var body =
     {
       "templateName": data.templateName,
@@ -267,6 +289,140 @@ class Addtemplate extends Component {
       data: JSON.stringify(body),
     });
   }
+  UpdateTemplateMaster(data) {
+    var isvalidate = window.formValidation("#formtemplate");
+    if (isvalidate) {
+      var res = this.isTemplateNameExistsUpdateApi();
+      res.done((response) => {
+        if (response.length > 0) {
+          $(".recordexists").show()
+        } else {
+          var res = this.updateTemplateMasterApi(data);
+          res.done((result) => {
+            var resTemplateDetail = this.tempgetTemplateDetailsId(this.state.id);
+            resTemplateDetail.done((resultDetail) => {
+              //Data from db
+              $(resultDetail).each((e, item) => {
+                var templateDetail = {
+                  templateId: item.templateId,
+                  kraId: item.kraId,
+                  kpiId: item.kpiId,
+                  templateDetailId: item.templateDetailId,
+                };
+                //Already exist daata into Temp_detail
+                currentDetailData.push(templateDetail);
+              });
+              var _DeletedRecords = [];
+              currentDetailData.forEach(function (i) {
+                debugger;
+                tempDeleteRecordsFromDatatable.forEach(function (j) {
+                  if (j.kraNameid == i.kraId && j.kpiTitleid == i.kpiId) {
+                    console.log(i)
+                    _DeletedRecords.push(i.templateDetailId)
+                  }
+                });
+              });
+              console.log("Existing Records.....");
+              console.log(currentDetailData);
+
+              $(templateData).each((e, item) => {
+                if (item.templateDetailId < 1 || item.templateDetailId == "") {
+                  var singleObjId = {
+                    templateId: this.state.id,
+                    kraId: item.kraName.id,
+                    kpiId: item.kpiTitle.id
+                    //  templateDetailId: item.templateDetailId,
+                  };
+                  saveTempDetail.push(singleObjId);
+                }
+              });
+              console.log("temp data base")
+              console.log(saveTempDetail);
+              if (_DeletedRecords.length > 0) {
+                console.log(_DeletedRecords.join());
+                this.deleteTemplateDetail(_DeletedRecords.join()).done(() => {
+                  this.saveUpdatedValues(saveTempDetail);
+                })
+              }
+              else {
+                this.saveUpdatedValues(saveTempDetail);
+              }
+            });
+
+            // if (this.state.isUpdated == true) {
+
+            // $(templateData).each((e, item) => {
+            //   var singleObjId = {
+            //     templateId: result.templateId,
+            //     kraId: item.kraId,
+            //     kpiId: item.kpiId,
+            //     templateDetailId: item.templateDetailId,
+            //   };
+            //   saveTempDetail.push(singleObjId);
+
+            // });
+
+
+            // this.updateTemplateDetails(saveTempDetail)
+            //}
+            // else {
+            //   this.setState({
+            //     redirectToList: true
+            //   })
+            //   toast.success("Template " + Notification.updated, {
+            //     position: toast.POSITION.TOP_RIGHT
+            //   });
+            // }
+          });
+        }
+      })
+      res.fail((error) => {
+        console.log(error)
+      })
+
+    } else {
+      return false;
+    }
+  }
+  saveUpdatedValues(saveTempDetail) {
+    if (saveTempDetail.length > 0) {
+      this.updateTemplateDetails(saveTempDetail).done((result) => {
+        console.log(result);
+        this.setState({
+          redirectToList: true,
+        });
+        toast.success("Template " + Notification.updated, {
+          position: toast.POSITION.TOP_RIGHT
+        });
+      }).fail((e) => {
+        console.log(e)
+      });
+    }
+    else {
+      this.setState({
+        redirectToList: true,
+      });
+      toast.success("Template " + Notification.updated, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
+  }
+  updateTemplateDetails(saveTempDetail) {
+    const templatedetailData = JSON.stringify(saveTempDetail);
+    const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
+
+    return $.ajax({
+      url: templateSaveApi,
+      type: Type.post,
+      data: templatedetailData,
+
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+
+    });
+  }
   deleteTemplateDetail(templateDetailId) {
     const multiDeleteAPIUrl = environment.apiUrl + moduleUrls.Templatedetail + '/bulk?_ids=' + `${templateDetailId}`;
     return $.ajax({
@@ -278,104 +434,44 @@ class Addtemplate extends Component {
       }
     });
   }
-  updateDetails(saveTemplateDetailIds) {
-    const templatedetailData = JSON.stringify(saveTemplateDetailIds);
-    console.log(templatedetailData)
-    const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
 
-    $.ajax({
-      url: templateSaveApi,
-      type: Type.post,
-      data: templatedetailData,
-
-      headers: {
-        "content-type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      success: () => {
-        this.setState({
-
-          redirectToList: true,
-
-        });
-        toast.success("Template " + Notification.updated, {
-          position: toast.POSITION.TOP_RIGHT
-        });
-      }
-    });
-  }
-  deleteDetails() {
-   
+  deleteTemplatDetails(saveTemplateDetailIds) {
     var deleteTempDetailIds = ''
     $(templateData).each((e, item) => {
-      
-      if (item.templateDetailId != undefined) {
-        if (deleteTempDetailIds == '') {
+      if (item.templateDetailId !== undefined) {
+        if (deleteTempDetailIds === '') {
           deleteTempDetailIds = item.templateDetailId
         } else {
           deleteTempDetailIds = deleteTempDetailIds + ',' + item.templateDetailId
         }
       }
-
     });
-    var res= this.deleteTemplateDetail(deleteTempDetailIds) 
-    res.done((result)=>{
-
-    })
-  }
-  UpdateTemplateMaster(data) {
-    var isvalidate = window.formValidation("#formtemplate");
-    if (isvalidate) {
-      var res = this.isTemplateNameExistsUpdateApi();
-      res.done((response) => {
-        if (response.length > 0) {
-          $(".recordexists").show()
-        } else {
-          var res = this.updateTemplateMasterApi(data);
-          res.done((result) => {
-            var saveTemplateDetailIds = [];
-            $(templateData).each((e, item) => {
-              var singleObjId = {
-                templateId: result.insertId,
-                kraId: item.kraId,
-                kpiId: item.kpiId,
-                templateDetailId: item.templateDetailId,
-              };
-              saveTemplateDetailIds.push(singleObjId);
-              console.log(saveTemplateDetailIds)
-            });
-            // bulk dlt temp d id
-           this.deleteDetails();
-            this.updateDetails(saveTemplateDetailIds);
-          });
-        }
+    if (deleteTempDetailIds !== "") {
+      var res = this.deleteTemplateDetail(deleteTempDetailIds)
+      res.done((result) => {
+        // this.updateTemplateDetails(saveTemplateDetailIds);
       })
-
       res.fail((error) => {
         console.log(error)
       })
-
-    } else {
-
-      return false;
+    }
+    else {
     }
   }
 
-
-
   componentDidMount() {
+
     if (this.state.id !== undefined) {
       var resTemplate = this.getTemplateMasterId();
       resTemplate.done((response) => {
         this.setState({
           templateName: response[0].templateName,
-
         })
         var res = this.getTemplateDetailsId(this.state.id);
         res.done((res) => {
-
+          var templateDetail;
           $(res).each((e, item) => {
-            var templateDetail = {
+            templateDetail = {
 
               kraName: {
                 Name: item.kraName,
@@ -387,12 +483,20 @@ class Addtemplate extends Component {
               },
               templateId: item.templateId,
               templateDetailId: item.templateDetailId,
+
               isDeleted: 0
             };
-
+            var singleObjId = {
+              templateId: item.templateId,
+              kraId: item.kraId,
+              kpiId: item.kpiId,
+              templateDetailId: item.templateDetailId,
+            };
             templateData.push(templateDetail);
-
+            oldTemplateValues.push(singleObjId);
           });
+
+          console.log(templateData);
 
           this.$el
             .DataTable()
@@ -412,15 +516,6 @@ class Addtemplate extends Component {
       datasrc: templateData,
       data: templateData,
       columns: [
-        // {
-        //   data: "kraName.id",
-        //   target: 0
-        // },
-        // {
-        //   data: "kpiTitle.id",
-        //   target: 1
-        // },
-
         {
           data: "kraName.Name",
           target: 0
@@ -430,27 +525,46 @@ class Addtemplate extends Component {
           target: 1
         },
         {
-          data: "kraId",
+          data: "templateId",
           "orderable": false,
           targets: 2,
           render: function (data, type, row) {
+            debugger;
             return (
-              '<a href="#" id="' + row.kraId + '"class="btn btn-danger btnDelete btn-sm">' +
-              '<i class="fa fa-trash" aria-hidden="true"></i>' +
-              "</a>"
+              '<a href="#" id="' + row.kraId + '" data-kraId="' + row.kraName.id + '" data-kpiId="' + row.kpiTitle.id + '" class="btn btn-danger btnDelete btn-sm">DELETE</a>'
             )
           }
         },
       ],
       drawCallback: (settings) => {
-
         $(".btnDelete").on("click", e => {
-
+          console.log(e)
+          var tempKraID = e.target.getAttribute('data-kraId');
+          var tempKpiID = e.target.getAttribute('data-kpiId');
+          this.deleteDataTableRow(parseInt(tempKraID), parseInt(tempKpiID));
         });
       }
     });
     this.getKPIData();
     this.getKRAData();
+  }
+  deleteDataTableRow(kraNameid, kpiTitleid) {
+    debugger;
+    console.log(templateData);
+    var tempDeleteRecordArray = {
+      kraNameid: kraNameid,
+      kpiTitleid: kpiTitleid
+    }
+    tempDeleteRecordsFromDatatable.push(tempDeleteRecordArray);
+
+    templateData = templateData.filter((i) => {
+      return !(i.kpiTitle.id == kpiTitleid && i.kraName.id == kraNameid)
+    })
+    this.$el
+      .DataTable()
+      .clear()
+      .rows.add(templateData)
+      .draw();
 
   }
   render() {
@@ -474,6 +588,8 @@ class Addtemplate extends Component {
                   <input
                     id="templateid"
                     className="form-control"
+                    required
+                    name="templateName"
                     onBlur={() => { this.onblurRowExists() }}
                     maxLength="50"
                     value={this.state.templateName}
@@ -483,7 +599,7 @@ class Addtemplate extends Component {
                         templateName: event.target.value
                       });
                     }}
-                    required
+
                   />
                   <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                 </div>
@@ -539,8 +655,6 @@ class Addtemplate extends Component {
           >
             <thead>
               <tr>
-                {/* <th>kraid</th>
-                <th>kpiid</th> */}
                 <th>KRA Name</th>
                 <th>KPI Name</th>
                 <th>Action</th>
