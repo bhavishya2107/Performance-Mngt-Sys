@@ -126,44 +126,58 @@ class AddProject extends Component {
             },
         })
     }
+    emailProjectApi() {
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+        })
+    }
 
     sendProjectMail() {
         debugger;
         /* START - GET TL NAME AND EMAIL */
-        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.manageBy}`
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.manageBy}`
         return $.ajax({
             url: url,
             type: Type.get,
             // Project Name:<b>` + res[0].projectName`</b></span>
-            // Date:<b>` + res[0].startDate + `to` + this.state.startDate` </b>
+            // Date:<b>` + res[0].startDate + `to` + this.state.endtDate` </b>
             // Resources:<b>` + res[0].resources`</b>
             // Description:<b>` + res[0].description`</b>
 
             success: (res) => {
-                debugger;
-                console.log(res)
-                /* START - SEND EMAIL */
-                var emailBody =
-                    `<html>
-                <body>
-                <p>Hello </p>
-                <p>New Project Assigned to you. Below are the details of project:</p>`;
-                emailBody += `
-                <p>
-             ProjectName:
-                </p>                        
-                <p>Thanks,</p>
-                <p>PSSPL ADMIN</p>
-            </body>
-            </html>`;
-                var body =
-                {
-                    emailSubject: "New Project assigned",
-                    emailBody: emailBody,
-                    toemailadress: "janmeshnayak1997@gmail.com"
-                }
-                this.sendMailAPI(body);
-                /* END - SEND EMAIL */
+                var response = this.emailProjectApi()
+                response.done((result) => {
+                    var emailBody =
+                        `<html>
+                    <body>
+                    <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `, </p>
+                    <p>New Project Assigned to you. Below are the details of project:</p>`;
+                    emailBody += `
+                    Project Name:<b>` + result[0].projectName`</b></span>
+                    Date:<b>` + result[0].startDate + `to` + result[0].endtDate` </b>
+                    Resources:<b>` + result[0].resources`</b>
+                    Description:<b>` + result[0].description`</b>
+                     <p>
+                    </p>                        
+                    <p>Thanks,</p>
+                    <p>PSSPL ADMIN</p>
+                </body>
+                </html>`;
+                    var body =
+                    {
+                        emailSubject: "New Project assigned",
+                        emailBody: emailBody,
+                        toemailadress: "psspl.trainee31@outlook.com"
+                    }
+                    this.sendMailAPI(body);
+                })
+                response.fail((e) => {
+                    console.log(e)
+                })
+
+
             }
         })
         /* END - GET TL NAME AND EMAIL */
@@ -274,13 +288,7 @@ class AddProject extends Component {
             isUpdate: true
         })
     }
-
-
-
-
-
-
-    //#region save data(api)
+  //#region save data(api)
 
     saveProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);
