@@ -86,7 +86,7 @@ class Addtemplate extends Component {
         }
       })
     }
-}
+  }
   savetemplatenameApi() {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -115,7 +115,6 @@ class Addtemplate extends Component {
                   };
                   saveTemplateDetailIds.push(singleObjId);
                 });
-
                 const templatedetailData = JSON.stringify(saveTemplateDetailIds);
                 const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
                 return $.ajax({
@@ -127,14 +126,12 @@ class Addtemplate extends Component {
                     "content-type": "application/json",
                     "x-requested-with": "XMLHttpRequest"
                   },
-
                   success: function (resultData) {
                     _this.setState({ redirectToList: true })
                     toast.success("Template " + Notification.saved, {
                       position: toast.POSITION.TOP_RIGHT
                     });
                   }
-
                 });
               } else {
                 _this.setState({ redirectToList: true })
@@ -146,14 +143,12 @@ class Addtemplate extends Component {
           });
         }
       })
-
     } else {
       return false;
     }
   }
 
   onChangekra(event) {
-
     this.setState({
       selectkra:
       {
@@ -185,33 +180,33 @@ class Addtemplate extends Component {
     this.state.isUpdated = true;
     if (this.state.isSelect === true) {
       var tempData = templateData.filter((i) => {
-        return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId:false)
+        return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId : false)
       });
       if (tempData.length > 0) {
 
         $(".recordExistsTbl").show()
       }
       else {
-        if(this.state.kpiId && this.state.kraId){
-        this.state.isUpdated = true;
-        var templateDataapi = {
-          kraName: this.state.selectkra,
-          kpiTitle: this.state.selectkpi,
-          kraId: this.state.kraId,
-          kpiId: this.state.kpiId,
-          templateDetailId: this.state.templateDetailId
-        };
-        templateData.push(templateDataapi);
-        this.$el
-          .DataTable()
-          .clear()
-          .rows.add(templateData)
-          .draw();
+        if (this.state.kpiId && this.state.kraId) {
+          this.state.isUpdated = true;
+          var templateDataapi = {
+            kraName: this.state.selectkra,
+            kpiTitle: this.state.selectkpi,
+            kraId: this.state.kraId,
+            kpiId: this.state.kpiId,
+            templateDetailId: this.state.templateDetailId
+          };
+          templateData.push(templateDataapi);
+          this.$el
+            .DataTable()
+            .clear()
+            .rows.add(templateData)
+            .draw();
+        }
+        else {
+          toast.info("Please select both values");
+        }
       }
-      else{
-        toast.info("Please select both values");
-      }
-    }
     }
     else {
       toast.info("Please select kra & kpi");
@@ -343,7 +338,7 @@ class Addtemplate extends Component {
                     templateId: this.state.id,
                     kraId: item.kraName.id,
                     kpiId: item.kpiTitle.id
-                   };
+                  };
                   saveTempDetail.push(singleObjId);
                 }
               });
