@@ -5,7 +5,6 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
-
 class Designationlist extends Component {
     constructor(props) {
         super(props);
@@ -60,9 +59,7 @@ class Designationlist extends Component {
         });
     }
     DeletedesignationApi(designationId) {
-
         const deleteDesignationApiUrl = environment.apiUrl + moduleUrls.Designation + '/' + `${designationId}`
-
         return $.ajax({
             url: deleteDesignationApiUrl,
             type: Type.deletetype,

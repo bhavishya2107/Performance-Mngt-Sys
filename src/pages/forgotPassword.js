@@ -43,7 +43,6 @@ class ForgotPW extends Component {
 
 
     addTokenToAPI = () => {
-        debugger;
         var tokenTopass = {
             query: `update user_master  set resetToken =  '${this.state.resetToken}'  where emailaddress = '${this.state.emailForFPW}'`
         }
@@ -62,14 +61,13 @@ class ForgotPW extends Component {
 
     isEmailIDexist = () => {
 
-        // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
         const emailAlreadyExist = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailForFPW + ')';
         return $.ajax({
             url: emailAlreadyExist,
             type: Type.get,
             data: '',
             success: function (resultData) {
-                console.log(resultData)
+           
             }
         });
 
@@ -98,7 +96,7 @@ class ForgotPW extends Component {
             emailForFPW: event.target.value,
             resetToken: this.generate_token(36)
         })
-        // localStorage.setItem('emailForFPW',`${event.target.value}`);
+      
     }
 
     ClickToSendEmailForFPW = () => {

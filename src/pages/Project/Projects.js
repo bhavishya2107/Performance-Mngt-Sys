@@ -167,7 +167,7 @@ class Projects extends Component {
                     targets: 2,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format("YYYY-MM-DD")}</label>`
+                            `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
                 },
@@ -176,7 +176,7 @@ class Projects extends Component {
                     targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="endDate" value=>${moment(row.endDate).format("YYYY-MM-DD")}</label>`
+                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
                 },
