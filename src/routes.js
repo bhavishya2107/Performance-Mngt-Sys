@@ -32,8 +32,9 @@ const routes = {
 
   '/user-management/add': 'add user',
   '/EditUser': 'user-management',
-  '/dashboard':'Dashboard'
-
+  '/dashboard':'Dashboard',
+   '/Template':'Template' ,
+   '/Template/add':'Template'
 };
 {
 }

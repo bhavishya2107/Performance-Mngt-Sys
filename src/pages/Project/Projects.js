@@ -167,7 +167,7 @@ class Projects extends Component {
                     targets: 2,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
+                            `<label id="startDate" value=>${moment(row.startDate).format("YYYY-MM-DD")}</label>`
                         )
                     },
                 },
@@ -176,7 +176,7 @@ class Projects extends Component {
                     targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+                            `<label id="endDate" value=>${moment(row.endDate).format("YYYY-MM-DD")}</label>`
                         )
                     },
                 },
@@ -240,14 +240,13 @@ class Projects extends Component {
                     id="tblprojectform"
                     ref={el => (this.el = el)}>
                     <thead>
-                        <tr>
+                        <tr className="container-fluid">
                             <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                           
-                            <th width="100">Project Name</th>
-                            <th width="80">Start Date</th>
-                            <th width="80">End Date</th>
+                            <th width="100">Name</th>
+                            <th width="100">Start Date</th>
+                            <th width="100">End Date</th>
                             <th width="100">Complexity</th>
-                            <th width="20">Action</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

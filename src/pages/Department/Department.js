@@ -77,8 +77,6 @@ class Department extends Component {
         })
     }
     multipleDeleteDeptConfirm() {
-
-        debugger;
         var departmentId = []
         $("#tblDepartment input:checkbox:checked").each((e, item) => {
             if (item.value != 259) {

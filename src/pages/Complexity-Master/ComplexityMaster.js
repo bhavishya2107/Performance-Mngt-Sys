@@ -224,12 +224,11 @@ class ComplexityMaster extends Component {
                         id="tblComplexityMaster"
                         ref={el => (this.el = el)}>
                         <thead>
-                            <tr>
+                            <tr className="container-fluid">
                                 <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="100">Complexity Name</th>
-                                <th>Description</th>
+                                <th width="100">Name</th>
+                                <th >Description</th>
                                 <th width="100">Action</th>
-
                             </tr>
                         </thead>
                         <tbody></tbody>

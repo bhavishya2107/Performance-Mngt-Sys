@@ -12,6 +12,8 @@ class Templatelist extends Component {
         this.state = {
         };
     }
+
+    //#region  singleDelete
     singleDeleteTemplateMasterApi(templateId) {
 
         const singleDeleteAPIUrl = environment.apiUrl + moduleUrls.Template + '/' + `${templateId}`;
@@ -68,6 +70,8 @@ class Templatelist extends Component {
             }
         });
     }
+    //#endregion
+    //#region MultiDelete
     multiDeleteTemplateApi(templateId) {
 
         const multiDeleteAPIUrl = environment.apiUrl + moduleUrls.Template + '/bulk?_ids=' + `${templateId}`;
@@ -81,7 +85,6 @@ class Templatelist extends Component {
         });
     }
     multiDeleteTemplate(templateId) {
-
         var item = templateId.join(",")
         var res = this.multiDeleteTemplateApi(item);
         res.done((response) => {
@@ -147,7 +150,7 @@ class Templatelist extends Component {
             }
         });
     }
-
+    //#endregion
     componentDidMount() {
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -159,7 +162,7 @@ class Templatelist extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_detail as TKKA LEFT JOIN template_master as TM ON TKKA.templateId = TM.templateId LEFT JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId"
+                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_master as TM LEFT JOIN template_detail as TKKA ON TKKA.templateId = TM.templateId LEFT JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId"
                 },
             },
             columns: [
@@ -212,9 +215,11 @@ class Templatelist extends Component {
         });
     }
     resetform() {
-        window.location.reload();
+        this.$el
+            .DataTable()
+            .clear()
+            .draw();
     }
-
     render() {
         return (<div>
             <div className="clearfix d-flex align-items-center row page-title">

@@ -30,7 +30,8 @@ class Addtemplate extends Component {
       kpiName: {},
       isUpdated: false,
       templateDetailId: "",
-      isSelect: false
+      isSelect: false,
+      isSelectBoth: false
     };
     templateData = [];
     currentDetailData = [];
@@ -85,9 +86,7 @@ class Addtemplate extends Component {
         }
       })
     }
-
   }
-
   savetemplatenameApi() {
     var isvalidate = window.formValidation("#formtemplate");
     if (isvalidate) {
@@ -117,7 +116,6 @@ class Addtemplate extends Component {
                   };
                   saveTemplateDetailIds.push(singleObjId);
                 });
-
                 const templatedetailData = JSON.stringify(saveTemplateDetailIds);
                 const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
                 return $.ajax({
@@ -129,14 +127,12 @@ class Addtemplate extends Component {
                     "content-type": "application/json",
                     "x-requested-with": "XMLHttpRequest"
                   },
-
                   success: function (resultData) {
                     _this.setState({ redirectToList: true })
                     toast.success("Template " + Notification.saved, {
                       position: toast.POSITION.TOP_RIGHT
                     });
                   }
-
                 });
               } else {
                 _this.setState({ redirectToList: true })
@@ -148,15 +144,12 @@ class Addtemplate extends Component {
           });
         }
       })
-
     } else {
       return false;
     }
-
   }
 
   onChangekra(event) {
-
     this.setState({
       selectkra:
       {
@@ -165,13 +158,12 @@ class Addtemplate extends Component {
 
       },
       kraId: event.target.value,
-      isSelect: true
+      isSelect: true,
     });
 
 
   }
   onChangekpi(event) {
-
     this.setState({
       selectkpi:
       {
@@ -181,40 +173,44 @@ class Addtemplate extends Component {
       },
       kpiId: event.target.value,
       kpiName: event.target.options[event.target.selectedIndex].text,
-      isSelect: true
+      isSelect: true,
     });
   }
 
   addtemplate() {
-
     this.state.isUpdated = true;
     if (this.state.isSelect === true) {
-      var a = templateData.filter((i) => {
-        return (i.kpiTitle.id == this.state.kpiId) && (i.kraName.id == this.state.kraId)
+      var tempData = templateData.filter((i) => {
+        return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId : false)
       });
-      if (a.length > 0) {
+      if (tempData.length > 0) {
 
         $(".recordExistsTbl").show()
       }
       else {
-        this.state.isUpdated = true;
-        var templateDataapi = {
-          kraName: this.state.selectkra,
-          kpiTitle: this.state.selectkpi,
-          kraId: this.state.kraId,
-          kpiId: this.state.kpiId,
-          templateDetailId: this.state.templateDetailId
-        };
-        templateData.push(templateDataapi);
-        this.$el
-          .DataTable()
-          .clear()
-          .rows.add(templateData)
-          .draw();
+        if (this.state.kpiId && this.state.kraId) {
+          this.state.isUpdated = true;
+          var templateDataapi = {
+            kraName: this.state.selectkra,
+            kpiTitle: this.state.selectkpi,
+            kraId: this.state.kraId,
+            kpiId: this.state.kpiId,
+            templateDetailId: this.state.templateDetailId
+          };
+          templateData.push(templateDataapi);
+          this.$el
+            .DataTable()
+            .clear()
+            .rows.add(templateData)
+            .draw();
+        }
+        else {
+          toast.info("Please select both values");
+        }
       }
     }
     else {
-      toast.info(Notification.selectOneRecord);
+      toast.info("Please select kra & kpi");
     }
   }
 
@@ -258,6 +254,7 @@ class Addtemplate extends Component {
       }
     });
   }
+
   resetform() {
     window.location.reload();
   }
@@ -343,7 +340,6 @@ class Addtemplate extends Component {
                     templateId: this.state.id,
                     kraId: item.kraName.id,
                     kpiId: item.kpiTitle.id
-                    //  templateDetailId: item.templateDetailId,
                   };
                   saveTempDetail.push(singleObjId);
                 }
@@ -576,7 +572,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option>select Kra</option>
+                <option disabled selected>Select Kra</option>
                 {this.state.displayDatakra}
               </select>
             </div>
@@ -589,7 +585,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option>select Kpi</option>
+                <option disabled selected>Select Kpi</option>
                 {this.state.displayDatakpi}
               </select>
             </div>
