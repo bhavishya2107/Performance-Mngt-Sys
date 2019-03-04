@@ -98,6 +98,11 @@ export default {
                 //     url: '/myProfile',
                 //     icon: 'fa fa-plus',
                 // }
+                {
+                    name: 'Assign-Template',
+                    url: '/Template',
+                    icon: 'fa fa-sitemap',
+                },
 
             ]
         }

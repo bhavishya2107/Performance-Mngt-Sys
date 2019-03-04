@@ -36,11 +36,17 @@ import Designation from './pages/Designation/adddesignation';
 import Addtemplate from './pages/Template/addtemplate';
 import MyProfile from './pages/My-Profile/myProfile';
 
+
+
 import '../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css';
 import Dashboard from './pages/dashboard';
 import ForgotPW from './pages/forgotPassword';
 import ResetPW from './pages/resetPassword';
 import ChangePW from './pages/changePassword';
+
+import Template from './pages/Assign-Template/Template';
+import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
+
 
 class App extends Component {
 constructor(props){
@@ -128,6 +134,13 @@ this.state={
                         {/* <Route exact path="/Department/add" component={AddDept} /> */}
                         <Route path="/AddDept" component={AddDept} />
                         <Route path="/AddProject" component={AddProject} />
+
+                        <Route exact path="/Template" component={Template} />
+                        <Route path="/addAssignTemplate" component={addAssignTemplate} />
+
+
+
+                        
 
 
                         <Route path="/innerpage" component={innerpage} />

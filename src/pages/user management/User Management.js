@@ -50,7 +50,7 @@ class UserManagement extends Component {
     singleDeleteUserConfirm(id) {
 
         if (id !== undefined) {
-            if (id != 2) {
+            if (id !== 2) {
                 bootbox.confirm({
                     message: Notification.deleteConfirm,
                     buttons: {
@@ -90,7 +90,7 @@ class UserManagement extends Component {
     multipleDeleteUserConfirm() {
         var userId = []
         $("#tblUser input:checkbox:checked").each((e, item) => {
-            if (item.value != 2) {
+            if (item.value !== 2) {
                 if (item.name !== "checkAll") {
                     userId.push(item.value);
                 }
