@@ -82,6 +82,7 @@ class AddDept extends Component {
 
                         "departmentName": this.state.departmentName.trim(),
                         "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
                     }
                     var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
                     $.ajax({
@@ -118,7 +119,9 @@ class AddDept extends Component {
         var deptList =
         {
             "departmentName": data.departmentName.trim(),
-            "description": data.description
+            "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
+
         }
         return $.ajax({
             url: updateDeptDetails,

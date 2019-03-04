@@ -16,12 +16,12 @@ class loginPage extends Component {
             userId: '',
             profileImage: "",
             RedirectLoginDetails: false,
-
+          
         };
     }
 
     loginCheckIsValid() {
-        // console.log(this.state.emailAddress);
+   
         const credentialValid = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + `${this.state.emailAddress}` + ')' + '~and(password,eq,' + `${this.state.password}` + ')';
         return $.ajax({
             url: credentialValid,
@@ -47,7 +47,6 @@ class loginPage extends Component {
 
 
     checkCredential = (event) => {
-
         // event.preventDefault(event);
         var isvalidate = window.formValidation("#loginForm")
 
@@ -79,6 +78,7 @@ class loginPage extends Component {
         localStorage.setItem('firstName', response.firstName);
         localStorage.setItem('lastName', response.lastName);
         localStorage.setItem('profileImage', response.profileImage);
+        localStorage.setItem('isAuthenticated',true);
     
         this.setState({
             RedirectLoginDetails: true,
@@ -98,9 +98,8 @@ class loginPage extends Component {
         }
     }
     render() {
-        debugger;
+   
         if (this.state.RedirectLoginDetails) {
-            //return <Redirect to="/dashboard" />
             window.location.href = '/dashboard'
         } else {
             return (

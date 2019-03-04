@@ -35,20 +35,22 @@ class Designation extends Component {
     savedesignation() {
         $(".recordexists").hide()
         var isvalidate = window.formValidation("#formjobtitle");
-        
+
         if (isvalidate) {
-         
+
             var res = this.isDesignationExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    
+
                     $(".recordexists").show()
 
                 } else {
                     var _this = this;
                     var formData = {
                         "designationName": this.state.designationName.trim(),
-                        "description": this.state.description
+                        "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
+
                     }
                     const savejobtitleUrl = environment.apiUrl + moduleUrls.Designation + '/'
                     $.ajax({
@@ -91,7 +93,8 @@ class Designation extends Component {
         var body =
         {
             "designationName": data.designationName.trim(),
-            "description": data.description
+            "description": data.description,
+            "modifiedBy":localStorage.getItem('userId')
 
         }
 
@@ -108,7 +111,7 @@ class Designation extends Component {
         });
     }
     UpdatedesignationDetails(data) {
-        
+
         var isvalidate = window.formValidation("#formjobtitle");
         if (isvalidate) {
             var res = this.isDesignationExistsUpdateApi()
@@ -133,7 +136,7 @@ class Designation extends Component {
                 }
             });
             res.fail((error) => {
-
+                console.log(error)
             })
         } else {
             $(".recordexists").hide()
@@ -141,30 +144,27 @@ class Designation extends Component {
         }
 
     }
-    onblurRowExists(){
-        if(this.state.id != undefined){
+    onblurRowExists() {
+        if (this.state.id != undefined) {
             var res = this.isDesignationExistsUpdateApi();
             res.done((response) => {
-                debugger;
                 if (response.length > 0) {
                     $(".recordexists").show()
 
-                }else{
-                   
+                } else {
                 }
-
+            }
+            )
         }
-        )}
-    
-        else{
+
+        else {
             var res = this.isDesignationExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
-    
+
                 } else {
-                    
                 }
             })
         }
@@ -186,9 +186,7 @@ class Designation extends Component {
 
             })
         } else {
-
         }
-
     }
 
     render() {
@@ -215,7 +213,7 @@ class Designation extends Component {
                                             designationName: event.target.value
                                         })
                                     }} required />
-                                    
+
                                 <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">

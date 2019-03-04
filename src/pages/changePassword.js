@@ -40,7 +40,7 @@ class ChangePW extends Component {
             url: url,
             type: Type.get,
             success: function (resultData) {
-                console.log(resultData)
+              
             }
         })
     }
@@ -68,7 +68,7 @@ class ChangePW extends Component {
     
                         });
                         changePassword.fail((error)=>{
-                            console.log("password not changed")
+                       
     
                         })
                     }

@@ -39,6 +39,11 @@ export default {
                 url: '/role',
                 icon: 'fa fa-user-secret',
             },
+            {
+                name: 'Quater',
+                url: '/quater',
+                icon: 'fa fa-user-secret',
+            },
 
             {
                 name: 'User Management',
