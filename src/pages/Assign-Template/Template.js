@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 $.DataTable = require('datatables.net-bs4');
-
+var moment = require('moment');
 
 class Template extends Component {
 
@@ -17,38 +17,31 @@ class Template extends Component {
             project: "",
             projectDate: "",
             status: "",
+            assignId: ""
+
         }
     }
     componentDidMount() {
-        const url = environment.dynamicUrl + 'dynamic' ;
-        
+        const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
+
+
         this.$el.DataTable({
             "autoWidth": false,
             ajax: {
                 url: url,
                 type: Type.post,
-                dataSrc: {
-                    "query" : "SELECT UM.firstName,Um.lastname, PM.projectName,PM.startDate,PM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy"
-                    },
-                error: function (xhr, status, error) {
-
+                data: {
+                    query: "SELECT TAM.assignId,UM.firstName,Um.lastname, PM.projectName,PM.startDate,PM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy"
                 },
-
+                dataSrc: "",
+                error: function (xhr, status, error) {
+                },
             },
-            // "firstName": "pratik",
-            // "lastname": "chotay",
-            // "projectName": "feb2019",
-            // "startDate": "2019-02-24T18:30:00.000Z",
-            // "endDate": "2019-03-01T18:30:00.000Z",
-            // "status": "Not Started",
-            // "templateName": "qwerty"
-
             columns: [
                 {
                     data: "templateName",
                     targets: 0,
-
                 },
                 {
                     data: "firstName",
@@ -59,8 +52,13 @@ class Template extends Component {
                     targets: 2,
                 },
                 {
-                    data: "projectDate",
+                    data: "startDate",
                     targets: 3,
+                    render: (data, type, row) => {
+                        return (
+                            `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
+                        )
+                    },
                 },
 
                 {
@@ -68,11 +66,11 @@ class Template extends Component {
                     targets: 4,
                 },
                 {
-                    data: "assignDetailId",
+                    data: "assignId",
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditTemplate/assignDetailId=' + row.assignDetailId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditTemplate/assignId=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.Id + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -90,7 +88,6 @@ class Template extends Component {
                 // $(".btnDelete").on("click", e => {
                 //     this.singleDeleteUserConfirm(e.currentTarget.id);
                 // });
-
             }
         });
     }
@@ -104,7 +101,7 @@ class Template extends Component {
                     </div>
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
-                    id="tblUser"
+                    id="tblTemplateAssigned"
 
                     ref={el => (this.el = el)}>
                     <thead>
@@ -119,6 +116,8 @@ class Template extends Component {
                     </thead>
                     <tbody></tbody>
                 </table>
+
+
                 <ToastContainer />
             </div >
 
