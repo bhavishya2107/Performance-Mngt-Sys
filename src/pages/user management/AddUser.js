@@ -380,7 +380,7 @@ class AddUser extends Component {
                 url: url,
                 type: Type.get,
                 success: (res) => {
-                    /* START - SEND EMAIL */
+                    /* START - SEND REMOVE EMAIL */
                     var result = this.removeEmpEmail();
                     result.done((response) => {
                         var emailBody = `<html>
@@ -405,7 +405,7 @@ class AddUser extends Component {
                         {
                             emailSubject: "Employee removed from your team",
                             emailBody: emailBody,
-                            toemailadress: res[0].emailAddress
+                            toemailadress: response[0].emailAddress
                         }
                         this.sendMailAPI(body);
 
@@ -496,59 +496,9 @@ class AddUser extends Component {
             isUpdate: true
         })
     }
-
-
-    //     var res = this.updatedMailApi(body);
-    //     res.done((result) => {
-    //         var result = this.getTeamLeaderAPI()
-
-    //         var emailBody = `<html>
-    //                      <body>
-    //                      <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
-    //               <p>New Employee added in your team.<span>`;
-    //                 if (this.state.gender == "Male") {
-    //                     emailBody += `His`
-    //                 }
-    //                 else {
-    //                     emailBody += `Her`
-    //                 }
-    //                 emailBody += `
-    //                     name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
-    //                     </p>                        
-    //                     <p>Thanks,</p>
-    //                     <p>PSSPL ADMIN</p>
-    //                 </body>
-    //                 </html>`;
-
-    //                 var body =
-    //                 {
-    //                     emailSubject: "Employee added in your team",
-    //                     emailBody: emailBody,
-    //                     toemailadress: res[0].emailAddress
-    //                 }
-
-
-    //         this.setState({
-    //             isUpdate: true
-    //         })
-    //     })
-    //     res.fail((error) => {
-    //         console.log(error);
-    //     })
-
-
-    // }
-
-
     updateUser(data) {
-
-
-
         var res = this.updateAjaxCall(data);
         res.done((response) => {
-
-
-
             this.updatedMail();
             toast.success("User " + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
@@ -673,16 +623,6 @@ class AddUser extends Component {
             },
         });
     }
-
-
-    getTeamLeaderAPI() {
-
-
-
-
-
-    }
-
     getTeamLeader() {
         var url = environment.apiUrl + moduleUrls.User
         $.ajax({

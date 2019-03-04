@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  // apiUrl: "http://180.211.103.189:3000/api/",
-  // dynamicUrl: "http://180.211.103.189:3000/",
+ //  apiUrl: "http://180.211.103.189:3000/api/",
+   //dynamicUrl: "http://180.211.103.189:3000/",
   apiUrl: 'http://192.168.10.110:3000/api/',
   dynamicUrl: "http://192.168.10.110:3000/",
   publicUrl: "http://180.211.103.189:3000/api/",
@@ -20,7 +20,8 @@ export const moduleUrls = {
   ProjectResources:"project_resources",
   Template:"template_master",
   Templatedetail:"template_detail",
-  Quater:"quater_master"
+  Quater:"quater_master",
+  Template_assignment_master:"template_assignment_master"
 };
 export const Type = {
   get: "GET",
@@ -42,7 +43,7 @@ export const Notification = {
   EmailSent:"Email Sent Please Check your Email",
   ChangePassword:"Password Changed Successfully",
   MatchPassword:"Password Does Not Match",
-  emailExist:"Email Does Not Exist",
+  emailExist:"Email Does Not Exist"
   
 };
 export const ModuleNames = {
@@ -56,4 +57,4 @@ export const ModuleNames = {
   ScaleSet: "Scale Set",
   ComplexityMaster:"Complexity Master",
   quater:"Quarter"
-};
+}
