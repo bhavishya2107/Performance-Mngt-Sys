@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { environment, moduleUrls, Type, Notification } from '../Environment';
 import { Redirect } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer , toast} from "react-toastify";
 const $ = require("jquery");
 
 class MyProfile extends Component {
@@ -26,20 +26,24 @@ class MyProfile extends Component {
 
   getUserDetailsApi() {
     var endpoint = environment.dynamicUrl + 'dynamic';
-
+    var MyProfileQuery = {
+      query: `select u.userid,u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename,dm.designationName, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = ${localStorage.getItem('userId')}`
+    }
     // const endpoint = "http://180.211.103.189:3000/dynamic";
 
     return $.ajax({
       url: endpoint,
       type: Type.post,
-      data: {
-        query:
-          "select u.userid,u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = 2"
-      }
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(MyProfileQuery),
+
     });
   }
 
   componentDidMount() {
+   
     if (this.state.userId !== undefined) {
       var res = this.getUserDetailsApi();
       res.done(response => {
@@ -69,22 +73,23 @@ class MyProfile extends Component {
   // localStorage.getItem('firstName', response.firstName);
   // localStorage.getItem('lastName', response.lastName);
   // this.state.userId == 
- 
+
 
   redirectToEdit = () => {
-   
+
     this.setState({
       redirectToEdit: true
     })
 
   }
+  
 
 
   render() {
     if (this.state.redirectToEdit) {
       var redirect = "/EditUser/userId=" + localStorage.getItem("userId")
       return (
-         <Redirect to={redirect}  /> 
+        <Redirect to={redirect} />
       )
     }
     return (
@@ -100,7 +105,7 @@ class MyProfile extends Component {
               <div>
                 <img
                   src={this.state.profileImage}
-                  style={{ width: "150px" , height:"150px" }}
+                  style={{ width: "130px", height: "150px" }}
                   className="img-thumbnail"
                 />
 
@@ -282,7 +287,7 @@ class MyProfile extends Component {
             </div>
           </div>
         </form>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     );
   }
