@@ -98,6 +98,7 @@ class Addtemplate extends Component {
           var _this = this;
           var formData = {
             templateName: this.state.templateName.trim(),
+            "createdBy":localStorage.getItem('userId')
           };
           const templateSaveApi = environment.apiUrl + moduleUrls.Template;
           return $.ajax({
@@ -289,6 +290,7 @@ class Addtemplate extends Component {
     var body =
     {
       "templateName": data.templateName,
+      "modifiedBy":localStorage.getItem('userId')
     }
     const endpointPOST = environment.apiUrl + moduleUrls.Template + '/' + `${data.id}`
     return $.ajax({

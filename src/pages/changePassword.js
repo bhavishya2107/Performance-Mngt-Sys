@@ -51,6 +51,7 @@ class ChangePW extends Component {
         var isvalidate = window.formValidation("#CPWform")
         if (isvalidate) {
             var res = this.matchCurrentPasswordAPI()
+            var _this=this;
             res.done((result) => {
 
                 if (result[0].password === this.state.currentPassword) {
@@ -58,15 +59,19 @@ class ChangePW extends Component {
                     if (this.state.password === this.state.retypePassword) {
 
                         var changePassword= this.updatePassword();
+                   
+                
                         changePassword.done((response)=>{
                             toast.success(" " + Notification.ChangePassword, {
                                 position: toast.POSITION.TOP_RIGHT
                             });
-                            this.setState({
-                                redirectTologin:true
-                            })
-    
+                        
+                      
                         });
+                        _this.setState({
+                            redirectTologin:true
+                        })
+
                         changePassword.fail((error)=>{
                        
     
@@ -90,11 +95,14 @@ class ChangePW extends Component {
     }
 
     updatedPassword = (event) => {
+        $(".matchPassword").hide();
         this.setState({
+         
             password: event.target.value
         })
     }
     confirmUpdatedPassword = (event) => {
+        $(".matchPassword").hide();
         this.setState({
             retypePassword: event.target.value
         })
@@ -106,11 +114,12 @@ class ChangePW extends Component {
     }
 
     render() {
-        // if (this.state.redirectTologin) {
-        //     window.location.href = '/myProfile'
-        // }
-        // else
-        // {
+        if (this.state.redirectTologin) {
+        
+            window.location.href = '/myProfile'
+        }
+        else
+        {
         return (
             <div>
                 <form className="form-signin p-3 shadow" id="CPWform">
@@ -131,7 +140,7 @@ class ChangePW extends Component {
                             value={this.state.currentPassword} required />
 
                     </div>
-                    <p className="matchPW" style={{ "display": "none", "color": "red" }}>password does not match check password</p>
+                    <p className="matchPW" style={{ "display": "none", "color": "red" }}>password does not match current password</p>
 
                     <div className="form-group">
 
@@ -148,21 +157,21 @@ class ChangePW extends Component {
                             onChange={this.confirmUpdatedPassword}
                             value={this.state.retypePassword} required />
 
-                    </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password Must be same in above two fields</p>
+                    </div><p className="matchPassword" style={{ "display": "none", "color": "red" }}>Password must match in above two fields</p>
 
                     <div className="form-group">
                         <a className="btn btn-lg btn-success" type="button" id="submitbutton" onClick={this.userCurrentpwCheck} >Submit</a>&nbsp;
                     <a className="btn btn-lg btn-danger" type="button" onClick={this.resetCPWform}>Reset</a><br />
                     </div>
                     <div className="divider">
-                        <Link to="/">Login Page</Link>
+                    {/* <Link to={window.location.href="/myProfile"}>Back</Link> */}
                     </div>
 
                 </form>
                 <ToastContainer />
             </div>
         )
-                            // }
+                            }
     }
 }
 export default ChangePW;

@@ -199,7 +199,7 @@ class Quater extends Component{
                     render: function (data, type, row) {
                         return (
                             '<a href="/EditQuaterForm/id=' + row.quaterId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            '&nbsp' +
+                            
                             '<a href="#" id="' + row.quaterId + '"class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"

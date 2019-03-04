@@ -367,6 +367,7 @@ class AddProject extends Component {
                         "status": this.state.status,
                         "manageBy": this.state.manageBy,
                         "description": this.state.description,
+                        "createdBy":localStorage.getItem('userId')
                     }
                     this.saveProjectDetails(projectData);
                 }
@@ -468,6 +469,7 @@ class AddProject extends Component {
                         "status": updateData.status,
                         "manageBy": updateData.manageBy,
                         "description": updateData.description,
+                        "modifiedBy":localStorage.getItem('userId')
                     }
                     this.updateProjectDetails(TempData);
                 }
