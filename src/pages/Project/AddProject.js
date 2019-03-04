@@ -34,9 +34,9 @@ class AddProject extends Component {
             complexityId: "",
             complexityName: "",
             userId: "",
-          
+
             manageBy: "",
-            resources: "",
+            resources: {},
             options: "",
             selectedOption: null,
             redirectToList: false
@@ -69,8 +69,8 @@ class AddProject extends Component {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
-                } 
-                else{
+                }
+                else {
                 }
             })
         }
@@ -115,6 +115,171 @@ class AddProject extends Component {
     }
     //#endregion
 
+    sendMailAPI(body) {
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+    }
+
+    sendProjectMail() {
+        debugger;
+        /* START - GET TL NAME AND EMAIL */
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.manageBy}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+            // Project Name:<b>` + res[0].projectName`</b></span>
+            // Date:<b>` + res[0].startDate + `to` + this.state.startDate` </b>
+            // Resources:<b>` + res[0].resources`</b>
+            // Description:<b>` + res[0].description`</b>
+
+            success: (res) => {
+                debugger;
+                console.log(res)
+                /* START - SEND EMAIL */
+                var emailBody =
+                    `<html>
+                <body>
+                <p>Hello </p>
+                <p>New Project Assigned to you. Below are the details of project:</p>`;
+                emailBody += `
+                <p>
+             ProjectName:
+                </p>                        
+                <p>Thanks,</p>
+                <p>PSSPL ADMIN</p>
+            </body>
+            </html>`;
+                var body =
+                {
+                    emailSubject: "New Project assigned",
+                    emailBody: emailBody,
+                    toemailadress: "janmeshnayak1997@gmail.com"
+                }
+                this.sendMailAPI(body);
+                /* END - SEND EMAIL */
+            }
+        })
+        /* END - GET TL NAME AND EMAIL */
+    }
+
+    updatedMailApi(body) {
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+    }
+
+
+    removeEmpEmail() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.oldReportingManagerId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+
+        });
+
+    }
+
+    updatedMail() {
+        if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
+            /* START - SEND EMAIL TO OLD REPORTING MANAGER */
+            var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+            return $.ajax({
+                url: url,
+                type: Type.get,
+                success: (res) => {
+                    /* START - SEND EMAIL */
+                    var result = this.removeEmpEmail();
+                    result.done((response) => {
+                        var emailBody = `<html>
+                        <body>
+                        <p>Hello `+ response[0].firstName + ` ` + response[0].lastName + `,</p>
+                        <p>Employee removed from your team.<span>`;
+                        if (this.state.gender == "Male") {
+                            emailBody += `His`
+                        }
+                        else {
+                            emailBody += `Her`
+                        }
+                        emailBody += `
+                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        </p>                        
+                        <p>Thanks,</p>
+                        <p>PSSPL ADMIN</p>
+                    </body>
+                    </html>`;
+
+                        var body =
+                        {
+                            emailSubject: "Employee removed from your team",
+                            emailBody: emailBody,
+                            toemailadress: res[0].emailAddress
+                        }
+                        this.sendMailAPI(body);
+
+                        this.setState({
+                            RedirectToUserManagement: true
+                        })
+                    })
+                    result.fail((error) => {
+
+                    })
+                    var emailBody = `<html>
+                        <body>
+                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                        <p>Employee added in your team.<span>`;
+                    if (this.state.gender == "Male") {
+                        emailBody += `His`
+                    }
+                    else {
+                        emailBody += `Her`
+                    }
+                    emailBody += `
+                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        </p>                        
+                        <p>Thanks,</p>
+                        <p>PSSPL ADMIN</p>
+                    </body>
+                    </html>`;
+
+                    var body =
+                    {
+                        emailSubject: "Employee added in your team",
+                        emailBody: emailBody,
+                        toemailadress: res[0].emailAddress
+                    }
+                    this.sendMailAPI(body);
+
+                    this.setState({
+                        RedirectToUserManagement: true
+                    })
+                }
+
+            })
+        }
+        this.setState({
+            isUpdate: true
+        })
+    }
+
+
+
+
+
+
     //#region save data(api)
 
     saveProjectResourceAPI(tempData) {
@@ -144,6 +309,7 @@ class AddProject extends Component {
         })
         var res = this.saveProjectResourceAPI(tempData);
         res.done((response) => {
+            this.sendProjectMail();
             this.setState({ redirectToList: true });
             toast.success("Project " + Notification.saved, {
                 position: toast.POSITION.TOP_RIGHT
@@ -167,6 +333,7 @@ class AddProject extends Component {
     saveProjectDetails(projectData) {
         var res = this.saveProjectDetailsAPI(projectData);
         res.done((response) => {
+            this.sendProjectMail();
             console.log(this.state.selectedOption)
             this.saveProjectResource(response.insertId, this.state.selectedOption);
         })
@@ -186,8 +353,8 @@ class AddProject extends Component {
                 } else {
                     var projectData = {
                         "projectName": this.state.projectName.trim(),
-                        "startDate": moment(this.state.startDate).format("DD-MM-YYYY"),
-                        "endDate": moment(this.state.endDate).format("DD-MM-YYYY"),
+                        "startDate": moment(this.state.startDate).format("YYYY-MM-DD"),
+                        "endDate": moment(this.state.endDate).format("YYYY-MM-DD"),
                         "complexityId": this.state.complexityId,
                         "status": this.state.status,
                         "manageBy": this.state.manageBy,
@@ -287,8 +454,8 @@ class AddProject extends Component {
                     var TempData =
                     {
                         "projectName": updateData.projectName.trim(),
-                        "startDate": moment(updateData.startDate).format("DD-MM-YYYY"),
-                        "endDate": moment(updateData.endDate).format("DD-MM-YYYY"),
+                        "startDate": moment(updateData.startDate).format("YYYY-MM-DD"),
+                        "endDate": moment(updateData.endDate).format("YYYY-MM-DD"),
                         "complexityId": updateData.complexityId,
                         "status": updateData.status,
                         "manageBy": updateData.manageBy,
@@ -492,7 +659,7 @@ class AddProject extends Component {
                                                     startDate: moment(e).format("")
                                                 })
                                             }}//only when value has changed
-                                            
+
                                             required />
                                     </div>
                                 </div>
@@ -502,10 +669,10 @@ class AddProject extends Component {
                                         selected={this.state.endDate}
                                         onChange={(e) => {
                                             this.setState({
-                                                endDate: moment(e).format("DD-MM-YYYY")
+                                                endDate: moment(e).format("YYYY-MM-DD")
                                             })
                                         }}//only when value has changed
-                                        dateFormat="DD-MM-YYYY"
+
                                     />
                                 </div>
                             </div>
@@ -513,14 +680,14 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <label >Complexity</label>
                                     <select required name="complexitydropdown" className="form-control" htmlFor="complexityId" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
-                                        <option value="">select</option>
+                                        <option disabled selected value="">select</option>
                                         {this.state.displayComplexityId}
                                     </select>
                                 </div>
                                 <div className="col-md-4">
                                     <label>Project Status</label>
                                     <select required name="projectStatusdropdown" className="form-control" value={this.state.status}  >
-                                        <option value="">select</option>
+                                        <option disabled selected value="">select</option>
                                         {this.state.displayProjectStatus}
                                         <option>Not Started</option>
                                         <option>On Going</option>
@@ -531,7 +698,7 @@ class AddProject extends Component {
                                     <div className="form-group">
                                         <label className="required" htmlFor="manageBy">Managed By</label>
                                         <select required name="manageBydropdown" className="form-control" onChange={(e) => { this.onChangeManageBy(e) }} value={this.state.manageBy}  >
-                                            <option value="">select</option>
+                                            <option disabled selected value="">select</option>
                                             {this.state.displayManageBy}
                                         </select>
                                     </div>
