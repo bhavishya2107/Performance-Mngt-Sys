@@ -48,6 +48,7 @@ import ADDQuater from './pages/Quater/add-quater';
 
 import Template from './pages/Assign-Template/Template';
 import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
+import KraSheet from './pages/Kra/kraSheetDetails';
 
 
 class App extends Component {
@@ -141,6 +142,7 @@ if(localStorage.getItem('isAuthenticated')){
                         <Route path="/innerpage" component={innerpage} />
                         <Route exact path="/kra/add" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
+                        <Route path="/kraSheetDetails" component={KraSheet}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>
                         <Route path="/quater" component={Quater}></Route>
