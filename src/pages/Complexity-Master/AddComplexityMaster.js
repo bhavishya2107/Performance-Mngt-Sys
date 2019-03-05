@@ -184,7 +184,7 @@ class AddComplexityMaster extends Component {
                     <div className="col-md-6">
                         <form id="ComplexityMasterForm">
                             <div className="form-group">
-                                <label className="required">Project Name</label>
+                                <label className="required">Complexity Name</label>
                                 <input type="text" id="complexityName" className="form-control" maxLength="50" onBlur={() => { this.onchangeBlur() }} name="complexityName" value={this.state.complexityName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
