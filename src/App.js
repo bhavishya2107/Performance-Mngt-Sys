@@ -48,7 +48,12 @@ import ADDQuater from './pages/Quater/add-quater';
 
 import Template from './pages/Assign-Template/Template';
 import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
+<<<<<<< HEAD
 import Myteam from './pages/myteam';
+=======
+import KraSheet from './pages/Kra/kraSheetDetails';
+
+>>>>>>> d6c70ffbc485f3461074e4645b675c1d9f68026e
 
 class App extends Component {
 constructor(props){
@@ -141,6 +146,7 @@ if(localStorage.getItem('isAuthenticated')){
                         <Route path="/innerpage" component={innerpage} />
                         <Route exact path="/kra/add" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
+                        <Route path="/kraSheetDetails" component={KraSheet}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>
                         <Route path="/quater" component={Quater}></Route>

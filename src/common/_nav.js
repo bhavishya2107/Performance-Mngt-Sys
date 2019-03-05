@@ -39,15 +39,16 @@ export default {
                 url: '/kra',
                 icon: 'fa fa-area-chart',
             },
+       
             {
                 name: 'Role',
                 url: '/role',
                 icon: 'fa fa-user-secret',
             },
             {
-                name: 'Quater',
+                name: 'Quarter',
                 url: '/quater',
-                icon: 'fa fa-user-secret',
+                icon: 'fa fab fa-quora',
             },
 
             {
