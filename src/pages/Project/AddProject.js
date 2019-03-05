@@ -34,7 +34,6 @@ class AddProject extends Component {
             complexityId: "",
             complexityName: "",
             userId: "",
-
             manageBy: "",
             resources: {},
             options: "",
@@ -42,9 +41,9 @@ class AddProject extends Component {
             redirectToList: false
         };
         // this.handleChange = this.handleChange.bind(this);
-        this.handleChange = (selectedOption1) => {
-            this.setState({ selectedOption: selectedOption1 });
-            //console.log(`Option selected:`, selectedOption1);
+        this.handleChange = (displaySelectedOption) => {
+            this.setState({ selectedOption: displaySelectedOption });
+            console.log(`Option selected:`, displaySelectedOption);
         }
     }
 
@@ -152,9 +151,8 @@ class AddProject extends Component {
                     emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("YYYY-MM-DD") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") +` </b><br>
-                       Resources:<b>` + this.state.userId +`</b><br>
+                       Resources:<b>` + this.state.selectedOption +`</b><br>
                        Description:<b>` + this.state.description +`</b>
-                     
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
@@ -177,21 +175,6 @@ class AddProject extends Component {
         })
         /* END - GET TL NAME AND EMAIL */
     }
-
-    updatedMailApi(body) {
-        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
-
-        return $.ajax({
-            url: emailUrl,
-            type: "post",
-            data: JSON.stringify(body),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-    }
-
-
     
   //#region save data(api)
 
@@ -289,6 +272,8 @@ class AddProject extends Component {
 
     //#region update api
 
+   
+
     updateProjectResourceAPI(tempData) {
         //debugger;
         var ResourcesData = JSON.stringify(tempData);
@@ -316,7 +301,6 @@ class AddProject extends Component {
             }
             tempData.push(resources);
         })
-
         var res = this.updateProjectResourceAPI(tempData);
         res.done((response) => {
             this.setState({ redirectToList: true });
@@ -423,7 +407,6 @@ class AddProject extends Component {
     }
 
     getResourcesData() {
-
         var output = [];
         const endpointGET = environment.apiUrl + moduleUrls.User + '/'
         $.ajax({
@@ -524,7 +507,7 @@ class AddProject extends Component {
                         }
                     }
 
-                })
+                });debugger;
                 this.setState({
                     selectedOption: tempData
                 })
