@@ -126,13 +126,7 @@ class AddProject extends Component {
             },
         })
     }
-    emailProjectApi() {
-        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-        })
-    }
+
 
     sendProjectMail() {
         debugger;
@@ -147,19 +141,20 @@ class AddProject extends Component {
             // Description:<b>` + res[0].description`</b>
 
             success: (res) => {
-                var response = this.emailProjectApi()
-                response.done((result) => {
+        
+                // response.done((result) => {
                     var emailBody =
-                        `<html>
+                    `<html>
                     <body>
                     <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `, </p>
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
+                   
                     emailBody += `
-                    Project Name:<b>` + result[0].projectName`</b></span>
-                    Date:<b>` + result[0].startDate + `to` + result[0].endtDate` </b>
-                    Resources:<b>` + result[0].resources`</b>
-                    Description:<b>` + result[0].description`</b>
-                     <p>
+                       project name is <b>` + this.state.projectName + `</b><br>
+                       Date:<b>` + moment(this.state.startDate).format("YYYY-MM-DD") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") +` </b><br>
+                       Resources:<b>` + this.state.userId +`</b><br>
+                       Description:<b>` + this.state.description +`</b>
+                     
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
@@ -169,13 +164,13 @@ class AddProject extends Component {
                     {
                         emailSubject: "New Project assigned",
                         emailBody: emailBody,
-                        toemailadress: "psspl.trainee31@outlook.com"
+                        toemailadress: "janmeshnayak1997@gmail.com"
                     }
                     this.sendMailAPI(body);
-                })
-                response.fail((e) => {
-                    console.log(e)
-                })
+                // })
+                // response.fail((e) => {
+                //     console.log(e)
+                // })
 
 
             }
@@ -197,97 +192,7 @@ class AddProject extends Component {
     }
 
 
-    removeEmpEmail() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.oldReportingManagerId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-
-        });
-
-    }
-
-    updatedMail() {
-        if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
-            /* START - SEND EMAIL TO OLD REPORTING MANAGER */
-            var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
-            return $.ajax({
-                url: url,
-                type: Type.get,
-                success: (res) => {
-                    /* START - SEND EMAIL */
-                    var result = this.removeEmpEmail();
-                    result.done((response) => {
-                        var emailBody = `<html>
-                        <body>
-                        <p>Hello `+ response[0].firstName + ` ` + response[0].lastName + `,</p>
-                        <p>Employee removed from your team.<span>`;
-                        if (this.state.gender == "Male") {
-                            emailBody += `His`
-                        }
-                        else {
-                            emailBody += `Her`
-                        }
-                        emailBody += `
-                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
-                        </p>                        
-                        <p>Thanks,</p>
-                        <p>PSSPL ADMIN</p>
-                    </body>
-                    </html>`;
-
-                        var body =
-                        {
-                            emailSubject: "Employee removed from your team",
-                            emailBody: emailBody,
-                            toemailadress: res[0].emailAddress
-                        }
-                        this.sendMailAPI(body);
-
-                        this.setState({
-                            RedirectToUserManagement: true
-                        })
-                    })
-                    result.fail((error) => {
-
-                    })
-                    var emailBody = `<html>
-                        <body>
-                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
-                        <p>Employee added in your team.<span>`;
-                    if (this.state.gender == "Male") {
-                        emailBody += `His`
-                    }
-                    else {
-                        emailBody += `Her`
-                    }
-                    emailBody += `
-                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
-                        </p>                        
-                        <p>Thanks,</p>
-                        <p>PSSPL ADMIN</p>
-                    </body>
-                    </html>`;
-
-                    var body =
-                    {
-                        emailSubject: "Employee added in your team",
-                        emailBody: emailBody,
-                        toemailadress: res[0].emailAddress
-                    }
-                    this.sendMailAPI(body);
-
-                    this.setState({
-                        RedirectToUserManagement: true
-                    })
-                }
-
-            })
-        }
-        this.setState({
-            isUpdate: true
-        })
-    }
+    
   //#region save data(api)
 
     saveProjectResourceAPI(tempData) {
@@ -341,7 +246,7 @@ class AddProject extends Component {
     saveProjectDetails(projectData) {
         var res = this.saveProjectDetailsAPI(projectData);
         res.done((response) => {
-            this.sendProjectMail();
+
             console.log(this.state.selectedOption)
             this.saveProjectResource(response.insertId, this.state.selectedOption);
         })
@@ -690,14 +595,14 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <label >Complexity</label>
                                     <select required name="complexitydropdown" className="form-control" htmlFor="complexityId" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
-                                        <option disabled selected value="">select</option>
+                                        <option defaultValue="">select</option>
                                         {this.state.displayComplexityId}
                                     </select>
                                 </div>
                                 <div className="col-md-4">
                                     <label>Project Status</label>
                                     <select required name="projectStatusdropdown" className="form-control" value={this.state.status}  >
-                                        <option disabled selected value="">select</option>
+                                        <option  defaultValue="">select</option>
                                         {this.state.displayProjectStatus}
                                         <option>Not Started</option>
                                         <option>On Going</option>
@@ -708,7 +613,7 @@ class AddProject extends Component {
                                     <div className="form-group">
                                         <label className="required" htmlFor="manageBy">Managed By</label>
                                         <select required name="manageBydropdown" className="form-control" onChange={(e) => { this.onChangeManageBy(e) }} value={this.state.manageBy}  >
-                                            <option disabled selected value="">select</option>
+                                            <option defaultValue="">select</option>
                                             {this.state.displayManageBy}
                                         </select>
                                     </div>
