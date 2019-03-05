@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import $ from 'jquery';
+import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import DatePicker from "react-datepicker";
+import { join } from 'path';
 var moment = require('moment');
 
 var ArrayState = []
@@ -11,7 +13,7 @@ class addAssignTemplate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignDetailId: props.match.params.userId,
+            assignId: props.match.params.assignId,
             quaterId: "",
             templateId: "",
             projectId: "",
@@ -22,6 +24,56 @@ class addAssignTemplate extends Component {
             startDate: new Date(),
             endDate: new Date()
         }
+    }
+
+    //#region Bind Dropdown Lists.
+
+    //#endregion
+
+
+    //#region AJax Calls
+    saveTemplateDetailsApi(data) {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + "/bulk";
+        return $.ajax({
+            url: url,
+            type: Type.post,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(data)
+        })
+    }
+    getTemplateDetailsApi() {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+
+        })
+    }
+
+    getDropDownValues(url) {
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+
+    }
+
+    //#endregion
+
+    //#region Methods
+
+
+    //#endregion
+
+    //#region Events
+    componentDidMount() {
+        this.getQuaterData();
+        this.getTemplateData();
+        this.getProjectData();
+        this.getProjectResourcesData();
+        this.getTemplateDetails();
     }
     onChangeQuater(event) {
         this.setState({
@@ -34,10 +86,12 @@ class addAssignTemplate extends Component {
         })
     }
     onChangeProject(event) {
+        debugger
         this.setState({
             projectId: event.target.value
         });
-        this.getUserData(92);
+
+        this.getUserData(event.target.value);
 
     }
     onChangeUser(event) {
@@ -48,22 +102,107 @@ class addAssignTemplate extends Component {
             })
         });
     }
-    getQuaterData() {
-        var url = environment.apiUrl + moduleUrls.Quater
-        $.ajax({
+    //#endregion
+    //#region update Template details
+    updateAjaxCall(data) {
+        var TempList =
+        {
+            "quaterId": data.quaterId,
+            "templateId": data.templateId,
+            "projectId": data.projectId,
+            "userId": data.userId,
+            "startDate": data.startDate,
+            "endDate": data.endDate
+
+        }
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
+
+        return $.ajax({
             url: url,
-            type: Type.get,
-            success: (tempQuater) => {
+            type: Type.patch,
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: JSON.stringify(TempList),
+        });
+    }
+
+    UpdateTemplateDetails(data) {
+        var result = window.formValidation("#createTemplate");
+        if (result) {
+            var res = this.updateAjaxCall(data);
+            res.done((response) => {
+                toast.success("Template " + Notification.updated, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+
+            });
+            res.fail((error) => {
+            })
+        }
+        else {
+            return false;
+        }
+    }
+    //#endregion
+
+    getTemplateDetails() {            //update api
+
+        if (this.state.assignId !== undefined) {
+            var res = this.getTemplateDetailsApi();
+            res.done((response) => {
+                if (response !== undefined) {
+                    var res = response[0];
+                    this.setState({
+                        quaterId: res.quaterId,
+                        templateId: res.templateId,
+                        projectId: res.projectId,
+                        userId: res.userId,
+                        startDate: res.startDate,
+                        endDate: res.endDate
+
+                    })
+                    alert(res.userId)
+                }
+            })
+            res.fail((error) => {
+
+            })
+        } else {
+
+        }
+    }
+    getQuaterData() {
+        var url = environment.apiUrl + moduleUrls.Quater;
+        this.getDropDownValues(url).done(
+            (tempQuater) => {
                 var displayQuaterData = tempQuater.map(function (i) {
-                    return (
-                        <option key={i.quaterId} value={i.quaterId}>{i.quaterName}</option>
-                    )
+                    return (<option key={i.quaterId} value={i.quaterId}>{i.quaterName}</option>)
                 });
                 this.setState({
                     displayQuaterData: displayQuaterData
-                })
-            },
-        });
+                });
+            }
+        ).fail((error) => { console.log(error) });
+
+
+        // $.ajax({
+        //     url: url,
+        //     type: Type.get,
+        //     success: (tempQuater) => {
+        //         var displayQuaterData = tempQuater.map(function (i) {
+        //             return (
+        //                 <option key={i.quaterId} value={i.quaterId}>{i.quaterName}</option>
+        //             )
+        //         });
+        //         this.setState({
+        //             displayQuaterData: displayQuaterData
+        //         })
+        //     },
+        // });
     }
     getTemplateData() {
         var url = environment.apiUrl + moduleUrls.Template
@@ -77,7 +216,8 @@ class addAssignTemplate extends Component {
                     )
                 });
                 this.setState({
-                    displayTemplateData: displayTemplateData
+                    displayTemplateData: displayTemplateData,
+                    startDate: this.state.startDate
                 })
             },
         });
@@ -120,21 +260,20 @@ class addAssignTemplate extends Component {
         });
     }
     getUserData(selectedProjectId) {
+        var url = environment.dynamicUrl + "dynamic"
 
-        var url = environment.dynamicUrl + 'dynamic'
         var userData = {
             query: `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId = ${selectedProjectId}`
         };
         $.ajax({
             url: url,
             type: Type.post,
+            dataSrc: "",
             data: JSON.stringify(userData),
             headers: {
                 "Content-Type": "application/json",
             },
             success: (tempUser) => {
-                debugger
-                console.log(tempUser)
                 this.setState({
                     displayUserData: tempUser,
                     multiSelectDDL: true
@@ -142,219 +281,157 @@ class addAssignTemplate extends Component {
             },
         });
     }
-    getTemplateApi() {
-        debugger;
-        var url = environment.dynamicUrl + 'dynamic'
-        var tempData = {
-            query: "SELECT UM.firstName,Um.lastname, PM.projectName,PM.startDate,PM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy"
-        }
-        
-        return $.ajax({
-            url: url,
-            type: Type.post,
-            data:(tempData),
-            success:((result)=>{
-                console.log(result)
-            })
-        })
-    }
 
-    getUserDetails() {
-        if (this.state.assignDetailId !== undefined) {
-            var res = this.getTemplateApi();
-            res.done((response) => {
-                if (response !== undefined) {
-                    var res = response[0];
-                    this.setState({
-                        templateName: res.templateName,
-                        firstName: res.firstName,
-                        lastName: res.lastName,
-                        projectName: res.projectName,
-                        startDate: res.startDate,
-                        endDate: res.endDate
-                    })
-
-                }
-            });
-            res.fail((error) => {
-            })
-        } else {
-
-        }
-    }
-
-    // #region save details for template
-    saveTemplateDetailsApi(DataList) {
-        alert(1)
-        debugger;
-        
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.templateId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-            data: DataList,
-            success: (res) => {
-                console.log(res)
-            }
-        })
-    }
-
-    saveTemplateDetails(DataList) {
-        var res = this.saveTemplateDetailsApi(DataList);
-        res.done((response) => {
-            this.setState({
-                RedirectToTemplate: true
-            })
-            toast.success("Template " + Notification.saved, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-
-        });
-        res.fail((error) => {
-
-        })
-
-    }
-    
-    //#endregion
     //#region save details
     saveAssignTemplate() {
         var res = window.formValidation("#createTemplate");
+        var multiArraySaveDataList = [];
         if (res) {
-            var _this = this;
-            var DataList =
-            {
-                "templateName": this.state.templateName,
-                "firstName": this.state.firstName,
-                "lastName": this.state.lastName,
-                "projectName": this.state.projectName,
-                "startDate": moment(this.state.startDate).format("YYYY-MM-DD"),
-                "endDate": moment(this.state.endDate).format("YYYY-MM-DD"),
-            }
-            this.saveTemplateDetails(DataList);
-
-
+            this.state.userId.map((user) => {
+                multiArraySaveDataList.push({
+                    "quaterId": this.state.quaterId,
+                    "templateId": this.state.templateId,
+                    "projectId": this.state.projectId,
+                    "userId": user,
+                    "startDate": moment(this.state.startDate).format("YYYY-MM-DD"),
+                    "endDate": moment(this.state.endDate).format("YYYY-MM-DD"),
+                });
+            });
+            var res = this.saveTemplateDetailsApi(multiArraySaveDataList);
+            res.done((response) => {
+                this.setState({
+                    RedirectToTemplate: true
+                })
+                toast.success("Template " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            });
+            res.fail((error) => {
+            });
         }
         else {
-
             return false;
         }
     }
     //#endregion
-    componentDidMount() {
-        this.getQuaterData();
-        this.getTemplateData();
-        this.getProjectData();
-        this.getProjectResourcesData();
 
-    }
     render() {
-        debugger;
         var displayUserDataReturn = this.state.displayUserData.map(function (i) {
-            return (
-                <option key={i.userid} value={i.userid}>{i.firstName + " " + i.lastName}</option>
-            )
+            return (<option key={i.userid} value={i.userid}>{i.firstName + " " + i.lastName}</option>)
         });
-        if (this.state.RedirectToTemplate) {
+        if (this.state.RedirectToTemplate===true) {
             return <Redirect to={{ pathname: "/Template" }} />
         }
         return (
             <div>
-                <div className="row">
-                    <div className="col-md-12">
-                        <form id="createTemplate">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label className="required">Quater</label>
-                                        <select name="quaterDropDown" onChange={(e) => { this.onChangeQuater(e) }} value={this.state.quaterId} className="form-control" >
-                                            <option value="">Select Quater</option>
-                                            {this.state.displayQuaterData}
-                                        </select>
+                <div className="clearfix">
+                    <div className="clearfix d-flex align-items-center row page-title">
+                        <h2 className="col">
+                            {this.state.assignId !== undefined ? <span>Edit AssignTemplate</span> : <span>Add AssignTemplate</span>}
+                        </h2>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <form id="createTemplate">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label className="required">Quater</label>
+                                            <select name="quaterDropDown" onChange={(e) => { this.onChangeQuater(e) }} value={this.state.quaterId} className="form-control" >
+                                                <option value="">Select Quater</option>
+                                                {this.state.displayQuaterData}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label className="required">Template</label>
-                                        <select name="TemplateDropDown" onChange={(e) => { this.onChangeTemplate(e) }} value={this.state.templateId} className="form-control" >
-                                            <option value="">Select Template</option>
-                                            {this.state.displayTemplateData}
-                                        </select>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label className="required">Template</label>
+                                            <select name="TemplateDropDown" onChange={(e) => { this.onChangeTemplate(e) }} value={this.state.templateId} className="form-control" >
+                                                <option value="">Select Template</option>
+                                                {this.state.displayTemplateData}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label className="required">Project</label>
-                                        <select name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
-                                            <option value="">Select Project</option>
-                                            {this.state.displayProjectData}
-                                        </select>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label className="required">Project</label>
+                                            <select name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
+                                                <option value="">Select Project</option>
+                                                {this.state.displayProjectData}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div className="form-group">
-                                        <label>User</label>
-                                        <select id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" multiple={this.state.multiSelectDDL} >
-                                            <option value="">select</option>
-                                            {displayUserDataReturn}
-                                        </select>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="form-group">
+                                            <label>User</label>
+                                            {this.state.assignId == undefined ?
+                                                <select id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" multiple={true} >
+                                                    <option value=""></option>
+                                                    {displayUserDataReturn}
+                                                </select>
+                                                :
+                                                <select name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control">
+                                                    <option value=""></option>
+                                                    {displayUserDataReturn}
+                                                </select>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-md-4">
-                                    <div className="form-group">
-                                        <label className="required" htmlFor="startDate">Start Date</label><br></br>
-                                        <DatePicker className="form-control" name="startDate"
-                                            selected={this.state.startDate}
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <div className="form-group">
+                                            <label className="required" htmlFor="startDate">Start Date</label><br></br>
+                                            <DatePicker className="form-control" name="startDate"
+                                                selected={this.state.startDate}
+                                                onChange={(e) => {
+                                                    this.setState({
+                                                        startDate: moment(e).format("")
+                                                    })
+                                                }}
+                                                dateFormat="YYYY-MM-dd"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div >
+                                        <label className="required" htmlFor="endDate">End Date</label><br></br>
+                                        <DatePicker className="form-control" name="endDate"
+                                            selected={this.state.endDate}
                                             onChange={(e) => {
                                                 this.setState({
-                                                    startDate: moment(e).format("YYYY-MM-DD")
+                                                    endDate: moment(e).format("")
                                                 })
                                             }}//only when value has changed
                                             dateFormat="YYYY-MM-dd"
-                                            required />
+                                        />
                                     </div>
                                 </div>
-                                <div >
-                                    <label className="required" htmlFor="endDate">End Date</label><br></br>
-                                    <DatePicker className="form-control" name="endDate"
-                                        selected={this.state.endDate}
-                                        onChange={(e) => {
-                                            this.setState({
-                                                endDate: moment(e).format("YYYY-MM-DD")
-                                            })
-                                        }}//only when value has changed
-                                        dateFormat="YYYY-MM-dd"
-                                    />
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col">
-                                    <div className="form-group">
-                                        {this.state.assignDetailId !== undefined ?
-                                            <button type="button" className="btn btn-success mr-2" onClick={() => {
-                                                this.UpdateTemplateDetails(this.state);
-                                            }}>Update</button>
-                                            : <button type="button" className="btn btn-success mr-2" onClick={() => { 
-                                                this.saveAssignTemplate(this.state)
-                                            }}>Save</button>}
-
+                                <div className="row">
+                                    <div className="col">
+                                        <div className="form-group">
+                                            {this.state.assignId !== undefined ?
+                                                <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                                    this.UpdateTemplateDetails(this.state);
+                                                }}>Update</button>
+                                                : <button type="button" className="btn btn-success mr-2" onClick={() => {
+                                                    this.saveAssignTemplate(this.state)
+                                                }}>Save</button>}
+                                            <Link to='/Template' className="btn btn-danger mr-2">Cancel</Link>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         )
     }
 }
-
 export default addAssignTemplate;
