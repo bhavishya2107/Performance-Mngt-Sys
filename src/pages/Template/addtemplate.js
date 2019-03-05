@@ -98,7 +98,7 @@ class Addtemplate extends Component {
           var _this = this;
           var formData = {
             templateName: this.state.templateName.trim(),
-            "createdBy":localStorage.getItem('userId')
+            "createdBy": localStorage.getItem('userId')
           };
           const templateSaveApi = environment.apiUrl + moduleUrls.Template;
           return $.ajax({
@@ -150,6 +150,7 @@ class Addtemplate extends Component {
   }
 
   onChangekra(event) {
+    $(".recordRequiredTbl").hide()
     this.setState({
       selectkra:
       {
@@ -159,11 +160,13 @@ class Addtemplate extends Component {
       },
       kraId: event.target.value,
       isSelect: true,
+
     });
 
 
   }
   onChangekpi(event) {
+    $(".recordRequiredTbl").hide()
     this.setState({
       selectkpi:
       {
@@ -197,7 +200,12 @@ class Addtemplate extends Component {
             kpiId: this.state.kpiId,
             templateDetailId: this.state.templateDetailId
           };
+
           templateData.push(templateDataapi);
+          // this.setState({
+          //   selectkpi:"",
+          //   selectkra:""
+          // })
           this.$el
             .DataTable()
             .clear()
@@ -205,12 +213,12 @@ class Addtemplate extends Component {
             .draw();
         }
         else {
-          toast.info("Please select both values");
+          $(".recordRequiredTbl").show()
         }
       }
     }
     else {
-      toast.info("Please select kra & kpi");
+      $(".recordRequiredTbl").show()
     }
   }
 
@@ -290,7 +298,7 @@ class Addtemplate extends Component {
     var body =
     {
       "templateName": data.templateName,
-      "modifiedBy":localStorage.getItem('userId')
+      "modifiedBy": localStorage.getItem('userId')
     }
     const endpointPOST = environment.apiUrl + moduleUrls.Template + '/' + `${data.id}`
     return $.ajax({
@@ -563,10 +571,11 @@ class Addtemplate extends Component {
         <div>
           <br />
           <br />
+
           <div className="row">
             <div className="col-md-4">
 
-              <select
+              <select required name="optionKra"
                 onChange={e => {
                   this.onChangekra(e);
                 }}
@@ -576,10 +585,8 @@ class Addtemplate extends Component {
                 {this.state.displayDatakra}
               </select>
             </div>
-
             <div className="col-md-4">
-
-              <select
+              <select required name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
                 }}
@@ -603,9 +610,9 @@ class Addtemplate extends Component {
               <span></span>
               &nbsp; &nbsp;
               <label className="recordExistsTbl" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
+              <label className="recordRequiredTbl" style={{ "display": "none", "color": "#dc3545", "marginRight": "" }}>Select both fields.</label>
             </div></div>
           <br />
-
           <br />
           <table
             className="table table-striped table-bordered table-hover"

@@ -48,7 +48,7 @@ import ADDQuater from './pages/Quater/add-quater';
 
 import Template from './pages/Assign-Template/Template';
 import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
-
+import Myteam from './pages/myteam';
 
 class App extends Component {
 constructor(props){
@@ -163,6 +163,7 @@ if(localStorage.getItem('isAuthenticated')){
                         <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
                         <Route exact path="/designation/edit/id=:id" component={Designation} />
                         <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                        <Route exact path="/myteam" component={Myteam}></Route>
                       </Switch>
                     </div>
                   </div>
