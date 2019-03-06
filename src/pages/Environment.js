@@ -56,5 +56,6 @@ export const ModuleNames = {
   Department: "Department",
   ScaleSet: "Scale Set",
   ComplexityMaster:"Complexity Master",
-  quater:"Quarter"
+  quater:"Quarter",
+  Template:"Assign-Template"
 }

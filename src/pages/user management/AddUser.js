@@ -331,9 +331,7 @@ class AddUser extends Component {
             "modifiedBy":localStorage.getItem('userId')
 
         }
-
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
-
+         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
         return $.ajax({
             url: url,
             type: Type.patch,
@@ -450,47 +448,7 @@ class AddUser extends Component {
 
             })
             /* END - SEND EMAIL TO OLD REPORTING MANAGER */
-            /* START - SEND EMAIL TO NEW REPORTING MANAGER */
-            var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
-            return $.ajax({
-                url: url,
-                type: Type.get,
-                success: (res) => {
-                    /* START - SEND EMAIL */
-                    var emailBody = `<html>
-                        <body>
-                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
-                        <p>New Employee added in your team.<span>`;
-                    if (this.state.gender == "Male") {
-                        emailBody += `His`
-                    }
-                    else {
-                        emailBody += `Her`
-                    }
-                    emailBody += `
-                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
-                        </p>                        
-                        <p>Thanks,</p>
-                        <p>PSSPL ADMIN</p>
-                    </body>
-                    </html>`;
-
-                    var body =
-                    {
-                        emailSubject: "Employee added in your team",
-                        emailBody: emailBody,
-                        toemailadress: res[0].emailAddress
-                    }
-                    this.sendMailAPI(body);
-
-                    this.setState({
-                        RedirectToUserManagement: true
-                    })
-                    /* END - SEND EMAIL */
-                }
-
-            })
-            /* END - SEND EMAIL TO NEW REPORTING MANAGER */
+          
         }
         this.setState({
             isUpdate: true

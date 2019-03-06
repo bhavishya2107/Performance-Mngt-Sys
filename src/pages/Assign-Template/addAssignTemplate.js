@@ -74,6 +74,7 @@ class addAssignTemplate extends Component {
         this.getProjectData();
         this.getProjectResourcesData();
         this.getTemplateDetails();
+        this.getUserDataDetails();
     }
     onChangeQuater(event) {
         this.setState({
@@ -115,8 +116,11 @@ class addAssignTemplate extends Component {
             "endDate": data.endDate
 
         }
+        this.setState({
+            RedirectToTemplate: true
+        })
+        debugger
         var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
-
         return $.ajax({
             url: url,
             type: Type.patch,
@@ -131,6 +135,7 @@ class addAssignTemplate extends Component {
     }
 
     UpdateTemplateDetails(data) {
+        debugger
         var result = window.formValidation("#createTemplate");
         if (result) {
             var res = this.updateAjaxCall(data);
@@ -165,7 +170,7 @@ class addAssignTemplate extends Component {
                         endDate: res.endDate
 
                     })
-                    alert(res.userId)
+                    
                 }
             })
             res.fail((error) => {
@@ -259,6 +264,26 @@ class addAssignTemplate extends Component {
             },
         });
     }
+    getUserDataDetails() {
+        debugger
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.projectId}`
+        $.ajax({
+            url: url,
+            type: Type.get,
+            success: (tempUser) => {
+                var displayUserDataReturn = tempUser.map(function (i) {
+                    return (
+                        <option key={i.userid} value={i.userid}>{i.firstName + " " + i.lastName}</option>
+                    )
+                });
+                this.setState({
+                    displayUserDataReturn: displayUserDataReturn
+
+                })
+            },
+        });
+    }
+    
     getUserData(selectedProjectId) {
         var url = environment.dynamicUrl + "dynamic"
 
@@ -280,6 +305,7 @@ class addAssignTemplate extends Component {
                 })
             },
         });
+
     }
 
     //#region save details
@@ -319,7 +345,8 @@ class addAssignTemplate extends Component {
         var displayUserDataReturn = this.state.displayUserData.map(function (i) {
             return (<option key={i.userid} value={i.userid}>{i.firstName + " " + i.lastName}</option>)
         });
-        if (this.state.RedirectToTemplate===true) {
+
+        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Template" }} />
         }
         return (
