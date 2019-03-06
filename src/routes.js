@@ -1,3 +1,5 @@
+import Template from "./pages/Assign-Template/Template";
+
 const routes = {
   '/': 'Home',
   '/innerpage': 'Inner Page',
@@ -34,7 +36,8 @@ const routes = {
   '/EditUser': 'user-management',
   '/dashboard':'Dashboard',
    '/Template':'Template' ,
-   '/Template/add':'Template'
+   '/Template/add':'Template',
+   '/EditTemplate':'Template'
 };
 {
 }

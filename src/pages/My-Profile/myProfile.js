@@ -90,6 +90,7 @@ class MyProfile extends Component {
       var redirect = "/EditUser/userId=" + localStorage.getItem("userId")
       return (
         <Redirect to={redirect} />
+        
       )
     }
     return (
@@ -124,7 +125,7 @@ class MyProfile extends Component {
                         id="userFirstName"
                         type="text"
                         className="form-control"
-                        readonly
+                        readOnly
                         value={this.state.firstName}
                       />
                     </div>
@@ -140,7 +141,7 @@ class MyProfile extends Component {
                         id="userLastName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.lastName}
                       />
                     </div>
@@ -159,7 +160,7 @@ class MyProfile extends Component {
                         id="userName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.userName}
                       />
                     </div>
@@ -175,7 +176,7 @@ class MyProfile extends Component {
                         id="userEmail"
                         type="email"
                         className="form-control"
-                        readonly
+                        readOnly
                         value={this.state.emailAddress}
                       />
                     </div>
@@ -193,7 +194,7 @@ class MyProfile extends Component {
                         id="userAddress"
                         type="text"
                         className="form-control"
-                        readonly
+                        readOnly
                         value={this.state.address}
                       />
                     </div>
@@ -209,7 +210,7 @@ class MyProfile extends Component {
                         id="userLastName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.mobileno}
                       />
                     </div>
@@ -227,7 +228,7 @@ class MyProfile extends Component {
                         id="userDepartment"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.departmentName}
                       />
                     </div>
@@ -243,7 +244,7 @@ class MyProfile extends Component {
                         id="userLastName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.designationName}
                       />
                     </div>
@@ -261,7 +262,7 @@ class MyProfile extends Component {
                         id="userFirstName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.rolename}
                       />
                     </div>
@@ -277,7 +278,7 @@ class MyProfile extends Component {
                         id="userLastName"
                         type="text"
                         className="form-control "
-                        readonly
+                        readOnly
                         value={this.state.teamleader}
                       />
                     </div>
