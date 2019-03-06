@@ -17,7 +17,10 @@ class Template extends Component {
             project: "",
             projectDate: "",
             status: "",
-            assignId: ""
+            assignId: "",
+            firstName: "",
+            lastname: "",
+            selectedIds:[]
 
         }
     }
@@ -184,7 +187,12 @@ class Template extends Component {
                 {
                     data: "firstName",
                     targets: 2,
-                    
+                    render: (data, type, row) => {
+                        return (
+                            `<label id="firstName" value=>${row.firstName}` + " " +
+                            `<label id="firstName" value=>${row.lastname}`
+                        )
+                    }
                 },
                 {
                     data: "projectName",
