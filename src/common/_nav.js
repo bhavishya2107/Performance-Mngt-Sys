@@ -1,8 +1,13 @@
 export default {
     items: [
         {
-            name: 'Dashboard',
+            name: 'My KRA',
             url: '/dashboard',
+            icon: 'fa fa-dashboard',
+        },
+        {
+            name: 'My Team',
+            url: '/myteam',
             icon: 'fa fa-dashboard',
         },
 
@@ -34,15 +39,16 @@ export default {
                 url: '/kra',
                 icon: 'fa fa-area-chart',
             },
+       
             {
                 name: 'Role',
                 url: '/role',
                 icon: 'fa fa-user-secret',
             },
             {
-                name: 'Quater',
+                name: 'Quarter',
                 url: '/quater',
-                icon: 'fa fa-user-secret',
+                icon: 'fa fab fa-quora',
             },
 
             {

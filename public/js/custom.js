@@ -74,6 +74,12 @@ function formValidation(form) {
                     // passwordMatch:true
                     // equalTo:'#ResetNewPWRequired'
                 },
+                optionKra:{
+                    required:true,
+                },
+                optionKpi:{
+                    required:true,
+                },
                 messages: {
                     // ChangePWemail:{required: " Enter Password"},
                     // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import bootbox from 'bootbox';
 var moment = require('moment');
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
-class Dashboard extends Component {
+class Myteam extends Component {
 
     componentDidMount() {
 
@@ -20,12 +17,11 @@ class Dashboard extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where UM.userId='${localStorage.getItem('userId')}'`
+                    "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where UM.userId=UM.reportingManagerId`
                 },
-                
+
             },
             columns: [
-               
                 {
                     data: "quaterName",
                     targets: 0,
@@ -59,13 +55,13 @@ class Dashboard extends Component {
                 },
 
                 {
-                    data: "assignId",
+                    data: "",
                     targets: 5,
                     "orderable": false,
                     render: function (data, type, row) {
                         ;
                         return (
-                            '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
+                            '<a href="' + row.templateId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
 
@@ -100,9 +96,9 @@ class Dashboard extends Component {
                         </tr>
                     </thead>
                 </table>
-                <ToastContainer />
+
             </div>
         )
     }
 }
-export default Dashboard;
+export default Myteam;
