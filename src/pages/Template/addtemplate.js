@@ -187,7 +187,6 @@ class Addtemplate extends Component {
         return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId : false)
       });
       if (tempData.length > 0) {
-
         $(".recordExistsTbl").show()
       }
       else {
