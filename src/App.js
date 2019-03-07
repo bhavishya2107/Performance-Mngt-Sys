@@ -131,19 +131,14 @@ if(localStorage.getItem('isAuthenticated')){
                         {/* <Route exact path="/Department/add" component={AddDept} /> */}
                         <Route path="/AddDept" component={AddDept} />
                         <Route path="/AddProject" component={AddProject} />
-
                         <Route exact path="/Template" component={Template} />
                         <Route path="/addAssignTemplate" component={addAssignTemplate} />
-
-
-
-                        
 
 
                         <Route path="/innerpage" component={innerpage} />
                         <Route exact path="/kra/add" component={kraHome}></Route>
                         <Route path="/kra" component={kraListPage}></Route>
-                        <Route path="/kraSheetDetails" component={KraSheet}></Route>
+                        <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
                         <Route path="/addRole" component={UserRoleForm}></Route>
                         <Route path="/quater" component={Quater}></Route>

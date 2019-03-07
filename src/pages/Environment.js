@@ -21,7 +21,8 @@ export const moduleUrls = {
   Template:"template_master",
   Templatedetail:"template_detail",
   Quater:"quater_master",
-  Template_assignment_master:"template_assignment_master"
+  Template_assignment_master:"template_assignment_master",
+  TAD:"template_assignment_detail"
 };
 export const Type = {
   get: "GET",
