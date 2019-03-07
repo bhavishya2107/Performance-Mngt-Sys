@@ -20,7 +20,7 @@ class Dashboard extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where UM.userId='${localStorage.getItem('userId')}'`
+                    "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId  where TAM.userId='${localStorage.getItem('userId')}'`
                 },
                 
             },
@@ -85,7 +85,10 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome To Dashboard {localStorage.getItem('firstName')} </h1>
+                  <div className="clearfix d-flex align-items-center row page-title">
+                <h2 className="col">My KRA</h2>
+            </div>
+                
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplate"
                     ref={el => (this.el = el)}>
