@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import DatePicker from "react-datepicker";
-import { join } from 'path';
 var moment = require('moment');
-
+const options = []
 var ArrayState = []
 class addAssignTemplate extends Component {
     constructor(props) {
@@ -22,8 +21,15 @@ class addAssignTemplate extends Component {
             displayUserData: [],
             multiSelectDDL: false,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            options: "",
+            tempUser: "",
+            ResourceOptions: []
         }
+        // this.handleChange = (displaySelectedOption) => {
+        //     this.setState({ selectedOption: displaySelectedOption });
+        //     console.log(`Option selected:`, displaySelectedOption);
+        // }
     }
 
     //#region Bind Dropdown Lists.
@@ -66,7 +72,24 @@ class addAssignTemplate extends Component {
 
 
     //#endregion
+    getResourceDetailsAPI() {
+        const url = environment.dynamicUrl + 'dynamic'
+        return $.ajax({
+            url: url,
+            type: Type.post,
+            dataSrc: "",
+            data: {
+                "query": "select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId =98"
+            },
+            success: (response) => {
+                this.setState({
+                    displayUserData: response,
 
+                });
+            }
+
+        })
+    }
     //#region Events
     componentDidMount() {
         this.getQuaterData();
@@ -74,6 +97,34 @@ class addAssignTemplate extends Component {
         this.getProjectData();
         this.getProjectResourcesData();
         this.getTemplateDetails();
+
+        if (this.state.projectId !== undefined) {
+
+            var res = this.getUserDataDetails();
+            res.done((response) => {
+                var res = response[0];
+                this.setState({
+                    userId: res.userId,
+                })
+
+                var result = this.getResourceDetailsAPI();
+                result.done((response) => {
+                    debugger
+                    this.setState({
+                        displayUserData: response
+                    })
+                })
+
+                result.fail((error) => {
+                    alert(error)
+                });
+
+            });
+
+            res.fail((error) => {
+
+            });
+        }
     }
     onChangeQuater(event) {
         this.setState({
@@ -92,15 +143,19 @@ class addAssignTemplate extends Component {
         });
 
         this.getUserData(event.target.value);
+        this.getUserDataDetails();
+
+
 
     }
     onChangeUser(event) {
         this.setState({
-            //userId: event.target.value,
+            // userId: event.target.value, 
             userId: [].slice.call(event.target.selectedOptions).map(o => {
                 return o.value;
             })
         });
+
     }
     //#endregion
     //#region update Template details
@@ -115,8 +170,12 @@ class addAssignTemplate extends Component {
             "endDate": data.endDate
 
         }
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
+        alert(data.startDate)
 
+        this.setState({
+            RedirectToTemplate: true
+        })
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
         return $.ajax({
             url: url,
             type: Type.patch,
@@ -131,6 +190,7 @@ class addAssignTemplate extends Component {
     }
 
     UpdateTemplateDetails(data) {
+        debugger
         var result = window.formValidation("#createTemplate");
         if (result) {
             var res = this.updateAjaxCall(data);
@@ -153,6 +213,7 @@ class addAssignTemplate extends Component {
 
         if (this.state.assignId !== undefined) {
             var res = this.getTemplateDetailsApi();
+
             res.done((response) => {
                 if (response !== undefined) {
                     var res = response[0];
@@ -163,9 +224,7 @@ class addAssignTemplate extends Component {
                         userId: res.userId,
                         startDate: res.startDate,
                         endDate: res.endDate
-
                     })
-                    alert(res.userId)
                 }
             })
             res.fail((error) => {
@@ -187,22 +246,6 @@ class addAssignTemplate extends Component {
                 });
             }
         ).fail((error) => { console.log(error) });
-
-
-        // $.ajax({
-        //     url: url,
-        //     type: Type.get,
-        //     success: (tempQuater) => {
-        //         var displayQuaterData = tempQuater.map(function (i) {
-        //             return (
-        //                 <option key={i.quaterId} value={i.quaterId}>{i.quaterName}</option>
-        //             )
-        //         });
-        //         this.setState({
-        //             displayQuaterData: displayQuaterData
-        //         })
-        //     },
-        // });
     }
     getTemplateData() {
         var url = environment.apiUrl + moduleUrls.Template
@@ -259,6 +302,16 @@ class addAssignTemplate extends Component {
             },
         });
     }
+    getUserDataDetails() {
+        debugger
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.projectId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+
+        });
+    }
+
     getUserData(selectedProjectId) {
         var url = environment.dynamicUrl + "dynamic"
 
@@ -280,6 +333,7 @@ class addAssignTemplate extends Component {
                 })
             },
         });
+
     }
 
     //#region save details
@@ -317,9 +371,9 @@ class addAssignTemplate extends Component {
 
     render() {
         var displayUserDataReturn = this.state.displayUserData.map(function (i) {
-            return (<option key={i.userid} value={i.userid}>{i.firstName + " " + i.lastName}</option>)
+            return (<option key={i.userId} value={i.userId}>{i.firstName + " " + i.lastName}</option>)
         });
-        if (this.state.RedirectToTemplate===true) {
+        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Template" }} />
         }
         return (
@@ -337,7 +391,7 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label className="required">Quater</label>
-                                            <select name="quaterDropDown" onChange={(e) => { this.onChangeQuater(e) }} value={this.state.quaterId} className="form-control" >
+                                            <select required disabled="disabled" name="quaterDropDown" onChange={(e) => { this.onChangeQuater(e) }} value={this.state.quaterId} className="form-control" >
                                                 <option value="">Select Quater</option>
                                                 {this.state.displayQuaterData}
                                             </select>
@@ -348,7 +402,7 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label className="required">Template</label>
-                                            <select name="TemplateDropDown" onChange={(e) => { this.onChangeTemplate(e) }} value={this.state.templateId} className="form-control" >
+                                            <select required disabled="disabled" name="TemplateDropDown" onChange={(e) => { this.onChangeTemplate(e) }} value={this.state.templateId} className="form-control" >
                                                 <option value="">Select Template</option>
                                                 {this.state.displayTemplateData}
                                             </select>
@@ -359,7 +413,7 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label className="required">Project</label>
-                                            <select name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
+                                            <select required disabled="disabled" name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
                                                 <option value="">Select Project</option>
                                                 {this.state.displayProjectData}
                                             </select>
@@ -371,16 +425,18 @@ class addAssignTemplate extends Component {
                                         <div className="form-group">
                                             <label>User</label>
                                             {this.state.assignId == undefined ?
-                                                <select id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" multiple={true} >
+                                                <select required disabled="disabled" id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" multiple={true} >
                                                     <option value=""></option>
                                                     {displayUserDataReturn}
                                                 </select>
                                                 :
-                                                <select name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control">
+                                                <select required name="user" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control">
                                                     <option value=""></option>
                                                     {displayUserDataReturn}
                                                 </select>
+
                                             }
+                                           
                                         </div>
                                     </div>
                                 </div>

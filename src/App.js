@@ -134,7 +134,8 @@ if(localStorage.getItem('isAuthenticated')){
 
                         <Route exact path="/Template" component={Template} />
                         <Route path="/addAssignTemplate" component={addAssignTemplate} />
-
+                        <Route  path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
+                       
 
 
                         

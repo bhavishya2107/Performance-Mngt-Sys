@@ -13,7 +13,7 @@ class Projects extends Component {
         super(props);
         this.state = {
             selectedIds: [],
-           
+
         }
     }
 
@@ -30,26 +30,34 @@ class Projects extends Component {
     }
 
     SingleDeleteConfirm(id) {
-        bootbox.confirm({
-            message: Notification.deleteConfirm,
-            buttons: {
-                confirm: {
-                    label: 'Ok',
-                    className: 'btn-success'
-                },
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-danger'
-                }
-            },
-            callback: (result) => {
-                if (result === true) {
-                    this.SingleDeleteProject(id);
-                }
-                else {
-                }
+        if (id !== undefined) {
+            if (id != 98) {
+                debugger;
+                bootbox.confirm({
+                    message: Notification.deleteConfirm,
+                    buttons: {
+                        confirm: {
+                            label: 'Ok',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'Cancel',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: (result) => {
+                        if (result === true) {
+                            this.SingleDeleteProject(id);
+                        }
+                        else {
+                        }
+                    }
+                });
             }
-        });
+            else {
+                alert("you cannot delete system user")
+            }
+        }
     }
 
     SingleDeleteProject(kpiId) {
@@ -97,8 +105,10 @@ class Projects extends Component {
     multipleDeleteProjectconfirm() {
         var ProjectId = []
         $("#tblprojectform input:checkbox:checked").each((e, item) => {
-            if (item.name != 'checkAll') {
-                ProjectId.push(item.value);
+            if (item.value != 98) {
+                if (item.name != 'checkAll') {
+                    ProjectId.push(item.value);
+                }
             }
         });
         if (ProjectId.length > 0) {
@@ -129,16 +139,29 @@ class Projects extends Component {
     }
     //#endregion
 
+    deleteProjectResource(resourceId) {
+        const endpoint = environment.apiUrl + moduleUrls.ProjectResources + `/bulk?_ids=${resourceId}`;
+        return $.ajax({ 
+            url: endpoint,
+            type: Type.deletetype,
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+            }
+        });
+
+    }
+
+
     componentDidMount() {
-    
-        const endpointGET = environment.dynamicUrl + 'dynamic' 
+        const endpointGET = environment.dynamicUrl + 'dynamic'
         // this.setState({
         //     title: ModuleNames.kpi
         // })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-           // "order": [[1, 'asc']],
+            // "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "POST",
@@ -195,7 +218,7 @@ class Projects extends Component {
                             '<a href="#" id="' + row.projectId + '"class="btn btn-danger btnDelete btn-sm";"">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
-                            )
+                        )
                     },
                     orderable: false
                 }
@@ -226,34 +249,34 @@ class Projects extends Component {
     render() {
         return (
             <div >
-            <div className="clearfix d-flex align-items-center row page-title">
-                <h2 className="col">Projects</h2>
-                <div className="col text-right">
-                    <Link to="/projects/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">Projects</h2>
+                    <div className="col text-right">
+                        <Link to="/projects/add" className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    </div>
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => {
+                        this.multipleDeleteProjectconfirm()
+                    }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-                <button className="btn btn-danger btn-multi-delete" onClick={() => {
-                    this.multipleDeleteProjectconfirm()
-                }}><i className="fa fa-trash " aria-hidden="true"></i></button>
+                <div className="page-header">
+                    <table className="table table-striped table-bordered table-hover customDataTable"
+                        id="tblprojectform"
+                        ref={el => (this.el = el)}>
+                        <thead>
+                            <tr className="container-fluid">
+                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
+                                <th width="100">Name</th>
+                                <th width="100">Start Date</th>
+                                <th width="100">End Date</th>
+                                <th width="100">Complexity</th>
+                                <th width="100">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <ToastContainer />
             </div>
-            <div className="page-header">
-                <table className="table table-striped table-bordered table-hover customDataTable"
-                    id="tblprojectform"
-                    ref={el => (this.el = el)}>
-                    <thead>
-                        <tr className="container-fluid">
-                            <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                            <th width="100">Name</th>
-                            <th width="100">Start Date</th>
-                            <th width="100">End Date</th>
-                            <th width="100">Complexity</th>
-                            <th width="100">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <ToastContainer />
-        </div>
         )
     }
 }
