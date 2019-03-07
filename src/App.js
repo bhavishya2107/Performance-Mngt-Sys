@@ -133,7 +133,8 @@ if(localStorage.getItem('isAuthenticated')){
                         <Route path="/AddProject" component={AddProject} />
                         <Route exact path="/Template" component={Template} />
                         <Route path="/addAssignTemplate" component={addAssignTemplate} />
-
+                        <Route  path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
+                       
 
                         <Route path="/innerpage" component={innerpage} />
                         <Route exact path="/kra/add" component={kraHome}></Route>
