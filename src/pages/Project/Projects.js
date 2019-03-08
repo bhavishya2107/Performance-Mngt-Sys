@@ -16,6 +16,7 @@ class Projects extends Component {
 
         }
     }
+//#region single and multiple delete with confirmation
 
     DeleteProjectApi(projectId) {
         const endpoint = environment.apiUrl + moduleUrls.Project + '/' + `${projectId}`;
@@ -137,7 +138,7 @@ class Projects extends Component {
             toast.info(Notification.selectOneRecord);
         }
     }
-    //#endregion
+  
 
     deleteProjectResource(resourceId) {
         const endpoint = environment.apiUrl + moduleUrls.ProjectResources + `/bulk?_ids=${resourceId}`;
@@ -151,7 +152,7 @@ class Projects extends Component {
         });
 
     }
-
+  //#endregion
 
     componentDidMount() {
         const endpointGET = environment.dynamicUrl + 'dynamic'
@@ -170,6 +171,7 @@ class Projects extends Component {
                     query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId order by projectId desc"
                 },
             },
+          //#region datatable
             columns: [
                 {
                     data: "projectId",
@@ -190,7 +192,7 @@ class Projects extends Component {
                     targets: 2,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format("YYYY-MM-DD")}</label>`
+                            `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
                 },
@@ -199,7 +201,7 @@ class Projects extends Component {
                     targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="endDate" value=>${moment(row.endDate).format("YYYY-MM-DD")}</label>`
+                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
                 },
@@ -246,6 +248,7 @@ class Projects extends Component {
             }
         });
     }
+    //#endregion
     render() {
         return (
             <div >
