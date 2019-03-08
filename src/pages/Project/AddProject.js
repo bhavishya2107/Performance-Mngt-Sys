@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { environment, Type, moduleUrls, Notification, ModuleNames } from '../Environment'
 import Select from 'react-select';
+
 import { Redirect } from "react-router-dom";
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -19,39 +20,36 @@ class AddProject extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempData: {},
             projectId: props.match.params.id,
             RedirectToSample: false,
             displayComplexityId: "",
             displayProjectStatus: "",
-            selectComplexityMaster: "",
-            selectProjectStatus: "",
             templateDataTable: [],
             displayManageBy: "",
             displayResources: "",
             projectName: "",
-            startDate: new Date(),
-            endDate: new Date(),
+            startDate: "",
+            endDate: "",
             complexityId: "",
             complexityName: "",
             userId: "",
             manageBy: "",
             resources: {},
+            isSelect: false,
             ResourceOptions: [],
             selectedOption: null,
             redirectToList: false
         };
-        // this.handleChange = this.handleChange.bind(this);
         this.handleChange = (displaySelectedOption) => {
+            $(".requiredfield").hide()
             this.setState({ selectedOption: displaySelectedOption });
-            // console.log(`Option selected:`, displaySelectedOption);
         }
     }
-
 
     resetForm() {
         window.location.reload();
     }
-
 
     onChangeBlur() {
         if (this.state.projectId != undefined) {
@@ -69,7 +67,6 @@ class AddProject extends Component {
             var res = this.isProjectExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
                     $(".recordexists").show()
                 }
                 else {
@@ -112,7 +109,6 @@ class AddProject extends Component {
 
     isEditProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')' + '~and(projectId,ne,' + this.state.projectId + ')';
-        //console.log(endpointGET)
         return $.ajax({
             url: endpointGET,
             type: Type.get,
@@ -133,33 +129,39 @@ class AddProject extends Component {
             },
         })
     }
+    temp() {
 
+        this.setState({
+            tempData: options
+        })
+    }
 
     sendProjectMail() {
-
+        var resourceName = '';
+        $(this.state.selectedOption).each((e, item) => {
+            resourceName += item.label + ",";
+        })
         var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.manageBy}`
         return $.ajax({
             url: url,
             type: Type.get,
             success: (res) => {
-
                 var emailBody =
                     `<html>
                     <body>
                     <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `, </p>
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
-
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
-                       Date:<b>` + moment(this.state.startDate).format("YYYY-MM-DD") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
-                       Resources:<b>` + this.state.userData + `</b><br>
+                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` +
+                    ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
+                       Resources:<b>` + resourceName + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
                 </body>
                 </html>`;
-
                 var body =
                 {
                     emailSubject: "New Project assigned",
@@ -167,12 +169,6 @@ class AddProject extends Component {
                     toemailadress: "janmeshnayak1997@gmail.com"
                 }
                 this.sendMailAPI(body);
-                // })
-                // response.fail((e) => {
-                //     console.log(e)
-                // })
-
-
             }
         })
     }
@@ -183,8 +179,6 @@ class AddProject extends Component {
 
     saveProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);
-        //console.log(resourcesApi)
-
         const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
         return $.ajax({
             url: resourcesApi,
@@ -197,30 +191,33 @@ class AddProject extends Component {
         });
     }
 
-
     saveProjectResource(projectId, userData) {
-        var tempData = [];
-        userData.map(item => {
-            var resources = {
-                "projectId": projectId,
-                "userId": item.value,
-            }
-            tempData.push(resources);
-        })
-
-        var res = this.saveProjectResourceAPI(tempData);
-        res.done((response) => {
-              this.sendProjectMail();
-            this.setState({ redirectToList: true });
-            toast.success("Project " + Notification.saved, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        })
-        res.fail((error) => {
-
-        })
+        var isvalidate = window.formValidation("#projectform");
+        if (isvalidate) {
+            var tempData = [];
+            userData.map(item => {
+                var resources = {
+                    "projectId": projectId,
+                    "userId": item.value,
+                }
+                tempData.push(resources);
+            })
+            var res = this.saveProjectResourceAPI(tempData);
+            res.done((response) => {
+                this.sendProjectMail();
+                this.setState({ redirectToList: true });
+                toast.success("Project " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            })
+            res.fail((error) => {
+            })
+        }
+        else {
+            $(".requiredfield").show()
+            return false;
+        }
     }
-
 
     saveProjectDetailsAPI(projectData) {
         const saveProjectUrl = environment.apiUrl + moduleUrls.Project + '/'
@@ -232,11 +229,9 @@ class AddProject extends Component {
         });
     }
 
-
     saveProjectDetails(projectData) {
         var res = this.saveProjectDetailsAPI(projectData);
         res.done((response) => {
-            //  console.log(this.state.selectedOption)
             this.saveProjectResource(response.insertId, this.state.selectedOption);
         })
         res.fail((error) => {
@@ -244,10 +239,14 @@ class AddProject extends Component {
         })
     }
 
-
-    saveDetailsProject() {
-        // alert(1)
+    saveProject() {
         var isvalidate = window.formValidation("#projectform");
+
+        if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
+            isvalidate = false;
+            $(".requiredfield").show();
+        }
+
         if (isvalidate) {
             var res = this.isProjectExistsApi();
             res.done((response) => {
@@ -264,72 +263,18 @@ class AddProject extends Component {
                         "description": this.state.description,
                         "createdBy": localStorage.getItem('userId')
                     }
-
                     this.saveProjectDetails(projectData);
                 }
             });
-
             res.fail(error => {
             });
         }
-
         else {
             return false;
         }
+
     }
     //#endregion
-
-
-    /*deleteResourcesAPI(resourceId) {
-        // var ResourcesData = JSON.stringify(tempData);
-        // const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
-        const DeleteResources = environment.apiUrl + moduleUrls.ProjectResources + '/bulk?_ids=' + `${resourceId}` ;
-        return $.ajax({
-            url: DeleteResources,
-            type: Type.delete,
-            //  data: ResourcesData,
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
-            }
-        });
-
-    }*/
-
-    /*deleteResources(resources, userData, projectId,tempData) {
-        var deleteResourcesDetails = ''
-        var tempDatadetails = userData.filter((i) => {
-            return ( i.userId.value == this.state.userId)
-          });
-        userData.map(item => {
-            var resources = {
-                "projectId": projectId,
-                "userId": item.value
-            }
-        })
-
-        $(resources).each((e, item) => {
-            if (item.resources !== undefined) {
-                if (deleteResourcesDetails === '') {
-                    deleteResourcesDetails = item.resources
-                } else {
-                    deleteResourcesDetails = deleteResourcesDetails + ',' + item.resources
-                }
-            }
-        });
-        if (deleteResourcesDetails !== "") {
-            var res = this.deleteResourcesAPI(deleteResourcesDetails)
-            res.done((result) => {
-                this.updateProjectResource(this.state.projectId, this.state.selectedOption);
-            })
-            res.fail((error) => {
-                console.log(error)
-            })
-
-        }
-        else {
-        }
-    }*/
 
     //#region update api
 
@@ -337,8 +282,6 @@ class AddProject extends Component {
     updateProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);
         const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
-        // const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '?_where=(projectId,eq,' + this.state.projectId + ')' ;
-        //console.log(resourcesApi)
         return $.ajax({
             url: resourcesApi,
             type: Type.post,
@@ -371,15 +314,15 @@ class AddProject extends Component {
                 }
                 tempData.push(resources);
             })
-            
+
             var res = this.updateProjectResourceAPI(tempData);
             res.done((response) => {
                 this.setState({ redirectToList: true });
-                toast.success("Project " + Notification.saved, {
+                toast.success("Project " + Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
             })
-            res.fail((error) => {    
+            res.fail((error) => {
             })
         })
         responseDeleteResources.fail((error) => {
@@ -402,6 +345,10 @@ class AddProject extends Component {
 
     updateDetailsAPI(updateData) {
         var isvalidate = window.formValidation("#projectform");
+        if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
+            isvalidate = false;
+            $(".requiredfield").show();
+        }
         if (isvalidate) {
             var res = this.isEditProjectExistsApi();
             res.done((response) => {
@@ -419,20 +366,16 @@ class AddProject extends Component {
                         "description": updateData.description,
                         "modifiedBy": localStorage.getItem('userId')
                     }
-                    
                     var res = this.updateProjectDetailsAPI(TempData);
                     res.done((response) => {
                         this.updateProjectResource(this.state.projectId, this.state.selectedOption);
                     })
                     res.fail((error) => {
-
                     })
                 }
-
             });
             res.fail((error) => {
             })
-
         } else {
             $(".recordexists").hide()
             return false;
@@ -441,15 +384,13 @@ class AddProject extends Component {
 
     //#endregion
 
-
     //#region onchange for Complexity Master Data
 
     onChangeComplexityMaster(event) {
         this.setState({
-            complexityId: event.target.value
+            complexityId: event.target.value,
         })
     }
-
 
     getcomplexityIdData() {
         const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '/'
@@ -474,14 +415,13 @@ class AddProject extends Component {
     //#region  onchange for resources Data
 
     onChangeResources(event) {
+        $(".requiredfield").hide()
         this.setState({
-            resources: event.target.value
+            resources: event.target.value,
         })
     }
 
-
     getResourcesData() {
-
         var output = [];
         const endpointGET = environment.apiUrl + moduleUrls.User + '/'
         return $.ajax({
@@ -490,7 +430,6 @@ class AddProject extends Component {
             complete: (temp) => {
 
                 var temp = temp.responseJSON;
-                //   var displayDataReturn = temp.map((i) => {
                 $(temp).each((e, item) => {
                     var singleObjId = {
                         value: item.userId,
@@ -498,20 +437,10 @@ class AddProject extends Component {
                     };
                     options.push(singleObjId);
                 }
-                    // output.push('<option value="'+ key +'">'+ value +'</option>')
-
-                    // <option key={i.userId} value={i.userId}>{i.userName}</option>
                 )
                 this.setState({
                     ResourceOptions: options
                 })
-
-
-                // });
-                //         console.log(options)
-                // this.setState({
-                //     displayResources: displayDataReturn
-                // })
             },
         });
     }
@@ -519,14 +448,11 @@ class AddProject extends Component {
 
     //#region onchange for Managed By  Data from user page
 
-
     onChangeManageBy(event) {
         this.setState({
-            manageBy: event.target.value
+            manageBy: event.target.value,
         })
     }
-
-
 
     getmanageByData() {
         const endpointGET = environment.apiUrl + moduleUrls.User + '/'
@@ -547,8 +473,6 @@ class AddProject extends Component {
         });
     }
     //#endregion
-
-
 
     componentDidMount() {
         this.setState({
@@ -571,7 +495,7 @@ class AddProject extends Component {
                         startDate: response[0].startDate,
                         endDate: response[0].endDate
                     })
-    
+
                     var resource = this.getResourceDetailsAPI();
                     resource.done((response) => {
                         var tempData = [];
@@ -588,7 +512,7 @@ class AddProject extends Component {
                                     tempData.push(resources);
                                 }
                             }
-    
+
                         });
                         this.setState({
                             selectedOption: tempData
@@ -597,20 +521,16 @@ class AddProject extends Component {
                     resource.fail((error) => {
                     })
                 });
-            } 
+            }
         });
         responseResourcesData.fail((error) => {
         })
     }
 
-
     render() {
-        //   const { selectedOption } = this.state;
-
         if (this.state.redirectToList == true) {
             return <Redirect to={{ pathname: "/projects" }} />
         }
-
         return (
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
@@ -632,51 +552,63 @@ class AddProject extends Component {
                                                     projectName: event.target.value
                                                 })
                                             }} required />
-                                        <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                        <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                                     </div>
                                 </div>
-
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="startDate">Start Date</label><br></br>
-                                        <DatePicker className="form-control" name="startDate"
-                                            selected={this.state.startDate}
-                                            onChange={(e) => {
-                                                this.setState({
-                                                    startDate: moment(e).format("")
-                                                })
-                                            }}//only when value has changed
-
-                                            required />
+                                        <div>
+                                            <DatePicker className="form-control" name="startDate"
+                                                selected={this.state.startDate} autoComplete="off"
+                                                dateFormat="dd-MM-YYYY"
+                                                onChange={(e) => {
+                                                    $(".requiredfield").hide()
+                                                    this.setState({
+                                                        isSelect: true,
+                                                        startDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                    })
+                                                }}
+                                                required />
+                                        </div>
+                                        {/* <label className="requiredfield" style={{ "display": "none", "color": "#dc3545" }}>This field is required.</label> */}
                                     </div>
                                 </div>
+                                <div>
+                                    <div>
+                                        <label className="required" htmlFor="endDate">End Date</label><br></br>
+                                        <DatePicker required className="form-control" name="endDate"
+                                            selected={this.state.endDate} autoComplete="off"
+                                            dateFormat="dd-MM-YYYY"
+                                            onChange={(e) => {
 
-                                <div >
-                                    <label className="required" htmlFor="endDate">End Date</label><br></br>
-                                    <DatePicker className="form-control" name="endDate"
-                                        selected={this.state.endDate}
-                                        onChange={(e) => {
-                                            this.setState({
-                                                endDate: moment(e).format("YYYY-MM-DD")
-                                            })
-                                        }}//only when value has changed
-
-                                    />
+                                                // $(".requiredfield").hide()
+                                                this.setState({
+                                                    isSelect: true,
+                                                    endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                })
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-
                             <div className="row">
                                 <div className="col-md-4">
-                                    <label >Complexity</label>
-                                    <select required name="complexitydropdown" className="form-control" htmlFor="complexityId" onChange={(e) => { this.onChangeComplexityMaster(e) }} value={this.state.complexityId}  >
-                                        <option defaultValue="">select</option>
+                                    <label>Complexity</label>
+                                    <select required name="complexitydropdown" className="form-control" htmlFor="complexityId"
+                                        onChange={(e) => {
+                                            this.onChangeComplexityMaster(e)
+                                        }} value={this.state.complexityId}  >
+                                        <option value="">select</option>
                                         {this.state.displayComplexityId}
                                     </select>
                                 </div>
                                 <div className="col-md-4">
                                     <label>Project Status</label>
-                                    <select required name="projectStatusdropdown" className="form-control" value={this.state.status}  >
-                                        <option defaultValue="">select</option>
+                                    <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
+                                        onChange={(e) => {
+                                        }} value={this.state.status}  >
+                                        <option value="">select</option>
                                         {this.state.displayProjectStatus}
                                         <option>Not Started</option>
                                         <option>On Going</option>
@@ -686,30 +618,29 @@ class AddProject extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="manageBy">Managed By</label>
-                                        <select required name="manageBydropdown" className="form-control" onChange={(e) => { this.onChangeManageBy(e) }} value={this.state.manageBy}  >
-                                            <option defaultValue="">select</option>
+                                        <select required name="manageBydropdown" className="form-control"
+                                            onChange={(e) => {
+                                                this.onChangeManageBy(e)
+                                            }} value={this.state.manageBy}  >
+                                            <option value="">select</option>
                                             {this.state.displayManageBy}
                                         </select>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <label>Resources</label>
-                                    
                                     <Select isMulti name="resources" id="mySelect"
                                         onChange={(event) => {
+                                            $(".requiredfield").hide()
                                             this.setState({
+                                                isSelect: true,
                                                 resources: event.target.value
                                             })
-                                        }}
-                                        value={this.state.selectedOption}
-                                        onChange={this.handleChange}
+                                        }} value={this.state.selectedOption}
                                         options={this.state.ResourceOptions}
+                                        onChange={this.handleChange}
                                     />
-                                    {/* <select multiple id className="chosen-select" required name="resourcesdropdown" className="form-control"
-                                        onChange={(e) => { this.onChangeResources(e) }}>
-                                    <option value="">select</option>                                      
-                                        {this.state.displayResources}
-                                    </select> */}
+                                    <label className="requiredfield" style={{ "display": "none", "color": "#dc3545" }}>This field is required.</label>
                                 </div>
                             </div>
                             <div className="row">
@@ -734,7 +665,8 @@ class AddProject extends Component {
                                             }}>Update</button>
 
                                             : <button type="button" className="btn btn-success mr-2" value="submit" onClick={() => {
-                                                this.saveDetailsProject(this.state);
+
+                                                this.saveProject(this.state);
                                             }}>Save</button>}
 
                                         <button type="button" className="btn btn-info mr-2" onClick={() => {

@@ -1,49 +1,52 @@
 import React, { Component } from 'react';
+import { environment, Type } from './Environment';
 var moment = require('moment');
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
 class Myteam extends Component {
-
     componentDidMount() {
-        debugger;
+        const myTeamUrl =  environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
             aaSorting: [[2, 'asc']],
             ajax: {
-                url: "http://192.168.10.110:3000/dynamic",
-                type: "POST",
+                url: myTeamUrl,
+                type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": `SELECT UM.firstName,UM.lastName,UM.reportingManagerId,TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where UM.reportingManagerId='${localStorage.getItem('userId')}'`
-                },
+                    "query": `SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,pm.status,tam.assignId,um.firstName,um.lastName,qm.quaterName
+                    FROM template_assignment_master tam
+                    JOIN project_master pm ON tam.projectId = pm.projectId
+                    JOIN user_master um ON um.userId = tam.userId
+                    JOIN quater_master as qm ON qm.quaterId = TAM.quaterId
+                    WHERE pm.manageBy = ${localStorage.getItem('userId')}`
+                }
             },
-
             columns: [
                 {
-                    data: "firstName",
+                    data: "quaterName" + "projectName",
                     targets: 0,
-
+                    render: (data, type, row) => {
+                        return (
+                            `<div>${(row.quaterName + " " + "-" + " " + row.projectName)}</div>`
+                        )
+                    },
                 },
                 {
-                    data: "lastName",
+                    data: "firstName" + "lastName",
                     targets: 1,
-
-                },
-                {
-                    data: "quaterName",
-                    targets: 2,
-
-                },
-                {
-                    data: "projectName",
-                    targets: 3
+                    render: (data, type, row) => {
+                        return (
+                            `<div>${(row.firstName + " " + row.lastName)}</div>`
+                        )
+                    },
                 },
                 {
                     data: "startDate",
-                    targets: 4,
+                    targets: 2,
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
@@ -52,7 +55,7 @@ class Myteam extends Component {
                 },
                 {
                     data: "endDate",
-                    targets: 5,
+                    targets: 3,
                     render: (data, type, row) => {
                         return (
                             `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
@@ -61,57 +64,43 @@ class Myteam extends Component {
                 },
                 {
                     data: "status",
-                    targets: 6
+                    targets: 4
                 },
-
                 {
                     data: "assignId",
-                    targets: 7,
+                    targets: 5,
                     "orderable": false,
                     render: function (data, type, row) {
-                        ;
                         return (
                             '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
-
                         )
                     }
                 }
-            ],
-            initComplete: (settings, json) => {
-
-            },
-            drawCallback: (settings) => {
-
-            }
+            ]
         });
-
     }
     render() {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">My Team</h2>
-
-
                 </div>
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplate"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th width="100">Project</th>
-                            <th>Start Data</th>
+                            <th width="100">KRA Sheet</th>
+                            <th width="100">Employee Name</th>
+                            <th width="100">Start Data</th>
                             <th width="100">End Date</th>
-                            <th>Status</th>
+                            <th width="100">Status</th>
                             <th width="100">Action</th>
                         </tr>
                     </thead>
                 </table>
-
             </div>
         )
     }

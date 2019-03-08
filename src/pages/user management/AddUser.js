@@ -7,11 +7,9 @@ import { environment, Type, moduleUrls, Notification } from '../Environment'
 import { Link } from 'react-router-dom';
 import ReactFileReader from 'react-file-reader';
 
-
 class AddUser extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             userId: props.match.params.userId,
             RedirectToUserManagement: false,
@@ -42,20 +40,11 @@ class AddUser extends Component {
 
 
         }
-
     }
-
-    //#region  clear user fields
-    reset() {
-        window.location.reload();
-    }
-    //#endregion
-
-    //#region  bind the dropdown list on onChange event
+    //#region  onChange events
     onChangeDepartment(event) {
         this.setState({
             departmentId: event.target.value
-
         })
     }
     onChangeJob(event) {
@@ -76,8 +65,14 @@ class AddUser extends Component {
         })
     }
     //#endregion
-    //#region save the details on click button
-
+    //#region ajax call 
+    componentDidMount() {
+        this.getUserDetails();
+        this.getDeptData();
+        this.getJobData();
+        this.getRoleData();
+        this.getTeamLeader();
+    }
     isUserExistApi() {
         var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'
         return $.ajax({
@@ -92,7 +87,6 @@ class AddUser extends Component {
             type: Type.get
         })
     }
-
     isExistUserNameOnChange() {
         if (this.state.userId != undefined) {
             var res = this.isUserExistUpdateApi();
@@ -129,62 +123,23 @@ class AddUser extends Component {
             data: JSON.stringify(body),
             headers: {
                 "Content-Type": "application/json",
-
             },
-
-
         })
     }
+    getDropDownValues(url) {
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
 
-    sendMail() {
-
-        /* START - GET TL NAME AND EMAIL */
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+    }
+    getUserApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
         return $.ajax({
             url: url,
             type: Type.get,
-            success: (res) => {
-                /* START - SEND EMAIL */
-                var emailBody = `<html>
-                    <body>
-                    <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
-                    <p>New Employee added in your team.<span>`;
-                if (this.state.gender == "Male") {
-                    emailBody += `His`
-                }
-                else {
-                    emailBody += `Her`
-                }
-                emailBody += `
-                    name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
-                    </p>                        
-                    <p>Thanks,</p>
-                    <p>PSSPL ADMIN</p>
-                </body>
-                </html>`;
-
-                var body =
-                {
-                    emailSubject: "Employee added in your team",
-                    emailBody: emailBody,
-                    toemailadress: res[0].emailAddress
-                }
-                this.sendMailAPI(body);
-
-                this.setState({
-                    RedirectToUserManagement: true
-                })
-                /* END - SEND EMAIL */
-            }
 
         })
-        /* END - GET TL NAME AND EMAIL */
-
-
-
-
-
-
     }
     saveUserDetailsApi(DataList) {
         var url = environment.apiUrl + moduleUrls.User
@@ -194,10 +149,47 @@ class AddUser extends Component {
             data: DataList,
         })
     }
+    isUserExistUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+    isUserExistEmailUpdateApi() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+    updatedMailApi(body) {
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+    }
+    removeEmpEmail() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.oldReportingManagerId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+
+        });
+
+    }
+
+    //#endregion
+    //#region Save user and update  user details 
     saveUserDetails(DataList) {
         var res = this.saveUserDetailsApi(DataList);
         res.done((response) => {
-
             this.sendMail();
             toast.success("User " + Notification.saved, {
                 position: toast.POSITION.TOP_RIGHT
@@ -236,7 +228,7 @@ class AddUser extends Component {
                         "address": this.state.address,
                         "profileImage": this.state.imageSrc,
                         "gender": this.state.gender,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
 
                     }
                     this.saveUserDetails(DataList);
@@ -251,66 +243,6 @@ class AddUser extends Component {
             return false;
         }
     }
-
-    handleFiles = files => {
-        this.setState({
-            imageSrc: files.base64
-        })
-    }
-
-    removeimg() {
-        this.setState({
-            imageSrc: ""
-        })
-    }
-    //#endregion 
-    //#region  Update the user details
-    getUserApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-
-        })
-    }
-    isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
-        return $.ajax({
-            url: url,
-            type: Type.get
-        })
-    }
-    isUserExistEmailUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
-        return $.ajax({
-            url: url,
-            type: Type.get
-        })
-    }
-
-    //email row Exists
-    isExistEmailOnChange() {
-        if (this.state.userId != undefined) { //id is undefinded edit 
-            var res = this.isUserExistEmailUpdateApi();
-            res.done((response) => {
-                if (response.length > 0) {
-                    $(".recordexists").show()
-                } else {
-                }
-            }
-            )
-        }
-        else {
-            var res = this.isUserEmailExistApi(); //save
-            res.done((response) => {
-                if (response.length > 0) {
-                    $(".recordexists").show()
-                } else {
-                }
-            })
-        }
-    }
-
     updateAjaxCall(data) {
 
         var userList =
@@ -328,10 +260,10 @@ class AddUser extends Component {
             "address": data.address,
             "profileImage": data.imageSrc,
             "gender": data.gender,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
 
         }
-         var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${data.userId}`
         return $.ajax({
             url: url,
             type: Type.patch,
@@ -345,31 +277,6 @@ class AddUser extends Component {
             data: JSON.stringify(userList),
         });
     }
-
-    updatedMailApi(body) {
-        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
-
-        return $.ajax({
-            url: emailUrl,
-            type: "post",
-            data: JSON.stringify(body),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-    }
-
-
-    removeEmpEmail() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.oldReportingManagerId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-
-        });
-
-    }
-
     updatedMail() {
         if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
             /* START - SEND EMAIL TO OLD REPORTING MANAGER */
@@ -448,7 +355,7 @@ class AddUser extends Component {
 
             })
             /* END - SEND EMAIL TO OLD REPORTING MANAGER */
-          
+
         }
         this.setState({
             isUpdate: true
@@ -467,8 +374,6 @@ class AddUser extends Component {
 
         })
     }
-
-
     UpdateUserDetails(data) {
         var result = window.formValidation("#createUser");
         if (result) {
@@ -489,6 +394,71 @@ class AddUser extends Component {
         else {
             return false;
         }
+    }
+    //#endregion
+    //#region image functionality
+
+    //#endregion 
+    //#region mail to TL
+    isExistEmailOnChange() {
+        if (this.state.userId != undefined) { //id is undefinded edit 
+            var res = this.isUserExistEmailUpdateApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            })
+        }
+        else {
+            var res = this.isUserEmailExistApi(); //save
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            })
+        }
+    }
+    sendMail() {
+        /* START - GET TL NAME AND EMAIL */
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.reportingManagerId}`
+        this.getDropDownValues(url).done(
+            (res) => {
+                /* START - SEND EMAIL */
+                var emailBody = `<html>
+                    <body>
+                    <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                    <p>New Employee added in your team.<span>`;
+                if (this.state.gender == "Male") {
+                    emailBody += `His`
+                }
+                else {
+                    emailBody += `Her`
+                }
+                emailBody += `
+                    name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                    </p>                        
+                    <p>Thanks,</p>
+                    <p>PSSPL ADMIN</p>
+                </body>
+                </html>`;
+
+                var body =
+                {
+                    emailSubject: "Employee added in your team",
+                    emailBody: emailBody,
+                    toemailadress: res[0].emailAddress
+                }
+                this.sendMailAPI(body);
+
+                this.setState({
+                    RedirectToUserManagement: true
+                })
+                /* END - SEND EMAIL */
+            }
+        )
+        /* END - GET TL NAME AND EMAIL */
     }
     getUserDetails() {
         if (this.state.userId !== undefined) {
@@ -511,9 +481,7 @@ class AddUser extends Component {
                         reportingManagerId: res.reportingManagerId,
                         oldReportingManagerId: res.reportingManagerId,
                         gender: res.gender,
-
                     })
-
                 }
             });
             res.fail((error) => {
@@ -523,7 +491,7 @@ class AddUser extends Component {
         }
     }
     //#endregion
-    //#region  get dept,job,role records through api
+    //#region  Methods
     getDeptData() {
         var url = environment.apiUrl + moduleUrls.Department
         $.ajax({
@@ -601,14 +569,18 @@ class AddUser extends Component {
             },
         });
     }
-
-    componentDidMount() {
-        this.getUserDetails();
-        this.getDeptData();
-        this.getJobData();
-        this.getRoleData();
-        this.getTeamLeader();
-
+    reset() {
+        window.location.reload();
+    }
+    handleFiles = files => {
+        this.setState({
+            imageSrc: files.base64
+        })
+    }
+    removeimg() {
+        this.setState({
+            imageSrc: ""
+        })
     }
     //#endregion
     render() {

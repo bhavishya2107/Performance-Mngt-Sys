@@ -30,7 +30,6 @@ class Template extends Component {
         res.done(response => {
             if (response.affectedRows > 0) {
                 toast.success("Template " + Notification.deleted);
-
             }
             this.$el.DataTable().ajax.reload()
         });
@@ -40,8 +39,7 @@ class Template extends Component {
     }
 
     //#endregion
-    //#region single Delete template confirm
-
+    //#region single Delete & multi Delete Assign-Template confirm
     singleDeleteTemplateConfirm(id) {
         if (id !== undefined) {
             bootbox.confirm({
@@ -67,22 +65,6 @@ class Template extends Component {
             });
         }
     }
-
-    //#endregion
-    //#region   Ajax call
-    DeleteTemplateApi(assignId) {
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${assignId}`
-        return $.ajax({
-            url: url,
-            type: Type.deletetype,
-            dataSrc: "",
-            error: function (xhr, status, error) {
-
-            },
-        });
-    }
-    //#endregion
-    //#region multiple delete functionality
     multipleDeleteTemplateConfirm() {
         var assignId = []
         $("#tblTemplateAssigned input:checkbox:checked").each((e, item) => {
@@ -118,13 +100,9 @@ class Template extends Component {
             toast.info(Notification.deleteInfo)
         }
     }
-    multipleTemplateDeleteApi(assignId) {
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/bulk?_ids=' + `${assignId}`;
-        return $.ajax({
-            url: url,
-            type: Type.deletetype
-        })
-    }
+
+    //#endregion
+       //#region multiple delete functionality
     multiDeleteTemplate(assignId) {
         $("#tblTemplateAssigned input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -153,17 +131,38 @@ class Template extends Component {
     }
 
     //#endregion
+    //#region   Ajax call
+    DeleteTemplateApi(assignId) {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${assignId}`
+        return $.ajax({
+            url: url,
+            type: Type.deletetype,
+            dataSrc: "",
+            error: function (xhr, status, error) {
+
+            },
+        });
+    }
+    multipleTemplateDeleteApi(assignId) {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/bulk?_ids=' + `${assignId}`;
+        return $.ajax({
+            url: url,
+            type: Type.deletetype
+        })
+    }
+
+    //#endregion
     componentDidMount() {
         const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
         this.$el.DataTable({
-            "sorting": [[0, 'asc']],
+            // "sorting": [[0, 'asc']],
             "autoWidth": false,
             ajax: {
                 url: url,
                 type: Type.post,
                 data: {
-                    query: "SELECT TAM.assignId,UM.firstName,Um.lastname, PM.projectName,PM.startDate,PM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy"
+                    query: "SELECT TAM.assignId,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid ORDER BY TAM.assignId DESC"
                 },
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -203,8 +202,9 @@ class Template extends Component {
                     targets: 4,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>` + "- " +
-                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
+                       `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+                       
                         )
                     },
                 },

@@ -186,8 +186,8 @@ class Addtemplate extends Component {
       var tempData = templateData.filter((i) => {
         return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId : false)
       });
-      if (tempData.length > 0) {
 
+      if (tempData.length > 0) {
         $(".recordExistsTbl").show()
       }
       else {
@@ -202,15 +202,19 @@ class Addtemplate extends Component {
           };
 
           templateData.push(templateDataapi);
-          // this.setState({
-          //   selectkpi:"",
-          //   selectkra:""
-          // })
+
           this.$el
             .DataTable()
             .clear()
             .rows.add(templateData)
             .draw();
+
+           $('#optionReset').prop('selectedIndex',0);
+           $('#optionreset').prop('selectedIndex',0);
+            
+         this.setState({
+           isSelect:false
+         })
         }
         else {
           $(".recordRequiredTbl").show()
@@ -275,9 +279,9 @@ class Addtemplate extends Component {
     })
   }
   getTemplateDetailsId() {
-    //const endpointGET = environment.apiUrl + moduleUrls.Templatedetail 
+    const endpointGET = environment.dynamicUrl + 'dynamic' 
     return $.ajax({
-      url: "http://192.168.10.110:3000/dynamic",
+      url: endpointGET,
       type: Type.post,
       data: {
         "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
@@ -286,8 +290,9 @@ class Addtemplate extends Component {
   }
 
   tempgetTemplateDetailsId() {
+    const tempgetTemplateDetailsIdUrl = environment.dynamicUrl + 'dynamic'
     return $.ajax({
-      url: "http://192.168.10.110:3000/dynamic",
+      url: tempgetTemplateDetailsIdUrl,
       type: Type.post,
       data: {
         "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
@@ -574,8 +579,7 @@ class Addtemplate extends Component {
 
           <div className="row">
             <div className="col-md-4">
-
-              <select required name="optionKra"
+              <select id="optionReset" name="optionKra"
                 onChange={e => {
                   this.onChangekra(e);
                 }}
@@ -586,7 +590,7 @@ class Addtemplate extends Component {
               </select>
             </div>
             <div className="col-md-4">
-              <select required name="optionKpi"
+              <select id="optionreset" name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
                 }}
