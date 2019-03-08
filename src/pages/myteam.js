@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
+import { environment, Type } from './Environment';
 var moment = require('moment');
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
+
 class Myteam extends Component {
     componentDidMount() {
+        const myTeamUrl =  environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
             aaSorting: [[2, 'asc']],
             ajax: {
-                url: "http://192.168.10.110:3000/dynamic",
-                type: "POST",
+                url: myTeamUrl,
+                type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": `SELECT *,um.firstname,um.lastName,qm.quaterName
+                    "query": `SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,pm.status,tam.assignId,um.firstName,um.lastName,qm.quaterName
                     FROM template_assignment_master tam
                     JOIN project_master pm ON tam.projectId = pm.projectId
                     JOIN user_master um ON um.userId = tam.userId
