@@ -69,7 +69,7 @@ class AddKpi extends Component {
                         "weightage": this.state.weightage,
                         "scaleSetId": this.state.scaleSetId,
                         "target": this.state.target,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
 
                     }
                     const saveKpiUrl = environment.apiUrl + moduleUrls.Kpi + '/'
@@ -90,7 +90,7 @@ class AddKpi extends Component {
             });
         }
         else {
-           
+
             $(".recordexists").hide()
             return false;
         }
@@ -104,67 +104,49 @@ class AddKpi extends Component {
         })
     }
 
-    onChangeBlur(){
-        if(this.state.kpiId != undefined){
+    onChangeBlur() {
+        if (this.state.kpiId != undefined) {
             var res = this.isEditKpiExistsApi();
             res.done((response) => {
-                debugger;
                 if (response.length > 0) {
                     $(".recordexists").show()
 
-                }else{
-                   
+                } else {
+
                 }
 
+            }
+            )
         }
-        )}
-    
-        else{
+
+        else {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     //alert("")
                     $(".recordexists").show()
-    
+
                 } else {
-                    
+
                 }
             })
         }
-    
+
     }
 
-    // addKpi() {
-    //     var kpiDataapi = {
-    //         "scaleSetId": this.state.scaleSetId,
-    //     }
-    //     kpiData.push(kpiDataapi)
-    //     this.setState({
-    //         kpiDataTable: kpiData
-    //     })
-    //     this.$el = $(this.el);
-    //     this.$el.DataTable({
-    //         datasrc: kpiData,
-    //         data: kpiData,
-    //         columns: [
-    //             {
-    //                 data: "scaleSetName",
-    //                 target: 0
-    //             },
-    //         ]
-    //     })
-    // }
 
-//#region update related api
+    //#region update related api
 
-    updateDetailsApi(data) {
+    updateDetailsApi(updateData) {
+        console.log(updateData.scaleSetId)
+        debugger;
         var body =
         {
-            "KpiTitle": data.kpiTitle.trim(),
-            "target": data.target,
-            "weightage": data.weightage,
-            "scaleSetId": data.scaleSetId,
-            "modifiedBy":localStorage.getItem('userId')
+            "KpiTitle": updateData.kpiTitle.trim(),
+            "target": updateData.target,
+            "weightage": updateData.weightage,
+            "scaleSetId": updateData.scaleSetId,
+            "modifiedBy": updateData.getItem('userId')
 
         }
         const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
@@ -178,8 +160,9 @@ class AddKpi extends Component {
             data: JSON.stringify(body)
         });
     }
-    
+
     UpdateKpiDetails(data) {
+        debugger;
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {
             var res = this.isEditKpiExistsApi();
@@ -228,24 +211,19 @@ class AddKpi extends Component {
                     )
                 });
                 this.setState({
-                    
                     displayScaleSetId: displayDataReturn
                 })
             },
         });
     }
 
-    componentWillMount() {
-        this.getscaleSetIdData();
-    }
-
-
-
-
+    
     componentDidMount() {
         this.setState({
             title: ModuleNames.kpi
         })
+        this.getscaleSetIdData();
+
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
             res.done((response) => {
@@ -280,7 +258,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">KPI Title</label>
-                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={()=>(this.onChangeBlur())} value={this.state.kpiTitle}
+                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={() => (this.onChangeBlur())} value={this.state.kpiTitle}
                                             onChange={(event) => {
                                                 $(".recordexists").hide()
                                                 this.setState({
@@ -293,7 +271,7 @@ class AddKpi extends Component {
                                 <div className="col-md-4">
                                     <div className="form-group">
                                         <label className="required" htmlFor="weightage">Weight</label>
-                                        <input className="form-control" name="weightage" min="1"  max="99" type="number" value={this.state.weightage}
+                                        <input className="form-control" name="weightage" min="1" max="99" type="number" value={this.state.weightage}
                                             onChange={(event) => {
                                                 this.setState({
                                                     weightage: event.target.value
@@ -303,11 +281,14 @@ class AddKpi extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label>Scale Set</label>
-                                        <select required name="scaleSetdropdown" className="form-control" onChange={(e) => { this.onChangeScaleSetId(e) }} value={this.state.scaleSetId}  >
-                                            <option value="">select</option>
-                                            {this.state.displayScaleSetId}
-                                        </select>
+                                    <label>Scale Set</label>
+                                    <select required name="scaleSetName" className="form-control" htmlFor="scaleSetId"
+                                        onChange={(e) => {
+                                            this.onChangeScaleSetId(e)
+                                        }} value={this.state.scaleSetId}  >
+                                        <option value="">select</option>
+                                        {this.state.displayScaleSetId}
+                                    </select>
                                     </div>
                                 </div>
                             </div>
