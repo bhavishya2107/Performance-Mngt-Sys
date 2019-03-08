@@ -22,22 +22,21 @@ class Dashboard extends Component {
                 data: {
                     "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId  where TAM.userId='${localStorage.getItem('userId')}'`
                 },
-                
+
             },
             columns: [
-               
                 {
-                    data: "quaterName",
+                    data: "quaterName" + "projectName",
                     targets: 0,
-
-                },
-                {
-                    data: "projectName",
-                    targets: 1
+                    render: (data, type, row) => {
+                        return (
+                            `<div>${(row.quaterName + " " + "-" + " " + row.projectName)}</div>`
+                        )
+                    },
                 },
                 {
                     data: "startDate",
-                    targets: 2,
+                    targets: 1,
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format("DD-MM-YYYY")}</label>`
@@ -46,7 +45,7 @@ class Dashboard extends Component {
                 },
                 {
                     data: "endDate",
-                    targets: 3,
+                    targets: 2,
                     render: (data, type, row) => {
                         return (
                             `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
@@ -55,47 +54,37 @@ class Dashboard extends Component {
                 },
                 {
                     data: "status",
-                    targets: 4
+                    targets: 3
                 },
 
                 {
                     data: "assignId",
-                    targets: 5,
+                    targets: 4,
                     "orderable": false,
                     render: function (data, type, row) {
-                        ;
                         return (
                             '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
-
                         )
                     }
                 }
-            ],
-            initComplete: (settings, json) => {
-
-            },
-            drawCallback: (settings) => {
-
-            }
+            ]
         });
-
     }
     render() {
         return (
             <div>
-                  <div className="clearfix d-flex align-items-center row page-title">
-                <h2 className="col">My KRA</h2>
-            </div>
-                
+                <div className="clearfix d-flex align-items-center row page-title">
+                    <h2 className="col">My KRA</h2>
+                </div>
+
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplate"
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>Quater</th>
-                            <th width="100">Project</th>
+                            <th>KRA Sheet</th>
                             <th>Start Data</th>
                             <th width="100">End Date</th>
                             <th>Status</th>
