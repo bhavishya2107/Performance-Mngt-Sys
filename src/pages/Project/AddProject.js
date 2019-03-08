@@ -43,7 +43,7 @@ class AddProject extends Component {
         // this.handleChange = this.handleChange.bind(this);
         this.handleChange = (displaySelectedOption) => {
             this.setState({ selectedOption: displaySelectedOption });
-           // console.log(`Option selected:`, displaySelectedOption);
+            // console.log(`Option selected:`, displaySelectedOption);
         }
     }
 
@@ -121,7 +121,7 @@ class AddProject extends Component {
     }
     //#endregion
 
-
+    //#region mail sent on project save
     sendMailAPI(body) {
         const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
         return $.ajax({
@@ -136,13 +136,13 @@ class AddProject extends Component {
 
 
     sendProjectMail() {
-        /* START - GET TL NAME AND EMAIL */
+
         var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.manageBy}`
         return $.ajax({
             url: url,
             type: Type.get,
             success: (res) => {
-                // response.done((result) => {
+
                 var emailBody =
                     `<html>
                     <body>
@@ -152,7 +152,7 @@ class AddProject extends Component {
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("YYYY-MM-DD") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
-                       Resources:<b>` + this.state.selectedOption + `</b><br>
+                       Resources:<b>` + this.state.userData + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
                     <p>Thanks,</p>
@@ -176,6 +176,7 @@ class AddProject extends Component {
             }
         })
     }
+    //#endregion
 
     //#region save data(api)
 
@@ -209,7 +210,7 @@ class AddProject extends Component {
 
         var res = this.saveProjectResourceAPI(tempData);
         res.done((response) => {
-          //  this.sendProjectMail();
+              this.sendProjectMail();
             this.setState({ redirectToList: true });
             toast.success("Project " + Notification.saved, {
                 position: toast.POSITION.TOP_RIGHT
@@ -235,7 +236,7 @@ class AddProject extends Component {
     saveProjectDetails(projectData) {
         var res = this.saveProjectDetailsAPI(projectData);
         res.done((response) => {
-          //  console.log(this.state.selectedOption)
+            //  console.log(this.state.selectedOption)
             this.saveProjectResource(response.insertId, this.state.selectedOption);
         })
         res.fail((error) => {
@@ -279,6 +280,57 @@ class AddProject extends Component {
     //#endregion
 
 
+    /*deleteResourcesAPI(resourceId) {
+        // var ResourcesData = JSON.stringify(tempData);
+        // const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
+        const DeleteResources = environment.apiUrl + moduleUrls.ProjectResources + '/bulk?_ids=' + `${resourceId}` ;
+        return $.ajax({
+            url: DeleteResources,
+            type: Type.delete,
+            //  data: ResourcesData,
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest"
+            }
+        });
+
+    }*/
+
+    /*deleteResources(resources, userData, projectId,tempData) {
+        var deleteResourcesDetails = ''
+        var tempDatadetails = userData.filter((i) => {
+            return ( i.userId.value == this.state.userId)
+          });
+        userData.map(item => {
+            var resources = {
+                "projectId": projectId,
+                "userId": item.value
+            }
+        })
+
+        $(resources).each((e, item) => {
+            if (item.resources !== undefined) {
+                if (deleteResourcesDetails === '') {
+                    deleteResourcesDetails = item.resources
+                } else {
+                    deleteResourcesDetails = deleteResourcesDetails + ',' + item.resources
+                }
+            }
+        });
+        if (deleteResourcesDetails !== "") {
+            var res = this.deleteResourcesAPI(deleteResourcesDetails)
+            res.done((result) => {
+                this.updateProjectResource(this.state.projectId, this.state.selectedOption);
+            })
+            res.fail((error) => {
+                console.log(error)
+            })
+
+        }
+        else {
+        }
+    }*/
+
     //#region update api
 
 
@@ -298,26 +350,39 @@ class AddProject extends Component {
         });
     }
 
+    deleteResources(projectId) {
+        return $.ajax({
+            url: "http://192.168.10.110:3000/dynamic",
+            type: Type.post,
+            data: {
+                "query": "delete from project_resources where projectId = " + projectId
+            },
+        })
+    }
 
     updateProjectResource(projectId, userData) {
-        var tempData = [];
-        userData.map(item => {
-            var resources = {
-                "projectId": projectId,
-                "userId": item.value
-            }
-            tempData.push(resources);
+        var responseDeleteResources = this.deleteResources(projectId);
+        responseDeleteResources.done((response) => {
+            var tempData = [];
+            userData.map(item => {
+                var resources = {
+                    "projectId": projectId,
+                    "userId": item.value
+                }
+                tempData.push(resources);
+            })
+            
+            var res = this.updateProjectResourceAPI(tempData);
+            res.done((response) => {
+                this.setState({ redirectToList: true });
+                toast.success("Project " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            })
+            res.fail((error) => {    
+            })
         })
-
-        var res = this.updateProjectResourceAPI(tempData);
-        res.done((response) => {
-            this.setState({ redirectToList: true });
-            toast.success("Project " + Notification.saved, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        })
-        res.fail((error) => {
-
+        responseDeleteResources.fail((error) => {
         })
     }
 
@@ -334,20 +399,6 @@ class AddProject extends Component {
             data: updateData
         });
     }
-
-
-    updateProjectDetails(updateData) {
-        // var updateData = JSON.stringify(updateData);
-        var res = this.updateProjectDetailsAPI(updateData);
-        res.done((response) => {
-            this.updateProjectResource(this.state.projectId, this.state.selectedOption);
-        })
-        res.fail((error) => {
-        })
-
-        // this.updateProjectAPI(updateData);
-    }
-
 
     updateDetailsAPI(updateData) {
         var isvalidate = window.formValidation("#projectform");
@@ -368,11 +419,20 @@ class AddProject extends Component {
                         "description": updateData.description,
                         "modifiedBy": localStorage.getItem('userId')
                     }
-                    this.updateProjectDetails(TempData);
+                    
+                    var res = this.updateProjectDetailsAPI(TempData);
+                    res.done((response) => {
+                        this.updateProjectResource(this.state.projectId, this.state.selectedOption);
+                    })
+                    res.fail((error) => {
+
+                    })
                 }
+
             });
             res.fail((error) => {
             })
+
         } else {
             $(".recordexists").hide()
             return false;
@@ -380,6 +440,7 @@ class AddProject extends Component {
     }
 
     //#endregion
+
 
     //#region onchange for Complexity Master Data
 
@@ -420,32 +481,32 @@ class AddProject extends Component {
 
 
     getResourcesData() {
-    
+
         var output = [];
         const endpointGET = environment.apiUrl + moduleUrls.User + '/'
-        $.ajax({
+        return $.ajax({
             type: Type.get,
             url: endpointGET,
             complete: (temp) => {
 
                 var temp = temp.responseJSON;
                 //   var displayDataReturn = temp.map((i) => {
-                    $(temp).each((e, item) => {
-                        var singleObjId = {
-                            value: item.userId,
-                            label: item.userName
-                        };
-                        options.push(singleObjId);
-                    }
-                        // output.push('<option value="'+ key +'">'+ value +'</option>')
+                $(temp).each((e, item) => {
+                    var singleObjId = {
+                        value: item.userId,
+                        label: item.userName
+                    };
+                    options.push(singleObjId);
+                }
+                    // output.push('<option value="'+ key +'">'+ value +'</option>')
 
-                        // <option key={i.userId} value={i.userId}>{i.userName}</option>
-                    )
-                    this.setState({
-                        ResourceOptions:options
-                    })
+                    // <option key={i.userId} value={i.userId}>{i.userName}</option>
+                )
+                this.setState({
+                    ResourceOptions: options
+                })
 
-                   
+
                 // });
                 //         console.log(options)
                 // this.setState({
@@ -490,55 +551,56 @@ class AddProject extends Component {
 
 
     componentDidMount() {
-    
-        this.getmanageByData();
-        this.getcomplexityIdData();
-        this.getResourcesData();
         this.setState({
             title: ModuleNames.Project
         })
-        if (this.state.projectId !== undefined) {
 
-            var res = this.getProjectDetailsApi();
-            res.done((response) => {
-                this.setState({
-                    projectName: response[0].projectName,
-                    complexityId: response[0].complexityId,
-                    status: response[0].status,
-                    manageBy: response[0].manageBy,
-                    description: response[0].description,
-                    startDate: response[0].startDate,
-                    endDate: response[0].endDate
-                })
-                
-                var resource = this.getResourceDetailsAPI();
-                resource.done((response) => {
-                    var tempData = []; 
-                    response.map(item => {
-                        if (item.userId !== null) {
-                            var found_names = $.grep(this.state.ResourceOptions, function(v) {
-                                return v.value === item.userId
-                            });
-                            if (found_names.length > 0) {
-                                var resources = {
-                                    "value": item.userId,
-                                    "label": found_names[0].label
-                                }
-                                tempData.push(resources);
-                            }
-                        }
-    
-                    });
+        this.getmanageByData();
+        this.getcomplexityIdData();
+        var responseResourcesData = this.getResourcesData();
+        responseResourcesData.done((response) => {
+            if (this.state.projectId !== undefined) {
+                var res = this.getProjectDetailsApi();
+                res.done((response) => {
                     this.setState({
-                        selectedOption: tempData
+                        projectName: response[0].projectName,
+                        complexityId: response[0].complexityId,
+                        status: response[0].status,
+                        manageBy: response[0].manageBy,
+                        description: response[0].description,
+                        startDate: response[0].startDate,
+                        endDate: response[0].endDate
+                    })
+    
+                    var resource = this.getResourceDetailsAPI();
+                    resource.done((response) => {
+                        var tempData = [];
+                        response.map(item => {
+                            if (item.userId !== null) {
+                                var found_names = $.grep(this.state.ResourceOptions, function (v) {
+                                    return v.value === item.userId
+                                });
+                                if (found_names.length > 0) {
+                                    var resources = {
+                                        "value": item.userId,
+                                        "label": found_names[0].label
+                                    }
+                                    tempData.push(resources);
+                                }
+                            }
+    
+                        });
+                        this.setState({
+                            selectedOption: tempData
+                        })
+                    });
+                    resource.fail((error) => {
                     })
                 });
-                resource.fail((error) => {
-                })
-            });
-           
-        } else {
-        }
+            } 
+        });
+        responseResourcesData.fail((error) => {
+        })
     }
 
 
@@ -632,6 +694,7 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <label>Resources</label>
+                                    
                                     <Select isMulti name="resources" id="mySelect"
                                         onChange={(event) => {
                                             this.setState({
