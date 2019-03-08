@@ -150,37 +150,26 @@ class Scaleset extends Component {
     }
     //#endregion
     onblurRowExists() {
-
         if (this.state.id != undefined) {
             var res = this.isScalesetExistsUpdateApi();
             res.done((response) => {
-                debugger;
                 if (response.length > 0) {
                     $(".recordexists").show()
-
                 } else {
-
                 }
-
             }
             )
         }
-
         else {
             var res = this.isScalesetExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
                     $(".recordexists").show()
-
                 } else {
-
                 }
             })
         }
-
     }
-
 
     componentDidMount() {
         this.setState({

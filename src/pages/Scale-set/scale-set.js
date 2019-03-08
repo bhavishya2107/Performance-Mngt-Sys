@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { environment, Type, Notification, moduleUrls, ModuleNames } from '../Environment'
-    import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -89,6 +89,8 @@ class Scalesetlist extends Component {
     }
 
     //#endregion
+
+    //#region Multi Delete
     multiDelete(scaleSetId) {
 
         var item = scaleSetId.join(",")
@@ -139,7 +141,7 @@ class Scalesetlist extends Component {
                         this.multiDelete(scaleSetId);
                     }
                     else {
-                       
+
                     }
                 }
             });
@@ -148,7 +150,6 @@ class Scalesetlist extends Component {
             toast.info(Notification.selectOneRecord);
         }
     }
-
     checkall(e) {
         $("#tblscaleset  input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -158,10 +159,12 @@ class Scalesetlist extends Component {
             }
         });
     }
+
+    //#endregion
     componentDidMount() {
         //#region Data table realted Block
         const scalesetGET = environment.apiUrl + moduleUrls.ScaleSet + '/?_size=1000' + '&_sort=-scaleSetId'
-        
+
         this.setState({
             title: ModuleNames.ScaleSet
         })
@@ -169,15 +172,12 @@ class Scalesetlist extends Component {
 
         this.$el.DataTable({
             "autoWidth": false,
-          //  "order": [[1, 'asc']],
-
             ajax: {
                 url: scalesetGET,
                 type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
                 },
-
             },
             columns: [
                 {
@@ -190,7 +190,6 @@ class Scalesetlist extends Component {
                         );
                     }
                 },
-              
                 {
                     data: "scaleSetName",
                     targets: 1
@@ -199,9 +198,7 @@ class Scalesetlist extends Component {
                     data: "description",
                     "orderable": false,
                     targets: 2
-
                 },
-
                 {
                     data: "scaleSetId",
                     "orderable": false,
@@ -218,20 +215,7 @@ class Scalesetlist extends Component {
                     }
                 },
             ],
-            // "createdRow": function (row, data, index) {
-
-            //     $('td', row).eq(1).html(index + 1);
-            // },
-            // "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-            //     $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-            //     return nRow;
-            // },
             initComplete: (settings, json) => {
-
-                // $(".btnDeletescaleset").on("click", e => {
-
-                //     this.SingleDelete(e.currentTarget.id);
-                // });
             },
             drawCallback: (settings) => {
                 window.smallTable();
@@ -240,16 +224,9 @@ class Scalesetlist extends Component {
                     this.SingleDeleteConfirm(e.currentTarget.id);
 
                 });
-                // $(".confirmbtnmulti").on("click", e => {
-
-                //     this.multipleDeleteScalesetconfirm(e.id);
-
-                // });
             }
         });
         //#endregion
-
-
     }
 
     render() {
@@ -268,20 +245,16 @@ class Scalesetlist extends Component {
                     id="tblscaleset"
                     ref={el => (this.el = el)}>
                     <thead>
-
                         <tr>
                             <th width="20">
                                 <input
-
                                     type="checkbox"
-
                                     name="checkAll"
                                     onClick={e => {
                                         this.checkall(e);
                                     }}
                                 />
                             </th>
-                            {/* <th width="5">Sr.No</th> */}
                             <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
@@ -294,7 +267,6 @@ class Scalesetlist extends Component {
         )
     }
 }
-
 export default Scalesetlist;
 
 
