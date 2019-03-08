@@ -46,7 +46,7 @@ class KraSheet extends Component {
       },
       data: JSON.stringify(changePWquery),
       success: (response) => {
-        console.log(response)
+      
       }
 
     });
@@ -80,19 +80,24 @@ class KraSheet extends Component {
         "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
         "selfComment": $(item).find('.commentSaved').val(),
         "selfRating": $(item).find('.selfrate').val(),
-        "selfRatingBy": localStorage.getItem('userId'),
-        "templateAssignId": parseInt($(item).find('.selfrate').attr('tempId')),
+        "selfRatingBy": parseInt(localStorage.getItem('userId')) ,
+        // "templateAssignId": parseInt($(item).find('.selfrate').attr('tempId')),
+    
       }
       kraData.push(kraSheetdata)
     })
     console.log(kraData)
 
 
-    const endpointPOST = environment.apiUrl + moduleUrls.TAD  + '/'
-    $.ajax({
+    const endpointPOST = environment.apiUrl + moduleUrls.TAD  + '/bulk' 
+    return $.ajax({
       url: endpointPOST,
       type: Type.post,
-      data: kraData,
+      dataSrc:"",
+      data:JSON.stringify(kraData),
+      headers: {
+        "Content-Type": "application/json"
+    },
     });
   }
 
@@ -139,9 +144,7 @@ class KraSheet extends Component {
           data: {
             query: `SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle , kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
           },
-          // success:(res)=>{
-          //   console.log(res)
-          // }
+         
 
 
 
