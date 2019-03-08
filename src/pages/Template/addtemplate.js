@@ -202,15 +202,20 @@ class Addtemplate extends Component {
           };
 
           templateData.push(templateDataapi);
-          // this.setState({
-          //   selectkpi:"",
-          //   selectkra:""
-          // })
+
           this.$el
             .DataTable()
             .clear()
             .rows.add(templateData)
             .draw();
+
+          // $('#optionReset').prop('selectedIndex',0);
+
+
+          // var options = document.querySelectorAll('#optionReset option');
+          // for (var i = 0, l = options.length; i < l; i++) {
+          //     options[i].selected = options[i].defaultSelected;
+          // }
         }
         else {
           $(".recordRequiredTbl").show()
@@ -574,25 +579,24 @@ class Addtemplate extends Component {
 
           <div className="row">
             <div className="col-md-4">
-
-              <select required name="optionKra"
+              <select id="optionReset" name="optionKra"
                 onChange={e => {
                   this.onChangekra(e);
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kra</option>
+                <option selected>Select Kra</option>
                 {this.state.displayDatakra}
               </select>
             </div>
             <div className="col-md-4">
-              <select required name="optionKpi"
+              <select id="optionReset" name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kpi</option>
+                <option selected>Select Kpi</option>
                 {this.state.displayDatakpi}
               </select>
             </div>
