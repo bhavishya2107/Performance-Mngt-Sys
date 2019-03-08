@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import bootbox from 'bootbox';
+import { environment, Type } from './Environment';
 var moment = require('moment');
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -9,15 +10,15 @@ $.DataTable = require('datatables.net-bs4');
 class Dashboard extends Component {
 
     componentDidMount() {
-
+        const myKRAUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[1, 'asc']],
             aaSorting: [[2, 'asc']],
             ajax: {
-                url: "http://192.168.10.110:3000/dynamic",
-                type: "POST",
+                url: myKRAUrl,
+                type: Type.post,
                 dataSrc: "",
                 data: {
                     "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId  where TAM.userId='${localStorage.getItem('userId')}'`

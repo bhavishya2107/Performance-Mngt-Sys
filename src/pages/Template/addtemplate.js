@@ -186,8 +186,8 @@ class Addtemplate extends Component {
       var tempData = templateData.filter((i) => {
         return (i.kpiTitle.id ? i.kpiTitle.id == this.state.kpiId : false) && (i.kraName.id ? i.kraName.id == this.state.kraId : false)
       });
-      if (tempData.length > 0) {
 
+      if (tempData.length > 0) {
         $(".recordExistsTbl").show()
       }
       else {
@@ -209,13 +209,12 @@ class Addtemplate extends Component {
             .rows.add(templateData)
             .draw();
 
-          // $('#optionReset').prop('selectedIndex',0);
-
-
-          // var options = document.querySelectorAll('#optionReset option');
-          // for (var i = 0, l = options.length; i < l; i++) {
-          //     options[i].selected = options[i].defaultSelected;
-          // }
+           $('#optionReset').prop('selectedIndex',0);
+           $('#optionreset').prop('selectedIndex',0);
+            
+         this.setState({
+           isSelect:false
+         })
         }
         else {
           $(".recordRequiredTbl").show()
@@ -280,9 +279,9 @@ class Addtemplate extends Component {
     })
   }
   getTemplateDetailsId() {
-    //const endpointGET = environment.apiUrl + moduleUrls.Templatedetail 
+    const endpointGET = environment.dynamicUrl + 'dynamic' 
     return $.ajax({
-      url: "http://192.168.10.110:3000/dynamic",
+      url: endpointGET,
       type: Type.post,
       data: {
         "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
@@ -291,8 +290,9 @@ class Addtemplate extends Component {
   }
 
   tempgetTemplateDetailsId() {
+    const tempgetTemplateDetailsIdUrl = environment.dynamicUrl + 'dynamic'
     return $.ajax({
-      url: "http://192.168.10.110:3000/dynamic",
+      url: tempgetTemplateDetailsIdUrl,
       type: Type.post,
       data: {
         "query": "SELECT * from template_detail as TD JOIN kpi_master as KM ON TD.kpiId = KM.kpiId JOIN kra_master as TM ON TD.kraId = TM.kraId where td.templateId =" + `${this.state.id}`
@@ -585,18 +585,18 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option selected>Select Kra</option>
+                <option disabled selected>Select Kra</option>
                 {this.state.displayDatakra}
               </select>
             </div>
             <div className="col-md-4">
-              <select id="optionReset" name="optionKpi"
+              <select id="optionreset" name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
                 }}
                 className="form-control"
               >
-                <option selected>Select Kpi</option>
+                <option disabled selected>Select Kpi</option>
                 {this.state.displayDatakpi}
               </select>
             </div>
