@@ -189,7 +189,7 @@ class Addtemplate extends Component {
 
       if (tempData.length > 0) {
         $(".recordExistsTbl").show()
-      }
+        }
       else {
         if (this.state.kpiId && this.state.kraId) {
           this.state.isUpdated = true;
@@ -212,9 +212,9 @@ class Addtemplate extends Component {
            $('#optionReset').prop('selectedIndex',0);
            $('#optionreset').prop('selectedIndex',0);
             
-         this.setState({
-           isSelect:false
-         })
+        //  this.setState({
+        //    isSelect:false
+        //  })
         }
         else {
           $(".recordRequiredTbl").show()
@@ -585,7 +585,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kra</option>
+                <option disabled selected>Select KRA</option>
                 {this.state.displayDatakra}
               </select>
             </div>
@@ -596,7 +596,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kpi</option>
+                <option disabled selected>Select KPI</option>
                 {this.state.displayDatakpi}
               </select>
             </div>

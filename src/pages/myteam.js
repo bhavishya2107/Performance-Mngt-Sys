@@ -6,7 +6,7 @@ $.DataTable = require('datatables.net-bs4');
 
 class Myteam extends Component {
     componentDidMount() {
-        const myTeamUrl =  environment.dynamicUrl + 'dynamic' + '/?_size=1000'
+        const myTeamUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
@@ -16,13 +16,12 @@ class Myteam extends Component {
                 url: myTeamUrl,
                 type: Type.post,
                 dataSrc: "",
-                data: {
+                data:{
                     "query": `SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,pm.status,tam.assignId,um.firstName,um.lastName,qm.quaterName
                     FROM template_assignment_master tam
                     JOIN project_master pm ON tam.projectId = pm.projectId
                     JOIN user_master um ON um.userId = tam.userId
-                    JOIN quater_master as qm ON qm.quaterId = TAM.quaterId
-                    WHERE pm.manageBy = ${localStorage.getItem('userId')}`
+                    JOIN quater_master as qm ON qm.quaterId = TAM.quaterId`
                 }
             },
             columns: [

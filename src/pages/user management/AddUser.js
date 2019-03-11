@@ -191,6 +191,7 @@ class AddUser extends Component {
         var res = this.saveUserDetailsApi(DataList);
         res.done((response) => {
             this.sendMail();
+            this.sendMailWhenUserCreated()
             toast.success("User " + Notification.saved, {
                 position: toast.POSITION.TOP_RIGHT
             });
@@ -460,6 +461,58 @@ class AddUser extends Component {
         )
         /* END - GET TL NAME AND EMAIL */
     }
+    sendMailWhenUserCreatedApi(body) {
+        {
+            const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+
+            return $.ajax({
+                url: emailUrl,
+                type: "post",
+                data: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+        }
+    }
+
+    sendMailWhenUserCreated() {
+        /* START - GET TL NAME AND EMAIL */
+        // User Name Is : <b>` + this.state.userName + `</b></span>
+        {
+            /* START - SEND EMAIL */
+            var emailBody = `
+                <p>Hello `+ this.state.firstName + ` ` + this.state.lastName + `,</p>
+                    </p> 
+                    
+                    <p>Welcome to Prakash Software. Below are the credentials to access PMS system:</p>
+                    
+                        URL: www.pms.com<br/>
+                        UserName: `+ this.state.userName + `<br/>
+                        Password: 123456<br/>
+
+                                        
+                    <p>Thanks,</p>
+                    <p>PSSPL ADMIN</p>
+                </body>
+                </html>`;
+
+            var body =
+            {
+                emailSubject: "Welcome to Prakash Software",
+                emailBody: emailBody,
+                toemailadress: this.state.emailAddress
+            }
+            this.sendMailWhenUserCreatedApi(body);
+
+            this.setState({
+                RedirectToUserManagement: true
+            })
+            /* END - SEND EMAIL */
+        }
+
+        /* END - GET TL NAME AND EMAIL */
+    }
     getUserDetails() {
         if (this.state.userId !== undefined) {
             var res = this.getUserApi();
@@ -557,10 +610,10 @@ class AddUser extends Component {
             success: (res) => {
                 var displayDataReturn = res.map(function (item) {
                     if (item.roleId === 1) {
-                        return (
-                            <option key={item.userName} value={item.userId}>{item.userName}</option>
+                    return (
+                        <option key={item.userName} value={item.userId}>{item.userName}</option>
 
-                        )
+                    )
                     }
                 });
                 this.setState({

@@ -20,12 +20,11 @@ class AddProject extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempData: {},
             projectId: props.match.params.id,
             RedirectToSample: false,
             displayComplexityId: "",
             displayProjectStatus: "",
-            selectComplexityMaster: "",
-            selectProjectStatus: "",
             templateDataTable: [],
             displayManageBy: "",
             displayResources: "",
@@ -45,7 +44,6 @@ class AddProject extends Component {
         this.handleChange = (displaySelectedOption) => {
             $(".requiredfield").hide()
             this.setState({ selectedOption: displaySelectedOption });
-            console.log(displaySelectedOption)
         }
     }
 
@@ -131,10 +129,18 @@ class AddProject extends Component {
             },
         })
     }
+    temp() {
+
+        this.setState({
+            tempData: options
+        })
+    }
 
     sendProjectMail() {
-        //debugger;
-        //  var item = selectedOption.join(",")
+        var resourceName = '';
+        $(this.state.selectedOption).each((e, item) => {
+            resourceName += item.label + ",";
+        })
         var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.manageBy}`
         return $.ajax({
             url: url,
@@ -145,19 +151,17 @@ class AddProject extends Component {
                     <body>
                     <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `, </p>
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
-                //debugger;
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` +
                     ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
-                       Resources:<b>` + this.state.selectedOption + `</b><br>
+                       Resources:<b>` + resourceName + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
                 </body>
                 </html>`;
-
                 var body =
                 {
                     emailSubject: "New Project assigned",
@@ -340,7 +344,6 @@ class AddProject extends Component {
     }
 
     updateDetailsAPI(updateData) {
-        //debugger;
         var isvalidate = window.formValidation("#projectform");
         if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
             isvalidate = false;
@@ -560,7 +563,6 @@ class AddProject extends Component {
                                                 selected={this.state.startDate} autoComplete="off"
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
-                                                    //debugger;
                                                     $(".requiredfield").hide()
                                                     this.setState({
                                                         isSelect: true,
@@ -599,7 +601,6 @@ class AddProject extends Component {
                                         }} value={this.state.complexityId}  >
                                         <option value="">select</option>
                                         {this.state.displayComplexityId}
-                                        <required />
                                     </select>
                                 </div>
                                 <div className="col-md-4">
