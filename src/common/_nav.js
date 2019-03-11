@@ -8,7 +8,7 @@ export default {
         {
             name: 'My Team',
             url: '/myteam',
-            icon: 'fa fa-dashboard',
+            icon: 'fa fa-users',
         },
 
         {
