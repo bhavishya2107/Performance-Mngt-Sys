@@ -76,7 +76,6 @@ class loginPage extends Component {
         } else {
             return false;
         }
-
     }
 
     fetchingValueInLocalStorage(response) {

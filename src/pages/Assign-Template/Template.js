@@ -102,7 +102,7 @@ class Template extends Component {
     }
 
     //#endregion
-       //#region multiple delete functionality
+    //#region multiple delete functionality
     multiDeleteTemplate(assignId) {
         $("#tblTemplateAssigned input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -150,7 +150,6 @@ class Template extends Component {
             type: Type.deletetype
         })
     }
-
     //#endregion
     componentDidMount() {
         const url = environment.dynamicUrl + 'dynamic';
@@ -162,7 +161,7 @@ class Template extends Component {
                 url: url,
                 type: Type.post,
                 data: {
-                    query: "SELECT TAM.assignId,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid ORDER BY TAM.assignId DESC"
+                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  ORDER BY TAM.assignId DESC"
                 },
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -180,12 +179,16 @@ class Template extends Component {
                     orderable: false
                 },
                 {
-                    data: "templateName",
+                    data: "quaterName",
                     targets: 1,
                 },
                 {
-                    data: "firstName",
+                    data: "templateName",
                     targets: 2,
+                },
+                {
+                    data: "firstName",
+                    targets: 3,
                     render: (data, type, row) => {
                         return (
                             `<label id="firstName" value=>${row.firstName}` + " " +
@@ -195,11 +198,11 @@ class Template extends Component {
                 },
                 {
                     data: "projectName",
-                    targets: 3,
+                    targets: 4,
                 },
                 {
                     data: "startDate",
-                    targets: 4,
+                    targets: 5,
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
@@ -210,11 +213,11 @@ class Template extends Component {
                 },
                 {
                     data: "status",
-                    targets: 5,
+                    targets: 6,
                 },
                 {
                     data: "assignId",
-                    targets: 6,
+                    targets: 7,
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditTemplate/assignId=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
@@ -262,6 +265,7 @@ class Template extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkall(e) }} />
                             </th>
+                            <th width="100">Quater</th>
                             <th width="100">Template Name</th>
                             <th width="100">Assigned Users</th>
                             <th width="100" >Project</th>
