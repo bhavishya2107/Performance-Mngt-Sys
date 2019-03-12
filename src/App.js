@@ -23,8 +23,8 @@ import Department from './pages/Department/Department';
 import AddDept from './pages/Department/AddDept'
 import Projects from './pages/Project/Projects';
 import AddProject from './pages/Project/AddProject';
-import addkpi from './pages/KPI/addkpi';
-import kpi from './pages/KPI/kpi';
+import addkpi from './pages/KPI/AddKpi';
+import kpi from './pages/KPI/KPI';
 
 import ComplexityMaster from './pages/Complexity-Master/ComplexityMaster';
 import AddComplexityMaster from './pages/Complexity-Master/AddComplexityMaster';
