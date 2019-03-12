@@ -39,7 +39,7 @@ export default {
                 url: '/kra',
                 icon: 'fa fa-area-chart',
             },
-       
+
             {
                 name: 'Role',
                 url: '/role',
@@ -77,11 +77,6 @@ export default {
                 icon: 'fa fa-clipboard',
             },
 
-            // {
-            //     name: 'Add Scale Set',
-            //     url: '/scaleset',
-            //     icon: 'fsa fa-plus',
-            // },
             {
                 name: 'Scale Set',
                 url: '/scale-set',
@@ -92,36 +87,19 @@ export default {
                 url: '/designation',
                 icon: 'fa fa-id-card-o',
             },
-            // {
-            //     name: 'Add template',
-            //     url: '/addtemplate',
-            //     icon: 'fa fa-plus',
-            // },
             {
                 name: 'Projects',
                 url: '/projects',
                 icon: 'fa fa-sitemap',
             },
-            
-
-                // {
-                //     name: 'My Profile',
-                //     url: '/myProfile',
-                //     icon: 'fa fa-plus',
-                // }
-                {
-                    name: 'Assign-Template',
-                    url: '/Template',
-                    icon: 'fa fa-sitemap',
-                },
+            {
+                name: 'Assign-Template',
+                url: '/Template',
+                icon: 'fa fa-tasks',
+            },
 
             ]
         }
 
-
-
-
-
-
-    ]
+]
 };
