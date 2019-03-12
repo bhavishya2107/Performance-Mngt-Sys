@@ -6,7 +6,7 @@ const routes = {
   '/demo': 'UI Design Control',
   '/kra/add': ' add KRA',
   '/kra/edit': 'KRA',
-  '/role/add': 'ROLE',
+  '/role/add': 'add Role',
   '/scale-set/add': 'Add Scale Set',
   '/scale-set': 'Scale Set',
   '/designation': 'Job Title',
