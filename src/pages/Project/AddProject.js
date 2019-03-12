@@ -62,7 +62,6 @@ class AddProject extends Component {
             }
             )
         }
-
         else {
             var res = this.isProjectExistsApi();
             res.done((response) => {
@@ -74,7 +73,6 @@ class AddProject extends Component {
             })
         }
     }
-
 
     getResourceDetailsAPI() {
         const endpointGET = environment.apiUrl + moduleUrls.ProjectResources + '?_where=(projectId,eq,' + this.state.projectId + ')';
@@ -153,8 +151,7 @@ class AddProject extends Component {
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
-                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` +
-                    ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
+                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
                        Resources:<b>` + resourceName + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
@@ -344,6 +341,7 @@ class AddProject extends Component {
     }
 
     updateDetailsAPI(updateData) {
+        debugger;
         var isvalidate = window.formValidation("#projectform");
         if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
             isvalidate = false;

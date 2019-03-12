@@ -23,8 +23,8 @@ import Department from './pages/Department/Department';
 import AddDept from './pages/Department/AddDept'
 import Projects from './pages/Project/Projects';
 import AddProject from './pages/Project/AddProject';
-import AddKpi from './pages/KPI/AddKpi';
-import KPI from './pages/KPI/KPI';
+import addkpi from './pages/KPI/addkpi';
+import kpi from './pages/KPI/kpi';
 
 import ComplexityMaster from './pages/Complexity-Master/ComplexityMaster';
 import AddComplexityMaster from './pages/Complexity-Master/AddComplexityMaster';
@@ -111,9 +111,14 @@ if(localStorage.getItem('isAuthenticated')){
                           path="/demo"
                           component={Demo}
                         />
-                        <Route exact path="/KPI" component={KPI} />
-                        <Route exact path="/KPI/editkpi/id=:id" component={AddKpi} />
-                        <Route exact path="/KPI/add" component={AddKpi} />
+                        <Route exact path="/kpi" component={kpi} />
+                        <Route exact path="/kpi/edit/id=:id" component={addkpi} />
+                        <Route exact path="/kpi/add" component={addkpi} />
+
+                         
+                        <Route exact path="/kra/add" component={kraHome}></Route>
+                        <Route path="/kra" component={kraListPage}></Route>
+                        <Route path="/Editkra/id=:id" component={kraHome}></Route>
 
                         <Route exact path="/complexity-master" component={ComplexityMaster} />
                         <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
@@ -134,20 +139,19 @@ if(localStorage.getItem('isAuthenticated')){
                         <Route exact path="/Template" component={Template} />
                         <Route path="/addAssignTemplate" component={addAssignTemplate} />
                         <Route  path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
-                       
+                      
 
                         <Route path="/innerpage" component={innerpage} />
-                        <Route exact path="/kra/add" component={kraHome}></Route>
-                        <Route path="/kra" component={kraListPage}></Route>
+
                         <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
                         <Route path="/role" component={UserRolePMS}></Route>
-                        <Route path="/addRole" component={UserRoleForm}></Route>
+                        <Route path="/add/role" component={UserRoleForm}></Route>
                         <Route path="/quater" component={Quater}></Route>
                         <Route path="/add-quater" component={ADDQuater}></Route>
                         <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
                     
                         <Route path="/templateList" component={Templatelist}></Route>
-                        <Route path="/Editkra/id=:id" component={kraHome}></Route>
+
                         <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
                         <Route exact path="/myProfile" component={MyProfile} />
                         <Route path="/dashboard" component={Dashboard} />              

@@ -38,20 +38,28 @@ class AddComplexityMaster extends Component {
         });
     }
     onchangeBlur() {
-        var res = this.isComplexityMasterExistsApi();
-        res.done((response) => {
-            if (response.length > 0) {
-                $(".recordexists").show()
-            } else {
-                var _this = this;
-                var ComplexityMasterdata = {
-                    "complexityName": this.state.complexityName,
-                    "description": this.state.description,
+        if (this.state.complexityId != undefined) {
+            var res = this.isEditComplexityMasterExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+
                 }
             }
-        });
-        res.fail(error => {
-        });
+            )
+        }
+        else {
+            var res = this.isComplexityMasterExistsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+
+                } else {
+
+                }
+            })
+        }
     }
 
 
@@ -67,7 +75,7 @@ class AddComplexityMaster extends Component {
                     var ComplexityMasterdata = {
                         "complexityName": this.state.complexityName.trim(),
                         "description": this.state.description,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
 
                     }
                     const endpointPOST = environment.apiUrl + moduleUrls.ComplexityMaster + '/'
@@ -111,7 +119,7 @@ class AddComplexityMaster extends Component {
         {
             "complexityName": data.complexityName.trim(),
             "description": data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
         }
         return $.ajax({
             url: endpointPATCH,
@@ -185,14 +193,14 @@ class AddComplexityMaster extends Component {
                         <form id="ComplexityMasterForm">
                             <div className="form-group">
                                 <label className="required">Complexity Name</label>
-                                <input type="text" id="complexityName" className="form-control" maxLength="50" onBlur={() => { this.onchangeBlur() }} name="complexityName" value={this.state.complexityName}
+                                <input type="text" id="complexityName" name="complexityName" onBlur={() => { this.onchangeBlur() }} maxLength="20" className="form-control" value={this.state.complexityName}
                                     onChange={(event) => {
                                         $(".recordexists").hide()
                                         this.setState({
                                             complexityName: event.target.value
                                         })
                                     }} required />
-                                <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
                                 <label>Description</label> <textarea id="kpiId" className="form-control" name="description" rows="4" value={this.state.description}

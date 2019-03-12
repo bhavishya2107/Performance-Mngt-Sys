@@ -188,11 +188,11 @@ class KPI extends Component {
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/kpi/edit/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.kpiId + '"class="btn btn-danger btnDelete btn-sm";"">' +
-                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                            '<i class="fa fa-trash" aria-hidden="true"></i>' +  
                             "</a>"
                         )
                     },
