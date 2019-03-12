@@ -121,24 +121,24 @@ class App extends Component {
 
               <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
               <Route path="/role" component={UserRolePMS}></Route>
-              <Route path="/add/role" component={UserRoleForm}/>
+              <Route path="/add/role" component={UserRoleForm} />
 
               <Route path="/quater" component={Quater}></Route>
               <Route path="/add-quater" component={ADDQuater}></Route>
               <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
 
               <Route path="/templateList" component={Templatelist}></Route>
+              <Route exact path="/addtemplate" component={Addtemplate} />
+              <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
 
               <Route exact path="/myProfile" component={MyProfile} />
               {/* <Route path="/dashboard" component={Dashboard} /> */}
 
-             
+
               <Route exact path="/designation" component={Designationlist} />
               <Route exact path="/designation/add" component={Designation} />
-              <Route exact path="/addtemplate" component={Addtemplate} />
-            
               <Route exact path="/designation/edit/id=:id" component={Designation} />
-              <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+             
               {/* <Route exact path="/myteam" component={Myteam}></Route> */}
             </Switch>
           </Router>
@@ -169,7 +169,7 @@ class App extends Component {
                       <div className="col-md-12">
                         <Switch>
                           <Route
-                            path="/innerpage" component={innerpage}/>
+                            path="/innerpage" component={innerpage} />
 
                           <Route path="/demo" component={Demo} />
 
