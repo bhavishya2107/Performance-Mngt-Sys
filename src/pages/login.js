@@ -56,8 +56,6 @@ class loginPage extends Component {
             password: event.target.value
         })
     }
-
-
     checkCredential = (event) => {
         // event.preventDefault(event);
         var isvalidate = window.formValidation("#loginForm")

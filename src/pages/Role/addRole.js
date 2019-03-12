@@ -20,27 +20,45 @@ class UserRoleForm extends Component {
     }
 
     isExistRoleonChange() {
-
-        var isvalidate = window.formValidation("#userRoleForm");
-        if (isvalidate) {
+        if (this.state.id != undefined) {
+            var res = this.updateroleEditExistApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                } else {
+                }
+            }
+            )
+        }
+        else {
             var res = this.RoleAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hiderole").show()
-                } else {
-                    var _this = this;
-                    var roleFormData =
-                    {
-                        "roleName": this.state.roleName,
-                        "description":this.state.description
-                    }
+                    $(".recordexists").show()
                 }
-            });
-            res.fail(error => {
-
-            });
-
+            })
         }
+
+        // var isvalidate = window.formValidation("#userRoleForm");
+        // if (isvalidate) {
+        //     var res = this.RoleAlreadyExistApi();
+        //     res.done((response) => {
+        //         if (response.length > 0) {
+        //             $(".hiderole").show()
+        //         } else {
+        //             var _this = this;
+        //             var roleFormData =
+        //             {
+        //                 "roleName": this.state.roleName,
+        //                 "description":this.state.description
+        //             }
+        //         }
+        //     });
+        //     res.fail(error => {
+
+        //     });
+
+        // }
     }
 
     submitDataFromRoleform() {
@@ -188,7 +206,8 @@ class UserRoleForm extends Component {
             res.done((response) => {
 
                 this.setState({
-                    roleName: response[0].roleName,
+                    roleName: response[0].roleName, 
+                    description: response[0].description
                 })
             });
             res.fail((error) => {
@@ -216,7 +235,7 @@ class UserRoleForm extends Component {
                     <div className="form-group">
                         <label htmlFor="roleName" className="required">Name</label>
                         <div className="">
-                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }} maxLength="20"
+                            <input id="roleName" type="text" className="form-control col-6" name="rolename" onBlur={() => { this.isExistRoleonChange() }} maxLength="15"
                                 value={this.state.roleName}
                                 onChange={(event) => {
                                     $(".hiderole").hide()
