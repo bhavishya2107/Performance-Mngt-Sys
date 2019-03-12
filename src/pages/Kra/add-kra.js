@@ -15,13 +15,13 @@ class kraHome extends Component {
             kraName: "",
         };
     }
-// createdBy = ${localStorage.getItem('userId')}
+    // createdBy = ${localStorage.getItem('userId')}
 
     submitDataFromKra() {
         debugger;
-        
+
         var isvalidate = window.formValidation("#kraAddForm");
-     
+
         if (isvalidate) {
 
             var res = this.kraAlreadyExistApi();
@@ -34,7 +34,7 @@ class kraHome extends Component {
                     {
                         "kraName": this.state.kraName.trim(),
                         "description": this.state.description,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
                     };
                     const apiKraPost = environment.apiUrl + moduleUrls.Kra + '/'
                     $.ajax({
@@ -63,25 +63,24 @@ class kraHome extends Component {
     }
 
     kraExistonBlur() {
-
-        var isvalidate = window.formValidation("#kraAddForm");
-        if (isvalidate) {
-            var res = this.kraAlreadyExistApi();
+        if (this.state.id != undefined) {
+            var res = this.updatekraEditExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".hide").show()
+                    $(".recordexists").show()
                 } else {
-                    var _this = this;
-                    var kraFormData =
-                    {
-                        "kraName": this.state.kraName,
-                        "description": this.state.description,
-                    };
-                }
-            });
-            res.fail(error => {
 
-            });
+                }
+            }
+            )
+        }
+        else {
+            var res = this.updatekraDetailsApi();
+            res.done((response) => {
+                if (response.length > 0) {
+                    $(".recordexists").show()
+                }
+            })
         }
     }
 
@@ -113,7 +112,7 @@ class kraHome extends Component {
         {
             "kraName": data.kraName.trim(),
             "description": data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/kra_master/${data.id}`,
@@ -140,7 +139,7 @@ class kraHome extends Component {
     UpdateKraDetails(data) {
         debugger;
         var isvalidate = window.formValidation("#kraAddForm");
-   
+
         if (isvalidate) {
             var res = this.updatekraEditExistApi();
             res.done((response) => {
@@ -226,7 +225,7 @@ class kraHome extends Component {
 
                                         }
                                     )
-                                }} required /> <p className="hide" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                                }} required /> <p className="hide" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
 
                         </div>
                     </div>

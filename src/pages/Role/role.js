@@ -95,11 +95,11 @@ class UserRolePMS extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -250,7 +250,7 @@ class UserRolePMS extends Component {
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">{ModuleNames.Role}</h2>
                     <div className="col text-right">
-                        <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/add/role', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button type="button"
                         className="btn btn-danger btn-multi-delete"

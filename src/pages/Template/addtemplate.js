@@ -189,7 +189,7 @@ class Addtemplate extends Component {
 
       if (tempData.length > 0) {
         $(".recordExistsTbl").show()
-        }
+      }
       else {
         if (this.state.kpiId && this.state.kraId) {
           this.state.isUpdated = true;
@@ -209,17 +209,19 @@ class Addtemplate extends Component {
             .rows.add(templateData)
             .draw();
 
-           $('#optionReset').prop('selectedIndex',0);
-           $('#optionreset').prop('selectedIndex',0);
-            
-        //  this.setState({
-        //    isSelect:false
-        //  })
+          $('#optionReset').prop('selectedIndex', 0);
+          $('#optionreset').prop('selectedIndex', 0);
+
+          this.setState({
+            isSelect: false,
+            kpiId:"",
+            kraId:""
+          })
         }
         else {
           $(".recordRequiredTbl").show()
         }
-      }
+      } 
     }
     else {
       $(".recordRequiredTbl").show()
@@ -279,7 +281,7 @@ class Addtemplate extends Component {
     })
   }
   getTemplateDetailsId() {
-    const endpointGET = environment.dynamicUrl + 'dynamic' 
+    const endpointGET = environment.dynamicUrl + 'dynamic'
     return $.ajax({
       url: endpointGET,
       type: Type.post,
