@@ -98,8 +98,8 @@ class App extends Component {
               <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
               <Route exact path="/Projects" component={Projects} />
-              <Route exact path="/Project/editproject/id=:id" component={AddProject} />
-              <Route exact path="/Projects/add" component={AddProject} />
+              <Route exact path="/project/edit/id=:id" component={AddProject} />
+              <Route exact path="/projects/add" component={AddProject} />
 
               <Route path="/user-management" component={UserManagement} />
               <Route path="/user-managemnet/add" component={AddUser} />
@@ -169,17 +169,13 @@ class App extends Component {
                       <div className="col-md-12">
                         <Switch>
                           <Route
-                            path="/innerpage"
-                            component={innerpage}
-                          />
-                          <Route
-                            path="/demo"
-                            component={Demo}
-                          />
+                            path="/innerpage" component={innerpage}/>
+
+                          <Route path="/demo" component={Demo} />
+
                           <Route exact path="/kpi" component={kpi} />
                           <Route exact path="/kpi/edit/id=:id" component={addkpi} />
                           <Route exact path="/kpi/add" component={addkpi} />
-
 
                           <Route exact path="/kra/add" component={kraHome}></Route>
                           <Route path="/kra" component={kraListPage}></Route>
@@ -190,13 +186,12 @@ class App extends Component {
                           <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
                           <Route exact path="/Projects" component={Projects} />
-                          <Route exact path="/Project/editproject/id=:id" component={AddProject} />
-                          <Route exact path="/Projects/add" component={AddProject} />
+                          <Route exact path="/project/edit/id=:id" component={AddProject} />
+                          <Route exact path="/projects/add" component={AddProject} />
 
                           <Route exact path="/scale-set/add" component={Scaleset} />
                           <Route exact path="/scale-set" component={Scalesetlist} />
                           <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
-
 
                           <Route path="/user-management" component={UserManagement} />
                           <Route path="/user-managemnet/add" component={AddUser} />
@@ -207,13 +202,9 @@ class App extends Component {
                           {/* <Route exact path="/Department/add" component={AddDept} /> */}
                           <Route path="/AddDept" component={AddDept} />
 
-
                           <Route exact path="/Template" component={Template} />
                           <Route path="/addAssignTemplate" component={addAssignTemplate} />
                           <Route path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
-
-
-                          <Route path="/innerpage" component={innerpage} />
 
                           <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 

@@ -214,7 +214,7 @@ class Projects extends Component {
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/Project/editproject/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/project/edit/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.projectId + '"class="btn btn-danger btnDelete btn-sm";"">' +
