@@ -51,6 +51,15 @@ class AddProject extends Component {
         window.location.reload();
     }
 
+    checkDateValidation(startDate, endDate) {
+        // check the dates
+        if ((new Date(startDate) > new Date(endDate)) || (new Date(endDate) < new Date(startDate))) {
+            // set date error validation true 
+        } else {
+            // null or false date error validation 
+        }
+    }
+
     onChangeBlur() {
         if (this.state.projectId != undefined) {
             var res = this.isEditProjectExistsApi();
@@ -103,7 +112,6 @@ class AddProject extends Component {
             data: ''
         });
     }
-
 
     isEditProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')' + '~and(projectId,ne,' + this.state.projectId + ')';
@@ -274,7 +282,6 @@ class AddProject extends Component {
     //#endregion
 
     //#region update api
-
 
     updateProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);

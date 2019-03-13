@@ -102,17 +102,19 @@ class App extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <Switch>
-                          <Route exact path="/KPI" component={kpi} />
-                          <Route exact path="/KPI/editkpi/id=:id" component={addkpi} />
-                          <Route exact path="/KPI/add" component={addkpi} />
+
+                          <Route exact path="/kpi" component={kpi} />
+                          <Route exact path="/kpi/edit/id=:id" component={addkpi} />
+                          <Route exact path="/kpi/add" component={addkpi} />
 
                           <Route exact path="/complexity-master" component={ComplexityMaster} />
                           <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
                           <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
                           <Route exact path="/Projects" component={Projects} />
-                          <Route exact path="/Project/editproject/id=:id" component={AddProject} />
-                          <Route exact path="/Projects/add" component={AddProject} />
+                          <Route exact path="/project/edit/id=:id" component={AddProject} />
+                          <Route exact path="/projects/add" component={AddProject} />
+
 
                           <Route path="/user-management" component={UserManagement} />
                           <Route path="/user-managemnet/add" component={AddUser} />
@@ -159,8 +161,9 @@ class App extends Component {
                 </div>
               </div>
             </div>
-            </Router>
-        )}
+          </Router>
+        )
+      }
       else if (localStorage.getItem('roleName') == "HR") {
         return (
           <Router>
@@ -221,7 +224,7 @@ class App extends Component {
               <Route exact path="/designation" component={Designationlist} />
               <Route exact path="/designation/add" component={Designation} />
               <Route exact path="/designation/edit/id=:id" component={Designation} />
-             
+
               {/* <Route exact path="/myteam" component={Myteam}></Route> */}
             </Switch>
           </Router>

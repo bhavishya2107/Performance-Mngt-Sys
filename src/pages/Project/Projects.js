@@ -156,13 +156,10 @@ class Projects extends Component {
 
     componentDidMount() {
         const endpointGET = environment.dynamicUrl + 'dynamic'
-        // this.setState({
-        //     title: ModuleNames.kpi
-        // })
+
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            // "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "POST",
