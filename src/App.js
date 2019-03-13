@@ -102,17 +102,23 @@ class App extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <Switch>
-                          <Route exact path="/KPI" component={kpi} />
-                          <Route exact path="/KPI/editkpi/id=:id" component={addkpi} />
-                          <Route exact path="/KPI/add" component={addkpi} />
+
+                          <Route exact path="/kpi" component={kpi} />
+                          <Route exact path="/kpi/edit/id=:id" component={addkpi} />
+                          <Route exact path="/kpi/add" component={addkpi} />
 
                           <Route exact path="/complexity-master" component={ComplexityMaster} />
                           <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
                           <Route exact path="/complexity-master/add" component={AddComplexityMaster} />
 
                           <Route exact path="/Projects" component={Projects} />
-                          <Route exact path="/Project/editproject/id=:id" component={AddProject} />
-                          <Route exact path="/Projects/add" component={AddProject} />
+                          <Route exact path="/project/edit/id=:id" component={AddProject} />
+                          <Route exact path="/projects/add" component={AddProject} />
+
+                          <Route exact path="/kra/add" component={kraHome}></Route>
+                          <Route exact path="/kra" component={kraListPage}></Route>
+                          <Route exact path="/kra/edit/id=:id" component={kraHome}></Route>
+
 
                           <Route path="/user-management" component={UserManagement} />
                           <Route path="/user-managemnet/add" component={AddUser} />
@@ -121,25 +127,35 @@ class App extends Component {
                           <Route path="/EditDept/departmentId=:departmentId" component={AddDept} />
                           {/* <Route exact path="/Department/add" component={AddDept} /> */}
                           <Route path="/AddDept" component={AddDept} />
-                          <Route path="/AddProject" component={AddProject} />
                           <Route exact path="/Template" component={Template} />
                           <Route path="/addAssignTemplate" component={addAssignTemplate} />
                           <Route path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
 
 
                           <Route path="/innerpage" component={innerpage} />
-                          <Route exact path="/kra/add" component={kraHome}></Route>
-                          <Route path="/kra" component={kraListPage}></Route>
-                          <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
-                          <Route path="/role" component={UserRolePMS}></Route>
-                          <Route path="/addRole" component={UserRoleForm}></Route>
-                          <Route path="/quater" component={Quater}></Route>
-                          <Route path="/add-quater" component={ADDQuater}></Route>
-                          <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
 
+                          <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
+
+
+                          <Route exact path="/role" component={UserRolePMS}></Route>
+                          <Route exact path="/role/add" component={UserRoleForm}></Route>
+                          <Route exact path="/role/edit/id=:id" component={UserRoleForm}></Route>
+
+
+
+                          <Route exact path="/quater" component={Quater}></Route>
+                          <Route exact path="/quater/add" component={ADDQuater}></Route>
+                          <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
+
+<<<<<<< HEAD
                           <Route exact path="/templateList" component={Templatelist}></Route>
                           <Route path="/Editkra/id=:id" component={kraHome}></Route>
                           <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
+=======
+                          <Route path="/templateList" component={Templatelist}></Route>
+
+
+>>>>>>> eb6bfc67a764d68f3cefab766929d493a38169ba
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route exact path="/dashboard" component={Dashboard} />
 
@@ -159,8 +175,9 @@ class App extends Component {
                 </div>
               </div>
             </div>
-            </Router>
-        )}
+          </Router>
+        )
+      }
       else if (localStorage.getItem('roleName') == "HR") {
         return (
           <Router>
@@ -172,9 +189,10 @@ class App extends Component {
               <Route exact path="/kpi/edit/id=:id" component={addkpi} />
               <Route exact path="/kpi/add" component={addkpi} />
 
+
               <Route exact path="/kra/add" component={kraHome}></Route>
-              <Route path="/kra" component={kraListPage}></Route>
-              <Route path="/Editkra/id=:id" component={kraHome}></Route>
+              <Route exact path="/kra" component={kraListPage}></Route>
+              <Route exact path="/kra/edit/id=:id" component={kraHome}></Route>
 
               <Route exact path="/complexity-master" component={ComplexityMaster} />
               <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
@@ -202,13 +220,14 @@ class App extends Component {
 
               <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 
-              <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
-              <Route path="/role" component={UserRolePMS}></Route>
-              <Route path="/add/role" component={UserRoleForm} />
+              <Route exact path="/role" component={UserRolePMS}></Route>
+              <Route exact path="/role/add" component={UserRoleForm}></Route>
+              <Route exact path="/role/edit/id=:id" component={UserRoleForm}></Route>
 
-              <Route path="/quater" component={Quater}></Route>
-              <Route path="/add-quater" component={ADDQuater}></Route>
-              <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
+              <Route exact path="/quater" component={Quater}></Route>
+              <Route exact path="/quater/add" component={ADDQuater}></Route>
+              <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
+
 
               <Route exact path="/templateList" component={Templatelist}></Route>
               <Route exact path="/template/add" component={Addtemplate} />
@@ -221,7 +240,7 @@ class App extends Component {
               <Route exact path="/designation" component={Designationlist} />
               <Route exact path="/designation/add" component={Designation} />
               <Route exact path="/designation/edit/id=:id" component={Designation} />
-             
+
               {/* <Route exact path="/myteam" component={Myteam}></Route> */}
             </Switch>
           </Router>
@@ -301,9 +320,10 @@ class App extends Component {
                           <Route exact path="/kpi/edit/id=:id" component={addkpi} />
                           <Route exact path="/kpi/add" component={addkpi} />
 
+
                           <Route exact path="/kra/add" component={kraHome}></Route>
-                          <Route path="/kra" component={kraListPage}></Route>
-                          <Route path="/Editkra/id=:id" component={kraHome}></Route>
+                          <Route exact path="/kra" component={kraListPage}></Route>
+                          <Route exact path="/kra/edit/id=:id" component={kraHome}></Route>
 
                           <Route exact path="/complexity-master" component={ComplexityMaster} />
                           <Route exact path="/complexity-master/edit/id=:id" component={AddComplexityMaster} />
@@ -332,13 +352,14 @@ class App extends Component {
 
                           <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 
-                          <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
-                          <Route path="/role" component={UserRolePMS}></Route>
-                          <Route path="/add/role" component={UserRoleForm}></Route>
+                          <Route exact path="/role" component={UserRolePMS}></Route>
+                          <Route exact path="/role/add" component={UserRoleForm}></Route>
+                          <Route exact path="/role/edit/id=:id" component={UserRoleForm}></Route>
 
-                          <Route path="/quater" component={Quater}></Route>
-                          <Route path="/add-quater" component={ADDQuater}></Route>
-                          <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
+                          <Route exact path="/quater" component={Quater}></Route>
+                          <Route exact path="/quater/add" component={ADDQuater}></Route>
+                          <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
+
 
                           <Route exact path="/templateList" component={Templatelist}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />

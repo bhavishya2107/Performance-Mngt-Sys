@@ -198,7 +198,7 @@ class kraListPage extends Component {
           targets: 3,
           render: function (data, type, row) {
             return (
-              '<a href="/Editkra/id=' +
+              '<a href="/kra/edit/id=' +
               row.kraId +
               '"class="btn mr-2 btn-edit btn-info btn-sm">' +
               '<i class="fa fa-pencil" aria-hidden="true"></i>' +

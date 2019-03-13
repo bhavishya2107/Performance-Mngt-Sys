@@ -56,7 +56,9 @@ class Projects extends Component {
                 });
             }
             else {
-                alert("you cannot delete system user")
+                toast.error("Some of Project will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             }
         }
     }
@@ -156,13 +158,10 @@ class Projects extends Component {
 
     componentDidMount() {
         const endpointGET = environment.dynamicUrl + 'dynamic'
-        // this.setState({
-        //     title: ModuleNames.kpi
-        // })
+
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            // "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "POST",
