@@ -147,15 +147,9 @@ class App extends Component {
                           <Route exact path="/quater/add" component={ADDQuater}></Route>
                           <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
 
-<<<<<<< HEAD
-                          <Route exact path="/templateList" component={Templatelist}></Route>
-                          <Route path="/Editkra/id=:id" component={kraHome}></Route>
-                          <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
-=======
                           <Route path="/templateList" component={Templatelist}></Route>
 
 
->>>>>>> eb6bfc67a764d68f3cefab766929d493a38169ba
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route exact path="/dashboard" component={Dashboard} />
 
