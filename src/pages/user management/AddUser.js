@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import { ToastContainer, toast } from 'react-toastify';
@@ -32,7 +31,6 @@ class AddUser extends Component {
             selectRole: "",
             displayDataReturn: "",
             displayTeamLeaderData: '',
-            departmentId: "",
             designationId: "",
             imageSrc: "",
             gender: "",
@@ -88,7 +86,7 @@ class AddUser extends Component {
         })
     }
     isExistUserNameOnChange() {
-        if (this.state.userId != undefined) {
+        if (this.state.userId !== undefined) {
             var res = this.isUserExistUpdateApi();
 
             res.done((response) => {
@@ -212,7 +210,7 @@ class AddUser extends Component {
                     $(".dataExist").show()
                 }
                 else {
-                    var _this = this;
+                    // var _this = this;
                     var DataList =
                     {
                         "userName": this.state.userName.trim(),
@@ -278,6 +276,7 @@ class AddUser extends Component {
             data: JSON.stringify(userList),
         });
     }
+    
     updatedMail() {
         if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
             /* START - SEND EMAIL TO OLD REPORTING MANAGER */
@@ -293,7 +292,7 @@ class AddUser extends Component {
                         <body>
                         <p>Hello `+ response[0].firstName + ` ` + response[0].lastName + `,</p>
                         <p>Employee removed from your team.<span>`;
-                        if (this.state.gender == "Male") {
+                        if (this.state.gender === "Male") {
                             emailBody += `His`
                         }
                         else {
@@ -326,7 +325,7 @@ class AddUser extends Component {
                         <body>
                         <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
                         <p>Employee added in your team.<span>`;
-                    if (this.state.gender == "Male") {
+                    if (this.state.gender === "Male") {
                         emailBody += `His`
                     }
                     else {
@@ -402,7 +401,7 @@ class AddUser extends Component {
     //#endregion 
     //#region mail to TL
     isExistEmailOnChange() {
-        if (this.state.userId != undefined) { //id is undefinded edit 
+        if (this.state.userId !== undefined) { //id is undefinded edit 
             var res = this.isUserExistEmailUpdateApi();
             res.done((response) => {
                 if (response.length > 0) {
@@ -431,7 +430,7 @@ class AddUser extends Component {
                     <body>
                     <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
                     <p>New Employee added in your team.<span>`;
-                if (this.state.gender == "Male") {
+                if (this.state.gender === "Male") {
                     emailBody += `His`
                 }
                 else {
@@ -525,7 +524,6 @@ class AddUser extends Component {
                         userName: res.userName,
                         emailAddress: res.emailAddress,
                         mobileNo: res.mobileNo,
-                        roleId: res.roleId,
                         address: res.address,
                         imageSrc: res.profileImage,
                         designationId: res.designationId,
@@ -662,8 +660,7 @@ class AddUser extends Component {
                                             <label htmlFor="profileImage">Image</label>
                                             <div className="clearfix mb-2">
                                                 <div className="user-img-block">
-                                                    {this.state.imageSrc == "" ?
-
+                                                    {this.state.imageSrc === "" ?
                                                         (<img src="../img/download.png" id="imgB" className="img-thumbnail" />)
                                                         :
                                                         (<img src={this.state.imageSrc} id="imgB" className="img-thumbnail" />)
@@ -691,8 +688,8 @@ class AddUser extends Component {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <div className="form-group">
-                                                    <label htmlFor="firstName" className="required" sm={2} maxLength="50" >First Name</label>
-                                                    <input type="text" name="firstName" id="firstName" className="form-control" value={this.state.firstName}
+                                                    <label htmlFor="firstName" className="required" sm={2} >First Name</label>
+                                                    <input type="text" name="firstName" id="firstName" maxLength="50" className="form-control" value={this.state.firstName}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 firstName: event.target.value
@@ -748,7 +745,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input type="text" name="mobileNo" id="mobileNo" maxLength="10" className="form-control" value={this.state.mobileNo}
+                                                    <input type="text" name="mobileNo" id="mobileNo" maxLength="20" className="form-control" value={this.state.mobileNo}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 mobileNo: event.target.value
@@ -799,13 +796,12 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label className="required">Gender</label><br></br>
-                                                    <label> <input type="radio" name="gender" value="Male" checked={this.state.gender === "Male"} onChange={(event) => {
+                                                    <label className="radioButton"> <input type="radio" name="gender" value="Male" checked={this.state.gender === "Male"} onChange={(event) => {
                                                         this.setState({
                                                             gender: event.target.value
                                                         })
                                                     }} />Male</label>
-                                                    <label> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {
-                                                        this.setState({
+                                                    <label className="radioButton"> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {                                                        this.setState({
                                                             gender: event.target.value
                                                         })
                                                     }} />Female</label>
@@ -819,7 +815,7 @@ class AddUser extends Component {
                                             <div className="col">
                                                 <div className="form-group">
                                                     <label className="required">Address</label>
-                                                    <textarea name="Address" id="Address" rows="3" maxLength="100" className="form-control" value={this.state.address}
+                                                    <textarea name="Address" id="Address" rows="3" maxLength="255" className="form-control" value={this.state.address}
                                                         onChange={(event) => {
                                                             this.setState({
                                                                 address: event.target.value

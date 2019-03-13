@@ -156,8 +156,8 @@ menuItems.push(
     },
     {
         name: 'Assign-Template',
-        url: '/Template',
-        icon: 'fa fa-sitemap',
+        url: '/Assign-Template',
+        icon: 'fa fa-tasks',
     }
 )
 }

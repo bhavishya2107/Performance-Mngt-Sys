@@ -6,8 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { environment, Type, moduleUrls, Notification } from '../Environment'
 import DatePicker from "react-datepicker";
 var moment = require('moment');
-const options = []
-var ArrayState = []
+
+
 class addAssignTemplate extends Component {
     constructor(props) {
         super(props);
@@ -136,6 +136,9 @@ class addAssignTemplate extends Component {
     }
     //#endregion
     //#region Methods
+    reset() {
+        window.location.reload();
+    }
     getResourceDetailsAPI(projectId) {
         const url = environment.dynamicUrl + 'dynamic'
         return $.ajax({
@@ -311,7 +314,7 @@ class addAssignTemplate extends Component {
         //console.log('existingUserId ', existingUserId);
         var displayUserDataReturn = this.state.displayUserData.map(function (i) {
             return (
-                existingUserId == i.userid ?
+                existingUserId === i.userid ?
                     (<option key={i.userid} value={i.userid} selected="selected">{i.firstName + " " + i.lastName}</option>)
                     :
                     (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>)
@@ -325,7 +328,7 @@ class addAssignTemplate extends Component {
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col">
-                            {this.state.assignId !== undefined ? <span>Edit AssignTemplate</span> : <span>Add AssignTemplate</span>}
+                            {this.state.assignId !== undefined ? <span>Edit Assign-Template</span> : <span>Add Assign-Template</span>}
                         </h2>
                     </div>
                     <div className="row">
@@ -368,7 +371,7 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label>User</label>
-                                            <select required id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} disabled={this.state.assignId !== undefined ? true : false} className="form-control" multiple={this.state.assignId == undefined ? true : false} >
+                                            <select required id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} disabled={this.state.assignId !== undefined ? true : false} className="form-control" multiple={this.state.assignId === undefined ? true : false} >
                                                 <option value="0">--</option>
                                                 {displayUserDataReturn}
                                             </select>
@@ -384,7 +387,7 @@ class addAssignTemplate extends Component {
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     this.setState({
-                                                        startDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                        startDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
 
                                                     })
                                                 }}
@@ -398,7 +401,7 @@ class addAssignTemplate extends Component {
                                             dateFormat="dd-MM-YYYY"
                                             onChange={(e) => {
                                                 this.setState({
-                                                    endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                    endDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
 
                                                 })
                                             }}
@@ -415,7 +418,8 @@ class addAssignTemplate extends Component {
                                                 : <button type="button" className="btn btn-success mr-2" onClick={() => {
                                                     this.saveTemplateAssignDetails(this.state)
                                                 }}>Save</button>}
-                                            <Link to='/Template' className="btn btn-danger mr-2">Cancel</Link>
+                                            <button type="button" className="btn btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
+                                            <Link to='/Assign-Template' className="btn btn-danger mr-2">Cancel</Link>
                                         </div>
                                     </div>
                                 </div>
