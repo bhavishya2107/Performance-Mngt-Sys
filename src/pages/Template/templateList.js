@@ -152,18 +152,16 @@ class Templatelist extends Component {
     }
     //#endregion
     componentDidMount() {
-        const templateListUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
+        const templateListUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000' + '&_sort=-templateId'
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
             ajax: {
                 url: templateListUrl,
                 type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_master as TM LEFT JOIN template_detail as TKKA ON TKKA.templateId = TM.templateId LEFT JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId"
+                    "query": "SELECT TM.templateId,TM.templateName, GROUP_CONCAT( KM.kraName SEPARATOR ',') as kraName FROM template_master as TM LEFT JOIN template_detail as TKKA ON TKKA.templateId = TM.templateId LEFT JOIN kra_master as KM ON TKKA.kraid = KM.kraid group by TM.templateId ORDER BY TM.templateId desc"
                 },
             },
             columns: [
@@ -224,7 +222,7 @@ class Templatelist extends Component {
             .clear()
             .draw();
     }
-    
+
     render() {
         return (<div>
             <div className="clearfix d-flex align-items-center row page-title">
@@ -250,8 +248,8 @@ class Templatelist extends Component {
                                 }}
                             />
                         </th>
-                        <th width="100">Name</th>
-                        <th>Kra Name</th>
+                        <th width="150">Template Name</th>
+                        <th>KRAs</th>
                         <th width="100">Action</th>
                     </tr>
                 </thead>
