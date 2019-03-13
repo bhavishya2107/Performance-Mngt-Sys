@@ -137,20 +137,20 @@ class App extends Component {
                           <Route path="/add-quater" component={ADDQuater}></Route>
                           <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
 
-                          <Route path="/templateList" component={Templatelist}></Route>
+                          <Route exact path="/templateList" component={Templatelist}></Route>
                           <Route path="/Editkra/id=:id" component={kraHome}></Route>
                           <Route path="/EditRoleForm/id=:id" component={UserRoleForm}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />
-                          <Route path="/dashboard" component={Dashboard} />
+                          <Route exact path="/dashboard" component={Dashboard} />
 
                           <Route exact path="/scale-set/add" component={Scaleset} />
                           <Route exact path="/scale-set" component={Scalesetlist} />
                           <Route exact path="/designation" component={Designationlist} />
                           <Route exact path="/designation/add" component={Designation} />
-                          <Route exact path="/addtemplate" component={Addtemplate} />
+                          <Route exact path="/template/add" component={Addtemplate} />
                           <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
                           <Route exact path="/designation/edit/id=:id" component={Designation} />
-                          <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                          <Route exact path="/template/edit/id=:id" component={Addtemplate} />
                           <Route exact path="/myteam" component={Myteam}></Route>
                         </Switch>
                       </div>
@@ -210,9 +210,9 @@ class App extends Component {
               <Route path="/add-quater" component={ADDQuater}></Route>
               <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
 
-              <Route path="/templateList" component={Templatelist}></Route>
-              <Route exact path="/addtemplate" component={Addtemplate} />
-              <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+              <Route exact path="/templateList" component={Templatelist}></Route>
+              <Route exact path="/template/add" component={Addtemplate} />
+              <Route exact path="/template/edit/id=:id" component={Addtemplate} />
 
               <Route exact path="/myProfile" component={MyProfile} />
               {/* <Route path="/dashboard" component={Dashboard} /> */}
@@ -340,16 +340,16 @@ class App extends Component {
                           <Route path="/add-quater" component={ADDQuater}></Route>
                           <Route path="/EditQuaterForm/id=:id" component={ADDQuater}></Route>
 
-                          <Route path="/templateList" component={Templatelist}></Route>
+                          <Route exact path="/templateList" component={Templatelist}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route path="/dashboard" component={Dashboard} />
 
                           <Route exact path="/designation" component={Designationlist} />
                           <Route exact path="/designation/add" component={Designation} />
-                          <Route exact path="/addtemplate" component={Addtemplate} />
+                          <Route exact path="/template/add" component={Addtemplate} />
 
                           <Route exact path="/designation/edit/id=:id" component={Designation} />
-                          <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                          <Route exact path="/template/edit/id=:id" component={Addtemplate} />
                           <Route exact path="/myteam" component={Myteam}></Route>
                         </Switch>
                       </div>
