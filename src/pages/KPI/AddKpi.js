@@ -278,7 +278,7 @@ class AddKpi extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col">
+                                <div className="col-md-6">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">Target</label>
                                         <textarea className="form-control" rows="4" name="target" type="text" value={this.state.target}

@@ -56,7 +56,9 @@ class Projects extends Component {
                 });
             }
             else {
-                alert("you cannot delete system user")
+                toast.error("Some of Project will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             }
         }
     }

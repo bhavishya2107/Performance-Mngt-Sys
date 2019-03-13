@@ -198,7 +198,7 @@ class Quater extends Component{
                     className: "text-center",
                     render: function (data, type, row) {
                         return (
-                            '<a href="/EditQuaterForm/id=' + row.quaterId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                            '<a href="/quater/edit/id=' + row.quaterId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             
                             '<a href="#" id="' + row.quaterId + '"class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
@@ -227,7 +227,7 @@ class Quater extends Component{
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">{ModuleNames.quater}</h2>
                     <div className="col text-right">
-                        <Link to={{ pathname: '/add-quater', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/quater/add', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button type="button"
                         className="btn btn-danger btn-multi-delete"
