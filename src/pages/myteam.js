@@ -163,8 +163,16 @@ class Myteam extends Component {
         });
     }
     //#endregion
+   
+    componentWillMount(){
+        $(document).ready(function(){
 
+            $(".dataTables_length").css("padding-left","0px");
+          
+          });
+    }
     componentDidMount() {
+        
         if (localStorage.getItem('roleName') == "HR") {
             this.hrApiDatatable()
         }
@@ -188,7 +196,7 @@ class Myteam extends Component {
                             <th width="100">Start Data</th>
                             <th width="100">End Date</th>
                             <th width="100">Status</th>
-                            <th width="100">Action</th>
+                            <th width="50">Action</th>
                         </tr>
                     </thead>
                 </table>
