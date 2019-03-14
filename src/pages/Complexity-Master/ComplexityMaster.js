@@ -64,9 +64,14 @@ class ComplexityMaster extends Component {
         });
 
         res.fail(error => {
-            toast.error("Record Not Deleted", {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            if (error.status === 400) {
+                toast.error("Some of Complexity will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("Complexity" + Notification.notdeleted)
+            }
         });
     }
     multiDeleteComplexityMasterApi(complexityId) {
@@ -91,6 +96,14 @@ class ComplexityMaster extends Component {
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
+            if (error.status === 400) {
+                toast.error("Some of Complexity will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("Complexity" + Notification.notdeleted)
+            }
         });
     }
 

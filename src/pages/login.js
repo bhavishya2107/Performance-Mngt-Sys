@@ -16,12 +16,13 @@ class loginPage extends Component {
             userId: '',
             profileImage: "",
             RedirectLoginDetails: false,
-          
+
+
         };
     }
 
     loginCheckIsValid() {
-   
+
         const credentialValid = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + `${this.state.emailAddress}` + ')' + '~and(password,eq,' + `${this.state.password}` + ')';
         return $.ajax({
             url: credentialValid,
@@ -29,6 +30,17 @@ class loginPage extends Component {
             data: ''
         });
     }
+    //#region role data
+    getRoleData(roleId) {
+        const roleUrl = environment.apiUrl + moduleUrls.Role + "/" + roleId;
+        return $.ajax({
+            url: roleUrl,
+            type: Type.get,
+            data: ''
+        });
+    }
+    //#endregion
+
     //email when changed reflects in setState
     emailAddressOnChange = (event) => {
         $(".errorIfInvalIdInput").hide()
@@ -44,15 +56,12 @@ class loginPage extends Component {
             password: event.target.value
         })
     }
-
-
     checkCredential = (event) => {
         // event.preventDefault(event);
         var isvalidate = window.formValidation("#loginForm")
 
         if (isvalidate) {
             var res = this.loginCheckIsValid();
-
             res.done((response) => {
                 if (response.length > 0) {
                     this.fetchingValueInLocalStorage(response[0]);
@@ -67,21 +76,31 @@ class loginPage extends Component {
         } else {
             return false;
         }
-
     }
 
     fetchingValueInLocalStorage(response) {
-
         localStorage.setItem('emailAddress', response.emailAddress);
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('userName', response.userName);
         localStorage.setItem('firstName', response.firstName);
         localStorage.setItem('lastName', response.lastName);
         localStorage.setItem('profileImage', response.profileImage);
+<<<<<<< HEAD
         localStorage.setItem('isAuthenticated',true);
       
 
     
+=======
+        localStorage.setItem('isAuthenticated', true);
+
+        var responseRoleData = this.getRoleData(response.roleId);
+        responseRoleData.done((response) => {
+            if (response.length > 0) {
+                localStorage.setItem('roleName', response[0].roleName);
+            }
+        })
+        
+>>>>>>> ed9279af07d49b449f6be45c09fa478cfd450e31
         this.setState({
             RedirectLoginDetails: true,
         })
@@ -100,7 +119,7 @@ class loginPage extends Component {
         }
     }
     render() {
-   
+
         if (this.state.RedirectLoginDetails) {
             window.location.href = '/dashboard'
         } else {
@@ -127,17 +146,17 @@ class loginPage extends Component {
                             <div className="checkbox">
                                 <label style={{ float: "right" }}>
                                     {/* <input type="checkbox" value="remember-me" name="rememberme" /> Remember me */}
-                            </label>
+                                </label>
                             </div>
                         </div>
                         <div className="form-group">
                             <a className="btn btn-lg btn-success" type="button" id="loginbutton" onClick={this.checkCredential}>Login</a>&nbsp;
-                        <a className="btn btn-lg btn-danger" type="button" onClick={this.resetLoginForm}>Reset</a><br/>
+                        <a className="btn btn-lg btn-danger" type="button" onClick={this.resetLoginForm}>Reset</a><br />
                         </div>
                         <div className="divider">
                             <Link to="/forgotPassword">Forgot Password</Link>
                         </div>
-
+                        
                     </form>
                 </div>
             )

@@ -1,4 +1,4 @@
-import Template from "./pages/Assign-Template/Template";
+import Template from "./pages/Assign-Template/Assign-Template";
 
 const routes = {
   '/': 'Home',
@@ -6,12 +6,15 @@ const routes = {
   '/demo': 'UI Design Control',
   '/kra/add': ' add KRA',
   '/kra/edit': 'KRA',
-  '/addRole': 'ROLE',
+  '/role/add': 'add Role',
   '/scale-set/add': 'Add Scale Set',
   '/scale-set': 'Scale Set',
   '/designation': 'Job Title',
   '/designation/add': "Add Job title",
-  '/KPI': 'KPI',
+  '/kpi/add': 'Add KPI',
+  '/kpi': 'Add KPI',
+  '/kpi/edit': "KPI",
+  
   '/complexity-master': 'Complexity Master',
   '/complexity-master/add': 'Complexity Master',
   '/complexity-master/edit': 'Complexity Master',
@@ -39,6 +42,5 @@ const routes = {
    '/Template/add':'Template',
    '/EditTemplate':'Template'
 };
-{
-}
+
 export default routes;

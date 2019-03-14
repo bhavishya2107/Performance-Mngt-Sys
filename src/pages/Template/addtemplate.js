@@ -106,8 +106,9 @@ class Addtemplate extends Component {
             type: Type.post,
             data: formData,
             success: function (resultData) {
+              var saveTemplateDetailIds = [];
               if (_this.state.isUpdated == true) {
-                var saveTemplateDetailIds = [];
+                
                 $(templateData).each((e, item) => {
                   var singleObjId = {
                     templateId: resultData.insertId,
@@ -116,13 +117,18 @@ class Addtemplate extends Component {
                   };
                   saveTemplateDetailIds.push(singleObjId);
                 });
+                if(saveTemplateDetailIds.length < 1){
+                _this.setState({ redirectToList: true })
+                toast.success("Template " + Notification.saved, {
+                  position: toast.POSITION.TOP_RIGHT
+                });
+                }
                 const templatedetailData = JSON.stringify(saveTemplateDetailIds);
                 const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
                 return $.ajax({
                   url: templateSaveApi,
                   type: Type.post,
                   data: templatedetailData,
-
                   headers: {
                     "content-type": "application/json",
                     "x-requested-with": "XMLHttpRequest"
@@ -209,12 +215,14 @@ class Addtemplate extends Component {
             .rows.add(templateData)
             .draw();
 
-           $('#optionReset').prop('selectedIndex',0);
-           $('#optionreset').prop('selectedIndex',0);
-            
-         this.setState({
-           isSelect:false
-         })
+          $('#optionReset').prop('selectedIndex', 0);
+          $('#optionreset').prop('selectedIndex', 0);
+
+          this.setState({
+            isSelect: false,
+            kpiId: "",
+            kraId: ""
+          })
         }
         else {
           $(".recordRequiredTbl").show()
@@ -279,7 +287,7 @@ class Addtemplate extends Component {
     })
   }
   getTemplateDetailsId() {
-    const endpointGET = environment.dynamicUrl + 'dynamic' 
+    const endpointGET = environment.dynamicUrl + 'dynamic'
     return $.ajax({
       url: endpointGET,
       type: Type.post,
@@ -565,7 +573,6 @@ class Addtemplate extends Component {
                         templateName: event.target.value
                       });
                     }}
-
                   />
                   <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                 </div>
@@ -585,7 +592,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kra</option>
+                <option disabled selected>Select KRA</option>
                 {this.state.displayDatakra}
               </select>
             </div>
@@ -596,7 +603,7 @@ class Addtemplate extends Component {
                 }}
                 className="form-control"
               >
-                <option disabled selected>Select Kpi</option>
+                <option disabled selected>Select KPI</option>
                 {this.state.displayDatakpi}
               </select>
             </div>
@@ -614,7 +621,7 @@ class Addtemplate extends Component {
               <span></span>
               &nbsp; &nbsp;
               <label className="recordExistsTbl" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
-              <label className="recordRequiredTbl" style={{ "display": "none", "color": "#dc3545", "marginRight": "" }}>Select both fields.</label>
+              <label className="recordRequiredTbl" style={{ "display": "none", "color": "#dc3545", "marginRight": "" }}>Select proper fields.</label>
             </div></div>
           <br />
           <br />

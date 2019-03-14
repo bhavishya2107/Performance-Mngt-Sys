@@ -22,7 +22,7 @@ class Department extends Component {
         var res = this.DeleteDepApi(departmentId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success( "Department" +Notification.deleted);
+                toast.success( "Department " +Notification.deleted);
             }
             this.$el.DataTable().ajax.reload()
         });
@@ -33,7 +33,7 @@ class Department extends Component {
     singleDeleteDeptConfirm(id) {
 
         if (id !== undefined) {
-            if (id != 259) {
+            if (id !== 259) {
                 bootbox.confirm({
                     message: Notification.deleteConfirm,
                     buttons: {
@@ -79,7 +79,7 @@ class Department extends Component {
     multipleDeleteDeptConfirm() {
         var departmentId = []
         $("#tblDepartment input:checkbox:checked").each((e, item) => {
-            if (item.value != 259) {
+            if (item.value !== 259) {
                 if (item.name !== "checkAll") {
                     departmentId.push(item.value);
                 }
@@ -127,9 +127,7 @@ class Department extends Component {
         });
 
     }
-
-
-    checkAll(e) {
+   checkAll(e) {
         $("#tblDepartment input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
@@ -192,7 +190,7 @@ class Department extends Component {
                     targets: 3,
                     render: function (data, type, row) {
                         return (
-                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/EditDept/departmentId=' + row.departmentId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
+                            '<a class="btn mr-2 btn-edit btn-info btn-sm" href="/department/edit/id=' + row.departmentId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + "" +
                             '<a href="#" id="' + row.departmentId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete " href="javascript:void(0);">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -238,9 +236,9 @@ class Department extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkAll(e); }} />
                             </th>
-                            <th> Name</th>
-                            <th> Description</th>
-                            <th>Action</th>
+                            <th width="100"> Name</th>
+                            <th width="100"> Description</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

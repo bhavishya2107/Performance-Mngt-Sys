@@ -14,7 +14,6 @@ class AddKpi extends Component {
         this.state = {
             kpiId: props.match.params.id,
             displayScaleSetName: "",
-            selectScaleSetName: "",
             displayScaleSetId: "",
             selectScaleSetId: "",
             kpiTitle: "",
@@ -31,7 +30,6 @@ class AddKpi extends Component {
         window.location.reload();
     }
     //#endregion
-
 
     //#region 
     isKpiExistsApi() {
@@ -57,11 +55,7 @@ class AddKpi extends Component {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
                     $(".recordexists").show()
-                    // toast.error("KPI Already exists!", {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    // });
                 } else {
                     var _this = this;
                     var Kpidata = {
@@ -110,20 +104,16 @@ class AddKpi extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
-
                 } else {
 
                 }
-
             }
             )
         }
-
         else {
             var res = this.isKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
                     $(".recordexists").show()
 
                 } else {
@@ -131,22 +121,18 @@ class AddKpi extends Component {
                 }
             })
         }
-
     }
-
 
     //#region update related api
 
     updateDetailsApi(updateData) {
-        console.log(updateData.scaleSetId)
-        debugger;
         var body =
         {
             "KpiTitle": updateData.kpiTitle.trim(),
             "target": updateData.target,
             "weightage": updateData.weightage,
             "scaleSetId": updateData.scaleSetId,
-            "modifiedBy": updateData.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
 
         }
         const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
@@ -162,7 +148,6 @@ class AddKpi extends Component {
     }
 
     UpdateKpiDetails(data) {
-        debugger;
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {
             var res = this.isEditKpiExistsApi();
@@ -193,12 +178,13 @@ class AddKpi extends Component {
 
     //#endregion
 
-    onChangeScaleSetId(event) {
+    onChangeScaleSetMaster(event) {
         this.setState({
-            scaleSetId: event.target.value
+            scaleSetId: event.target.value,
         })
     }
-    getscaleSetIdData() {
+
+    getScaleSetData() {
         const endpointGET = environment.apiUrl + moduleUrls.ScaleSet + '/'
         $.ajax({
             type: Type.get,
@@ -217,13 +203,11 @@ class AddKpi extends Component {
         });
     }
 
-    
     componentDidMount() {
         this.setState({
             title: ModuleNames.kpi
         })
-        this.getscaleSetIdData();
-
+        this.getScaleSetData();
         if (this.state.kpiId !== undefined) {
             var res = this.getKpiDetailsApi();
             res.done((response) => {
@@ -231,7 +215,7 @@ class AddKpi extends Component {
                     kpiTitle: response[0].kpiTitle,
                     target: response[0].target,
                     weightage: response[0].weightage,
-                    scaleSetId: response[0].scalesetId
+                    scaleSetId: response[0].scaleSetId
                 })
             });
             res.fail((error) => {
@@ -241,7 +225,7 @@ class AddKpi extends Component {
     }
     render() {
         if (this.state.redirectToList == true) {
-            return <Redirect to={{ pathname: "/KPI" }} />
+            return <Redirect to={{ pathname: "/kpi" }} />
         }
         return (
             //#region datatable
@@ -257,16 +241,17 @@ class AddKpi extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label className="required" htmlFor="target">KPI Title</label>
-                                        <input type="text" className="form-control" rows="4" maxLength="50" name="kpiTitle" type="text" onBlur={() => (this.onChangeBlur())} value={this.state.kpiTitle}
-                                            onChange={(event) => {
-                                                $(".recordexists").hide()
-                                                this.setState({
-                                                    kpiTitle: event.target.value
-                                                })
-                                            }} required />
-                                        <label className="recordexists" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</label>
-                                    </div>
+                                    <label className="required">KPI Title</label>
+                                <input type="text" id="kpititle" name="kpititle" onBlur={() => { this.onChangeBlur() }} maxLength="50" className="form-control" value={this.state.kpiTitle}
+                                    onChange={(event) => {
+                                        $(".recordexists").hide()
+                                        this.setState({
+                                            kpiTitle: event.target.value
+                                        })
+                                    }} required />
+
+                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
+                           </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
@@ -281,19 +266,19 @@ class AddKpi extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                    <label>Scale Set</label>
-                                    <select required name="scaleSetName" className="form-control" htmlFor="scaleSetId"
-                                        onChange={(e) => {
-                                            this.onChangeScaleSetId(e)
-                                        }} value={this.state.scaleSetId}  >
-                                        <option value="">select</option>
-                                        {this.state.displayScaleSetId}
-                                    </select>
+                                        <label>Scale Set</label>
+                                        <select required name="scalesetdropdown" className="form-control" htmlFor="scaleSetId"
+                                            onChange={(e) => {
+                                                this.onChangeScaleSetMaster(e)
+                                            }} value={this.state.scaleSetId}  >
+                                            <option value="">select</option>
+                                            {this.state.displayScaleSetId}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col">
+                                <div className="col-md-6">
                                     <div className="form-group">
                                         <label className="required" htmlFor="target">Target</label>
                                         <textarea className="form-control" rows="4" name="target" type="text" value={this.state.target}
@@ -319,7 +304,7 @@ class AddKpi extends Component {
                                             this.resetForm();
                                         }}>Reset</button>
                                         {/* <button type="clear" className="btn btn-info mr-2" >Reset</button> */}
-                                        <Link to={{ pathname: '/KPI', }} className="btn btn-danger mr-2">Cancel</Link>
+                                        <Link to={{ pathname: '/kpi', }} className="btn btn-danger mr-2">Cancel</Link>
                                     </div>
                                 </div>
                             </div>

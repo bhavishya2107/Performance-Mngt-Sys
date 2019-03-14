@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Form, Label, FormGroup, Input } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import { Redirect } from 'react-router-dom'
 import { environment, moduleUrls, Type, Notification } from '../Environment'
@@ -38,8 +37,7 @@ class AddDept extends Component {
 
     //#region onblur function
     isExistOnChange(data) {
-        var result = []
-        if (this.state !== undefined) { //add 
+         if (this.state !== undefined) { //add 
             var res = this.isDeptExistApi(); // get api call
             res.done((response) => {
                 if (response.length > 0) {
@@ -115,7 +113,6 @@ class AddDept extends Component {
     }
     updateDetailsApi(data) {
         var updateDeptDetails = environment.apiUrl + moduleUrls.Department + '/' + `${data.departmentId}`
-        var _this = this;
         var deptList =
         {
             "departmentName": data.departmentName.trim(),
@@ -203,7 +200,7 @@ class AddDept extends Component {
 
             return <Redirect to={{ pathname: "/Department", state: "2" }} />
         }
-        if (this.state.isUpdate == true) {
+        if (this.state.isUpdate === true) {
             return <Redirect to="/Department" />
         }
 
@@ -229,13 +226,13 @@ class AddDept extends Component {
                                             departmentName: event.target.value
                                         })
                                     }} required />
-                                <p className="dataExist" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                                <p className="dataExist" style={{ "display": "none",  "color": "#dc3545"  }}>{Notification.recordExists}</p>
 
 
                             </div>
                             <div className="form-group">
                                 <label htmlFor="description">Description</label>
-                                <textarea name="description" className="form-control" id="description" maxLength="100" value={this.state.description}
+                                <textarea type="textarea" name="description" className="form-control" id="description" maxLength="100" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value

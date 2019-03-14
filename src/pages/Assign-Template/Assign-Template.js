@@ -7,7 +7,7 @@ import bootbox from 'bootbox'
 $.DataTable = require('datatables.net-bs4');
 var moment = require('moment');
 
-class Template extends Component {
+class AssignTemplate extends Component {
 
     constructor(props) {
         super(props);
@@ -15,14 +15,64 @@ class Template extends Component {
             templateName: "",
             assignedUser: "",
             project: "",
+            projectId: "",
             projectDate: "",
             status: "",
             assignId: "",
             firstName: "",
             lastname: "",
-            selectedIds:[]
-
+            selectedIds: [],
+            displayProjectData: [],
+            userId: "",
+            statusId: ""
         }
+    }
+    clear() {
+        this.setState({
+            userId: "",
+            projectId: "",
+            statusId: ""
+        })
+    }
+    searchUser() {
+
+
+        /*debugger
+        alert(this.state.firstName)
+        $(document).ready(function () {
+            $("#tblTemplateAssigned").on("click", function () {
+                var value = $(this).val().toLowerCase();
+                $("#firstName ").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });*/
+
+        //     var table = $('#tblTemplateAssigned').DataTable();
+
+        //     // #column3_search is a <input type="text"> element
+        //     $('#firstName').on('click', function () {
+        //         table
+        //             .columns('.getUserName')
+        //             .search(this.state.firstName)
+        //             .draw();
+        //     });
+    }
+    onChangeProject(event) {
+        this.setState({
+            projectId: event.target.value
+        });
+
+    }
+    onChangeUser(event) {
+        this.setState({
+            userId: event.target.value,
+        })
+    }
+    onChangeStatus(e) {
+        this.setState({
+            status: e.currentTarget.value
+        })
     }
     //#region single delete for assign_template
     singleDeleteTemplate(assignId) {
@@ -46,11 +96,11 @@ class Template extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -102,7 +152,7 @@ class Template extends Component {
     }
 
     //#endregion
-       //#region multiple delete functionality
+    //#region multiple delete functionality
     multiDeleteTemplate(assignId) {
         $("#tblTemplateAssigned input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -150,9 +200,50 @@ class Template extends Component {
             type: Type.deletetype
         })
     }
-
     //#endregion
+
+    getProjectData() {
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
+        this.getDropDownValues(url).done(
+            (tempProject) => {
+                var displayProjectDataReturn = tempProject.map(function (i) {
+                    return (
+                        <option key={i.projectId} value={i.projectId}>{i.projectName}</option>
+                    )
+                });
+                this.setState({
+                    displayProjectData: displayProjectDataReturn
+                })
+            })
+    }
+
+    getUserData() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
+        this.getDropDownValues(url).done(
+            (tempUser) => {
+                var displayUserDataReturn = tempUser.map(function (i) {
+                    return (
+                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayUserData: displayUserDataReturn
+                })
+            })
+    }
+    
+    getDropDownValues(url) {
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+
+    }
     componentDidMount() {
+        this.getProjectData()
+        this.getUserData()
+
+
         const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -162,7 +253,7 @@ class Template extends Component {
                 url: url,
                 type: Type.post,
                 data: {
-                    query: "SELECT TAM.assignId,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid ORDER BY TAM.assignId DESC"
+                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  ORDER BY TAM.assignId DESC"
                 },
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -180,44 +271,49 @@ class Template extends Component {
                     orderable: false
                 },
                 {
-                    data: "templateName",
+                    data: "quaterName",
                     targets: 1,
                 },
                 {
-                    data: "firstName",
+                    data: "templateName",
                     targets: 2,
+                },
+                {
+                    data: "firstName",
+                    targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="firstName" value=>${row.firstName}` + " " +
-                            `<label id="firstName" value=>${row.lastname}`
+
+                            `<label className="getUserName" id="firstName" value=>${row.firstName}` + " " +
+                            `<label className="getUserName" id="lastName" value=>${row.lastname}`
                         )
                     }
                 },
                 {
                     data: "projectName",
-                    targets: 3,
+                    targets: 4,
                 },
                 {
                     data: "startDate",
-                    targets: 4,
+                    targets: 5,
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
-                       `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
-                       
+                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+
                         )
                     },
                 },
                 {
                     data: "status",
-                    targets: 5,
+                    targets: 6,
                 },
                 {
                     data: "assignId",
-                    targets: 6,
+                    targets: 7,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditTemplate/assignId=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -238,18 +334,52 @@ class Template extends Component {
             }
         });
     }
-
     render() {
         return (
             <div>
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> {ModuleNames.Template}</h2>
                     <div className="col text-right">
-                        <Link to={{ pathname: '/addAssignTemplate' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/assign-template/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteTemplateConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
 
                 </div>
+
+                <div className="col-sm-2">
+
+                    <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
+                        <option value="">Select user</option>
+                        {this.state.displayUserData}
+                    </select>
+
+
+                    <select required name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
+                        <option value="">Select Project</option>
+                        {this.state.displayProjectData}
+                    </select>
+
+                    <select required name="statusDropDown" onChange={(e) => { this.onChangeStatus(e) }} value={this.state.statusId} className="form-control" >
+                        <option value="">Select status</option>
+                        {this.state.displayStatusData}
+                    </select>
+
+
+
+                    {/* <input type="text" className="form-control" id="getUserName" onChange={(e) => { this.onChangeSearchUser(e) }}
+                        placeholder="search User" value={this.state.firstName} /> */}
+                    {/* <input type="text" className="form-control" onChange={(e) => { this.onChangeSearchProject(e) }}
+                        placeholder="search project" value={this.state.project} /> */}
+                    {/* <input type="text" className="form-control" onChange={(e) => { this.onChangeSearchStatus(e) }}
+                        placeholder="search status" value={this.state.status} /> */}
+
+                    <button type="button" className="btn btn-info mr-2" onClick={() => { this.clear(); }}>Clear</button>
+
+                    <button id="searchButton" type="button" className="btn btn-sm btn-success" onClick={() => { this.searchUser() }}>
+                        <i className="fa fa-search">Search</i>
+                    </button>
+                </div>
+
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplateAssigned"
 
@@ -262,6 +392,7 @@ class Template extends Component {
                                     name="checkAll"
                                     onClick={e => { this.checkall(e) }} />
                             </th>
+                            <th width="100">Quater</th>
                             <th width="100">Template Name</th>
                             <th width="100">Assigned Users</th>
                             <th width="100" >Project</th>
@@ -280,4 +411,4 @@ class Template extends Component {
         )
     }
 }
-export default Template;
+export default AssignTemplate;

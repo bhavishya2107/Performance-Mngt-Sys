@@ -8,7 +8,11 @@ const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
 class Dashboard extends Component {
-
+    componentWillMount() {
+        $(document).ready(function () {
+            $(".dataTables_length").css("padding-left", "0px");
+        });
+    }
     componentDidMount() {
         const myKRAUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
@@ -85,11 +89,11 @@ class Dashboard extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th>KRA Sheet</th>
-                            <th>Start Data</th>
+                            <th width="100">KRA Sheet</th>
+                            <th width="100">Start Data</th>
                             <th width="100">End Date</th>
-                            <th>Status</th>
-                            <th width="100">Action</th>
+                            <th width="100">Status</th>
+                            <th width="50">Action</th>
                         </tr>
                     </thead>
                 </table>

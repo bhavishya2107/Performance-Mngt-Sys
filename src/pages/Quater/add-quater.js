@@ -211,7 +211,7 @@ class ADDQuater extends Component{
                     <div className="form-group">
                         <label htmlFor="quaterName" className="required">Name</label>
                         <div className="">
-                            <input id="quaterName" type="text" className="form-control col-6" name="quaterName" onBlur={() => { this.isExistRoleonChange() }} maxLength="20"
+                            <input id="quaterName" type="text" className="form-control col-6" name="quaterName" onBlur={() => { this.isExistRoleonChange() }} maxLength="15"
                                 value={this.state.quaterName}
                                 onChange={(event) => {
                                     $(".hideQuater").hide()
@@ -221,7 +221,7 @@ class ADDQuater extends Component{
                                         }
                                     )
                                 }} required />
-                            <p className="hideQuater" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
+                            <p className="hideQuater" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
 

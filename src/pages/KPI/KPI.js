@@ -63,9 +63,14 @@ class KPI extends Component {
         });
 
         res.fail(error => {
-            toast.error("Record Not Deleted", {
-                position: toast.POSITION.TOP_RIGHT
-            });
+            if (error.status === 400) {
+                toast.error("Some of KPI will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("KPI" + Notification.notdeleted)
+            }
         });
     }
     multiDeleteKpiApi(kpiId) {
@@ -90,6 +95,14 @@ class KPI extends Component {
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
+            if (error.status === 400) {
+                toast.error("Some of KPI will not deleted as they are being used", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+            else {
+                toast.error("KPI" + Notification.notdeleted)
+            }
         });
 
     }
@@ -188,11 +201,11 @@ class KPI extends Component {
                     targets: 5,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/KPI/editkpi/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
+                            '<a href="/kpi/edit/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.kpiId + '"class="btn btn-danger btnDelete btn-sm";"">' +
-                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
+                            '<i class="fa fa-trash" aria-hidden="true"></i>' +  
                             "</a>"
                         )
                     },
