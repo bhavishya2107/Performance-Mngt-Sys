@@ -46,7 +46,7 @@ import ChangePW from './pages/changePassword';
 import Quater from './pages/Quater/quater';
 import ADDQuater from './pages/Quater/add-quater';
 
-import Template from './pages/Assign-Template/Template';
+import AssignTemplate from './pages/Assign-Template/Assign-Template';
 import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
 import Myteam from './pages/myteam';
 import KraSheet from './pages/Kra/kraSheetDetails';
@@ -120,16 +120,19 @@ class App extends Component {
                           <Route exact path="/kra/edit/id=:id" component={kraHome}></Route>
 
 
-                          <Route path="/user-management" component={UserManagement} />
-                          <Route path="/user-managemnet/add" component={AddUser} />
-                          <Route path="/EditUser/userId=:userId" component={AddUser} />
-                          <Route path="/Department" component={Department} />
-                          <Route path="/EditDept/departmentId=:departmentId" component={AddDept} />
-                          {/* <Route exact path="/Department/add" component={AddDept} /> */}
-                          <Route path="/AddDept" component={AddDept} />
-                          <Route exact path="/Template" component={Template} />
-                          <Route path="/addAssignTemplate" component={addAssignTemplate} />
-                          <Route path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
+                          <Route exact path="/user-management" component={UserManagement} />
+                          <Route exact path="/user-management/add" component={AddUser} />
+                          <Route exact path="/user-management/edit/userId=:userId" component={AddUser} />
+
+                          <Route exact path="/department" component={Department} />
+                          <Route exact path="/department/edit/id=:departmentId" component={AddDept} />
+                          <Route exact path="/department/add" component={AddDept} />
+
+                          <Route path="/AddProject" component={AddProject} />
+
+                          <Route exact path="/assign-template" component={AssignTemplate} />
+                          <Route exact path="/assign-template/add" component={addAssignTemplate} />
+                          <Route exact path="/assign-template/edit/id=:assignId" component={addAssignTemplate} />
 
 
                           <Route path="/innerpage" component={innerpage} />
@@ -151,16 +154,16 @@ class App extends Component {
 
 
                           <Route exact path="/myProfile" component={MyProfile} />
-                          <Route path="/dashboard" component={Dashboard} />
+                          <Route exact path="/dashboard" component={Dashboard} />
 
                           <Route exact path="/scale-set/add" component={Scaleset} />
                           <Route exact path="/scale-set" component={Scalesetlist} />
                           <Route exact path="/designation" component={Designationlist} />
                           <Route exact path="/designation/add" component={Designation} />
-                          <Route exact path="/addtemplate" component={Addtemplate} />
+                          <Route exact path="/template/add" component={Addtemplate} />
                           <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
                           <Route exact path="/designation/edit/id=:id" component={Designation} />
-                          <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                          <Route exact path="/template/edit/id=:id" component={Addtemplate} />
                           <Route exact path="/myteam" component={Myteam}></Route>
                         </Switch>
                       </div>
@@ -196,21 +199,22 @@ class App extends Component {
               <Route exact path="/project/edit/id=:id" component={AddProject} />
               <Route exact path="/projects/add" component={AddProject} />
 
-              <Route path="/user-management" component={UserManagement} />
-              <Route path="/user-managemnet/add" component={AddUser} />
-              <Route path="/EditUser/userId=:userId" component={AddUser} />
+              <Route exact path="/user-management" component={UserManagement} />
+              <Route exact path="/user-management/add" component={AddUser} />
+              <Route exact path="/user-management/edit/userId=:userId" component={AddUser} />
 
               <Route exact path="/scale-set/add" component={Scaleset} />
               <Route exact path="/scale-set" component={Scalesetlist} />
               <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
 
-              <Route path="/Department" component={Department} />
-              <Route path="/EditDept/departmentId=:departmentId" component={AddDept} />
-              <Route path="/AddDept" component={AddDept} />
+              <Route exact path="/department" component={Department} />
+              <Route exact path="/department/edit/id=:departmentId" component={AddDept} />
+              <Route exact path="/department/add" component={AddDept} />
 
-              <Route exact path="/Template" component={Template} />
-              <Route path="/addAssignTemplate" component={addAssignTemplate} />
-              <Route path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
+
+              <Route exact path="/assign-template" component={AssignTemplate} />
+              <Route exact path="/assign-template/add" component={addAssignTemplate} />
+              <Route exact path="/assign-template/edit/id=:assignId" component={addAssignTemplate} />
 
               <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 
@@ -223,9 +227,9 @@ class App extends Component {
               <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
 
 
-              <Route path="/templateList" component={Templatelist}></Route>
-              <Route exact path="/addtemplate" component={Addtemplate} />
-              <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+              <Route exact path="/templateList" component={Templatelist}></Route>
+              <Route exact path="/template/add" component={Addtemplate} />
+              <Route exact path="/template/edit/id=:id" component={Addtemplate} />
 
               <Route exact path="/myProfile" component={MyProfile} />
               {/* <Route path="/dashboard" component={Dashboard} /> */}
@@ -331,18 +335,17 @@ class App extends Component {
                           <Route exact path="/scale-set" component={Scalesetlist} />
                           <Route exact path="/scale-set/edit/id=:id" component={Scaleset} />
 
-                          <Route path="/user-management" component={UserManagement} />
-                          <Route path="/user-managemnet/add" component={AddUser} />
-                          <Route path="/EditUser/userId=:userId" component={AddUser} />
+                          <Route exact path="/user-management" component={UserManagement} />
+                          <Route exact path="/user-management/add" component={AddUser} />
+                          <Route exact path="/user-management/edit/userId=:userId" component={AddUser} />
 
-                          <Route path="/Department" component={Department} />
-                          <Route path="/EditDept/departmentId=:departmentId" component={AddDept} />
-                          {/* <Route exact path="/Department/add" component={AddDept} /> */}
-                          <Route path="/AddDept" component={AddDept} />
+                          <Route exact path="/department" component={Department} />
+                          <Route exact path="/department/edit/id=:departmentId" component={AddDept} />
+                          <Route exact path="/department/add" component={AddDept} />
 
-                          <Route exact path="/Template" component={Template} />
-                          <Route path="/addAssignTemplate" component={addAssignTemplate} />
-                          <Route path="/EditTemplate/assignId=:assignId" component={addAssignTemplate} />
+                          <Route exact path="/assign-template" component={AssignTemplate} />
+                          <Route exact path="/assign-template/add" component={addAssignTemplate} />
+                          <Route exact path="/assign-template/edit/id=:assignId" component={addAssignTemplate} />
 
                           <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 
@@ -355,16 +358,16 @@ class App extends Component {
                           <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
 
 
-                          <Route path="/templateList" component={Templatelist}></Route>
+                          <Route exact path="/templateList" component={Templatelist}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route path="/dashboard" component={Dashboard} />
 
                           <Route exact path="/designation" component={Designationlist} />
                           <Route exact path="/designation/add" component={Designation} />
-                          <Route exact path="/addtemplate" component={Addtemplate} />
+                          <Route exact path="/template/add" component={Addtemplate} />
 
                           <Route exact path="/designation/edit/id=:id" component={Designation} />
-                          <Route exact path="/Edittemplate/id=:id" component={Addtemplate} />
+                          <Route exact path="/template/edit/id=:id" component={Addtemplate} />
                           <Route exact path="/myteam" component={Myteam}></Route>
                         </Switch>
                       </div>

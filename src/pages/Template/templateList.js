@@ -192,7 +192,7 @@ class Templatelist extends Component {
                     render: function (data, type, row) {
                         ;
                         return (
-                            '<a href="/Edittemplate/id=' + row.templateId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
+                            '<a href="/template/edit/id=' + row.templateId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.templateId + '"class="btnDelete btn btn-danger btnDelete btn-sm">' +
@@ -228,7 +228,7 @@ class Templatelist extends Component {
             <div className="clearfix d-flex align-items-center row page-title">
                 <h2 className="col">Template</h2>
                 <div className="col text-right">
-                    <Link to="/addtemplate" className="btn btn-primary" onClick={() => { this.resetform() }} ><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                    <Link to="/template/add" className="btn btn-primary" onClick={() => { this.resetform() }} ><i className="fa fa-plus" aria-hidden="true"></i></Link>
                 </div>
                 <button className="btn btn-danger btn-multi-delete" onClick={() => {
                     this.multipleDeleteTemplateconfirm()
