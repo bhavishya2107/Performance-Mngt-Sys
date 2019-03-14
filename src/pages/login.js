@@ -79,6 +79,8 @@ class loginPage extends Component {
         localStorage.setItem('lastName', response.lastName);
         localStorage.setItem('profileImage', response.profileImage);
         localStorage.setItem('isAuthenticated',true);
+      
+
     
         this.setState({
             RedirectLoginDetails: true,
