@@ -85,12 +85,6 @@ class loginPage extends Component {
         localStorage.setItem('firstName', response.firstName);
         localStorage.setItem('lastName', response.lastName);
         localStorage.setItem('profileImage', response.profileImage);
-<<<<<<< HEAD
-        localStorage.setItem('isAuthenticated',true);
-      
-
-    
-=======
         localStorage.setItem('isAuthenticated', true);
 
         var responseRoleData = this.getRoleData(response.roleId);
@@ -100,7 +94,6 @@ class loginPage extends Component {
             }
         })
         
->>>>>>> ed9279af07d49b449f6be45c09fa478cfd450e31
         this.setState({
             RedirectLoginDetails: true,
         })
