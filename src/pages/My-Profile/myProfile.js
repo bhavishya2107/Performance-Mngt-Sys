@@ -111,7 +111,7 @@ class MyProfile extends Component {
                 />
 
               </div><br />
-              <label className="btn btn-primary btn-sm" onClick={this.redirectToEdit}>Edit Profile</label>
+              {/* <label className="btn btn-primary btn-sm" onClick={this.redirectToEdit}>Edit Profile</label> */}
             </div>
             <div className="col-md-9 order-md-first">
               <div className="row">

@@ -6,7 +6,7 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 const $ = require('jquery');
 var moment = require('moment');
 $.DataTable = require('datatables.net-bs4');
-
+var assignData = []
 class KraSheet extends Component {
   constructor(props) {
     super(props);
@@ -26,17 +26,33 @@ class KraSheet extends Component {
       kraNameRow: "",
       kpiRow: "",
       targetRow: "",
-      weightageRow: ""
+      weightageRow: "",
+      assignDetailId: "",
+      getassignDetailId: {}
 
 
     }
   }
 
+  getDetailForEdit() {
+
+    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/' + `${this.state.assignId}`
+    return $.ajax({
+      url: endpointPOST,
+      type: Type.get,
+      dataSrc: "",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+  }
+
   getTemplateid = () => {
 
+
     var toGetTemplateId = environment.dynamicUrl + 'dynamic';
-    var changePWquery = {
-      query: `SELECT tm.templateId FROM template_assignment_master t LEFT JOIN template_master tm ON t.templateId = tm.templateId WHERE t.assignId = ${this.state.assignId}`
+    var getTemp = {
+      query: `SELECT tm.templateId  FROM template_assignment_master t LEFT JOIN template_master tm ON t.templateId = tm.templateId WHERE t.assignId = ${this.state.assignId}`
     }
     return $.ajax({
       url: toGetTemplateId,
@@ -44,9 +60,9 @@ class KraSheet extends Component {
       headers: {
         "Content-Type": "application/json",
       },
-      data: JSON.stringify(changePWquery),
+      data: JSON.stringify(getTemp),
       success: (response) => {
-      
+
       }
 
     });
@@ -55,7 +71,28 @@ class KraSheet extends Component {
   getUserDetailsApi = () => {
     var endpoint = environment.dynamicUrl + 'dynamic';
     var kraSheet = {
-      query: `SELECT k.kraname,TAM.assignId, PM.projectName,PM.startDate,PM.endDate,q.quaterName,UM.firstname,UM.lastname,d.departmentname FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as q ON q.quaterId = TAM.quaterId JOIN department_master d ON d.departmentid = UM.departmentid JOIN template_detail as td ON td.templateid = TAM.templateid JOIN kra_master k ON k.kraid = td.kraid  where assignId=${this.state.assignId}`
+      query: `
+        SELECT 
+          k.kraname,
+          TAM.assignId, 
+          PM.projectName,
+          PM.startDate,
+          PM.endDate,
+          q.quaterName,
+          UM.firstname,
+          UM.lastname,
+          d.departmentname 
+        FROM 
+          template_assignment_master as TAM           
+          JOIN template_master as TM ON TAM.templateId = TM.templateId 
+          JOIN project_master as PM ON PM.projectId = TAM.projectId 
+          JOIN user_master as UM ON UM.userId = TAM.userId 
+          JOIN quater_master as q ON q.quaterId = TAM.quaterId 
+          JOIN department_master d ON d.departmentid = UM.departmentid 
+          JOIN template_detail as td ON td.templateid = TAM.templateid 
+          JOIN kra_master k ON k.kraid = td.kraid  
+        where 
+          TAM.assignId=${this.state.assignId}`
     }
 
     return $.ajax({
@@ -69,46 +106,134 @@ class KraSheet extends Component {
   }
 
 
-  commentAndratingSave = () => {
-
-    var kraData = new Array();
-    $('#tblkraSheet tbody tr').each((index, item) => {
-      debugger;
-      var kraSheetdata =
-      {
-        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-        "selfComment": $(item).find('.commentSaved').val(),
-        "selfRating": $(item).find('.selfrate').val(),
-        "selfRatingBy": parseInt(localStorage.getItem('userId')) ,
-        // "templateAssignId": parseInt($(item).find('.selfrate').attr('tempId')),
-    
-      }
-      kraData.push(kraSheetdata)
+//delete saved comment on update 
+  deleteData() {
+    return $.ajax({
+        url: "http://192.168.10.110:3000/dynamic",
+        type: Type.post,
+        data: {
+            "query": "delete from template_assignment_detail where templateAssignId  = " + `${this.state.assignId}`
+        },
     })
-    console.log(kraData)
+}
+updateKraSheetAPI(kraData) {
+  var ResourcesData = JSON.stringify(kraData);
+  const resourcesApi = environment.apiUrl + moduleUrls.TAD + '/bulk';
+  return $.ajax({
+      url: resourcesApi,
+      type: Type.post,
+      data: ResourcesData,
+      headers: {
+          "content-type": "application/json",
+          "x-requested-with": "XMLHttpRequest"
+      }
+  });
+}
+
+  commentAndratingUpdate  (assignId) {
+var response = this.deleteData(assignId)
+response.done((result) => {
+  this.commentAndratingSave();
+  var kraData = new Array();
+  $('#tblkraSheet tbody tr').each((index, item) => {
+if( $(item).find('.commentSaved').val() !== "null"){
+  var kraSheetdata =
+  {
+   
+    "selfComment": $(item).find('.commentSaved').val(),
+    "selfRating": $(item).find('.selfrate').val(),
+    "selfRatingBy": parseInt(localStorage.getItem('userId')),
+
+  }
+  kraData.push(kraSheetdata)
+}
+  
+    
+  })
+  var res = this.updateKraSheetAPI(kraData);
+            res.done((response) => {
+               
+            })
+
+})
+response.fail((error)=>{
+  console.log(error)
+})
+    
+  }
+
+  update(){}
 
 
-    const endpointPOST = environment.apiUrl + moduleUrls.TAD  + '/bulk' 
+  //api to update rating and commnets
+  getassigndetailID() {
+    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/' + `${this.state.assignId}`
     return $.ajax({
       url: endpointPOST,
-      type: Type.post,
-      dataSrc:"",
-      data:JSON.stringify(kraData),
+      type: Type.get,
+      dataSrc: "",
+      // data:JSON.stringify(kraData),
       headers: {
         "Content-Type": "application/json"
-    },
+      },
+      success: (res) => {
+        
+      }
     });
   }
 
 
 
+  commentAndratingSave = () => {
+
+    var kraData = new Array();
+    $('#tblkraSheet tbody tr').each((index, item) => {
+      var kraSheetdata =
+      {
+
+        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+        "selfComment": $(item).find('.commentSaved').val(),
+        "selfRating": $(item).find('.selfrate').val(),
+        "selfRatingBy": parseInt(localStorage.getItem('userId')),
+        "templateAssignId": this.state.assignId
+
+      }
+      kraData.push(kraSheetdata)
+    })
+
+    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+    return $.ajax({
+      url: endpointPOST,
+      type: Type.post,
+      data: JSON.stringify(kraData),
+      headers: {
+        "Content-Type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      success: function (resultData) {
+
+        
+      }
+    });
+  }
+
+
   componentDidMount() {
-    debugger;
+    //var response = this.getassigndetailID()
+    //response.done((result) => {
+   
+    //s})
     // if (this.state.userId ) {
+
+
+
     var res = this.getUserDetailsApi();
     res.done(response => {
-      console.log(response)
+      
+
+      console.log('response', response);
+
       this.setState({
 
         firstName: response[0].firstname,
@@ -129,6 +254,7 @@ class KraSheet extends Component {
     const endpointGET = environment.dynamicUrl + 'dynamic'
     var getTempId = this.getTemplateid();
     getTempId.done((temp) => {
+
       this.$el = $(this.el);
       this.state.table = this.$el.DataTable({
         "autoWidth": false,
@@ -142,11 +268,16 @@ class KraSheet extends Component {
           type: "POST",
           dataSrc: "",
           data: {
-            query: `SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle , kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
+            query: 
+            ` 
+            SELECT DISTINCT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target,tad.selfRating,tad.selfComment,tad.assignDetailId FROM template_detail td 
+            LEFT JOIN kra_master km ON km.kraId = td.kraId
+            LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId 
+            LEFT JOIN template_assignment_master tam ON tam.templateId = td.templateId
+            LEFT JOIN template_assignment_detail tad ON tad.templateAssignId = tam.assignId
+            WHERE td.templateId =  ${temp[0].templateId}`
+            //`SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
           },
-         
-
-
 
         },
         columns: [
@@ -155,7 +286,7 @@ class KraSheet extends Component {
             data: "kraName",
             targets: 0,
             render: (data, type, row) => {
-              debugger;
+
               return (
                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
               )
@@ -192,27 +323,29 @@ class KraSheet extends Component {
             data: "selfRating",
             targets: 4,
             render: (data, type, row) => {
+             
+            
               return (
-                `<input   class="selfrate" type="number" name="selfRating" min="0" max="10" width="100px" tempId=${temp[0].templateId} value=${this.state.selfRating} />`
+                `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
               )
             },
 
           },
           {
-            data: "comments",
+            
+            data: "selfComment",
             targets: 5,
             render: (data, type, row) => {
+                         
               return (
-                `<textarea class="commentSaved" rows="4" cols="75" name="kpiId"  tempId=${temp[0].templateId} value=${this.state.comments}/>`
+               `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75" value="${row.selfComment}">${row.selfComment}</textarea>`
               )
             },
           },
         ],
 
         drawCallback: (settings) => {
-          // this.setState({
-
-          // })
+     
           window.smallTable();
           $(".commentSaved").on("change", e => {
             this.state.comments = e.target.value
@@ -350,19 +483,8 @@ class KraSheet extends Component {
           </div>
         </form>
         <br />
-        {/* <h5><p style={{ textAlign: "center" }}> KRA {this.state.kraName}</p></h5> */}
+       
         <div className="clearfix d-flex align-items-center row page-title">
-          {/* <h2 className="col">{ModuleNames.Role}</h2> */}
-          {/* <div className="col text-right">
-                <Link to={{ pathname: '/addRole', state: {} }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
-            </div> */}
-          {/* <button type="button"
-                className="btn btn-danger btn-multi-delete"
-                onClick={() => {
-                    this.multiRoleDeleteConfirm();
-                }}><i className="fa fa-trash" aria-hidden="true"></i></button> */}
-
-
           {/* //dataTable rendering */}
 
           <table className="table table-striped table-bordered table-hover customDataTable"
@@ -377,14 +499,23 @@ class KraSheet extends Component {
                 <th width="150px">Self Rating</th>
                 <th width="500px">Comments</th>
 
+
               </tr>
             </thead>
             <tbody></tbody>
           </table>
 
         </div>
-        <button type="button" style={{ float: "right" }} className="btn btn-success" onClick={() => { this.commentAndratingSave() }}>Save</button>&nbsp;
-            </div>
+     
+        <button className="btn btn-success " type="button" onClick={() => {
+          this.commentAndratingSave();
+        }}>Save </button> 
+        &nbsp;
+         <button className="btn btn-success " type="button" onClick={() => {
+          this.commentAndratingUpdate();
+        }}>Update</button>
+
+      </div>
       //dataTable
 
     )
