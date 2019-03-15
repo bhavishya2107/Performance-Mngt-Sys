@@ -173,7 +173,7 @@ class kraListPage extends Component {
           render: function (data, type, row) {
             return (
               '<label class="checkbox">' +
-                  '<input type="checkbox" name="kraId" value=" + row.kraId + " />' +
+                  '<input type="checkbox" name="kraId" value="' + row.kraId + '" />' +
                   '<i></i> '+
                 '</label>'
               
