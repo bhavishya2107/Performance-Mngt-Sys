@@ -163,16 +163,14 @@ class Myteam extends Component {
         });
     }
     //#endregion
-   
-    componentWillMount(){
-        $(document).ready(function(){
 
-            $(".dataTables_length").css("padding-left","0px");
-          
-          });
+    componentWillMount() {
+        $(document).ready(function () {
+            $(".dataTables_length").css("padding-left", "0px");
+        });
     }
     componentDidMount() {
-        
+
         if (localStorage.getItem('roleName') == "HR") {
             this.hrApiDatatable()
         }

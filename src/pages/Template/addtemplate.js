@@ -108,7 +108,7 @@ class Addtemplate extends Component {
             success: function (resultData) {
               var saveTemplateDetailIds = [];
               if (_this.state.isUpdated == true) {
-                
+
                 $(templateData).each((e, item) => {
                   var singleObjId = {
                     templateId: resultData.insertId,
@@ -117,11 +117,11 @@ class Addtemplate extends Component {
                   };
                   saveTemplateDetailIds.push(singleObjId);
                 });
-                if(saveTemplateDetailIds.length < 1){
-                _this.setState({ redirectToList: true })
-                toast.success("Template " + Notification.saved, {
-                  position: toast.POSITION.TOP_RIGHT
-                });
+                if (saveTemplateDetailIds.length < 1) {
+                  _this.setState({ redirectToList: true })
+                  toast.success("Template " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                  });
                 }
                 const templatedetailData = JSON.stringify(saveTemplateDetailIds);
                 const templateSaveApi = environment.apiUrl + moduleUrls.Templatedetail + '/bulk';
@@ -168,8 +168,6 @@ class Addtemplate extends Component {
       isSelect: true,
 
     });
-
-
   }
   onChangekpi(event) {
     $(".recordRequiredTbl").hide()
@@ -195,6 +193,8 @@ class Addtemplate extends Component {
 
       if (tempData.length > 0) {
         $(".recordExistsTbl").show()
+        $('#optionReset').prop('selectedIndex', 0);
+        $('#optionreset').prop('selectedIndex', 0);
       }
       else {
         if (this.state.kpiId && this.state.kraId) {
@@ -555,7 +555,7 @@ class Addtemplate extends Component {
             </h2>
           </div>
           <div className="row">
-            <div className="col-md-5">
+            <div className="col-md-4">
               <form id="formtemplate">
                 <div className="form-group">
                   <label className="required">Template Name</label>
@@ -582,8 +582,8 @@ class Addtemplate extends Component {
         </div>
         <div>
           <br />
-        <div className="row">
-            <div className="col-md-5">
+          <div className="row">
+            <div className="col-md-4">
               <select id="optionReset" name="optionKra"
                 onChange={e => {
                   this.onChangekra(e);
@@ -594,7 +594,7 @@ class Addtemplate extends Component {
                 {this.state.displayDatakra}
               </select>
             </div>
-            <div className="col-md-5">
+            <div className="col-md-4">
               <select id="optionreset" name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
@@ -605,7 +605,7 @@ class Addtemplate extends Component {
                 {this.state.displayDatakpi}
               </select>
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3">
               <button id="btnTemplateDetail"
                 onChange={
                   $(".recordExistsTbl").hide()
