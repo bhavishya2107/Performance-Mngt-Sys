@@ -180,11 +180,6 @@ class kraListPage extends Component {
             );
           }
         },
-        // {
-        //   data: null,
-        //   targets: 1,
-        //   orderable: false
-        // },
         {
           data: "kraName",
           targets: 1
@@ -206,7 +201,6 @@ class kraListPage extends Component {
               row.kraId +
               '"class="btn mr-2 btn-edit btn-info btn-sm">' +
               '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-
               '<a href="#" id="' +
               row.kraId +
               '"class="btn delete btn-danger btn-sm btnDelete">' +
@@ -216,20 +210,7 @@ class kraListPage extends Component {
           }
         }
       ],
-      //   "createdRow": function (row, data, index) {
-
-      //     $('td', row).eq(1).html(index + 1 );
-      // },
-
-      // fnRowCallback: function (nRow, aData, iDisplayIndex) {
-      //   $("td:eq(1)", nRow).html(iDisplayIndex + 1);
-      //   return nRow;
-
       initComplete: (settings, json) => {
-        //;
-        // $(".btnDelete").on("click", e => {
-        //     this.SingleDeleteConfirm(e.currentTarget.id);
-        // });
       },
       drawCallback: settings => {
         window.smallTable();
