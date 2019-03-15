@@ -53,7 +53,7 @@ class UserRolePMS extends Component {
 
 
     multiDeleteRoleApi(roleId) {
-        
+
         const multiDelRole = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
         return $.ajax({
             url: multiDelRole,
@@ -75,7 +75,7 @@ class UserRolePMS extends Component {
         });
     }
     DeleteAllRole(roleId) {
-        
+
         var item = roleId.join(",");
         var res = this.multiDeleteRoleApi(item);
         res.done((response) => {
@@ -176,9 +176,9 @@ class UserRolePMS extends Component {
                 { width: '20%', targets: 1 },
                 { width: '65%', targets: 2 },
                 { width: '10%', targets: 3 },
-            
-               ],
-        
+
+            ],
+
             columns: [
                 {
 
@@ -187,7 +187,12 @@ class UserRolePMS extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="roleId" value=' + row.roleId + ">"
+
+
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="roleId" value=' + row.roleId + ">" +
+                            '<i></i> ' +
+                            '</label>'
                         );
                     },
 
@@ -205,7 +210,7 @@ class UserRolePMS extends Component {
                 {
                     data: "description",
                     "orderable": false,
-                    targets:2
+                    targets: 2
                 },
 
                 {
@@ -215,7 +220,7 @@ class UserRolePMS extends Component {
                     render: function (data, type, row) {
                         return (
                             '<a href="/role/edit/id=' + row.roleId + '"class="btn mr-2 btn-edit btn-info btn-sm">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            
+
                             '<a href="#" id="' + row.roleId + '"class="btn mr-2 delete btn-danger btn-sm btnDelete">' +
                             '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
@@ -225,12 +230,12 @@ class UserRolePMS extends Component {
 
                 }
             ],
-         
+
             // "createdRow": function (row, data, index) {
-                
+
             //     $('td', row).eq(1).html(index + 1 );
             // },
-    
+
 
             initComplete: (settings, json) => {
             },
@@ -267,10 +272,13 @@ class UserRolePMS extends Component {
                     <thead>
                         <tr>
                             <th width="20">
+                            <label className="checkbox">
                                 <input
                                     type="checkbox" name="checkAll"
                                     onClick={e => { this.checkallrole(e); }}
                                 />
+                                 <i></i>
+                                </label>
                             </th>
                             {/* <th>Sr.No</th> */}
                             <th  >Name</th>

@@ -171,7 +171,10 @@ class Templatelist extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="templateId" value=' + row.templateId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="templateId" value=' + row.templateId + ">" +
+                            '<i></i> '+
+                            '</label>'
                         );
                     }
                 },
@@ -240,13 +243,10 @@ class Templatelist extends Component {
                 <thead>
                     <tr>
                         <th width="20">
-                            <input
-                                type="checkbox"
-                                name="checkAll"
-                                onClick={e => {
-                                    this.checkall(e);
-                                }}
-                            />
+                        <label className="checkbox">
+                            <input type="checkbox" name="checkAll" onClick={e => {this.checkall(e); }} />
+                            <i></i>
+                           </label>
                         </th>
                         <th width="150">Template Name</th>
                         <th>KRAs</th>

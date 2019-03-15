@@ -168,27 +168,22 @@ class Designationlist extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="designationId" value=' + row.designationId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="designationId" value=' + row.designationId + ">"+
+                            '<i></i> '+
+                            '</label>'
                         );
                     }
                 },
-                // {
-                //     data: null,
-                //     targets: 1,
-                //     "orderable": false,
-                //     //width: '10'
-                // },
                 {
                     data: "designationName",
                     targets: 1,
-                    //width: '20%'
                 },
                 {
                     data: "description",
                     "orderable": false,
                     targets: 2
                 },
-
                 {
                     data: "designationId",
                     "orderable": false,
@@ -206,12 +201,7 @@ class Designationlist extends Component {
                     }
                 },
             ],
-            //fixedColumns: true,
-            // "createdRow": function (row, data, index) {
-
-            //     $('td', row).eq(1).html(index + 1);
-            // },
-
+          
             initComplete: (settings, json) => {
 
             },
@@ -243,15 +233,11 @@ class Designationlist extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr><th width="20">
-                            <input
-                                type="checkbox"
-                                name="checkAll"
-                                onClick={e => {
-                                    this.checkall(e);
-                                }}
-                            />
+                        <label className="checkbox">
+                            <input type="checkbox" name="checkAll" onClick={e => { this.checkall(e); }}/>
+                            <i></i>
+                           </label>
                         </th>
-                            {/* <th width="5">Sr.No</th> */}
                             <th width="100">Name</th>
                             <th>Description</th>
                             <th width="100">Action</th>
