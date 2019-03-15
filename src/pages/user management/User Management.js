@@ -174,7 +174,10 @@ class UserManagement extends Component {
                     targets: 0, 
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="userId" value=' + row.userId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="userId" value="' + row.userId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     orderable: false
@@ -250,11 +253,14 @@ class UserManagement extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
-                            <th width="10">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => { this.checkall(e) }} />
+                        <th width="10">
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
                             </th>
                             <th width="100">First Name</th>
                             <th width="100">Last Name</th>
