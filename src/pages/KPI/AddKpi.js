@@ -99,7 +99,7 @@ class AddKpi extends Component {
     }
 
     onChangeBlur() {
-        if (this.state.kpiId != undefined) {
+        if (this.state.kpiId !== undefined) {
             var res = this.isEditKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
@@ -224,7 +224,7 @@ class AddKpi extends Component {
         }
     }
     render() {
-        if (this.state.redirectToList == true) {
+        if (this.state.redirectToList === true) {
             return <Redirect to={{ pathname: "/kpi" }} />
         }
         return (
