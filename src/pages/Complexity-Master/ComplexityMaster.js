@@ -193,6 +193,7 @@ class ComplexityMaster extends Component {
                 {
                     data: "complexityId",
                     targets: 3,
+                    className: "text-center",
                     render: function (data, type, row) {
                         return (
                             '<a href="/complexity-master/edit/id=' + row.complexityId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -246,9 +247,8 @@ class ComplexityMaster extends Component {
                                             onClick={e => { this.checkall(e) }} />
                                         <i></i>
                                     </label>
-
                                 </th>
-                                <th width="100">Name</th>
+                                <th  width="120" >Name</th>
                                 <th>Description</th>
                                 <th width="100">Action</th>
                             </tr>
