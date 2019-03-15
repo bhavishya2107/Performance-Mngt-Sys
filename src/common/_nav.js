@@ -66,7 +66,7 @@ if (localStorage.getItem('roleName') == "HR") {
         {
             name: 'Assign-Template',
             url: '/Assign-Template',
-            icon: 'fa fa-sitemap',
+            icon: 'fa fa-tasks',
         }
 
 

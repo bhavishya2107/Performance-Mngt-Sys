@@ -13,10 +13,10 @@ class Projects extends Component {
         super(props);
         this.state = {
             selectedIds: [],
-
         }
     }
-//#region single and multiple delete with confirmation
+
+    //#region single and multiple delete with confirmation
 
     DeleteProjectApi(projectId) {
         const endpoint = environment.apiUrl + moduleUrls.Project + '/' + `${projectId}`;
@@ -33,7 +33,6 @@ class Projects extends Component {
     SingleDeleteConfirm(id) {
         if (id !== undefined) {
             if (id != 98) {
-                debugger;
                 bootbox.confirm({
                     message: Notification.deleteConfirm,
                     buttons: {
@@ -49,8 +48,6 @@ class Projects extends Component {
                     callback: (result) => {
                         if (result === true) {
                             this.SingleDeleteProject(id);
-                        }
-                        else {
                         }
                     }
                 });
@@ -80,6 +77,7 @@ class Projects extends Component {
             });
         });
     }
+
     multiDeleteProjectApi(projectId) {
         const endpoint = environment.apiUrl + moduleUrls.Project + `/bulk?_ids=${projectId}`;
         return $.ajax({
@@ -105,6 +103,7 @@ class Projects extends Component {
         });
 
     }
+
     multipleDeleteProjectconfirm() {
         var ProjectId = []
         $("#tblprojectform input:checkbox:checked").each((e, item) => {
@@ -140,11 +139,10 @@ class Projects extends Component {
             toast.info(Notification.selectOneRecord);
         }
     }
-  
 
     deleteProjectResource(resourceId) {
         const endpoint = environment.apiUrl + moduleUrls.ProjectResources + `/bulk?_ids=${resourceId}`;
-        return $.ajax({ 
+        return $.ajax({
             url: endpoint,
             type: Type.deletetype,
             headers: {
@@ -154,12 +152,12 @@ class Projects extends Component {
         });
 
     }
-  //#endregion
+    //#endregion
 
     componentDidMount() {
         const endpointGET = environment.dynamicUrl + 'dynamic'
-
         this.$el = $(this.el);
+        //#region datatable
         this.$el.DataTable({
             "autoWidth": false,
             ajax: {
@@ -170,14 +168,16 @@ class Projects extends Component {
                     query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId order by projectId desc"
                 },
             },
-          //#region datatable
             columns: [
                 {
                     data: "projectId",
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="projectId" value=' + row.projectId + ' />'
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.projectId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     "orderable": false,
@@ -211,6 +211,7 @@ class Projects extends Component {
                 {
                     data: "projectId",
                     targets: 5,
+                    className: "text-center",
                     render: function (data, type, row) {
                         return (
                             '<a href="/project/edit/id=' + row.projectId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
@@ -224,12 +225,6 @@ class Projects extends Component {
                     orderable: false
                 }
             ],
-            // initComplete: (settings, json) => {
-            //     $(".btnDelete").on("click", e => {
-            //         ;
-            //         this.SingleDelete(e.currentTarget.id);
-            //     });
-            // },
             drawCallback: (settings) => {
                 window.smallTable();
                 $(".btnDelete").on("click", e => {
@@ -265,12 +260,20 @@ class Projects extends Component {
                         id="tblprojectform"
                         ref={el => (this.el = el)}>
                         <thead>
-                            <tr className="container-fluid">
-                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                                <th width="100">Name</th>
-                                <th width="100">Start Date</th>
-                                <th width="100">End Date</th>
-                                <th width="100">Complexity</th>
+                            <tr>
+                                <th width="10">
+                                    <label className="checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="checkAll"
+                                            onClick={e => { this.checkall(e) }} />
+                                        <i></i>
+                                    </label>
+                                </th>
+                                <th >Name</th>
+                                <th>Start Date</th>
+                                <th >End Date</th>
+                                <th>Complexity</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>

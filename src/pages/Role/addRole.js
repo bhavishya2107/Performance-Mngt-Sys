@@ -5,8 +5,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
 const $ = require('jquery');
 
-
-
 class UserRoleForm extends Component {
     constructor(props) {
         super(props);
@@ -104,9 +102,10 @@ class UserRoleForm extends Component {
 
         })
     }
+
     updateRoleDetailsApi(data) {
         const updateRoleDetails = environment.apiUrl + moduleUrls.Role + '/' + `${data.id}`
-        // '/?_size=1000' + '&_sort=-kraId' 
+   
 
         var body =
         {
