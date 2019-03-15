@@ -22,7 +22,7 @@ class Department extends Component {
         var res = this.DeleteDepApi(departmentId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success( "Department " +Notification.deleted);
+                toast.success("Department " + Notification.deleted);
             }
             this.$el.DataTable().ajax.reload()
         });
@@ -127,7 +127,7 @@ class Department extends Component {
         });
 
     }
-   checkAll(e) {
+    checkAll(e) {
         $("#tblDepartment input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
                 $(item).prop("checked", true);
@@ -157,8 +157,8 @@ class Department extends Component {
                 { width: '20%', targets: 1 },
                 { width: '65%', targets: 2 },
                 { width: '10%', targets: 3 },
-              
-               ],
+
+            ],
             columns: [
                 {
                     data: "depId",
@@ -166,14 +166,17 @@ class Department extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="departmentId" value=' + row.departmentId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="departmentId" value="' + row.departmentId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     orderable: false
 
                 },
-            
-                
+
+
                 {
                     data: "departmentName",
                     targets: 1,
@@ -219,7 +222,7 @@ class Department extends Component {
                     <h2 className="col">{ModuleNames.Department}</h2>
                     <div className="col text-right">
                         <div>
-                            <Link to={{ pathname: '/AddDept' }} className="btn btn-primary" ><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                            <Link to={{ pathname: '/department/add' }} className="btn btn-primary" ><i className="fa fa-plus" aria-hidden="true"></i></Link>
                         </div>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteDeptConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
@@ -231,10 +234,13 @@ class Department extends Component {
                     <thead>
                         <tr className="container-fluid">
                             <th width="10">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => { this.checkAll(e); }} />
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
                             </th>
                             <th width="100"> Name</th>
                             <th width="100"> Description</th>
