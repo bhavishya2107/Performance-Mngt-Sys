@@ -144,6 +144,16 @@ html {
     bottom: -60px;
     z-index: 9;
 }
+.filter-delete{
+    position: relative;
+    .btn-multi-delete {
+        position: absolute;
+        left: 15px;
+        bottom: -42px;
+        z-index: 9;
+      }
+  }
+   
 .content-block {
     margin-left: 200px;
     padding-top: 60px;
