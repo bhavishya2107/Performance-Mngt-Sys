@@ -193,9 +193,13 @@ class Addtemplate extends Component {
 
       if (tempData.length > 0) {
         $(".recordExistsTbl").show()
-        $('#optionReset').prop('selectedIndex', 0);
-        $('#optionreset').prop('selectedIndex', 0);
-      }
+         // $('#optionReset').prop('selectedIndex', 0);
+        // $('#optionreset').prop('selectedIndex', 0);
+        
+        // this.setState({
+        //   isSelect: false,
+        // })
+     }
       else {
         if (this.state.kpiId && this.state.kraId) {
           this.state.isUpdated = true;
@@ -487,6 +491,7 @@ class Addtemplate extends Component {
     this.$el.DataTable({
       datasrc: templateData,
       data: templateData,
+      autoWidth:false,
       columns: [
         {
           data: "kraName.Name",
@@ -502,7 +507,7 @@ class Addtemplate extends Component {
           targets: 2,
           render: function (data, type, row) {
             return (
-              '<a href="#" id="' + row.kraId + '" data-kraId="' + row.kraName.id + '" data-kpiId="' + row.kpiTitle.id + '" class="btn btn-danger btnDelete btn-sm">Delete</a>'
+              '<a href="#" id="' + row.kraId + '" data-kraId="' + row.kraName.id + '" data-kpiId="' + row.kpiTitle.id + '" class="btn btn-danger btnDelete btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></a>'
             )
           }
         },
@@ -514,8 +519,8 @@ class Addtemplate extends Component {
       "searching": false,
       drawCallback: (settings) => {
         $(".btnDelete").on("click", e => {
-          var tempKraID = e.target.getAttribute('data-kraId');
-          var tempKpiID = e.target.getAttribute('data-kpiId');
+          var tempKraID = $(e.currentTarget).attr('data-kraId');
+          var tempKpiID =  $(e.currentTarget).attr('data-kpiId');
           this.deleteDataTableRow(parseInt(tempKraID), parseInt(tempKpiID));
         });
 
