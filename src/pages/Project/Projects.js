@@ -177,7 +177,10 @@ class Projects extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="projectId" value=' + row.projectId + ' />'
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.projectId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     "orderable": false,
@@ -266,7 +269,16 @@ class Projects extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr className="container-fluid">
-                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
+                            <th width="10">
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
+
+                            </th>
                                 <th width="100">Name</th>
                                 <th width="100">Start Date</th>
                                 <th width="100">End Date</th>

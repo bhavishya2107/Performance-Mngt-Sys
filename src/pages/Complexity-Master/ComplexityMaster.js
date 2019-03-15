@@ -46,12 +46,11 @@ class ComplexityMaster extends Component {
                     this.SingleDeleteComplexityMaster(id);
                 }
                 else {
-
                 }
             }
         });
-
     }
+
     SingleDeleteComplexityMaster(complexityId) {
         var res = this.DeleteComplexityMasterApi(complexityId);
         res.done(response => {
@@ -62,7 +61,6 @@ class ComplexityMaster extends Component {
             }
             this.$el.DataTable().ajax.reload();
         });
-
         res.fail(error => {
             if (error.status === 400) {
                 toast.error("Some of Complexity will not deleted as they are being used", {
@@ -74,6 +72,7 @@ class ComplexityMaster extends Component {
             }
         });
     }
+
     multiDeleteComplexityMasterApi(complexityId) {
         const endpoint = environment.apiUrl + moduleUrls.ComplexityMaster + `/bulk?_ids=${complexityId}`;
         return $.ajax({
@@ -92,7 +91,7 @@ class ComplexityMaster extends Component {
         res.done((response) => {
             toast.success("Complexity " + Notification.deleted, {
                 position: toast.POSITION.TOP_RIGHT
-            }); 
+            });
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
@@ -130,8 +129,6 @@ class ComplexityMaster extends Component {
                 callback: (result) => {
                     if (result === true) {
                         this.multiDeleteComplexityMaster(complexityId);
-                    }
-                    else {
                     }
                 }
             });
@@ -175,7 +172,10 @@ class ComplexityMaster extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="complexityId" value=' + row.complexityId + ' />'
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.complexityId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     "orderable": false,
@@ -183,7 +183,7 @@ class ComplexityMaster extends Component {
                 {
                     data: "complexityName",
                     targets: 1
-                    
+
                 },
                 {
                     data: "description",
@@ -206,7 +206,7 @@ class ComplexityMaster extends Component {
                     orderable: false
                 }
             ],
-            
+
             //#endregion 
 
             //#region detete function id
@@ -238,9 +238,18 @@ class ComplexityMaster extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr className="container-fluid">
-                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
+                                <th width="10">
+                                    <label className="checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="checkAll"
+                                            onClick={e => { this.checkall(e) }} />
+                                        <i></i>
+                                    </label>
+
+                                </th>
                                 <th width="100">Name</th>
-                                <th >Description</th>
+                                <th>Description</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>

@@ -175,7 +175,10 @@ class KPI extends Component {
                     targets: 0,
                     render: (data, type, row) => {
                         return (
-                            '<input type="checkbox" name="kpiId" value=' + row.kpiId + ' />'
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.kpiId + '">' +
+                            '<i></i> ' +
+                            '</label>'
                         )
                     },
                     "orderable": false,
@@ -201,6 +204,9 @@ class KPI extends Component {
                     targets: 5,
                     render: function (data, type, row) {
                         return (
+
+
+                            
                             '<a href="/kpi/edit/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
@@ -241,8 +247,16 @@ class KPI extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                                <th width="5"><input type="checkbox" name="checkAll" onClick={(e) => { this.checkall(e); }}></input></th>
-                               
+                            <th width="10">
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
+
+                            </th>
                                 <th width="100">Name</th>
                                 <th width="80">Weightage</th>
                                 <th>Target</th>
