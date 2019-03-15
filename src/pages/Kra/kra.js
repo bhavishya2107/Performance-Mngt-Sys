@@ -107,9 +107,9 @@ class kraListPage extends Component {
     var kraId = []
     $("#kraDataList input:checkbox:checked").each((e, item) => {
       if (item.name != "checkAll") {
-      kraId.push(item.value);
+        kraId.push(item.value);
       }
-    
+
     });
     if (kraId.length > 0) {
 
@@ -141,7 +141,7 @@ class kraListPage extends Component {
 
 
   }
-//192.168.10.109:3000/api/modulename?_sort=-fieldname
+  //192.168.10.109:3000/api/modulename?_sort=-fieldname
   componentDidMount() {
     this.$el = $(this.el);
     const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId'
@@ -162,8 +162,8 @@ class kraListPage extends Component {
         { width: '20%', targets: 1 },
         { width: '65%', targets: 2 },
         { width: '10%', targets: 3 },
-      
-       ],
+
+      ],
 
       columns: [
         {
@@ -172,7 +172,11 @@ class kraListPage extends Component {
           targets: 0,
           render: function (data, type, row) {
             return (
-              '<input type="checkbox" name="kraId" value=' + row.kraId + ">"
+              '<label class="checkbox">' +
+                  '<input type="checkbox" name="kraId" value=" + row.kraId + " />' +
+                  '<i></i> '+
+                '</label>'
+              
             );
           }
         },
@@ -202,7 +206,7 @@ class kraListPage extends Component {
               row.kraId +
               '"class="btn mr-2 btn-edit btn-info btn-sm">' +
               '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-              
+
               '<a href="#" id="' +
               row.kraId +
               '"class="btn delete btn-danger btn-sm btnDelete">' +
@@ -212,15 +216,15 @@ class kraListPage extends Component {
           }
         }
       ],
-    //   "createdRow": function (row, data, index) {
-                
-    //     $('td', row).eq(1).html(index + 1 );
-    // },
-      
+      //   "createdRow": function (row, data, index) {
+
+      //     $('td', row).eq(1).html(index + 1 );
+      // },
+
       // fnRowCallback: function (nRow, aData, iDisplayIndex) {
       //   $("td:eq(1)", nRow).html(iDisplayIndex + 1);
       //   return nRow;
-     
+
       initComplete: (settings, json) => {
         //;
         // $(".btnDelete").on("click", e => {
@@ -266,18 +270,14 @@ class kraListPage extends Component {
           <thead>
             <tr className="container-fluid">
               <th width="20">
-                <input
-                  type="checkbox"
-                  name="checkAll"
-                  onClick={e => {
-                    this.checkall(e);
-                  }}
-                />
+                <label className="checkbox">
+                  <input type="checkbox" name="checkAll" onClick={e => { this.checkall(e); }} />
+                  <i></i>
+                </label>
               </th>
               <th>Name</th>
               <th>Description</th>
               <th>Action</th>
-       
             </tr>
           </thead>
         </table>
