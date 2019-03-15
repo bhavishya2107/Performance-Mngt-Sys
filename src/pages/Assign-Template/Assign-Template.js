@@ -384,10 +384,14 @@ class AssignTemplate extends Component {
                     <thead>
                         <tr>
                             <th width="10">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => { this.checkall(e) }} />
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
+
                             </th>
                             <th width="100">Quater</th>
                             <th width="100">Template Name</th>
