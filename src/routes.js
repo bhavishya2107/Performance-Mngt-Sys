@@ -1,4 +1,4 @@
-import Template from "./pages/Assign-Template/Template";
+import Template from "./pages/Assign-Template/Assign-Template";
 
 const routes = {
   '/': 'Home',
@@ -42,6 +42,5 @@ const routes = {
    '/Template/add':'Template',
    '/EditTemplate':'Template'
 };
-{
-}
+
 export default routes;

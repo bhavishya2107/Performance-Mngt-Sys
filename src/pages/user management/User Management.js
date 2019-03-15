@@ -27,7 +27,7 @@ class UserManagement extends Component {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("User " + Notification.deleted);
+                toast.success("User " + Notification.deleteConfirm);
 
             }
             this.$el.DataTable().ajax.reload()
@@ -207,7 +207,7 @@ class UserManagement extends Component {
                     targets: 6,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditUser/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/user-management/edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -240,7 +240,7 @@ class UserManagement extends Component {
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col"> {ModuleNames.User}</h2>
                     <div className="col text-right">
-                        <Link to={{ pathname: '/user-managemnet/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/user-management/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteUserConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>

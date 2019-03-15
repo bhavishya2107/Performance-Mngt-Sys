@@ -7,7 +7,7 @@ import bootbox from 'bootbox'
 $.DataTable = require('datatables.net-bs4');
 var moment = require('moment');
 
-class Template extends Component {
+class AssignTemplate extends Component {
 
     constructor(props) {
         super(props);
@@ -15,15 +15,49 @@ class Template extends Component {
             templateName: "",
             assignedUser: "",
             project: "",
+            projectId: "",
             projectDate: "",
             status: "",
             assignId: "",
             firstName: "",
             lastname: "",
-            selectedIds:[]
-
+            selectedIds: [],
+            displayProjectData: [],
+            userId: "",
+            statusId: "",
+            status: ""
         }
     }
+    clear() {
+        this.setState({
+            userId: "",
+            projectId: "",
+            status: ""
+        })
+    }
+    searchUser() {
+        debugger
+        this.$el.DataTable().ajax.reload()
+    }
+    //#region events
+    onChangeProject(event) {
+        this.setState({
+            projectId: event.target.value
+        });
+
+    }
+    onChangeUser(event) {
+        this.setState({
+            userId: event.target.value,
+        })
+    }
+    onChangeStatus(e) {
+        this.setState({
+            status: e.currentTarget.value
+        })
+    }
+
+    //#endregion
     //#region single delete for assign_template
     singleDeleteTemplate(assignId) {
         var res = this.DeleteTemplateApi(assignId);
@@ -39,6 +73,46 @@ class Template extends Component {
     }
 
     //#endregion
+    //#region methods
+    getProjectData() {
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
+        this.getDropDownValues(url).done(
+            (tempProject) => {
+                var displayProjectDataReturn = tempProject.map(function (i) {
+                    return (
+                        <option key={i.projectId} value={i.projectId}>{i.projectName}</option>
+                    )
+                });
+                this.setState({
+                    displayProjectData: displayProjectDataReturn
+                })
+            })
+    }
+
+    getUserData() {
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
+        this.getDropDownValues(url).done(
+            (tempUser) => {
+                var displayUserDataReturn = tempUser.map(function (i) {
+                    return (
+                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                    )
+                });
+                this.setState({
+                    displayUserData: displayUserDataReturn
+                })
+            })
+    }
+
+    getDropDownValues(url) {
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+
+    }
+
+    //#endregion
     //#region single Delete & multi Delete Assign-Template confirm
     singleDeleteTemplateConfirm(id) {
         if (id !== undefined) {
@@ -46,11 +120,11 @@ class Template extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Yes',
+                        label: 'ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'No',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
@@ -151,7 +225,13 @@ class Template extends Component {
         })
     }
     //#endregion
+
     componentDidMount() {
+        this.getProjectData()
+        this.getUserData()
+
+
+
         const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -161,7 +241,7 @@ class Template extends Component {
                 url: url,
                 type: Type.post,
                 data: {
-                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,PM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  ORDER BY TAM.assignId DESC"
+                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
                 },
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -173,7 +253,11 @@ class Template extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="assignId" value=' + row.assignId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
+                            '<i></i> ' +
+                            '</label>'
+
                         )
                     },
                     orderable: false
@@ -191,8 +275,9 @@ class Template extends Component {
                     targets: 3,
                     render: (data, type, row) => {
                         return (
-                            `<label id="firstName" value=>${row.firstName}` + " " +
-                            `<label id="firstName" value=>${row.lastname}`
+
+                            `<label className="getUserName" id="firstName" value=>${row.firstName}` + " " +
+                            `<label className="getUserName" id="lastName" value=>${row.lastname}`
                         )
                     }
                 },
@@ -206,8 +291,8 @@ class Template extends Component {
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
-                       `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
-                       
+                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+
                         )
                     },
                 },
@@ -220,7 +305,7 @@ class Template extends Component {
                     targets: 7,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/EditTemplate/assignId=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
 
                         )
@@ -241,18 +326,57 @@ class Template extends Component {
             }
         });
     }
-
     render() {
         return (
             <div>
-                <div className="clearfix d-flex align-items-center row page-title">
+                <div className="mb-1 row mt-3 page-title">
                     <h2 className="col"> {ModuleNames.Template}</h2>
                     <div className="col text-right">
-                        <Link to={{ pathname: '/addAssignTemplate' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                        <Link to={{ pathname: '/assign-template/add' }} className="btn btn-primary"><i className="fa fa-plus" aria-hidden="true"></i></Link>
                     </div>
-                    <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteTemplateConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
-
                 </div>
+
+                <div className="clearfix mt-3 mb-2 row filter-delete">
+
+
+                    <div className="col-md-3 col-sm-6 mb-2">
+                        <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
+                            <option value="">Select user</option>
+                            {this.state.displayUserData}
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-6 mb-2">
+                        <select required name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
+                            <option value="">Select Project</option>
+                            {this.state.displayProjectData}
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-6 mb-2">
+                        <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
+                            onChange={(e) => { this.onChangeStatus(e) }} value={this.state.status}  >
+                            <option value="">Select Status </option>
+                            <option value="1"> Created by Hr</option>
+                            <option value="2">Assigned Employee</option>
+                            <option value="1"> Draft by Employee</option>
+                            <option value="2">Submit by Employee</option>
+                            <option value="3">Draft by Reviewer</option>
+                            <option value="4">Submit by Reviewer</option>
+                            <option value="5">Reverted to employee by HR</option>
+                            <option value="6">Reverted to reviewer by HR</option>
+                            <option value="7">Approved by HR</option>
+                            {this.state.displayProjectStatus}
+                        </select>
+                    </div>
+                    <div className="col-md-3 col-sm-6 mb-2">
+                        <button type="button" className="btn btn-info mr-2" onClick={() => { this.clear(); }}><i className="fa fa-times"></i></button>
+                        <button id="searchButton" type="button" className="btn btn-success" onClick={() => { this.searchUser() }}>
+                            <i className="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteTemplateConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
+                </div>
+
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplateAssigned"
 
@@ -260,16 +384,20 @@ class Template extends Component {
                     <thead>
                         <tr>
                             <th width="10">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => { this.checkall(e) }} />
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
+
                             </th>
                             <th width="100">Quater</th>
                             <th width="100">Template Name</th>
                             <th width="100">Assigned Users</th>
                             <th width="100" >Project</th>
-                            <th width="100">Project Date</th>
+                            <th width="100">Worked Date</th>
                             <th width="100">Status</th>
                             <th width="100">Action</th>
                         </tr>
@@ -284,4 +412,4 @@ class Template extends Component {
         )
     }
 }
-export default Template;
+export default AssignTemplate;
