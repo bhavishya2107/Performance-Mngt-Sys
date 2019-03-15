@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   margin: 0;
   padding: 0;
@@ -248,7 +249,8 @@ html {
     width: 10rem;
   }
 
-  table.customDataTable tr th:last-child, table.customDataTable tr td:last-child {
+  table.customDataTable tr th:last-child,
+table.customDataTable tr td:last-child {
     max-width: 100% !important;
     min-width: 100px !important;
     width: 100% !important;
@@ -278,6 +280,95 @@ label.error.valid {
 
 select.custom-select {
   background-image: none;
+}
+
+.customDataTable thead tr th {
+  vertical-align: top;
+}
+
+.checkbox,
+.radio {
+  margin-bottom: 4px;
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  line-height: 25px;
+  color: #404040;
+  cursor: pointer;
+  font-size: 13px;
+}
+.checkbox input,
+.radio input {
+  position: absolute;
+  left: -9999px;
+}
+.checkbox i,
+.radio i {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  display: block;
+  width: 18px;
+  height: 18px;
+  outline: 0;
+  border-width: 1px;
+  border-style: solid;
+  background: #FFF;
+}
+
+.radio i {
+  border-radius: 50%;
+}
+
+.checkbox input + i:after,
+.radio input + i:after {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.1s;
+  -o-transition: opacity 0.1s;
+  -ms-transition: opacity 0.1s;
+  -moz-transition: opacity 0.1s;
+  -webkit-transition: opacity 0.1s;
+}
+
+.radio input + i:after {
+  content: "";
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.checkbox input + i:after {
+  color: #3276B1;
+}
+
+.radio input + i:after {
+  background-color: #3276B1;
+}
+
+.checkbox input + i:after {
+  content: "";
+  top: -2px;
+  left: 0px;
+  width: 15px;
+  height: 15px;
+  font: 400 16px/19px FontAwesome;
+  text-align: center;
+}
+
+.checkbox input:checked:hover + i:after {
+  content: "";
+}
+
+.checkbox input:checked:disabled:hover + i:after {
+  content: "";
+}
+
+.checkbox input:checked + i:after,
+.radio input:checked + i:after {
+  opacity: 1;
 }
 
 /*# sourceMappingURL=custom.css.map */

@@ -253,7 +253,11 @@ class AssignTemplate extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="assignId" value=' + row.assignId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
+                            '<i></i> ' +
+                            '</label>'
+
                         )
                     },
                     orderable: false
@@ -372,33 +376,37 @@ class AssignTemplate extends Component {
 
                     <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteTemplateConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
                 </div>
-            
-            <table className="table table-striped table-bordered table-hover customDataTable"
-                id="tblTemplateAssigned"
 
-                ref={el => (this.el = el)}>
-                <thead>
-                    <tr>
-                        <th width="10">
-                            <input
-                                type="checkbox"
-                                name="checkAll"
-                                onClick={e => { this.checkall(e) }} />
-                        </th>
-                        <th width="100">Quater</th>
-                        <th width="100">Template Name</th>
-                        <th width="100">Assigned Users</th>
-                        <th width="100" >Project</th>
-                        <th width="100">Worked Date</th>
-                        <th width="100">Status</th>
-                        <th width="100">Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+                <table className="table table-striped table-bordered table-hover customDataTable"
+                    id="tblTemplateAssigned"
+
+                    ref={el => (this.el = el)}>
+                    <thead>
+                        <tr>
+                            <th width="10">
+                                <label className="checkbox">
+                                    <input
+                                        type="checkbox"
+                                        name="checkAll"
+                                        onClick={e => { this.checkall(e) }} />
+                                    <i></i>
+                                </label>
+
+                            </th>
+                            <th width="100">Quater</th>
+                            <th width="100">Template Name</th>
+                            <th width="100">Assigned Users</th>
+                            <th width="100" >Project</th>
+                            <th width="100">Worked Date</th>
+                            <th width="100">Status</th>
+                            <th width="100">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
 
 
-            <ToastContainer />
+                <ToastContainer />
             </div >
 
         )
