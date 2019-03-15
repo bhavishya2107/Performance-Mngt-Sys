@@ -159,7 +159,6 @@ class Quater extends Component{
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[0, 'asc']],
-            // aaSorting: [[2, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: Type.get,
@@ -183,7 +182,10 @@ class Quater extends Component{
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input type="checkbox" name="quaterId" value=' + row.quaterId + ">"
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="quaterId" value=' + row.quaterId + ">" +
+                            '<i></i> ' +
+                            '</label>'
                         );
                     },
 
@@ -244,13 +246,16 @@ class Quater extends Component{
                     <thead>
                         <tr>
                             <th width="20">
+                            <label className="checkbox">
                                 <input
                                     type="checkbox" name="checkAll"
                                     onClick={e => { this.checkallrole(e); }}
                                 />
+                                <i></i>
+                                </label>
                             </th>
-                            <th  >Name</th>
-                            <th  >Action</th>
+                            <th>Name</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

@@ -73,7 +73,7 @@ class kraHome extends Component {
             )
         }
         else {
-            var res = this.updatekraDetailsApi();
+            var res = this.kraAlreadyExistApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
@@ -83,8 +83,6 @@ class kraHome extends Component {
     }
 
     kraAlreadyExistApi() {
-
-        // http://192.168.10.109:3000/api/modulename?_where=(fieldname,eq,searchtext)
         const apiForKraAlreadyExist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')';
         return $.ajax({
             url: apiForKraAlreadyExist,
@@ -94,9 +92,7 @@ class kraHome extends Component {
     }
 
     getKraDetailsApi() {
-
         const apiForKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${this.state.id}`
-        // const endpoint = `http://180.211.103.189:3000/api/kra_master/${this.state.id}`;
         return $.ajax({
             url: apiForKraDetails,
             type: Type.get,
@@ -122,6 +118,7 @@ class kraHome extends Component {
             data: JSON.stringify(body)
         });
     }
+
     updatekraEditExistApi() {
 
         const updatekraexist = environment.apiUrl + moduleUrls.Kra + '?_where=(kraName,eq,' + this.state.kraName.trim() + ')' + '~and(kraId,ne,' + this.state.id + ')';
@@ -134,7 +131,6 @@ class kraHome extends Component {
 
 
     UpdateKraDetails(data) {
-        
         var isvalidate = window.formValidation("#kraAddForm");
 
         if (isvalidate) {
@@ -142,7 +138,6 @@ class kraHome extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     $(".hide").show()
-
                 } else {
                     var res = this.updatekraDetailsApi(data);
                     res.done((result) => {
@@ -154,23 +149,18 @@ class kraHome extends Component {
                         });
                     });
                     res.fail((error) => {
-
                     })
-
                 }
             });
             res.fail((error) => {
-
             })
-
         } else {
-
             $(".hide").hide()
-
             return false;
         }
 
     }
+
     resetKraForm() {
         window.location.reload();
     }
@@ -199,15 +189,12 @@ class kraHome extends Component {
         }
 
         return (
-
-
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
                         {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add {ModuleNames.kra}</span>}
-                    </h2>
+            </h2>
                 </div>
-
                 <form id="kraAddForm">
                     <div className="form-group">
                         <label className=" required" htmlFor="kraName">Name</label>
@@ -229,7 +216,7 @@ class kraHome extends Component {
                     <div className="form-group">
                         <label className=" " htmlFor="kraDescription">Description</label>
                         <div className="">
-                            <textarea name="kraDescription" className="form-control col-6" rows="3"
+                            <textarea  id="kraDescriptionId" name="kraDescription" className="form-control col-6" rows="3"
                                 value={this.state.description}
                                 onChange={(event) => {
                                     this.setState(

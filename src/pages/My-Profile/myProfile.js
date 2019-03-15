@@ -29,7 +29,6 @@ class MyProfile extends Component {
     var MyProfileQuery = {
       query: `select u.userid,u.username,u.firstname,u.lastname,u.emailaddress,u.mobileno,d.departmentName,u.address,u.profileimage,r.rolename,dm.designationName, u.firstname  as teamleader from user_master U left join department_master d on U.departmentId = d.departmentId left join designation_master dm on u.designationId = dm.designationId left join role_master r on u.roleid = r.roleid where u.userid = ${localStorage.getItem('userId')}`
     }
-    // const endpoint = "http://180.211.103.189:3000/dynamic";
 
     return $.ajax({
       url: endpoint,
@@ -69,11 +68,6 @@ class MyProfile extends Component {
     } else {
     }
   }
-  // localStorage.getItem('userId', response.userId);
-  // localStorage.getItem('firstName', response.firstName);
-  // localStorage.getItem('lastName', response.lastName);
-  // this.state.userId == 
-
 
   redirectToEdit = () => {
 

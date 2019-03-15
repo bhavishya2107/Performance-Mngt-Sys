@@ -15,6 +15,8 @@ class UserRolePMS extends Component {
             selectedIds: [],
         };
     }
+
+    //single role delete on selecting single checkbox
     SingleRoleDelete(roleId) {
         if (roleId != 134) {
             var res = this.DeleteRoleApi(roleId);
@@ -36,10 +38,11 @@ class UserRolePMS extends Component {
             alert('system role cannot be deleted !')
         }
     }
+
+    //API to be called during delete role
     DeleteRoleApi(roleId) {
 
         const delRole = environment.apiUrl + moduleUrls.Role + '/' + `${roleId}`
-        // const endpoint = `http://180.211.103.189:3000/api/role_master/${roleId}`;
 
         return $.ajax({
             url: delRole,
@@ -51,7 +54,7 @@ class UserRolePMS extends Component {
         });
     }
 
-
+    //multiRole delete api
     multiDeleteRoleApi(roleId) {
 
         const multiDelRole = environment.apiUrl + moduleUrls.Role + '/bulk?_ids=' + `${roleId}`;
@@ -74,6 +77,7 @@ class UserRolePMS extends Component {
             }
         });
     }
+
     DeleteAllRole(roleId) {
 
         var item = roleId.join(",");
@@ -157,14 +161,13 @@ class UserRolePMS extends Component {
 
     componentDidMount() {
         this.$el = $(this.el);
-        const endpointGET = environment.apiUrl + moduleUrls.Role + '/?_size=1000' + '&_sort=-roleId'
+        const getRoleList = environment.apiUrl + moduleUrls.Role + '/?_size=1000' + '&_sort=-roleId'
         this.$el.DataTable({
             "autoWidth": false,
             aaSorting: [[0, 'asc']],
             // aaSorting: [[2, 'asc']],
             ajax: {
-                // url: "http://180.211.103.189:3000/api/role_master/?_size=1000",
-                url: endpointGET,
+                url: getRoleList,
                 type: Type.get,
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -187,8 +190,6 @@ class UserRolePMS extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-
-
                             '<label class="checkbox">' +
                             '<input type="checkbox" name="roleId" value=' + row.roleId + ">" +
                             '<i></i> ' +
@@ -197,12 +198,7 @@ class UserRolePMS extends Component {
                     },
 
                 },
-                // {
-                //     data: null,
-                //     targets: 1,
-                //     "orderable": false,
-
-                // },
+            
                 {
                     data: "roleName",
                     targets: 1
@@ -230,13 +226,6 @@ class UserRolePMS extends Component {
 
                 }
             ],
-
-            // "createdRow": function (row, data, index) {
-
-            //     $('td', row).eq(1).html(index + 1 );
-            // },
-
-
             initComplete: (settings, json) => {
             },
             drawCallback: (settings) => {
@@ -280,7 +269,6 @@ class UserRolePMS extends Component {
                                  <i></i>
                                 </label>
                             </th>
-                            {/* <th>Sr.No</th> */}
                             <th  >Name</th>
                             <th>Description</th>
                             <th  >Action</th>
