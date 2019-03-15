@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { environment, moduleUrls, Type, Notification } from '../Environment';
 import { Redirect } from "react-router-dom";
-import { ToastContainer , toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 const $ = require("jquery");
 
 class MyProfile extends Component {
@@ -42,7 +42,7 @@ class MyProfile extends Component {
   }
 
   componentDidMount() {
-   
+
     if (this.state.userId !== undefined) {
       var res = this.getUserDetailsApi();
       res.done(response => {
@@ -76,7 +76,7 @@ class MyProfile extends Component {
     })
 
   }
-  
+
 
 
   render() {
@@ -84,7 +84,7 @@ class MyProfile extends Component {
       var redirect = "/EditUser/userId=" + localStorage.getItem("userId")
       return (
         <Redirect to={redirect} />
-        
+
       )
     }
     return (
@@ -98,11 +98,12 @@ class MyProfile extends Component {
           <div className="row">
             <div className="col-md-3 order-md-last text-center">
               <div>
-                <img
-                  src={this.state.profileImage}
-                  style={{ width: "130px", height: "150px" }}
-                  className="img-thumbnail"
-                />
+            
+                {this.state.profileImage === ""  || this.state.profileImage === null  ?
+                  (<img src="../img/default-user.png" style={{ width: "130px", height: "150px" }}  className="img-thumbnail" />)
+                  :
+                  (<img src={this.state.profileImage} style={{ width: "130px", height: "150px" }}  className="img-thumbnail" />)
+                }
 
               </div><br />
               {/* <label className="btn btn-primary btn-sm" onClick={this.redirectToEdit}>Edit Profile</label> */}

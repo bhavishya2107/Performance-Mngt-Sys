@@ -71,6 +71,7 @@ class App extends Component {
                     <Route exact path="/forgotPassword" component={ForgotPW} />
                     <Route exact path="/resetPassword" component={ResetPW} />
                     <Route exact path="/changePassword" component={ChangePW} />
+              
                   </Switch>
                 </div>
               </div>
@@ -307,6 +308,7 @@ class App extends Component {
                         <Switch>
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route path="/dashboard" component={Dashboard} />
+                          <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
                         </Switch>
                       </div>
                     </div>
@@ -327,6 +329,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/forgotPassword" component={ForgotPW} />
                   <Route exact path="/resetPassword" component={ResetPW} />
+            
                   <Login />
                 </Switch>
               </div>

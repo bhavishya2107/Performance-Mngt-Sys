@@ -6,7 +6,7 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 const $ = require('jquery');
 var moment = require('moment');
 $.DataTable = require('datatables.net-bs4');
-var assignData = []
+
 class KraSheet extends Component {
   constructor(props) {
     super(props);
