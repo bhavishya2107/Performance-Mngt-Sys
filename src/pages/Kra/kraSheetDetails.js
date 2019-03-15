@@ -71,7 +71,28 @@ class KraSheet extends Component {
   getUserDetailsApi = () => {
     var endpoint = environment.dynamicUrl + 'dynamic';
     var kraSheet = {
-      query: `SELECT k.kraname,TAM.assignId, PM.projectName,PM.startDate,PM.endDate,q.quaterName,UM.firstname,UM.lastname,d.departmentname FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as q ON q.quaterId = TAM.quaterId JOIN department_master d ON d.departmentid = UM.departmentid JOIN template_detail as td ON td.templateid = TAM.templateid JOIN kra_master k ON k.kraid = td.kraid  where assignId=${this.state.assignId}`
+      query: `
+        SELECT 
+          k.kraname,
+          TAM.assignId, 
+          PM.projectName,
+          PM.startDate,
+          PM.endDate,
+          q.quaterName,
+          UM.firstname,
+          UM.lastname,
+          d.departmentname 
+        FROM 
+          template_assignment_master as TAM           
+          JOIN template_master as TM ON TAM.templateId = TM.templateId 
+          JOIN project_master as PM ON PM.projectId = TAM.projectId 
+          JOIN user_master as UM ON UM.userId = TAM.userId 
+          JOIN quater_master as q ON q.quaterId = TAM.quaterId 
+          JOIN department_master d ON d.departmentid = UM.departmentid 
+          JOIN template_detail as td ON td.templateid = TAM.templateid 
+          JOIN kra_master k ON k.kraid = td.kraid  
+        where 
+          TAM.assignId=${this.state.assignId}`
     }
 
     return $.ajax({
@@ -113,7 +134,6 @@ updateKraSheetAPI(kraData) {
 var response = this.deleteData(assignId)
 response.done((result) => {
   this.commentAndratingSave();
-  debugger
   var kraData = new Array();
   $('#tblkraSheet tbody tr').each((index, item) => {
 if( $(item).find('.commentSaved').val() !== "null"){
@@ -132,7 +152,7 @@ if( $(item).find('.commentSaved').val() !== "null"){
   })
   var res = this.updateKraSheetAPI(kraData);
             res.done((response) => {
-               console.log(response)
+               
             })
 
 })
@@ -157,7 +177,7 @@ response.fail((error)=>{
         "Content-Type": "application/json"
       },
       success: (res) => {
-        console.log(res)
+        
       }
     });
   }
@@ -193,21 +213,27 @@ response.fail((error)=>{
       },
       success: function (resultData) {
 
-        //console.log(resultData)
+        
       }
     });
   }
 
 
   componentDidMount() {
-    var response = this.getassigndetailID()
-    response.done((result) => {
+    //var response = this.getassigndetailID()
+    //response.done((result) => {
    
-    })
+    //s})
     // if (this.state.userId ) {
+
+
+
     var res = this.getUserDetailsApi();
     res.done(response => {
-      console.log(response)
+      
+
+      console.log('response', response);
+
       this.setState({
 
         firstName: response[0].firstname,

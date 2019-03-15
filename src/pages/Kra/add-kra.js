@@ -15,11 +15,9 @@ class kraHome extends Component {
             kraName: "",
         };
     }
-    // createdBy = ${localStorage.getItem('userId')}
 
     submitDataFromKra() {
-        debugger;
-
+        
         var isvalidate = window.formValidation("#kraAddForm");
 
         if (isvalidate) {
@@ -106,8 +104,7 @@ class kraHome extends Component {
     }
 
     updatekraDetailsApi(data) {
-
-        const apiForUpdateKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
+        var apiForUpdateKraDetails = environment.apiUrl + moduleUrls.Kra + '/' + `${data.id}`
         var body =
         {
             "kraName": data.kraName.trim(),
@@ -137,7 +134,7 @@ class kraHome extends Component {
 
 
     UpdateKraDetails(data) {
-        debugger;
+        
         var isvalidate = window.formValidation("#kraAddForm");
 
         if (isvalidate) {

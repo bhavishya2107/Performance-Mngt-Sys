@@ -148,7 +148,7 @@ class kraListPage extends Component {
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[0, "asc"]],
-      // aaSorting: [[2, "asc"]],          
+      
       ajax: {
         url: endpointGET,
         // url: "http://180.211.103.189:3000/api/kra_master/",
