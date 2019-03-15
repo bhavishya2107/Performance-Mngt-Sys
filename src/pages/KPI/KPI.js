@@ -11,8 +11,6 @@ class KPI extends Component {
         super(props);
         this.state = {
             saveKpiDetails: "",
-            // selectedIds: []
-
         };
     }
 
@@ -61,7 +59,6 @@ class KPI extends Component {
             }
             this.$el.DataTable().ajax.reload();
         });
-
         res.fail(error => {
             if (error.status === 400) {
                 toast.error("Some of KPI will not deleted as they are being used", {
@@ -104,8 +101,8 @@ class KPI extends Component {
                 toast.error("KPI" + Notification.notdeleted)
             }
         });
-
     }
+
     multipleDeleteKpiconfirm() {
         var kpiId = []
         $("#tblKpi input:checkbox:checked").each((e, item) => {
@@ -130,8 +127,6 @@ class KPI extends Component {
                     if (result === true) {
                         this.multiDeleteKpi(kpiId);
                     }
-                    else {
-                    }
                 }
             });
         }
@@ -150,17 +145,16 @@ class KPI extends Component {
             }
         });
     }
-   
+
     componentDidMount() {
-         //#region Datatable 
-        const endpointGET = environment.dynamicUrl + 'dynamic' 
+        //#region Datatable 
+        const endpointGET = environment.dynamicUrl + 'dynamic'
         this.setState({
             title: ModuleNames.kpi
         })
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-           // "order": [[1, 'asc']],
             ajax: {
                 url: endpointGET,
                 type: "POST",
@@ -202,23 +196,21 @@ class KPI extends Component {
                 {
                     data: "kpiId",
                     targets: 5,
+                    className: "text-center",
                     render: function (data, type, row) {
                         return (
-
-
-                            
                             '<a href="/kpi/edit/id=' + row.kpiId + '"class="btn mr-2 btn-edit btn-info btn-sm">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.kpiId + '"class="btn btn-danger btnDelete btn-sm";"">' +
-                            '<i class="fa fa-trash" aria-hidden="true"></i>' +  
+                            '<i class="fa fa-trash" aria-hidden="true"></i>' +
                             "</a>"
                         )
                     },
                     orderable: false
                 }
             ],
-            
+
             //#endregion
             drawCallback: (settings) => {
                 window.smallTable();
@@ -228,6 +220,7 @@ class KPI extends Component {
             }
         });
     }
+
     render() {
         return (
             //#region table of kpi
@@ -247,20 +240,19 @@ class KPI extends Component {
                         ref={el => (this.el = el)}>
                         <thead>
                             <tr>
-                            <th width="10">
-                                <label className="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="checkAll"
-                                        onClick={e => { this.checkall(e) }} />
-                                    <i></i>
-                                </label>
-
-                            </th>
-                                <th width="100">Name</th>
-                                <th width="80">Weightage</th>
-                                <th>Target</th>
-                                <th width="100">Scale Set</th>
+                                <th width="10">
+                                    <label className="checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="checkAll"
+                                            onClick={e => { this.checkall(e) }} />
+                                        <i></i>
+                                    </label>
+                                </th>
+                                <th  width="100" >Name</th>
+                                <th  width="100" >Weightage</th>
+                                <th  width="100">Target</th>
+                                <th width="100" >Scale Set</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
@@ -272,5 +264,5 @@ class KPI extends Component {
             //#endregion
         )
     }
-    }
+}
 export default KPI;

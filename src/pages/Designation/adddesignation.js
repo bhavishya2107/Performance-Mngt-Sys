@@ -49,7 +49,7 @@ class Designation extends Component {
                     var formData = {
                         "designationName": this.state.designationName.trim(),
                         "description": this.state.description,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
 
                     }
                     const savejobtitleUrl = environment.apiUrl + moduleUrls.Designation + '/'
@@ -94,7 +94,7 @@ class Designation extends Component {
         {
             "designationName": data.designationName.trim(),
             "description": data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
 
         }
 
@@ -161,9 +161,7 @@ class Designation extends Component {
             var res = this.isDesignationExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    //alert("")
                     $(".recordexists").show()
-
                 } else {
                 }
             })
