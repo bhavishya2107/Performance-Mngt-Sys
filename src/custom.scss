@@ -367,3 +367,25 @@ select.custom-select {
 .radio input:checked+i:after {
     opacity: 1
 }
+
+.icon-calender {
+    position: relative;
+    .react-datepicker-wrapper {
+        width: 100%;
+        .react-datepicker__input-container {
+            width: 100%;
+            input {
+                padding-right: 30px;
+                background: transparent;
+                z-index: 999;
+                position: relative;
+            }
+        }
+    }
+    i{
+        position: absolute;
+        right: 10px;
+        z-index: 9;
+        top: 10px;
+    }
+}

@@ -186,7 +186,10 @@ class Scalesetlist extends Component {
                     targets: 0,
                     render: function (data, type, row) {
                         return (
-                            '<input className="chkDelete" type="checkbox" name="scalesetId" value=' + row.scaleSetId + ">"
+                            '<label class="checkbox">' +
+                            '<input className="chkDelete" type="checkbox" name="scalesetId" value=' + row.scaleSetId + ">"+
+                            '<i></i> '+
+                            '</label>'
                         );
                     }
                 },
@@ -247,13 +250,10 @@ class Scalesetlist extends Component {
                     <thead>
                         <tr>
                             <th width="20">
-                                <input
-                                    type="checkbox"
-                                    name="checkAll"
-                                    onClick={e => {
-                                        this.checkall(e);
-                                    }}
-                                />
+                            <label className="checkbox">
+                                <input type="checkbox" name="checkAll" onClick={e => { this.checkall(e); }}/>
+                                <i></i>
+                           </label>
                             </th>
                             <th width="100">Name</th>
                             <th>Description</th>

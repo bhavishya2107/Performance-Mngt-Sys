@@ -371,4 +371,26 @@ select.custom-select {
   opacity: 1;
 }
 
+.icon-calender {
+  position: relative;
+}
+.icon-calender .react-datepicker-wrapper {
+  width: 100%;
+}
+.icon-calender .react-datepicker-wrapper .react-datepicker__input-container {
+  width: 100%;
+}
+.icon-calender .react-datepicker-wrapper .react-datepicker__input-container input {
+  padding-right: 30px;
+  background: transparent;
+  z-index: 999;
+  position: relative;
+}
+.icon-calender i {
+  position: absolute;
+  right: 10px;
+  z-index: 9;
+  top: 10px;
+}
+
 /*# sourceMappingURL=custom.css.map */

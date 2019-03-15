@@ -589,8 +589,8 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label className="required" htmlFor="startDate">Start Date</label><br></br>
-                                        <div>
+                                        <label className="required" htmlFor="startDate">Start Date</label>
+                                        <div className="icon-calender">
                                             <DatePicker className="form-control" name="startDate"
                                                 selected={this.state.startDate} autoComplete="off"
                                                 dateFormat="dd-MM-YYYY"
@@ -602,14 +602,16 @@ class AddProject extends Component {
                                                     })
                                                 }}
                                                 required />
+                                                <i className="fa fa-calendar"></i>
                                         </div>
                                         {/* <label className="requiredfield" style={{ "display": "none", "color": "#dc3545" }}>This field is required.</label> */}
                                     </div>
                                 </div>
-                                <div>
+                                <div className="col-md-4">
                                     <div>
-                                        <label className="required" htmlFor="endDate">End Date</label><br></br>
-                                        <DatePicker required className="form-control" name="endDate"
+                                        <label className="required" htmlFor="endDate">End Date</label>
+                                        <div className="icon-calender">
+                                        <DatePicker required className="form-control fa fa-calendar" name="endDate"
                                             selected={this.state.endDate} autoComplete="off"
                                             dateFormat="dd-MM-YYYY"
                                             onChange={(e) => {
@@ -620,7 +622,10 @@ class AddProject extends Component {
                                                     endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
                                                 })
                                             }}
+                                            
                                         />
+                                        <i className="fa fa-calendar"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -660,7 +665,7 @@ class AddProject extends Component {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-8">
                                     <label>Resources</label>
                                     <Select isMulti name="resources" id="mySelect"
                                         onChange={(event) => {
@@ -677,7 +682,7 @@ class AddProject extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col">
+                                <div className="col-md-8">
                                     <div className="form-group">
                                         <label>Description</label> <textarea className="form-control" name="description" rows="4" value={this.state.description}
                                             onChange={(event) => {
