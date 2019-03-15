@@ -321,7 +321,7 @@ class addAssignTemplate extends Component {
             )
         });
         if (this.state.RedirectToTemplate) {
-            return <Redirect to={{ pathname: "/Template" }} />
+            return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
         return (
             <div>

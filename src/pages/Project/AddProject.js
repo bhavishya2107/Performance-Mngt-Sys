@@ -477,6 +477,33 @@ class AddProject extends Component {
             },
         });
     }
+
+    onChangeProjectStatus(event) {
+        this.setState({
+            status: event.target.value,
+        })
+    }
+
+    getProjectStatus() {
+        const endpointGET = environment.apiUrl + moduleUrls.Project + '/'
+        $.ajax({
+            type: Type.get,
+            url: endpointGET,
+            complete: (temp) => {
+                var temp = temp.responseJSON;
+                var displayDataReturn = temp.map((i) => {
+                    return (
+                        <option>{i.status}</option>
+                    )
+                });
+                this.setState({
+                    displayProjectStatus: displayDataReturn
+                })
+            },
+        });
+    }
+
+
     //#endregion
 
     componentDidMount() {
@@ -540,7 +567,7 @@ class AddProject extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add   {ModuleNames.Project}</span>}
+                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add  {ModuleNames.Project}</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -612,10 +639,11 @@ class AddProject extends Component {
                                     <label>Project Status</label>
                                     <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
                                         onChange={(e) => {
+                                            this.onChangeProjectStatus(e)
                                         }} value={this.state.status}  >
-                                        <option value="">select</option>
+
                                         {this.state.displayProjectStatus}
-                                        <option>Not Started</option>
+                                        <option defaultValue="Not Started">Not Started</option>
                                         <option>On Going</option>
                                         <option>Completed</option>
                                     </select>

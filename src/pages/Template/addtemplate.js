@@ -555,7 +555,7 @@ class Addtemplate extends Component {
             </h2>
           </div>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-5">
               <form id="formtemplate">
                 <div className="form-group">
                   <label className="required">Template Name</label>
@@ -582,10 +582,8 @@ class Addtemplate extends Component {
         </div>
         <div>
           <br />
-          <br />
-
-          <div className="row">
-            <div className="col-md-4">
+        <div className="row">
+            <div className="col-md-5">
               <select id="optionReset" name="optionKra"
                 onChange={e => {
                   this.onChangekra(e);
@@ -596,7 +594,7 @@ class Addtemplate extends Component {
                 {this.state.displayDatakra}
               </select>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-5">
               <select id="optionreset" name="optionKpi"
                 onChange={e => {
                   this.onChangekpi(e);
@@ -607,7 +605,7 @@ class Addtemplate extends Component {
                 {this.state.displayDatakpi}
               </select>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-2">
               <button id="btnTemplateDetail"
                 onChange={
                   $(".recordExistsTbl").hide()
