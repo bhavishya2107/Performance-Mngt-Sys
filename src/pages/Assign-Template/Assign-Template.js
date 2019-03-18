@@ -20,12 +20,13 @@ class AssignTemplate extends Component {
             status: "",
             assignId: "",
             firstName: "",
-            lastname: "",
+            lastName: "",
             selectedIds: [],
             displayProjectData: [],
             userId: "",
             statusId: "",
-            status: ""
+            status: "",
+            quaterName: ""
         }
     }
     clear() {
@@ -225,13 +226,63 @@ class AssignTemplate extends Component {
         })
     }
     //#endregion
+    sendMailAPI(body) {
+        debugger;
+        const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
+        return $.ajax({
+            url: emailUrl,
+            type: "post",
+            data: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+    }
+
+
+    sendAssignTemplateMail() {
+        debugger;
+        const url = environment.dynamicUrl + 'dynamic';
+        return $.ajax({
+            url: url,
+            type: Type.post,
+            data: {
+                query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
+            },
+            success: (res) => {
+                console.log(res,"")
+                var emailBody =
+                    `<html>
+                    <body>
+                    <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `,  </p>`;
+                emailBody += `
+                KRA sheet assigned to you for project “PMS”,
+                you have worked on ` +  res[0].quaterName + `  
+                ` + `</b><br>
+                from` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` <br></br>
+                Please, fill your sheets as soon as possible. 
+                    </p>                        
+                    <p>Thanks,</p>
+                    <p>PSSPL ADMIN</p>
+                </body>
+                </html>`;
+                var body =
+                {
+                    emailSubject: "KRA sheet for" + ' ' + res[0].quaterName  + '-' + `PMS`,
+                    emailBody: emailBody,
+                    toemailadress: "janmeshnayak1997@gmail.com"
+                }
+                debugger;
+                this.sendMailAPI(body);
+                debugger;
+            }
+        })
+    }
+
 
     componentDidMount() {
         this.getProjectData()
         this.getUserData()
-
-
-
         const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -241,7 +292,7 @@ class AssignTemplate extends Component {
                 url: url,
                 type: Type.post,
                 data: {
-                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastname, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
+                    query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
                 },
                 dataSrc: "",
                 error: function (xhr, status, error) {
@@ -277,7 +328,7 @@ class AssignTemplate extends Component {
                         return (
 
                             `<label className="getUserName" id="firstName" value=>${row.firstName}` + " " +
-                            `<label className="getUserName" id="lastName" value=>${row.lastname}`
+                            `<label className="getUserName" id="lastName" value=>${row.lastName}`
                         )
                     }
                 },
@@ -286,13 +337,12 @@ class AssignTemplate extends Component {
                     targets: 4,
                 },
                 {
-                    data: "startDate",
+                    data: "startDate"+"endDate",
                     targets: 5,
                     render: (data, type, row) => {
                         return (
                             `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
                             `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
-
                         )
                     },
                 },
@@ -306,7 +356,8 @@ class AssignTemplate extends Component {
                     render: function (data, type, row) {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>' + " " +
+                            '<a href="" class="btnMail"  id="' + row.assignId + '" >Send Mail</a>'
 
                         )
                     },
@@ -323,8 +374,12 @@ class AssignTemplate extends Component {
                 $(".btnDelete").on("click", e => {
                     this.singleDeleteTemplateConfirm(e.currentTarget.id);
                 });
+                $(".btnMail").on("click", e => {
+                    this.sendAssignTemplateMail(e.currentTarget.id);
+                });
             }
         });
+
     }
     render() {
         return (

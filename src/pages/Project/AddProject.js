@@ -157,7 +157,7 @@ class AddProject extends Component {
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
-                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
+                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` </b><br>
                        Resources:<b>` + resourceName + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
