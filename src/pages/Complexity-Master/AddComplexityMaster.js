@@ -99,9 +99,6 @@ class AddComplexityMaster extends Component {
         }
     }
 
-
-
-
     getComplexityMasterDeatilsApi(complexityId) {
         const endpointGET = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + `${this.state.complexityId}`
         return $.ajax({
@@ -131,6 +128,7 @@ class AddComplexityMaster extends Component {
             data: JSON.stringify(body)
         });
     }
+    
     UpdateComplexityMasterDetails(data) {
         var isvalidate = window.formValidation("#ComplexityMasterForm");
         if (isvalidate) {

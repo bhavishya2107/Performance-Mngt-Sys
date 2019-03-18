@@ -104,7 +104,6 @@ class App extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <Switch>
-
                           <Route exact path="/kpi" component={kpi} />
                           <Route exact path="/kpi/edit/id=:id" component={addkpi} />
                           <Route exact path="/kpi/add" component={addkpi} />
