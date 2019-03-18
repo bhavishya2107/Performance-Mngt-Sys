@@ -88,9 +88,9 @@ class MyProfile extends Component {
       )
     }
     return (
-      <div className="container-fluid">
+      <div >
         <div className="clearfix d-flex align-items-center row page-title">
-          <h2 className="col">MyProfile</h2>
+          <h2 className="col">My Profile</h2>
           <div className="col text-right" />
         </div>
 
