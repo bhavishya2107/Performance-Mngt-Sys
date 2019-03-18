@@ -73,7 +73,7 @@ class kraListPage extends Component {
     var res = this.multiDeleteKraApi(item);
     res.done((response) => {
 
-      toast.success("Kra " + Notification.deleted, {
+      toast.success("KRA " + Notification.deleted, {
         position: toast.POSITION.TOP_RIGHT
       });
       this.$el.DataTable().ajax.reload();
