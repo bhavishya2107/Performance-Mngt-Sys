@@ -190,6 +190,7 @@ class TLKraSheet extends Component {
               WHERE td.templateId =  ${temp[0].templateId}`
                         //`SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
                     },
+                  
                 },
                 columns: [
                     {
@@ -225,6 +226,7 @@ class TLKraSheet extends Component {
                         data: "target",
                         targets: 3,
                         render: (data, type, row) => {
+                        
                             return (
                                 `<label class="targetRow" value="${row.target}">` + row.target + `</label>`
                             )

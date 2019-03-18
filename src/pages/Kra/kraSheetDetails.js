@@ -119,31 +119,36 @@ class KraSheet extends Component {
   }
 
   commentAndratingSave = () => {
-    var kraData = new Array();
-    $('#tblkraSheet tbody tr').each((index, item) => {
-      var kraSheetdata =
-      {
-        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-        "selfComment": $(item).find('.commentSaved').val(),
-        "selfRating": $(item).find('.selfrate').val(),
-        "selfRatingBy": parseInt(localStorage.getItem('userId')),
-        "templateAssignId": this.state.assignId
-      }
-      kraData.push(kraSheetdata)
+    var response = this.deleteData()
+    response.done(()=>{
+      var kraData = new Array();
+      $('#tblkraSheet tbody tr').each((index, item) => {
+        var kraSheetdata =
+        {
+          "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+          "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+          "selfComment": $(item).find('.commentSaved').val(),
+          "selfRating": $(item).find('.selfrate').val(),
+          "selfRatingBy": parseInt(localStorage.getItem('userId')),
+          "templateAssignId": this.state.assignId
+        }
+        kraData.push(kraSheetdata)
+      })
+      const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+      return $.ajax({
+        url: endpointPOST,
+        type: Type.post,
+        data: JSON.stringify(kraData),
+        headers: {
+          "Content-Type": "application/json",
+          "x-requested-with": "XMLHttpRequest"
+        },
+        success: function (resultData) {
+        }
+      });
+
     })
-    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-    return $.ajax({
-      url: endpointPOST,
-      type: Type.post,
-      data: JSON.stringify(kraData),
-      headers: {
-        "Content-Type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      success: function (resultData) {
-      }
-    });
+  
   }
 
 
@@ -187,7 +192,7 @@ class KraSheet extends Component {
             LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId 
             LEFT JOIN template_assignment_master tam ON tam.templateId = td.templateId
             LEFT JOIN template_assignment_detail tad ON tad.templateAssignId = tam.assignId
-            WHERE td.templateId =  ${temp[0].templateId}`
+            WHERE tad.assignDetailId IS NOT NULL and td.templateId =  ${temp[0].templateId}`
             //`SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
           },
         },
@@ -196,6 +201,7 @@ class KraSheet extends Component {
             data: "kraName",
             targets: 0,
             render: (data, type, row) => {
+              console.log(temp[0].templateId)
               return (
                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
               )
@@ -222,6 +228,7 @@ class KraSheet extends Component {
           {
             data: "target",
             targets: 3,
+          
             render: (data, type, row) => {
               return (
                 `<label class="targetRow" value="${row.target}">` + row.target + `</label>`
@@ -232,6 +239,7 @@ class KraSheet extends Component {
             data: "selfRating",
             targets: 4,
             render: (data, type, row) => {
+       
               return (
                 `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
               )

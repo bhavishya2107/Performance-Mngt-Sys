@@ -98,11 +98,11 @@ class MyProfile extends Component {
           <div className="row">
             <div className="col-md-3 order-md-last text-center">
               <div>
-            
-                {this.state.profileImage === ""  || this.state.profileImage === null  ?
-                  (<img src="../img/default-user.png" style={{ width: "130px", height: "150px" }}  className="img-thumbnail" />)
+
+                {this.state.profileImage === "" || this.state.profileImage === null ?
+                  (<img src="../img/default-user.png" style={{ width: "130px", height: "150px" }} className="img-thumbnail" />)
                   :
-                  (<img src={this.state.profileImage} style={{ width: "130px", height: "150px" }}  className="img-thumbnail" />)
+                  (<img src={this.state.profileImage} style={{ width: "130px", height: "150px" }} className="img-thumbnail" />)
                 }
 
               </div><br />
