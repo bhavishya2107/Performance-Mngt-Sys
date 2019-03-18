@@ -164,7 +164,7 @@ class ChangePW extends Component {
                     <a className="btn btn-lg btn-danger" type="button" onClick={this.resetCPWform}>Reset</a><br />
                     </div>
                     <div className="divider">
-                    {/* <Link to={window.location.href="/myProfile"}>Back</Link> */}
+                    {/* <Link to={"/"} >Back To Login Page</Link> */}
                     </div>
 
                 </form>
