@@ -2,6 +2,11 @@ var menuItems = [];
 if (localStorage.getItem('roleName') == "HR") {
     menuItems.push(
         {
+            name: 'My KRA',
+            url: '/dashboard',
+            icon: 'fa fa-dashboard',
+        },
+        {
             name: 'My Team',
             url: '/myteam',
             icon: 'fa fa-users',
