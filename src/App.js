@@ -50,6 +50,7 @@ import AssignTemplate from './pages/Assign-Template/Assign-Template';
 import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
 import Myteam from './pages/myteam';
 import KraSheet from './pages/Kra/kraSheetDetails';
+import TLKraSheet from './pages/TLkraSheet';
 
 
 class App extends Component {
@@ -269,6 +270,7 @@ class App extends Component {
 
                         <Switch>
                           <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
+                          <Route path="/TLkraSheet/id=:assignId" component={TLKraSheet}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route path="/dashboard" component={Dashboard} />
                           <Route exact path="/myteam" component={Myteam}></Route>
@@ -329,7 +331,6 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/forgotPassword" component={ForgotPW} />
                   <Route exact path="/resetPassword" component={ResetPW} />
-            
                   <Login />
                 </Switch>
               </div>

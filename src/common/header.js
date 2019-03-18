@@ -45,6 +45,7 @@ class Header extends Component {
                 }&nbsp;
                 {localStorage.getItem('firstName')} {localStorage.getItem('lastName')}
               </a>
+              
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
                 <a className="dropdown-item" href="/myProfile">Profile</a>
                 <a className="dropdown-item" href="/changePassword">Change Password</a>

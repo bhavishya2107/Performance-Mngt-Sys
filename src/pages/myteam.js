@@ -153,7 +153,7 @@ class Myteam extends Component {
                     "orderable": false,
                     render: function (data, type, row) {
                         return (
-                            '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
+                            '<a href="/TLKraSheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>"
                         )
