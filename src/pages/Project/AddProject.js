@@ -591,25 +591,21 @@ class AddProject extends Component {
                                                 required />
                                             <i className="fa fa-calendar"></i>
                                         </div>
-                                        {/* <label className="requiredfield" style={{ "display": "none", "color": "#dc3545" }}>This field is required.</label> */}
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div>
                                         <label className="required" htmlFor="endDate">End Date</label>
                                         <div className="icon-calender">
-                                            <DatePicker required className="form-control fa fa-calendar" name="endDate"
+                                            <DatePicker required className="form-control" name="endDate"
                                                 selected={this.state.endDate} autoComplete="off"
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
-
-                                                    // $(".requiredfield").hide()
                                                     this.setState({
                                                         isSelect: true,
                                                         endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
                                                     })
                                                 }}
-
                                             />
                                             <i className="fa fa-calendar"></i>
                                         </div>
@@ -638,6 +634,7 @@ class AddProject extends Component {
                                         <option>On Going</option>
                                         <option>Completed</option>
                                     </select>
+                                    <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">

@@ -102,7 +102,6 @@ class App extends Component {
                     <div className="row">
                       <div className="col-md-12">
                         <Switch>
-
                           <Route exact path="/kpi" component={kpi} />
                           <Route exact path="/kpi/edit/id=:id" component={addkpi} />
                           <Route exact path="/kpi/add" component={addkpi} />
@@ -267,7 +266,7 @@ class App extends Component {
                       <div className="col-md-12">
 
                         <Switch>
-                          <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
+                        <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
                           <Route exact path="/myProfile" component={MyProfile} />
                           <Route path="/dashboard" component={Dashboard} />
                           <Route exact path="/myteam" component={Myteam}></Route>
