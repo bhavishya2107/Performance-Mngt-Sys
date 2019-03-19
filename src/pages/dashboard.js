@@ -73,7 +73,7 @@ class Dashboard extends Component {
                             "</a>"
                         )
                     }
-                }
+                } 
             ]
         });
     }

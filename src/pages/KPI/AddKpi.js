@@ -31,7 +31,7 @@ class AddKpi extends Component {
     }
     //#endregion
 
-    //#region 
+    //#region to check kpi exist or not
     isKpiExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '?_where=(kpiTitle,eq,' + this.state.kpiTitle.trim() + ')';
         return $.ajax({
@@ -48,7 +48,9 @@ class AddKpi extends Component {
             data: ''
         });
     }
+    //#endregion
 
+    //#region save Kpi details
     saveApiDetails() {
         var isvalidate = window.formValidation("#kpiform");
         if (isvalidate) {
@@ -84,11 +86,12 @@ class AddKpi extends Component {
             });
         }
         else {
-
             $(".recordexists").hide()
             return false;
         }
     }
+    //#endregion
+
 
     getKpiDetailsApi(KpiId) {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
@@ -98,14 +101,13 @@ class AddKpi extends Component {
         })
     }
 
+
     onChangeBlur() {
         if (this.state.kpiId !== undefined) {
             var res = this.isEditKpiExistsApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
-                } else {
-
                 }
             }
             )
@@ -115,9 +117,7 @@ class AddKpi extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
-
                 } else {
-
                 }
             })
         }
@@ -126,6 +126,7 @@ class AddKpi extends Component {
     //#region update related api
 
     updateDetailsApi(updateData) {
+        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         var body =
         {
             "KpiTitle": updateData.kpiTitle.trim(),
@@ -133,9 +134,7 @@ class AddKpi extends Component {
             "weightage": updateData.weightage,
             "scaleSetId": updateData.scaleSetId,
             "modifiedBy": localStorage.getItem('userId')
-
         }
-        const endpointPATCH = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         return $.ajax({
             url: endpointPATCH,
             type: Type.patch,
@@ -164,8 +163,6 @@ class AddKpi extends Component {
                             position: toast.POSITION.TOP_RIGHT
                         });
                     })
-                    res.fail((error) => {
-                    })
                 }
             });
             res.fail((error) => {
@@ -175,9 +172,9 @@ class AddKpi extends Component {
             return false;
         }
     }
-
     //#endregion
 
+    //#region on change for scaleSet
     onChangeScaleSetMaster(event) {
         this.setState({
             scaleSetId: event.target.value,
@@ -202,6 +199,7 @@ class AddKpi extends Component {
             },
         });
     }
+    //#endregion
 
     componentDidMount() {
         this.setState({
@@ -223,6 +221,7 @@ class AddKpi extends Component {
         } else {
         }
     }
+
     render() {
         if (this.state.redirectToList === true) {
             return <Redirect to={{ pathname: "/kpi" }} />
@@ -241,17 +240,16 @@ class AddKpi extends Component {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                    <label className="required">KPI Title</label>
-                                <input type="text" id="kpititle" name="kpititle" onBlur={() => { this.onChangeBlur() }} maxLength="50" className="form-control" value={this.state.kpiTitle}
-                                    onChange={(event) => {
-                                        $(".recordexists").hide()
-                                        this.setState({
-                                            kpiTitle: event.target.value
-                                        })
-                                    }} required />
-
-                                <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
-                           </div>
+                                        <label className="required">KPI Title</label>
+                                        <input type="text" id="kpititle" name="kpititle" onBlur={() => { this.onChangeBlur() }} maxLength="50" className="form-control" value={this.state.kpiTitle}
+                                            onChange={(event) => {
+                                                $(".recordexists").hide()
+                                                this.setState({
+                                                    kpiTitle: event.target.value
+                                                })
+                                            }} required />
+                                        <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
+                                    </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">

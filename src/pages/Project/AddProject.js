@@ -51,14 +51,14 @@ class AddProject extends Component {
         window.location.reload();
     }
 
-    checkDateValidation(startDate, endDate) {
-        // check the dates
-        if ((new Date(startDate) > new Date(endDate)) || (new Date(endDate) < new Date(startDate))) {
-            // set date error validation true 
-        } else {
-            // null or false date error validation 
-        }
-    }
+    // checkDateValidation(startDate, endDate) {
+    //     // check the dates
+    //     if ((new Date(startDate) > new Date(endDate)) || (new Date(endDate) < new Date(startDate))) {
+    //         // set date error validation true 
+    //     } else {
+    //         // null or false date error validation 
+    //     }
+    // }
 
     onChangeBlur() {
         if (this.state.projectId != undefined) {
@@ -103,7 +103,6 @@ class AddProject extends Component {
 
     //#region is project already exist or not api
 
-
     isProjectExistsApi() {
         const endpointGET = environment.apiUrl + moduleUrls.Project + '?_where=(projectName,eq,' + this.state.projectName.trim() + ')';
         return $.ajax({
@@ -136,7 +135,6 @@ class AddProject extends Component {
         })
     }
     temp() {
-
         this.setState({
             tempData: options
         })
@@ -159,7 +157,7 @@ class AddProject extends Component {
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
                 emailBody += `
                        project name is <b>` + this.state.projectName + `</b><br>
-                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("YYYY-MM-DD") + ` </b><br>
+                       Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` </b><br>
                        Resources:<b>` + resourceName + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
@@ -180,8 +178,6 @@ class AddProject extends Component {
     //#endregion
 
     //#region save data(api)
-
-
     saveProjectResourceAPI(tempData) {
         var ResourcesData = JSON.stringify(tempData);
         const resourcesApi = environment.apiUrl + moduleUrls.ProjectResources + '/bulk';
@@ -240,18 +236,15 @@ class AddProject extends Component {
             this.saveProjectResource(response.insertId, this.state.selectedOption);
         })
         res.fail((error) => {
-
         })
     }
 
     saveProject() {
         var isvalidate = window.formValidation("#projectform");
-
         if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
             isvalidate = false;
             $(".requiredfield").show();
         }
-
         if (isvalidate) {
             var res = this.isProjectExistsApi();
             res.done((response) => {
@@ -348,7 +341,6 @@ class AddProject extends Component {
     }
 
     updateDetailsAPI(updateData) {
-        debugger;
         var isvalidate = window.formValidation("#projectform");
         if (this.state.selectedOption === null || this.state.selectedOption.length == 0) {
             isvalidate = false;
@@ -360,7 +352,7 @@ class AddProject extends Component {
                 if (response.length > 0) {
                     $(".recordexists").show()
                 } else {
-                    var TempData =
+                    var projectData =
                     {
                         "projectName": updateData.projectName.trim(),
                         "startDate": moment(updateData.startDate).format("YYYY-MM-DD"),
@@ -371,7 +363,7 @@ class AddProject extends Component {
                         "description": updateData.description,
                         "modifiedBy": localStorage.getItem('userId')
                     }
-                    var res = this.updateProjectDetailsAPI(TempData);
+                    var res = this.updateProjectDetailsAPI(projectData);
                     res.done((response) => {
                         this.updateProjectResource(this.state.projectId, this.state.selectedOption);
                     })
@@ -386,7 +378,6 @@ class AddProject extends Component {
             return false;
         }
     }
-
     //#endregion
 
     //#region onchange for Complexity Master Data
@@ -458,7 +449,6 @@ class AddProject extends Component {
             manageBy: event.target.value,
         })
     }
-
     getmanageByData() {
         const endpointGET = environment.apiUrl + moduleUrls.User + '/'
         $.ajax({
@@ -477,7 +467,9 @@ class AddProject extends Component {
             },
         });
     }
+    //#endregion
 
+    //#region  On change for project Status
     onChangeProjectStatus(event) {
         this.setState({
             status: event.target.value,
@@ -502,15 +494,12 @@ class AddProject extends Component {
             },
         });
     }
-
-
     //#endregion
 
     componentDidMount() {
         this.setState({
             title: ModuleNames.Project
         })
-
         this.getmanageByData();
         this.getcomplexityIdData();
         var responseResourcesData = this.getResourcesData();
@@ -527,7 +516,6 @@ class AddProject extends Component {
                         startDate: response[0].startDate,
                         endDate: response[0].endDate
                     })
-
                     var resource = this.getResourceDetailsAPI();
                     resource.done((response) => {
                         var tempData = [];
@@ -544,7 +532,6 @@ class AddProject extends Component {
                                     tempData.push(resources);
                                 }
                             }
-
                         });
                         this.setState({
                             selectedOption: tempData
@@ -602,29 +589,25 @@ class AddProject extends Component {
                                                     })
                                                 }}
                                                 required />
-                                                <i className="fa fa-calendar"></i>
+                                            <i className="fa fa-calendar"></i>
                                         </div>
-                                        {/* <label className="requiredfield" style={{ "display": "none", "color": "#dc3545" }}>This field is required.</label> */}
                                     </div>
                                 </div>
                                 <div className="col-md-4">
                                     <div>
                                         <label className="required" htmlFor="endDate">End Date</label>
                                         <div className="icon-calender">
-                                        <DatePicker required className="form-control fa fa-calendar" name="endDate"
-                                            selected={this.state.endDate} autoComplete="off"
-                                            dateFormat="dd-MM-YYYY"
-                                            onChange={(e) => {
-
-                                                // $(".requiredfield").hide()
-                                                this.setState({
-                                                    isSelect: true,
-                                                    endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
-                                                })
-                                            }}
-                                            
-                                        />
-                                        <i className="fa fa-calendar"></i>
+                                            <DatePicker required className="form-control" name="endDate"
+                                                selected={this.state.endDate} autoComplete="off"
+                                                dateFormat="dd-MM-YYYY"
+                                                onChange={(e) => {
+                                                    this.setState({
+                                                        isSelect: true,
+                                                        endDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                    })
+                                                }}
+                                            />
+                                            <i className="fa fa-calendar"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -642,16 +625,16 @@ class AddProject extends Component {
                                 </div>
                                 <div className="col-md-4">
                                     <label>Project Status</label>
-                                    <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
+                                    <select required name="projectStatusdropdown" className="form-control" htmlFor="status"
                                         onChange={(e) => {
                                             this.onChangeProjectStatus(e)
                                         }} value={this.state.status}  >
-
                                         {this.state.displayProjectStatus}
                                         <option defaultValue="Not Started">Not Started</option>
                                         <option>On Going</option>
                                         <option>Completed</option>
                                     </select>
+                                    <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">

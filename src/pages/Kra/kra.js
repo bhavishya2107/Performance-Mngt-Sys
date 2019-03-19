@@ -15,6 +15,7 @@ class kraListPage extends Component {
       selectedIds: []
     };
   }
+
   //#region delete kra on click delete icon
   SingleKraDelete(kraId) {
     var res = this.DeleteKraApi(kraId);
@@ -34,7 +35,6 @@ class kraListPage extends Component {
   }
 
   DeleteKraApi(kraId) {
-    // const endpoint = `http://192.168.10.109:3000/api/kra_master/${kraId}`;
     const deleteKra = environment.apiUrl + moduleUrls.Kra + "/" + `${kraId}`;
     return $.ajax({
       url: deleteKra,
@@ -45,6 +45,7 @@ class kraListPage extends Component {
       }
     });
   }
+
   multiDeleteKraApi(kraId) {
     const multiDelKra = environment.apiUrl + moduleUrls.Kra + '/bulk?_ids=' + `${kraId}`;
     return $.ajax({
@@ -56,6 +57,7 @@ class kraListPage extends Component {
       }
     });
   }
+
   checkall(e) {
     $("#kraDataList input:checkbox").each((index, item) => {
       if ($(e.currentTarget).is(":checked") === true) {
@@ -71,7 +73,7 @@ class kraListPage extends Component {
     var res = this.multiDeleteKraApi(item);
     res.done((response) => {
 
-      toast.success("Kra " + Notification.deleted, {
+      toast.success("KRA " + Notification.deleted, {
         position: toast.POSITION.TOP_RIGHT
       });
       this.$el.DataTable().ajax.reload();
@@ -103,6 +105,7 @@ class kraListPage extends Component {
       });
     }
   }
+
   multiKraDeleteConfirm() {
     var kraId = []
     $("#kraDataList input:checkbox:checked").each((e, item) => {
@@ -141,22 +144,19 @@ class kraListPage extends Component {
 
 
   }
-  //192.168.10.109:3000/api/modulename?_sort=-fieldname
+
   componentDidMount() {
     this.$el = $(this.el);
-    const endpointGET = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId'
+    const getKRAList = environment.apiUrl + moduleUrls.Kra + '/?_size=1000' + '&_sort=-kraId'
     this.$el.DataTable({
       autoWidth: false,
       aaSorting: [[0, "asc"]],
-      
       ajax: {
-        url: endpointGET,
-        // url: "http://180.211.103.189:3000/api/kra_master/",
+        url: getKRAList,
         type: "GET",
         dataSrc: "",
         error: function (xhr, status, error) { }
       },
-
       columnDefs: [
         { width: '5%', targets: 0 },
         { width: '20%', targets: 1 },
@@ -164,7 +164,6 @@ class kraListPage extends Component {
         { width: '10%', targets: 3 },
 
       ],
-
       columns: [
         {
           data: "kraId",
@@ -173,10 +172,10 @@ class kraListPage extends Component {
           render: function (data, type, row) {
             return (
               '<label class="checkbox">' +
-                  '<input type="checkbox" name="kraId" value="' + row.kraId + '" />' +
-                  '<i></i> '+
-                '</label>'
-              
+              '<input type="checkbox" name="kraId" value="' + row.kraId + '" />' +
+              '<i></i> ' +
+              '</label>'
+
             );
           }
         },
@@ -189,7 +188,6 @@ class kraListPage extends Component {
           targets: 2,
           orderable: false
         },
-
         {
           data: "action",
           className: "text-center",
@@ -228,7 +226,7 @@ class kraListPage extends Component {
           <h2 className="col">{ModuleNames.kra}</h2>
           <div className="col text-right">
             <Link
-              to={{ pathname: "/kra/add", state: {} }}
+              to={{ pathname: "/kra/add" }}
               className="btn btn-primary "
             >
               <i className="fa fa-plus" aria-hidden="true" />

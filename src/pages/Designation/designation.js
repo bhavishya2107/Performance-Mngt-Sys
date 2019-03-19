@@ -150,9 +150,6 @@ class Designationlist extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-
-            // "order": [[1, 'asc']],
-
             ajax: {
                 url: jobtitleGET,
                 type: "GET",
@@ -169,8 +166,8 @@ class Designationlist extends Component {
                     render: function (data, type, row) {
                         return (
                             '<label class="checkbox">' +
-                            '<input type="checkbox" name="designationId" value=' + row.designationId + ">"+
-                            '<i></i> '+
+                            '<input type="checkbox" name="designationId" value=' + row.designationId + ">" +
+                            '<i></i> ' +
                             '</label>'
                         );
                     }
@@ -201,7 +198,7 @@ class Designationlist extends Component {
                     }
                 },
             ],
-          
+
             initComplete: (settings, json) => {
 
             },
@@ -233,10 +230,10 @@ class Designationlist extends Component {
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr><th width="20">
-                        <label className="checkbox">
-                            <input type="checkbox" name="checkAll" onClick={e => { this.checkall(e); }}/>
-                            <i></i>
-                           </label>
+                            <label className="checkbox">
+                                <input type="checkbox" name="checkAll" onClick={e => { this.checkall(e); }} />
+                                <i></i>
+                            </label>
                         </th>
                             <th width="100">Name</th>
                             <th>Description</th>
