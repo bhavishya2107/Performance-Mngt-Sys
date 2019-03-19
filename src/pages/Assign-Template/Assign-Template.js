@@ -242,6 +242,7 @@ class AssignTemplate extends Component {
 
     sendAssignTemplateMail() {
         debugger;
+        console.log(moment(this.state.startDate).format("DD-MM-YYYY"))
         const url = environment.dynamicUrl + 'dynamic';
         return $.ajax({
             url: url,
@@ -258,9 +259,8 @@ class AssignTemplate extends Component {
                 emailBody += `
                 KRA sheet assigned to you for project “PMS”,
                 you have worked on ` +  res[0].quaterName + `  
-                ` + `</b><br>
-                from` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` <br></br>
-                Please, fill your sheets as soon as possible. 
+                ` + `
+                from` +" "+ moment(res[0].startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(res[0].endDate).format("DD-MM-YYYY") + `
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
@@ -272,9 +272,8 @@ class AssignTemplate extends Component {
                     emailBody: emailBody,
                     toemailadress: "janmeshnayak1997@gmail.com"
                 }
-                debugger;
                 this.sendMailAPI(body);
-                debugger;
+                toast.success("" + Notification.EmailSent);
             }
         })
     }
@@ -355,10 +354,10 @@ class AssignTemplate extends Component {
                     targets: 7,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>' + " " +
-                            '<a href="" class="btnMail"  id="' + row.assignId + '" >Send Mail</a>'
-
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" +
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" >' + '<i class="fa fa-trash" aria-hidden="true">' + "</a>" + 
+                            '<a  class="btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" >' + '<i  class="fa fa-envelope-o" aria-hidden="true""/>' +'</a>'
+                            
                         )
                     },
                     "orderable": false
