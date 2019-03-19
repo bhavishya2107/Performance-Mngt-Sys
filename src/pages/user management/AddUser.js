@@ -276,7 +276,7 @@ class AddUser extends Component {
             data: JSON.stringify(userList),
         });
     }
-    
+
     updatedMail() {
         if (this.state.oldReportingManagerId !== this.state.reportingManagerId) {
             /* START - SEND EMAIL TO OLD REPORTING MANAGER */
@@ -406,7 +406,8 @@ class AddUser extends Component {
             res.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
-                } else {
+                }
+                else {
                 }
             })
         }
@@ -608,10 +609,10 @@ class AddUser extends Component {
             success: (res) => {
                 var displayDataReturn = res.map(function (item) {
                     if (item.roleId === 1) {
-                    return (
-                        <option key={item.userName} value={item.userId}>{item.userName}</option>
+                        return (
+                            <option key={item.userName} value={item.userId}>{item.userName}</option>
 
-                    )
+                        )
                     }
                 });
                 this.setState({
@@ -801,7 +802,8 @@ class AddUser extends Component {
                                                             gender: event.target.value
                                                         })
                                                     }} />Male</label>
-                                                    <label className="radioButton"> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {                                                        this.setState({
+                                                    <label className="radioButton"> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {
+                                                        this.setState({
                                                             gender: event.target.value
                                                         })
                                                     }} />Female</label>

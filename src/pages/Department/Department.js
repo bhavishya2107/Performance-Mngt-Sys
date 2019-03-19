@@ -15,8 +15,6 @@ class Department extends Component {
             selectedIds: []
         }
     }
-
-
     //#region single delete functionality
     SingleDeleteDept(departmentId) {
         var res = this.DeleteDepApi(departmentId);

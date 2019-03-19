@@ -8,7 +8,6 @@ $.DataTable = require('datatables.net-bs4');
 var moment = require('moment');
 
 class AssignTemplate extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -29,23 +28,11 @@ class AssignTemplate extends Component {
             quaterName: ""
         }
     }
-    clear() {
-        this.setState({
-            userId: "",
-            projectId: "",
-            status: ""
-        })
-    }
-    searchUser() {
-        debugger
-        this.$el.DataTable().ajax.reload()
-    }
     //#region events
     onChangeProject(event) {
         this.setState({
             projectId: event.target.value
         });
-
     }
     onChangeUser(event) {
         this.setState({
@@ -59,22 +46,18 @@ class AssignTemplate extends Component {
     }
 
     //#endregion
-    //#region single delete for assign_template
-    singleDeleteTemplate(assignId) {
-        var res = this.DeleteTemplateApi(assignId);
-        res.done(response => {
-            if (response.affectedRows > 0) {
-                toast.success("Template " + Notification.deleted);
-            }
-            this.$el.DataTable().ajax.reload()
-        });
-        res.fail(error => {
-            toast.error(Notification.deleteError);
-        });
-    }
-
-    //#endregion
     //#region methods
+    clear() {
+        this.setState({
+            userId: "",
+            projectId: "",
+            status: ""
+        })
+    }
+    searchUser() {
+        debugger
+        this.$el.DataTable().ajax.reload()
+    }
     getProjectData() {
         var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
         this.getDropDownValues(url).done(
@@ -89,7 +72,6 @@ class AssignTemplate extends Component {
                 })
             })
     }
-
     getUserData() {
         var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
         this.getDropDownValues(url).done(
@@ -110,9 +92,7 @@ class AssignTemplate extends Component {
             url: url,
             type: Type.get
         })
-
     }
-
     //#endregion
     //#region single Delete & multi Delete Assign-Template confirm
     singleDeleteTemplateConfirm(id) {
@@ -175,9 +155,20 @@ class AssignTemplate extends Component {
             toast.info(Notification.deleteInfo)
         }
     }
-
     //#endregion
-    //#region multiple delete functionality
+    //#region  Single and multiple delete functionality
+    singleDeleteTemplate(assignId) {
+        var res = this.DeleteTemplateApi(assignId);
+        res.done(response => {
+            if (response.affectedRows > 0) {
+                toast.success("Template " + Notification.deleted);
+            }
+            this.$el.DataTable().ajax.reload()
+        });
+        res.fail(error => {
+            toast.error(Notification.deleteError);
+        });
+    }
     multiDeleteTemplate(assignId) {
         $("#tblTemplateAssigned input:checkbox:checked").each((e, item) => {
             this.state.selectedIds.push(item.value);
@@ -204,7 +195,6 @@ class AssignTemplate extends Component {
             }
         });
     }
-
     //#endregion
     //#region   Ajax call
     DeleteTemplateApi(assignId) {
@@ -285,7 +275,6 @@ class AssignTemplate extends Component {
         const url = environment.dynamicUrl + 'dynamic';
         this.$el = $(this.el);
         this.$el.DataTable({
-            // "sorting": [[0, 'asc']],
             "autoWidth": false,
             ajax: {
                 url: url,
@@ -307,7 +296,6 @@ class AssignTemplate extends Component {
                             '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
                             '<i></i> ' +
                             '</label>'
-
                         )
                     },
                     orderable: false
@@ -392,7 +380,6 @@ class AssignTemplate extends Component {
 
                 <div className="clearfix mt-3 mb-2 row filter-delete">
 
-
                     <div className="col-md-3 col-sm-6 mb-2">
                         <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
                             <option value="">Select user</option>
@@ -411,13 +398,13 @@ class AssignTemplate extends Component {
                             <option value="">Select Status </option>
                             <option value="1"> Created by Hr</option>
                             <option value="2">Assigned Employee</option>
-                            <option value="1"> Draft by Employee</option>
-                            <option value="2">Submit by Employee</option>
-                            <option value="3">Draft by Reviewer</option>
-                            <option value="4">Submit by Reviewer</option>
-                            <option value="5">Reverted to employee by HR</option>
-                            <option value="6">Reverted to reviewer by HR</option>
-                            <option value="7">Approved by HR</option>
+                            <option value="3"> Draft by Employee</option>
+                            <option value="4">Submit by Employee</option>
+                            <option value="5">Draft by Reviewer</option>
+                            <option value="6">Submit by Reviewer</option>
+                            <option value="7">Reverted to employee by HR</option>
+                            <option value="8">Reverted to reviewer by HR</option>
+                            <option value="9">Approved by HR</option>
                             {this.state.displayProjectStatus}
                         </select>
                     </div>
@@ -433,7 +420,6 @@ class AssignTemplate extends Component {
 
                 <table className="table table-striped table-bordered table-hover customDataTable"
                     id="tblTemplateAssigned"
-
                     ref={el => (this.el = el)}>
                     <thead>
                         <tr>
@@ -445,7 +431,6 @@ class AssignTemplate extends Component {
                                         onClick={e => { this.checkall(e) }} />
                                     <i></i>
                                 </label>
-
                             </th>
                             <th width="100">Quater</th>
                             <th width="100">Template Name</th>
@@ -458,11 +443,8 @@ class AssignTemplate extends Component {
                     </thead>
                     <tbody></tbody>
                 </table>
-
-
                 <ToastContainer />
-            </div >
-
+            </div>
         )
     }
 }

@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom';
 class AddDept extends Component {
     constructor(props) {
         super(props);
-
-        console.log(props.match.params, 'ppp')
         this.state = {
             RedirectToDept: false,
             isUpdate: false,
@@ -23,7 +21,6 @@ class AddDept extends Component {
         window.location.reload();
     }
     //#endregion
-
     //#region check whether the record is exist or not
     isDeptExistApi() {
         var DeptExist = environment.apiUrl + moduleUrls.Department + '?_where=(departmentName,eq,' + this.state.departmentName.trim() + ')'
@@ -33,11 +30,9 @@ class AddDept extends Component {
         })
     }
     //#endregion
-
-
     //#region onblur function
     isExistOnChange(data) {
-         if (this.state !== undefined) { //add 
+        if (this.state !== undefined) { //add 
             var res = this.isDeptExistApi(); // get api call
             res.done((response) => {
                 if (response.length > 0) {
@@ -46,9 +41,7 @@ class AddDept extends Component {
                 else {
 
                 }
-
             });
-
             res.fail((error) => {
             })
         }
@@ -62,7 +55,7 @@ class AddDept extends Component {
             })
         }
     }
-    ////#endregion
+    //#endregion
     //#region save department details  
     saveDept() {
         var result = window.formValidation("#createDepartment");
@@ -80,7 +73,7 @@ class AddDept extends Component {
 
                         "departmentName": this.state.departmentName.trim(),
                         "description": this.state.description,
-                        "createdBy":localStorage.getItem('userId')
+                        "createdBy": localStorage.getItem('userId')
                     }
                     var saveDeptApiUrl = environment.apiUrl + moduleUrls.Department;
                     $.ajax({
@@ -117,7 +110,7 @@ class AddDept extends Component {
         {
             "departmentName": data.departmentName.trim(),
             "description": data.description,
-            "modifiedBy":localStorage.getItem('userId')
+            "modifiedBy": localStorage.getItem('userId')
 
         }
         return $.ajax({
@@ -226,13 +219,13 @@ class AddDept extends Component {
                                             departmentName: event.target.value
                                         })
                                     }} required />
-                                <p className="dataExist" style={{ "display": "none",  "color": "#dc3545"  }}>{Notification.recordExists}</p>
+                                <p className="dataExist" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
 
 
                             </div>
                             <div className="form-group">
                                 <label htmlFor="description">Description</label>
-                                <textarea type="textarea" name="description" className="form-control" id="description" maxLength="100" value={this.state.description}
+                                <textarea type="textarea" name="description" className="form-control" id="description" maxLength="1000" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
