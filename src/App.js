@@ -151,7 +151,7 @@ class App extends Component {
                           <Route exact path="/quater/add" component={ADDQuater}></Route>
                           <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
 
-                          <Route path="/templateList" component={Templatelist}></Route>
+                          <Route exact path="/template" component={Templatelist}></Route>
 
 
                           <Route exact path="/myProfile" component={MyProfile} />
@@ -228,7 +228,7 @@ class App extends Component {
               <Route exact path="/quater/edit/id=:id" component={ADDQuater}></Route>
 
 
-              <Route exact path="/templateList" component={Templatelist}></Route>
+              <Route exact path="/template" component={Templatelist}></Route>
               <Route exact path="/template/add" component={Addtemplate} />
               <Route exact path="/template/edit/id=:id" component={Addtemplate} />
 
