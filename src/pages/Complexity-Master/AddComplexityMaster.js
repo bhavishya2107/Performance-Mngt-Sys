@@ -183,7 +183,7 @@ class AddComplexityMaster extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.complexityId !== undefined ? <span>Edit Complexity Master</span> : <span>Add Complexity Master</span>}
+                        {this.state.complexityId !== undefined ? <span>Edit Complexity Master</span> : <span>Add New Complexity Master</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -201,7 +201,7 @@ class AddComplexityMaster extends Component {
                                 <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                             </div>
                             <div className="form-group">
-                                <label>Description</label> <textarea id="kpiId" className="form-control" name="description" rows="4" value={this.state.description}
+                                <label>Description</label> <textarea id="complexityDescription" className="form-control" name="description" rows="4" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value

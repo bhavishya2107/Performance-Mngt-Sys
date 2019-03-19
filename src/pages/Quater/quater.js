@@ -168,11 +168,7 @@ class Quater extends Component{
             },
 
             columnDefs: [
-                { width: '5%', targets: 0 },
-                { width: '85%', targets: 1 },
-           
-                { width: '10%', targets: 2},
-            
+              
                ],
         
             columns: [
@@ -193,6 +189,11 @@ class Quater extends Component{
                 {
                     data: "quaterName",
                     targets: 1
+                },
+                {
+                    data: "description",
+                    targets: 2,
+                    "orderable": false,
                 },
                 {
                     data: "action",
@@ -254,8 +255,9 @@ class Quater extends Component{
                                 <i></i>
                                 </label>
                             </th>
-                            <th>Name</th>
-                            <th>Action</th>
+                            <th width="120">Name</th>
+                            <th>Description</th>
+                            <th width="100">Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

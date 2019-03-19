@@ -317,7 +317,7 @@ class addAssignTemplate extends Component {
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col">
-                            {this.state.assignId !== undefined ? <span>Edit Assign-Template</span> : <span>Add Assign-Template</span>}
+                            {this.state.assignId !== undefined ? <span>Edit Assign-Template</span> : <span>Add New Assign-Template</span>}
                         </h2>
                     </div>
                     <div className="row">

@@ -648,7 +648,7 @@ class AddUser extends Component {
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col">
-                            {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add User</span>}
+                            {this.state.userId !== undefined ? <span>Edit User</span> : <span>Add New User</span>}
                         </h2>
 
                     </div>

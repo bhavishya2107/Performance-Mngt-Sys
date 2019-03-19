@@ -554,7 +554,7 @@ class AddProject extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add  {ModuleNames.Project}</span>}
+                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add New {ModuleNames.Project}</span>}
                     </h2>
                 </div>
                 <div className="row">

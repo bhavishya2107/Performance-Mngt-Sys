@@ -200,7 +200,7 @@ class Scaleset extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit Scale Set</span> : <span>Add Scale Set</span>}
+                        {this.state.id !== undefined ? <span>Edit Scale Set</span> : <span>Add New Scale Set</span>}
                     </h2>
                 </div>
                 <div className="row">

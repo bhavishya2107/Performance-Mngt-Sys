@@ -196,7 +196,7 @@ class Designation extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit Designation</span> : <span>Add Designation</span>}
+                        {this.state.id !== undefined ? <span>Edit Designation</span> : <span>Add New Designation</span>}
                     </h2>
                 </div>
                 <div className="row">
