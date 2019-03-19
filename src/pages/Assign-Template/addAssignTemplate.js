@@ -20,11 +20,24 @@ class addAssignTemplate extends Component {
             RedirectToTemplate: false,
             displayUserData: [],
             multiSelectDDL: false,
-            startDate: "",
-            endDate: "",
+            startDate: null,
+            endDate: null,
             options: "",
             tempUser: "",
-
+            displayUserDataOptions:""
+        };
+        this.onChangeProject = this.onChangeProject.bind(this);
+    }
+    
+    componentDidMount() {
+        this.getQuaterData();
+        this.getTemplateData();
+        this.getProjectData();
+        this.getProjectResourcesData();
+       
+        //On Edit mode
+        if (this.state.assignId !== undefined) {
+            this.getTemplateAssignDetails();
         }
     }
     //#region Bind Dropdown Lists.
@@ -83,7 +96,42 @@ class addAssignTemplate extends Component {
                 })
             })
     }
+    getTemplateAssignDetails() {
+        //update api
+        if (this.state.assignId !== undefined) {
+            debugger
+            var res = this.getTemplateAssignDetailsApi();
 
+            res.done((response) => {
+                if (response !== undefined) {
+                    var res = response[0];
+                        this.setState({
+                        quaterId: res.quaterId,
+                        templateId: res.templateId,
+                        projectId: res.projectId,
+                        userId: res.userId,
+                        startDate: res.startDate,
+                        endDate: res.endDate
+                    })
+
+                    /* START - GET RESOURCE OF SELECTED PROJECT */
+                    var result = this.getResourceDetailsAPI(res.projectId);
+                    result.done((response) => {
+                        this.setState({
+                            displayUserData: response
+                        })
+                    })
+                    result.fail((error) => {
+                        alert(error)
+                    });
+                    /* END - GET RESOURCE OF SELECTED PROJECT */
+                }
+            })
+            res.fail((error) => {
+
+            })
+        }
+    }
     //#endregion
     //#region AJax Calls
     saveTemplateAssignDetailsApi(data) {
@@ -112,6 +160,7 @@ class addAssignTemplate extends Component {
         })
 
     }
+   
     updateTemplateAssignAjaxCall(data) {
         var TempList =
         {
@@ -119,6 +168,7 @@ class addAssignTemplate extends Component {
             "startDate": moment(data.startDate).format('YYYY-MM-DD'),
             "endDate": moment(data.endDate).format('YYYY-MM-DD')
         }
+       
         this.setState({
             RedirectToTemplate: true
         })
@@ -148,91 +198,21 @@ class addAssignTemplate extends Component {
             data: {
                 "query": `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId =${projectId}`
             },
-            success: (response) => {
-                this.setState({
-                    displayUserData: response,
-                });
-            }
-
-        })
-    }
-
-    getUserDataDetailsApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.projectId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-
-        });
-    }
+       })
+    }    
 
     getUserData(selectedProjectId) {
         var url = environment.dynamicUrl + "dynamic"
-
-        var userData = {
-            query: `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId = ${selectedProjectId}`
-        };
-        $.ajax({
+        return $.ajax({
             url: url,
-            type: Type.post,
-            dataSrc: "",
-            data: JSON.stringify(userData),
-            headers: {
-                "Content-Type": "application/json",
-            },
-            success: (tempUser) => {
-                this.setState({
-                    displayUserData: tempUser
-                })
-            },
+            type: Type.post,           
+            data: {
+                query: `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId=${selectedProjectId}`
+            }           
         });
-
-    }
-
-    getTemplateAssignDetails() {            //update api
-
-        if (this.state.assignId !== undefined) {
-            var res = this.getTemplateAssignDetailsApi();
-
-            res.done((response) => {
-                if (response !== undefined) {
-                    var res = response[0];
-                    this.setState({
-                        quaterId: res.quaterId,
-                        templateId: res.templateId,
-                        projectId: res.projectId,
-                        userId: res.userId,
-                        startDate: res.startDate,
-                        endDate: res.endDate
-                    })
-
-                    /* START - GET RESOURCE OF SELECTED PROJECT */
-                    var result = this.getResourceDetailsAPI(res.projectId);
-                    result.done((response) => {
-                        this.setState({
-                            displayUserData: response
-                        })
-                    })
-                    result.fail((error) => {
-                        alert(error)
-                    });
-                    /* END - GET RESOURCE OF SELECTED PROJECT */
-                }
-            })
-            res.fail((error) => {
-
-            })
-        }
     }
     //#endregion
     //#region Events
-    componentDidMount() {
-        this.getQuaterData();
-        this.getTemplateData();
-        this.getProjectData();
-        this.getProjectResourcesData();
-        this.getTemplateAssignDetails();
-    }
     onChangeQuater(event) {
         this.setState({
             quaterId: event.target.value
@@ -244,10 +224,22 @@ class addAssignTemplate extends Component {
         })
     }
     onChangeProject(event) {
-        this.setState({
-            projectId: event.target.value
-        });
-        this.getUserData(event.target.value);
+       
+        var selectedProjectId= event.target.value;
+        var dataUser = this.getUserData(event.target.value)
+        dataUser.done((response) => 
+        {
+            var existingUserId = this.state.userId;
+            var displayUserDataReturn= response.map(function (i) {
+            return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
+                    : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
+          
+            this.setState({
+                displayUserData: response,
+                projectId: selectedProjectId,
+                displayUserDataOptions:displayUserDataReturn
+            })
+        })
     }
     onChangeUser(event) {
         this.setState({
@@ -307,20 +299,17 @@ class addAssignTemplate extends Component {
             return false;
         }
     }
-    //#endregion
+    //#endregion  
     render() {
-        //for multiselect user ddl
         var existingUserId = this.state.userId;
-        //console.log('existingUserId ', existingUserId);
-        var displayUserDataReturn = this.state.displayUserData.map(function (i) {
-            return (
-                existingUserId === i.userid ?
-                    (<option key={i.userid} value={i.userid} selected="selected">{i.firstName + " " + i.lastName}</option>)
-                    :
-                    (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>)
-            )
-        });
-        if (this.state.RedirectToTemplate) {
+        var displayUserDataReturn= this.state.displayUserData.map(function (i) {
+        return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
+                : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
+      
+
+
+
+       if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
         return (
@@ -360,7 +349,12 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label className="required">Project</label>
-                                            <select required name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} disabled={this.state.assignId !== undefined ? true : false} value={this.state.projectId} className="form-control" >
+                                            <select name="projectDropDown" 
+                                            //onChange={(e) => { this.onChangeProject(e) }} 
+                                            onChange={(e) => { this.onChangeProject(e) }}
+                                            disabled={this.state.assignId !== undefined ? true : false} 
+                                            value={this.state.projectId} 
+                                            className="form-control" required>
                                                 <option value="">Select Project</option>
                                                 {this.state.displayProjectData}
                                             </select>
@@ -371,41 +365,53 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label>User</label>
-                                            <select required id="multiSelect" name="user" onChange={(e) => { this.onChangeUser(e) }} disabled={this.state.assignId !== undefined ? true : false} className="form-control" multiple={this.state.assignId === undefined ? true : false} >
+                                            <select required 
+                                            id="multiSelect" 
+                                            name="user"                                                                          
+                                            onChange={(e) => { this.onChangeUser(e) }} 
+                                            disabled={this.state.assignId !== undefined ? true : false} 
+                                            className="form-control" 
+                                            multiple={this.state.assignId === undefined ? true : false} >
                                                 <option value="0">--</option>
+                                                {this.state.displayUserDataOptions}
                                                 {displayUserDataReturn}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-4">
+                                    <div className="col-md-3">
                                         <div className="form-group">
                                             <label className="required" htmlFor="startDate">Start Date</label><br></br>
-                                            <DatePicker required className="form-control" name="startDate" autoComplete="off"
-                                                selected={this.state.startDate}
+                                            <div className="icon-calender">
+                                                <DatePicker required className="form-control" name="startDate" autoComplete="off"
+                                                    selected={this.state.startDate}
+                                                    dateFormat="dd-MM-YYYY"
+                                                    onChange={(e) => {
+                                                        this.setState({
+                                                            startDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+
+                                                        })
+                                                    }}/>
+                                                <i className="fa fa-calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="required" htmlFor="endDate">End Date</label><br></br>
+                                        <div className="icon-calender">
+                                            <DatePicker required className="form-control" name="endDate" autoComplete="off"
+                                                selected={this.state.endDate}
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     this.setState({
-                                                        startDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
+                                                        endDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
 
                                                     })
                                                 }}
-                                            />
+                                                 />
+                                            <i className="fa fa-calendar"></i>
                                         </div>
-                                    </div>
-                                    <div >
-                                        <label className="required" htmlFor="endDate">End Date</label><br></br>
-                                        <DatePicker required className="form-control" name="endDate" autoComplete="off"
-                                            selected={this.state.endDate}
-                                            dateFormat="dd-MM-YYYY"
-                                            onChange={(e) => {
-                                                this.setState({
-                                                    endDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
-
-                                                })
-                                            }}
-                                        />
                                     </div>
                                 </div>
                                 <div className="row">

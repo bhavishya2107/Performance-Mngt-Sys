@@ -15,8 +15,6 @@ class Department extends Component {
             selectedIds: []
         }
     }
-
-
     //#region single delete functionality
     SingleDeleteDept(departmentId) {
         var res = this.DeleteDepApi(departmentId);
@@ -222,7 +220,7 @@ class Department extends Component {
                     <h2 className="col">{ModuleNames.Department}</h2>
                     <div className="col text-right">
                         <div>
-                            <Link to={{ pathname: '/AddDept' }} className="btn btn-primary" ><i className="fa fa-plus" aria-hidden="true"></i></Link>
+                            <Link to={{ pathname: '/department/add' }} className="btn btn-primary" ><i className="fa fa-plus" aria-hidden="true"></i></Link>
                         </div>
                     </div>
                     <button className="btn btn-danger btn-multi-delete" onClick={() => { this.multipleDeleteDeptConfirm(); }}><i className="fa fa-trash " aria-hidden="true"></i></button>
