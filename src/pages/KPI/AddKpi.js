@@ -231,7 +231,7 @@ class AddKpi extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.kpiId !== undefined ? <span>Edit {ModuleNames.kpi}</span> : <span>Add   {ModuleNames.kpi}</span>}
+                        {this.state.kpiId !== undefined ? <span>Edit {ModuleNames.kpi}</span> : <span>Add New{ModuleNames.kpi}</span>}
                     </h2>
                 </div>
                 <div className="row">

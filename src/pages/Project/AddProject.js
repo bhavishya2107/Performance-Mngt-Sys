@@ -346,6 +346,10 @@ class AddProject extends Component {
             isvalidate = false;
             $(".requiredfield").show();
         }
+        // else if (this.state.displayProjectStatus === null) {
+        //     isvalidate = false;
+        //     $(".requiredfield").show();
+        // }
         if (isvalidate) {
             var res = this.isEditProjectExistsApi();
             res.done((response) => {
@@ -554,7 +558,7 @@ class AddProject extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add  {ModuleNames.Project}</span>}
+                        {this.state.projectId !== undefined ? <span>Edit {ModuleNames.Project}</span> : <span>Add New {ModuleNames.Project}</span>}
                     </h2>
                 </div>
                 <div className="row">
@@ -634,7 +638,6 @@ class AddProject extends Component {
                                         <option>On Going</option>
                                         <option>Completed</option>
                                     </select>
-                                    <label className="recordexists" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</label>
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">

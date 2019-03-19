@@ -202,7 +202,7 @@ class AddDept extends Component {
                 <div className="clearfix">
                     <div className="clearfix d-flex align-items-center row page-title">
                         <h2 className="col">
-                            {this.state.departmentId !== undefined ? <span>Edit Department</span> : <span>Add Department</span>}
+                            {this.state.departmentId !== undefined ? <span>Edit Department</span> : <span>Add New Department</span>}
                         </h2>
                     </div>
                 </div>

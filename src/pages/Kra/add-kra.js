@@ -192,7 +192,7 @@ class kraHome extends Component {
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add {ModuleNames.kra}</span>}
+                        {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add New {ModuleNames.kra}</span>}
             </h2>
                 </div>
                 <form id="kraAddForm">

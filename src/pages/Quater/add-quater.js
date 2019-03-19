@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Link , Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Environment';
-import bootbox from 'bootbox';
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
-class ADDQuater extends Component{
+class ADDQuater extends Component {
     constructor(props) {
         super(props);
         this.state = {
             Redirect: false,
             quaterName: "",
+            description:"",
             id: props.match.params.id,
 
         };
@@ -53,7 +53,8 @@ class ADDQuater extends Component{
                     var roleFormData =
                     {
                         "quaterName": this.state.quaterName.trim(),
-                        "createdBy":localStorage.getItem('userId')
+                        "description": this.state.description.trim(),
+                        "createdBy": localStorage.getItem('userId')
 
                     }
                     const endpointPOST = environment.apiUrl + moduleUrls.Quater + '/'
@@ -110,7 +111,8 @@ class ADDQuater extends Component{
         var body =
         {
             "quaterName": data.quaterName.trim(),
-            "modifiedBy":localStorage.getItem('userId'),
+            "description": data.description.trim(),
+            "modifiedBy": localStorage.getItem('userId'),
         }
         return $.ajax({
             // url: `http://180.211.103.189:3000/api/role_master/${data.id}`,
@@ -137,7 +139,6 @@ class ADDQuater extends Component{
         var isvalidate = window.formValidation("#userRoleForm");
         if (isvalidate) {
             var res = this.updateroleEditExistApi();
-            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".hideQuater").show()
@@ -184,6 +185,7 @@ class ADDQuater extends Component{
 
                 this.setState({
                     quaterName: response[0].quaterName,
+                    description: response[0].description,
                 })
             });
             res.fail((error) => {
@@ -203,10 +205,9 @@ class ADDQuater extends Component{
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit {ModuleNames.quater}</span> : <span>Add {ModuleNames.quater}</span>}
+                        {this.state.id !== undefined ? <span>Edit {ModuleNames.quater}</span> : <span>Add New {ModuleNames.quater}</span>}
                     </h2>
                 </div>
-
                 <form id="userRoleForm" >
                     <div className="form-group">
                         <label htmlFor="quaterName" className="required">Name</label>
@@ -223,8 +224,15 @@ class ADDQuater extends Component{
                                 }} required />
                             <p className="hideQuater" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                         </div>
+                        <div className="form-group">
+                            <label>Description</label> <textarea id="quaterDescription" className="form-control col-6" name="description" rows="4" value={this.state.description}
+                                onChange={(event) => {
+                                    this.setState({
+                                        description: event.target.value
+                                    })
+                                }} ></textarea>
+                        </div>
                     </div>
-
                     {this.state.id !== undefined ?
                         <button className="btn btn-success " type="button" onClick={() => {
                             this.UpdateRoleDetails(this.state);

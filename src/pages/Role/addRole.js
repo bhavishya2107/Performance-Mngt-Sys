@@ -205,10 +205,9 @@ class UserRoleForm extends Component {
             <div className="container-fluid">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
-                        {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add {ModuleNames.Role}</span>}
+                        {this.state.id !== undefined ? <span>Edit {ModuleNames.Role}</span> : <span>Add New {ModuleNames.Role}</span>}
                     </h2>
                 </div>
-
                 <form id="userRoleForm" >
                     <div className="form-group">
                         <label htmlFor="roleName" className="required">Name</label>
