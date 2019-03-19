@@ -72,15 +72,15 @@ class AddUser extends Component {
         this.getTeamLeader();
     }
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'+ '~and(userId,ne,' + this.state.userId + ')';
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
     isUserEmailExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')'
-        return $.ajax({
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')'   
+              return $.ajax({
             url: url,
             type: Type.get
         })
@@ -90,11 +90,11 @@ class AddUser extends Component {
             var res = this.isUserExistUpdateApi();
 
             res.done((response) => {
-
                 if (response.length > 0) {
                     $(".dataExist").show()
-
-                } else {
+                }
+                else {
+                    $(".dataExist").hide()
                 }
             }
             )
@@ -129,7 +129,6 @@ class AddUser extends Component {
             url: url,
             type: Type.get
         })
-
     }
     getUserApi() {
         var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
@@ -148,14 +147,14 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')';
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
     isUserExistEmailUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')'
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')';
         return $.ajax({
             url: url,
             type: Type.get
@@ -182,7 +181,6 @@ class AddUser extends Component {
         });
 
     }
-
     //#endregion
     //#region Save user and update  user details 
     saveUserDetails(DataList) {
@@ -198,52 +196,57 @@ class AddUser extends Component {
         res.fail((error) => {
 
         })
-
     }
     saveUser() {
         var isvalidate = window.formValidation("#createUser");
         if (isvalidate) {
             var res = this.isUserExistApi();
-            var res = this.isUserEmailExistApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".dataExist").show()
                 }
                 else {
-                    // var _this = this;
-                    var DataList =
-                    {
-                        "userName": this.state.userName.trim(),
-                        "password": this.state.password,
-                        "firstName": this.state.firstName,
-                        "lastName": this.state.lastName,
-                        "emailAddress": this.state.emailAddress.trim(),
-                        "roleId": this.state.roleId,
-                        "mobileNo": this.state.mobileNo,
-                        //"profileImage": this.state.imageSrc,
-                        "reportingManagerId": this.state.reportingManagerId,
-                        "departmentId": this.state.departmentId,
-                        "designationId": this.state.designationId,
-                        "address": this.state.address,
-                        "profileImage": this.state.imageSrc,
-                        "gender": this.state.gender,
-                        "createdBy": localStorage.getItem('userId')
+                    var result = this.isUserEmailExistApi();
+                    result.done((response) => {
+                        if (response.length > 0) {
+                            $(".dataExist").show()
+                        }
+                        else {
 
-                    }
-                    this.saveUserDetails(DataList);
+                            var DataList =
+                            {
+                                "userName": this.state.userName.trim(),
+                                "password": this.state.password,
+                                "firstName": this.state.firstName,
+                                "lastName": this.state.lastName,
+                                "emailAddress": this.state.emailAddress.trim(),
+                                "roleId": this.state.roleId,
+                                "mobileNo": this.state.mobileNo,
+                                //"profileImage": this.state.imageSrc,
+                                "reportingManagerId": this.state.reportingManagerId,
+                                "departmentId": this.state.departmentId,
+                                "designationId": this.state.designationId,
+                                "address": this.state.address,
+                                "profileImage": this.state.imageSrc,
+                                "gender": this.state.gender,
+                                "createdBy": localStorage.getItem('userId')
+
+                            }
+                            this.saveUserDetails(DataList);
+                            $(".dataExist").hide()
+                        }
+                    })
                 }
-            });
+            })
             res.fail(error => {
 
             });
         }
         else {
-
             return false;
         }
     }
     updateAjaxCall(data) {
-
         var userList =
         {
             "designationId": data.designationId,
@@ -368,37 +371,43 @@ class AddUser extends Component {
             toast.success("User " + Notification.updated, {
                 position: toast.POSITION.TOP_RIGHT
             });
-
         });
         res.fail((error) => {
 
         })
     }
     UpdateUserDetails(data) {
+        debugger;
         var result = window.formValidation("#createUser");
         if (result) {
             var res = this.isUserExistUpdateApi();
-            var res = this.isUserExistEmailUpdateApi();
             res.done((response) => {
                 if (response.length > 0) {
                     $(".dataExist").show()
                 }
                 else {
-                    this.updateUser(data)
+                    var result = this.isUserExistEmailUpdateApi();
+                    result.done((response) => {
+                        if (response.length > 0) {
+                            $(".dataExist").show()
+                        }
+                        else {
+                            this.updateUser(data)
+                            $(".dataExist").hide()
+                        }
+                    })
                 }
             });
-
             res.fail((error) => {
+                $(".dataExist").hide()
             })
         }
         else {
-            return false;
+            $(".dataExist").hide()
+            return false
         }
     }
     //#endregion
-    //#region image functionality
-
-    //#endregion 
     //#region mail to TL
     isExistEmailOnChange() {
         if (this.state.userId !== undefined) { //id is undefinded edit 
@@ -408,12 +417,14 @@ class AddUser extends Component {
                     $(".recordexists").show()
                 }
                 else {
+                    $(".recordexists").hide()
                 }
+
             })
         }
         else {
-            var res = this.isUserEmailExistApi(); //save
-            res.done((response) => {
+            var result = this.isUserEmailExistApi(); //save
+            result.done((response) => {
                 if (response.length > 0) {
                     $(".recordexists").show()
                 } else {
@@ -572,16 +583,12 @@ class AddUser extends Component {
                 var displayDataReturn = tempJob.map(function (i) {
                     return (
                         <option key={i.designationId} value={i.designationId}>{i.designationName}</option>
-
-
                     )
                 });
                 this.setState({
                     displayJobData: displayDataReturn
                 })
-
             },
-
         });
     }
     getRoleData() {
@@ -637,7 +644,7 @@ class AddUser extends Component {
     //#endregion
     render() {
         if (this.state.RedirectToUserManagement) {
-            return <Redirect to={{ pathname: "/user-management", state: "2" }} />
+            return <Redirect to={{ pathname: "/user-management" }} />
         }
         if (this.state.isUpdate === true) {
 

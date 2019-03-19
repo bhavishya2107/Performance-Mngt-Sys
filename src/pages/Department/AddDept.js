@@ -225,7 +225,7 @@ class AddDept extends Component {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="description">Description</label>
-                                <textarea type="textarea" name="description" className="form-control" id="description" maxLength="1000" value={this.state.description}
+                                <textarea type="textarea" name="description"  className="form-control col-12" rows="3" id="description" maxLength="1000" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value

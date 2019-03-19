@@ -306,9 +306,6 @@ class addAssignTemplate extends Component {
         return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
                 : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
       
-
-
-
        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
