@@ -217,7 +217,6 @@ class AssignTemplate extends Component {
     }
     //#endregion
     sendMailAPI(body) {
-        debugger;
         const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
         return $.ajax({
             url: emailUrl,
@@ -231,8 +230,6 @@ class AssignTemplate extends Component {
 
 
     sendAssignTemplateMail() {
-        debugger;
-        console.log(moment(this.state.startDate).format("DD-MM-YYYY"))
         const url = environment.dynamicUrl + 'dynamic';
         return $.ajax({
             url: url,
@@ -342,9 +339,9 @@ class AssignTemplate extends Component {
                     targets: 7,
                     render: function (data, type, row) {
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" >' + '<i class="fa fa-trash" aria-hidden="true">' + "</a>" + 
-                            '<a  class="btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" >' + '<i  class="fa fa-envelope-o" aria-hidden="true""/>' +'</a>'
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' + 
+                            '<a  class=" btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope-o" aria-hidden="true""></i></a>'
                             
                         )
                     },
