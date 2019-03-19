@@ -548,7 +548,7 @@ class Addtemplate extends Component {
   }
   render() {
     if (this.state.redirectToList === true) {
-      return <Redirect to={{ pathname: "/templateList" }} />;
+      return <Redirect to={{ pathname: "/template" }} />;
     }
 
     return (
@@ -660,7 +660,7 @@ class Addtemplate extends Component {
             Reset
             </button>
 
-          <Link to="/templatelist" className="btn btn-danger ">
+          <Link to="/template" className="btn btn-danger ">
             Cancel
             </Link>
         </div>

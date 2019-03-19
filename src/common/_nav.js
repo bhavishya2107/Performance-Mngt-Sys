@@ -50,7 +50,7 @@ if (localStorage.getItem('roleName') == "HR") {
         },
         {
             name: 'Template',
-            url: '/templateList',
+            url: '/template',
             icon: 'fa fa-clipboard',
         },
         {
