@@ -238,24 +238,24 @@ class AssignTemplate extends Component {
                 query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
             },
             success: (res) => {
-                console.log(res,"")
+                console.log(res, "")
                 var emailBody =
                     `<html>
                     <body>
                     <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `,  </p>`;
                 emailBody += `
                 KRA sheet assigned to you for project “PMS”,
-                you have worked on ` +  res[0].quaterName + `  
+                you have worked on ` + res[0].quaterName + `  
                 ` + `
-                from` +" "+ moment(res[0].startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(res[0].endDate).format("DD-MM-YYYY") + `
-                    </p>                        
+                from` + " " + moment(res[0].startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(res[0].endDate).format("DD-MM-YYYY") + `
+                    </p>Please fill your sheets as soon as possible.        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
                 </body>
                 </html>`;
                 var body =
                 {
-                    emailSubject: "KRA sheet for" + ' ' + res[0].quaterName  + '-' + `PMS`,
+                    emailSubject: "KRA sheet for" + ' ' + res[0].quaterName + '-' + `PMS`,
                     emailBody: emailBody,
                     toemailadress: "janmeshnayak1997@gmail.com"
                 }
@@ -321,7 +321,7 @@ class AssignTemplate extends Component {
                     targets: 4,
                 },
                 {
-                    data: "startDate"+"endDate",
+                    data: "startDate" + "endDate",
                     targets: 5,
                     render: (data, type, row) => {
                         return (
@@ -338,19 +338,23 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 7,
                     render: function (data, type, row) {
+                        if ({ status: "Created by HR" }) {
+                            return (
+                                '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a  class=" btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope-o" aria-hidden="true""></i></a>'
+                            );
+                        }
+                        else {
+                        }
                         return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' + 
-                            '<a  class=" btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope-o" aria-hidden="true""></i></a>'
-                            
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
                         )
                     },
                     "orderable": false
                 }
             ],
-
             initComplete: (settings, json) => {
-
             },
             //#region drawcallback function
             "drawCallback": (settings) => {
