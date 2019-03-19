@@ -229,8 +229,6 @@ class AssignTemplate extends Component {
         })
     }
 
-<<<<<<< HEAD
-=======
 
     sendAssignTemplateMail() {
         debugger;
@@ -272,7 +270,6 @@ class AssignTemplate extends Component {
     }
 
 
->>>>>>> d73b2ab2fe2c4dbab6380d4cd50e820793ac2a6c
     componentDidMount() {
         this.getProjectData()
         this.getUserData()
