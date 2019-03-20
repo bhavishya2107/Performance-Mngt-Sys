@@ -18,8 +18,6 @@ class Myteam extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "autoWidth": false,
-            aaSorting: [[1, 'asc']],
-            aaSorting: [[2, 'asc']],
             ajax: {
                 url: myTeamUrl,
                 type: Type.post,
