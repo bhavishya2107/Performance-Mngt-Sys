@@ -27,7 +27,7 @@ class UserManagement extends Component {
         var res = this.DeleteUserApi(userId);
         res.done(response => {
             if (response.affectedRows > 0) {
-                toast.success("User " + Notification.deleteConfirm);
+                toast.success("User " + Notification.deleted);
 
             }
             this.$el.DataTable().ajax.reload()

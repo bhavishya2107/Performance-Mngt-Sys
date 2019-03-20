@@ -72,15 +72,15 @@ class AddUser extends Component {
         this.getTeamLeader();
     }
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'+ '~and(userId,ne,' + this.state.userId + ')';
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')';
         return $.ajax({
             url: url,
             type: Type.get
         })
     }
     isUserEmailExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')'   
-              return $.ajax({
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(emailAddress,eq,' + this.state.emailAddress.trim() + ')'
+        return $.ajax({
             url: url,
             type: Type.get
         })
