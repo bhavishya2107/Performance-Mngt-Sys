@@ -6,7 +6,7 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 const $ = require('jquery');
 var moment = require('moment');
 $.DataTable = require('datatables.net-bs4');
-
+var filterData = []
 class KraSheet extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +23,11 @@ class KraSheet extends Component {
       assignId: props.match.params.assignId,
       templateid: "",
       table: "",
-
+      templateAssignId:"",
+      kraId:"",
+      kpiId:"",
     }
+    filterData = []
   }
 
   //template Id to load dataTable details
@@ -93,8 +96,19 @@ class KraSheet extends Component {
     })
   }
 
+
+
+  //comment,self-rating save if kpiID,KraId,assignId exist
+
   commentAndratingUpdate() {
-    var response = this.deleteData()
+    var tempData = filterData.filter((i) => {
+      return ( i.kpiId == this.state.kpiId && i.kraId == this.state.kraId && i.assignId == this.state.assignId ) 
+    });
+    console.log(tempData,"temp")
+
+
+    if(filterData.length > 0){
+      var response = this.deleteData()
     response.done((result) => {
       this.commentAndratingSave();
       var kraData = new Array();
@@ -113,41 +127,57 @@ class KraSheet extends Component {
         }
       })
     })
-    response.fail((error) => {
-
-    })
-  }
-
-  commentAndratingSave = () => {
-    var response = this.deleteData()
-    response.done(()=>{
+    }else{
+      alert("h")
+      this.commentAndratingSave();
       var kraData = new Array();
       $('#tblkraSheet tbody tr').each((index, item) => {
-        var kraSheetdata =
-        {
-          "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-          "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-          "selfComment": $(item).find('.commentSaved').val(),
-          "selfRating": $(item).find('.selfrate').val(),
-          "selfRatingBy": parseInt(localStorage.getItem('userId')),
-          "templateAssignId": this.state.assignId
+        if ($(item).find('.commentSaved').val() !== null) {
+          var kraSheetdata =
+          {
+            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+            "selfComment": $(item).find('.commentSaved').val(),
+            "selfRating": $(item).find('.selfrate').val(),
+            "selfRatingBy": parseInt(localStorage.getItem('userId')),
+            "templateAssignId": this.state.assignId
+          }
+          kraData.push(kraSheetdata)
+        
         }
-        kraData.push(kraSheetdata)
       })
-      const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-      return $.ajax({
-        url: endpointPOST,
-        type: Type.post,
-        data: JSON.stringify(kraData),
-        headers: {
-          "Content-Type": "application/json",
-          "x-requested-with": "XMLHttpRequest"
-        },
-        success: function (resultData) {
-        }
-      });
+    }
+   
+  }
+ 
+  //comment and rating save 
 
+  commentAndratingSave = () => {
+    var kraData = new Array();
+    $('#tblkraSheet tbody tr').each((index, item) => {
+      var kraSheetdata =
+      {
+        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+        "selfComment": $(item).find('.commentSaved').val(),
+        "selfRating": $(item).find('.selfrate').val(),
+        "selfRatingBy": parseInt(localStorage.getItem('userId')),
+        "templateAssignId": this.state.assignId
+      }
+      kraData.push(kraSheetdata)
     })
+    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+    return $.ajax({
+      url: endpointPOST,
+      type: Type.post,
+      data: JSON.stringify(kraData),
+      headers: {
+        "Content-Type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      success: function (resultData) {
+      }
+    });
   
   }
 
@@ -155,7 +185,7 @@ class KraSheet extends Component {
   componentDidMount() {
     var res = this.getUserDetailsApi();
     res.done(response => {
-      console.log('response', response);
+
       this.setState({
         firstName: response[0].firstname,
         lastName: response[0].lastname,
@@ -169,7 +199,7 @@ class KraSheet extends Component {
     });
     res.fail(error => { });
 
-    //*******DataTable************//
+    //**********DataTable************//
     const endpointGET = environment.dynamicUrl + 'dynamic'
     var getTempId = this.getTemplateid();
     getTempId.done((temp) => {
@@ -187,13 +217,14 @@ class KraSheet extends Component {
           data: {
             query:
               ` 
-            SELECT DISTINCT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target,tad.selfRating,tad.selfComment,tad.assignDetailId FROM template_detail td 
-            LEFT JOIN kra_master km ON km.kraId = td.kraId
-            LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId 
-            LEFT JOIN template_assignment_master tam ON tam.templateId = td.templateId
-            LEFT JOIN template_assignment_detail tad ON tad.templateAssignId = tam.assignId
-            WHERE tad.assignDetailId IS NOT NULL and td.templateId =  ${temp[0].templateId}`
-            //`SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
+              SELECT tad.templateAssignId, td.kraId, td.kpiId, kra.kraName, kpi.kpiTitle,kpi.weightage,kpi.target, tad.selfRating, tad.selfComment
+              FROM template_assignment_master tam
+              LEFT JOIN template_detail td ON tam.templateId = td.templateId
+              LEFT JOIN kra_master kra ON kra.kraId = td.kraId
+              LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId
+              LEFT JOIN template_assignment_detail tad ON tad.kpiId = td.kpiId AND tad.kraId = td.kraId
+              WHERE tam.assignId =  ${this.state.assignId}`
+         
           },
         },
         columns: [
@@ -201,7 +232,19 @@ class KraSheet extends Component {
             data: "kraName",
             targets: 0,
             render: (data, type, row) => {
-              console.log(temp[0].templateId)
+
+              this.setState({
+                templateAssignId:row.templateAssignId,
+                kraId:row.kraId,
+                kpiId:row.kpiId
+              })
+             
+              var singleObjId = {
+                templateAssignId:row.templateAssignId,
+                kraId: row.kraId,
+                kpiId: row.kpiId
+              };
+              filterData.push(singleObjId)
               return (
                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
               )
@@ -399,13 +442,17 @@ class KraSheet extends Component {
             <tbody></tbody>
           </table>
         </div>
-        <button className="btn btn-success " type="button" onClick={() => {
+        {this.state.templateAssignId === null ?
+         (<button className="btn btn-success " type="button" onClick={() => {
           this.commentAndratingSave();
         }}>Save </button>
-        &nbsp;
+         ):
+         (
          <button className="btn btn-success " type="button" onClick={() => {
           this.commentAndratingUpdate();
-        }}>Update</button>
+        }}>Update</button>)}
+
+        
       </div>
       //dataTable
     )
