@@ -342,7 +342,7 @@ class AssignTemplate extends Component {
                             return (
                                 '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                                 '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
-                                '<a  class=" btn mr-2 btnMail btn-warning btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope-o" aria-hidden="true""></i></a>'
+                                '<a href="#"  class="btn mr-2 btnMail btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope" aria-hidden="true""></i></a>'
                             );
                         }
                         else {
