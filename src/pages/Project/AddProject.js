@@ -36,6 +36,8 @@ class AddProject extends Component {
             userId: "",
             manageBy: "",
             resources: {},
+            selectsStart: true,
+            selectsEnd: true,
             isSelect: false,
             ResourceOptions: [],
             selectedOption: null,
@@ -45,6 +47,10 @@ class AddProject extends Component {
             $(".requiredfield").hide()
             this.setState({ selectedOption: displaySelectedOption });
         }
+
+        // this.handleChangeStart = (startDate) => {
+        //     this.setState({startDate});
+        // }
     }
 
     resetForm() {
@@ -60,6 +66,8 @@ class AddProject extends Component {
     //     }
     // }
 
+
+    //#region  on blur fucntion
     onChangeBlur() {
         if (this.state.projectId != undefined) {
             var res = this.isEditProjectExistsApi();
@@ -82,7 +90,9 @@ class AddProject extends Component {
             })
         }
     }
+    //#endregion
 
+    //#region get details of project and project resources api
     getResourceDetailsAPI() {
         const endpointGET = environment.apiUrl + moduleUrls.ProjectResources + '?_where=(projectId,eq,' + this.state.projectId + ')';
         return $.ajax({
@@ -100,6 +110,7 @@ class AddProject extends Component {
             type: Type.get,
         })
     }
+    //#endregion
 
     //#region is project already exist or not api
 
@@ -122,6 +133,11 @@ class AddProject extends Component {
     }
     //#endregion
 
+    temp() {
+        this.setState({
+            tempData: options
+        })
+    }
     //#region mail sent on project save
     sendMailAPI(body) {
         const emailUrl = "https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs";
@@ -134,11 +150,7 @@ class AddProject extends Component {
             },
         })
     }
-    temp() {
-        this.setState({
-            tempData: options
-        })
-    }
+
 
     sendProjectMail() {
         var resourceName = '';
@@ -384,6 +396,8 @@ class AddProject extends Component {
     }
     //#endregion
 
+    //#region on change events
+
     //#region onchange for Complexity Master Data
 
     onChangeComplexityMaster(event) {
@@ -500,6 +514,9 @@ class AddProject extends Component {
     }
     //#endregion
 
+    //#endregion
+
+    //#region componentdidmount area
     componentDidMount() {
         this.setState({
             title: ModuleNames.Project
@@ -549,12 +566,15 @@ class AddProject extends Component {
         responseResourcesData.fail((error) => {
         })
     }
+//#endregion
 
     render() {
         if (this.state.redirectToList == true) {
             return <Redirect to={{ pathname: "/projects" }} />
         }
         return (
+
+            //#region form for project
             <div className="clearfix">
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
@@ -584,9 +604,17 @@ class AddProject extends Component {
                                         <div className="icon-calender">
                                             <DatePicker className="form-control" name="startDate"
                                                 selected={this.state.startDate} autoComplete="off"
+                                                // selected={this.state.startDate}
+                                                // selectsStart
+                                                // startDate={this.state.startDate}
+                                                // endDate={this.state.endDate}
+                                                // onChange={this.handleChangeStart}
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     $(".requiredfield").hide()
+                                                    $(document).ready(function () {
+                                                        var endDate = new Date();
+                                                    })
                                                     this.setState({
                                                         isSelect: true,
                                                         startDate: moment(e).format("YYYY-MM-DD") == "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
@@ -603,6 +631,11 @@ class AddProject extends Component {
                                         <div className="icon-calender">
                                             <DatePicker required className="form-control" name="endDate"
                                                 selected={this.state.endDate} autoComplete="off"
+                                                // selected={this.state.endDate}
+                                                // selectsEnd
+                                                // startDate={this.state.startDate}
+                                                // endDate={this.state.endDate}
+                                                // onChange={this.handleChangeEnd}
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     this.setState({
@@ -707,4 +740,6 @@ class AddProject extends Component {
         )
     }
 }
+//#endregion
+
 export default AddProject;
