@@ -25,6 +25,9 @@ function formValidation(form) {
     $(form).validate(
         {
             rules: {
+                gender: {
+                    required: true,
+                },
                 kraName: {
                     required: true,
                 },
@@ -59,26 +62,26 @@ function formValidation(form) {
                     required: true
                 },
                 ConfirmPWemail: {
-                    required:true,
+                    required: true,
                     // equalTo:"#ChangePWemail"
                 },
-                CurrentPWemail:{
-                    required:true
+                CurrentPWemail: {
+                    required: true
                 },
                 //reset password
-                ResetNewPWRequired:{
-                    required:true
+                ResetNewPWRequired: {
+                    required: true
                 },
-                ConfirmNewPWRequired:{
-                    required:true,
+                ConfirmNewPWRequired: {
+                    required: true,
                     // passwordMatch:true
                     // equalTo:'#ResetNewPWRequired'
                 },
-                optionKra:{
-                    required:true,
+                optionKra: {
+                    required: true,
                 },
-                optionKpi:{
-                    required:true,
+                optionKpi: {
+                    required: true,
                 },
                 messages: {
                     // ChangePWemail:{required: " Enter Password"},
@@ -104,6 +107,15 @@ function formValidation(form) {
                     },
                 }
 
+            }
+            ,
+            errorPlacement: function (error, element) {
+                var placement = $(element).data('error');
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
             }
         }
     );
