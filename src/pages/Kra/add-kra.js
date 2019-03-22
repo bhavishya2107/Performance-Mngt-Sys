@@ -17,7 +17,7 @@ class kraHome extends Component {
     }
 
     submitDataFromKra() {
-        
+
         var isvalidate = window.formValidation("#kraAddForm");
 
         if (isvalidate) {
@@ -193,7 +193,7 @@ class kraHome extends Component {
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">
                         {this.state.id !== undefined ? <span>Edit {ModuleNames.kra}</span> : <span>Add New {ModuleNames.kra}</span>}
-            </h2>
+                    </h2>
                 </div>
                 <form id="kraAddForm">
                     <div className="form-group">
@@ -213,18 +213,17 @@ class kraHome extends Component {
 
                         </div>
                     </div>
-                    <div className="form-group">
-                        <label className=" " htmlFor="kraDescription">Description</label>
-                        <div className="">
-                            <textarea  id="kraDescriptionId" name="kraDescription" className="form-control col-6" rows="3"
-                                value={this.state.description}
-                                onChange={(event) => {
-                                    this.setState(
-                                        {
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label className="required" htmlFor="target">Description</label>
+                                <textarea className="form-control" rows="4" name="description" type="text" value={this.state.description}
+                                    onChange={(event) => {
+                                        this.setState({
                                             description: event.target.value
-                                        }
-                                    )
-                                }}></textarea><br />
+                                        })
+                                    }} required></textarea>
+                            </div>
                         </div>
                     </div>
                     {this.state.id !== undefined ?

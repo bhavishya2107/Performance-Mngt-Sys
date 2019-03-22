@@ -396,7 +396,7 @@ class AddProject extends Component {
     }
     //#endregion
 
-    //#region on change events
+         //#region on change events
 
     //#region onchange for Complexity Master Data
 
@@ -605,10 +605,10 @@ class AddProject extends Component {
                                             <DatePicker className="form-control" name="startDate"
                                                 selected={this.state.startDate} autoComplete="off"
                                                 // selected={this.state.startDate}
-                                                // selectsStart
-                                                // startDate={this.state.startDate}
-                                                // endDate={this.state.endDate}
-                                                // onChange={this.handleChangeStart}
+                                                selectsStart
+                                                startDate={this.state.startDate}
+                                                endDate={this.state.endDate}
+                                                onChange={this.handleChangeStart}
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     $(".requiredfield").hide()
@@ -632,10 +632,10 @@ class AddProject extends Component {
                                             <DatePicker required className="form-control" name="endDate"
                                                 selected={this.state.endDate} autoComplete="off"
                                                 // selected={this.state.endDate}
-                                                // selectsEnd
-                                                // startDate={this.state.startDate}
-                                                // endDate={this.state.endDate}
-                                                // onChange={this.handleChangeEnd}
+                                                selectsEnd
+                                                startDate={this.state.startDate}
+                                                endDate={this.state.endDate}
+                                                onChange={this.handleChangeEnd}
                                                 dateFormat="dd-MM-YYYY"
                                                 onChange={(e) => {
                                                     this.setState({

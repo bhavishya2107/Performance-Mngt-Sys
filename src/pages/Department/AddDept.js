@@ -224,13 +224,13 @@ class AddDept extends Component {
 
                             </div>
                             <div className="form-group">
-                                <label htmlFor="description">Description</label>
-                                <textarea type="textarea" name="description"  className="form-control col-12" rows="3" id="description" maxLength="1000" value={this.state.description}
+                                <label className="required" htmlFor="target">Description</label>
+                                <textarea className="form-control" rows="4" name="description" type="text" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
                                         })
-                                    }} />
+                                    }} required></textarea>
                             </div>
                             <div className="form-group">
                                 {this.state.departmentId !== undefined ?
