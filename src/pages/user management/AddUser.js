@@ -40,6 +40,7 @@ class AddUser extends Component {
         }
     }
     //#region  onChange events
+
     onChangeDepartment(event) {
         this.setState({
             departmentId: event.target.value
@@ -72,7 +73,7 @@ class AddUser extends Component {
         this.getTeamLeader();
     }
     isUserExistApi() {
-        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')';
+        var url = environment.apiUrl + moduleUrls.User + '?_where=(userName,eq,' + this.state.userName.trim() + ')'
         return $.ajax({
             url: url,
             type: Type.get
@@ -94,7 +95,7 @@ class AddUser extends Component {
                     $(".dataExist").show()
                 }
                 else {
-                    $(".dataExist").hide()
+                    $(".userExist").hide()
                 }
             }
             )
@@ -104,7 +105,7 @@ class AddUser extends Component {
             res.done((response) => {
                 if (response.length > 0) {
 
-                    $(".dataExist").show()
+                    $(".userExist").show()
 
                 } else {
 
@@ -147,7 +148,8 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' + '~and(userId,ne,' + this.state.userId + ')';
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' ;
+
         return $.ajax({
             url: url,
             type: Type.get
@@ -182,6 +184,11 @@ class AddUser extends Component {
 
     }
     //#endregion
+    handleChange(evt) {
+        const mobileNo = (evt.target.validity.valid) ? evt.target.value : this.state.mobileNo;
+
+        this.setState({ mobileNo });
+    }
     //#region Save user and update  user details 
     saveUserDetails(DataList) {
         var res = this.saveUserDetailsApi(DataList);
@@ -203,7 +210,7 @@ class AddUser extends Component {
             var res = this.isUserExistApi();
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".dataExist").show()
+                    $(".userExist").show()
                 }
                 else {
                     var result = this.isUserEmailExistApi();
@@ -233,7 +240,7 @@ class AddUser extends Component {
 
                             }
                             this.saveUserDetails(DataList);
-                            $(".dataExist").hide()
+
                         }
                     })
                 }
@@ -377,29 +384,32 @@ class AddUser extends Component {
         })
     }
     UpdateUserDetails(data) {
-        debugger;
+        
         var result = window.formValidation("#createUser");
         if (result) {
             var res = this.isUserExistUpdateApi();
             res.done((response) => {
+        
                 if (response.length > 0) {
-                    $(".dataExist").show()
+                    $(".userExist").show()
+                
                 }
                 else {
                     var result = this.isUserExistEmailUpdateApi();
                     result.done((response) => {
                         if (response.length > 0) {
                             $(".dataExist").show()
+                            return false;
                         }
                         else {
                             this.updateUser(data)
-                            $(".dataExist").hide()
+                            //$(".dataExist").show()
                         }
                     })
                 }
             });
             res.fail((error) => {
-                $(".dataExist").hide()
+                $(".userExist").hide()
             })
         }
         else {
@@ -608,6 +618,7 @@ class AddUser extends Component {
             },
         });
     }
+
     getTeamLeader() {
         var url = environment.apiUrl + moduleUrls.User
         $.ajax({
@@ -725,12 +736,13 @@ class AddUser extends Component {
                                                         onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
-                                                            $(".dataExist").hide()
+                                                           // $(".dataExist").hide()
+                                                             $(".userExist").hide()
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })
                                                         }} required />
-                                                    <p className="dataExist" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
+                                                    <p className="userExist" style={{ "display": "none", "color": "#dc3545" }}>{Notification.recordExists}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -753,12 +765,8 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input type="text" name="mobileNo" id="mobileNo" maxLength="20" className="form-control" value={this.state.mobileNo}
-                                                        onChange={(event) => {
-                                                            this.setState({
-                                                                mobileNo: event.target.value
-                                                            })
-                                                        }} required />
+                                                    <input type="text" pattern="[0-9]*" class="form-control" name="mobileNo" onInput={this.handleChange.bind(this)} value={this.state.mobileNo} autoComplete="off" id="mobileNo" maxlength="10"
+                                                        required />
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
@@ -802,23 +810,23 @@ class AddUser extends Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-                                                <div className="form-group">
-                                                    <label className="required">Gender</label><br></br>
-                                                    <label className="radioButton"> <input type="radio" name="gender" value="Male" checked={this.state.gender === "Male"} onChange={(event) => {
-                                                        this.setState({
-                                                            gender: event.target.value
-                                                        })
-                                                    }} />Male</label>
-                                                    <label className="radioButton"> <input type="radio" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {
-                                                        this.setState({
-                                                            gender: event.target.value
-                                                        })
-                                                    }} />Female</label>
-
-
+                                                <div className="form-group" >
+                                                    <label className="required" >Gender</label>
+                                                    <div>
+                                                        <label className="radioButton">  <input type="radio" data-error="#errorgender" name="gender" value="Male" checked={this.state.gender === "Male"} onChange={(event) => {
+                                                            this.setState({
+                                                                gender: event.target.value
+                                                            })
+                                                        }} /> Male</label>
+                                                        <label className="radioButton"> <input type="radio" data-error="#errorgender" name="gender" value="Female" checked={this.state.gender === "Female"} onChange={(event) => {
+                                                            this.setState({
+                                                                gender: event.target.value
+                                                            })
+                                                        }} /> Female</label>
+                                                    </div>
+                                                    <span id="errorgender"></span>
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div className="row">
                                             <div className="col">
@@ -848,14 +856,14 @@ class AddUser extends Component {
                                                     <button type="button" className="btn btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
                                                     <Link to='/user-management' className="btn btn-danger mr-2">Cancel</Link>
                                                 </div>
-                                            </div></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
