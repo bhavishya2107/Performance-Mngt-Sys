@@ -293,7 +293,7 @@ class AddUser extends Component {
                     result.done((response) => {
                         var emailBody = `<html>
                         <body>
-                        <p>Hello `+ response[0].firstName + ` ` + response[0].lastName + `,</p>
+                        <p>Hello `+ response[0].firstName.charAt(0).toUpperCase() + response[0].firstName.slice(1) + ` ` +  response[0].lastName.charAt(0).toUpperCase() + response[0].lastName.slice(1) + `,</p>
                         <p>Employee removed from your team.<span>`;
                         if (this.state.gender === "Male") {
                             emailBody += `His`
@@ -302,7 +302,7 @@ class AddUser extends Component {
                             emailBody += `Her`
                         }
                         emailBody += `
-                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        name is <b>` +response[0].firstName.charAt(0).toUpperCase() +  response[0].firstName.slice(1) + ` ` +  response[0].lastName.charAt(0).toUpperCase() +response[0].lastName.slice(1) + `</b></span>
                         </p>                        
                         <p>Thanks,</p>
                         <p>PSSPL ADMIN</p>
@@ -313,7 +313,8 @@ class AddUser extends Component {
                         {
                             emailSubject: "Employee removed from your team",
                             emailBody: emailBody,
-                            toemailadress: response[0].emailAddress
+                            toemailadress: "janmeshnayak1997@gmail.com"
+                            //response[0].emailAddress
                         }
                         this.sendMailAPI(body);
 
@@ -335,7 +336,7 @@ class AddUser extends Component {
                         emailBody += `Her`
                     }
                     emailBody += `
-                        name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                        name is <b>` +  this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1) + ` ` +  this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1) +`</b></span>
                         </p>                        
                         <p>Thanks,</p>
                         <p>PSSPL ADMIN</p>
@@ -346,7 +347,7 @@ class AddUser extends Component {
                     {
                         emailSubject: "Employee added in your team",
                         emailBody: emailBody,
-                        toemailadress: res[0].emailAddress
+                        toemailadress: "janmeshnayak1997@gmail.com"
                     }
                     this.sendMailAPI(body);
 
@@ -440,7 +441,7 @@ class AddUser extends Component {
                 /* START - SEND EMAIL */
                 var emailBody = `<html>
                     <body>
-                    <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
+                    <p>Hello `+  res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ` ` +  res[0].lastName.charAt(0).toUpperCase()  + res[0].lastName.slice(1) + `,</p>
                     <p>New Employee added in your team.<span>`;
                 if (this.state.gender === "Male") {
                     emailBody += `His`
@@ -449,7 +450,7 @@ class AddUser extends Component {
                     emailBody += `Her`
                 }
                 emailBody += `
-                    name is <b>` + this.state.firstName + ` ` + this.state.lastName + `</b></span>
+                    name is <b>` + this.state.firstName.charAt(0).toUpperCase() +  this.state.firstName.slice(1) + ` ` +   this.state.lastName.charAt(0).toUpperCase()  + this.state.lastName.slice(1) +  `</b></span>
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
@@ -460,7 +461,8 @@ class AddUser extends Component {
                 {
                     emailSubject: "Employee added in your team",
                     emailBody: emailBody,
-                    toemailadress: res[0].emailAddress
+                    toemailadress: "janmeshnayak1997@gmail.com"
+                  //  res[0].emailAddress
                 }
                 this.sendMailAPI(body);
 
@@ -493,7 +495,7 @@ class AddUser extends Component {
         {
             /* START - SEND EMAIL */
             var emailBody = `
-                <p>Hello `+ this.state.firstName + ` ` + this.state.lastName + `,</p>
+                <p>Hello `+ this.state.firstName.charAt(0).toUpperCase() +  this.state.firstName.slice(1) + ` ` +   this.state.lastName.charAt(0).toUpperCase()  + this.state.lastName.slice(1) + `,</p>
                     </p> 
                     
                     <p>Welcome to Prakash Software. Below are the credentials to access PMS system:</p>
@@ -512,7 +514,8 @@ class AddUser extends Component {
             {
                 emailSubject: "Welcome to Prakash Software",
                 emailBody: emailBody,
-                toemailadress: this.state.emailAddress
+                toemailadress: "janmeshnayak1997@gmail.com"
+                //this.state.emailAddress
             }
             this.sendMailWhenUserCreatedApi(body);
 

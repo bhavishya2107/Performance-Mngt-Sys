@@ -165,12 +165,12 @@ class AddProject extends Component {
                 var emailBody =
                     `<html>
                     <body>
-                    <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `, </p>
+                    <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) +' ' +  res[0].lastName.charAt(0).toUpperCase() +res[0].lastName.slice(1)+  `, </p>
                     <p>New Project Assigned to you. Below are the details of project:</p>`;
                 emailBody += `
-                       project name is <b>` + this.state.projectName + `</b><br>
+                       project name is <b>` + this.state.projectName.charAt(0).toUpperCase()+ this.state.projectName.slice(1) + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` </b><br>
-                       Resources:<b>` + resourceName + `</b><br>
+                       Resources:<b>` + resourceName.charAt(0).toUpperCase()+ resourceName.slice(1) + `</b><br>
                        Description:<b>` + this.state.description + `</b>
                     </p>                        
                     <p>Thanks,</p>
@@ -447,7 +447,7 @@ class AddProject extends Component {
                 $(temp).each((e, item) => {
                     var singleObjId = {
                         value: item.userId,
-                        label: item.userName
+                        label: item.firstName.charAt(0).toUpperCase()+item.firstName.slice(1)  + " " + item.lastName.charAt(0).toUpperCase()+item.lastName.slice(1)
                     };
                     options.push(singleObjId);
                 }
@@ -476,7 +476,7 @@ class AddProject extends Component {
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
-                        <option key={i.userId} value={i.userId}>{i.firstName} {i.lastName}</option>
+                        <option key={i.userId} value={i.userId}>{i.firstName.charAt(0).toUpperCase() + i.firstName.slice(1) } {i.lastName.charAt(0).toUpperCase() + i.firstName.slice(1) }</option>
                     )
                 });
                 this.setState({
