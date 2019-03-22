@@ -241,7 +241,7 @@ class AssignTemplate extends Component {
                 var emailBody =
                     `<html>
                     <body>
-                    <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) +' ' +  res[0].lastName.charAt(0).toUpperCase() +res[0].lastName.slice(1)+ `,  </p>`;
+                    <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ' ' + res[0].lastName.charAt(0).toUpperCase() + res[0].lastName.slice(1) + `,  </p>`;
                 emailBody += `
                 KRA sheet assigned to you for project ` + `"` + res[0].projectName + `"` + ` ,
                 you have worked on ` + res[0].quaterName + `  
@@ -325,7 +325,7 @@ class AssignTemplate extends Component {
                     targets: 5,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
+                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + " - " +
                             `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
@@ -346,10 +346,10 @@ class AssignTemplate extends Component {
                             );
                         }
                         else {
+                            return (
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                            );
                         }
-                        return (
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
-                        )
                     },
                     "orderable": false
                 }
