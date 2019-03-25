@@ -112,18 +112,17 @@ class KraSheet extends Component {
   //update and set comment
   updateApi(data) {
     debugger;
-    var kraData = []
+
     var kraSheetdata =
     {
       "kraId": data.kraId,
       "kpiId": data.kpiId,
-      "selfComment": data.comments,
+      "selfComment": data.selfComment,
       "selfRating": data.selfRating,
       "selfRatingBy": data.selfRatingBy,
       "templateAssignId": data.templateAssignId,
-      "assignDetailId": data.assignDetailId
     }
-    kraData.push(kraSheetdata)
+
 
     return $.ajax({
       url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
@@ -131,10 +130,9 @@ class KraSheet extends Component {
       headers: {
         "content-type": "application/json",
         "x-requested-with": "XMLHttpRequest"
-    },
+      },
       async: false,
-      data:JSON.stringify(kraData)
-
+      data: JSON.stringify(kraSheetdata)
     })
 
   }
@@ -176,14 +174,8 @@ class KraSheet extends Component {
       }
       else {
         //update
-        var temp = this.getdetailsFromTAD()
-        temp.done((data) => {
-          data.forEach(item => {
-            this.updateApi(item.assignDetailId)
-              // .done((res) => {
-               
-              // })
-          });
+        kraData.forEach(item => {
+          this.updateApi(item)
         })
       }
     });
