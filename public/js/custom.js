@@ -59,30 +59,25 @@ function formValidation(form) {
                     required: true
                 },
                 ConfirmPWemail: {
-                    required:true,
-                    // equalTo:"#ChangePWemail"
+                    required: true,
                 },
-                CurrentPWemail:{
-                    required:true
+                CurrentPWemail: {
+                    required: true
                 },
                 //reset password
-                ResetNewPWRequired:{
-                    required:true
+                ResetNewPWRequired: {
+                    required: true
                 },
-                ConfirmNewPWRequired:{
-                    required:true,
-                    // passwordMatch:true
-                    // equalTo:'#ResetNewPWRequired'
+                ConfirmNewPWRequired: {
+                    required: true,
                 },
-                optionKra:{
-                    required:true,
+                optionKra: {
+                    required: true,
                 },
-                optionKpi:{
-                    required:true,
+                optionKpi: {
+                    required: true,
                 },
                 messages: {
-                    // ChangePWemail:{required: " Enter Password"},
-                    // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},
                     jobtitlename: {
                         required: 'maximum 50 characters'
                     },
