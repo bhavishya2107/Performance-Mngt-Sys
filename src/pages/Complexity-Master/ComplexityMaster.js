@@ -248,7 +248,7 @@ class ComplexityMaster extends Component {
                                         <i></i>
                                     </label>
                                 </th>
-                                <th  width="120" >Name</th>
+                                <th width="120" >Name</th>
                                 <th>Description</th>
                                 <th width="100">Action</th>
                             </tr>

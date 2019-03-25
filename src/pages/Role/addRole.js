@@ -225,18 +225,17 @@ class UserRoleForm extends Component {
                             <p className="hiderole" style={{ "display": "none", "color": "red" }}>{Notification.recordExists}</p>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <label className=" " htmlFor="roleDescription">Description</label>
-                        <div className="">
-                            <textarea name="roleDescription" className="form-control col-6" rows="3"
-                                value={this.state.description}
-                                onChange={(event) => {
-                                    this.setState(
-                                        {
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <label className="required" htmlFor="target">Description</label>
+                                <textarea className="form-control" rows="4" name="description" type="text" value={this.state.description}
+                                    onChange={(event) => {
+                                        this.setState({
                                             description: event.target.value
-                                        }
-                                    )
-                                }}></textarea><br />
+                                        })
+                                    }} required></textarea>
+                            </div>
                         </div>
                     </div>
                     {this.state.id !== undefined ?

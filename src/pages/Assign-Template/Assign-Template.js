@@ -228,7 +228,6 @@ class AssignTemplate extends Component {
         })
     }
 
-
     sendAssignTemplateMail() {
         const url = environment.dynamicUrl + 'dynamic';
         return $.ajax({
@@ -242,9 +241,9 @@ class AssignTemplate extends Component {
                 var emailBody =
                     `<html>
                     <body>
-                    <p>Hello `+ res[0].firstName + ' ' + res[0].lastName + `,  </p>`;
+                    <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ' ' + res[0].lastName.charAt(0).toUpperCase() + res[0].lastName.slice(1) + `,  </p>`;
                 emailBody += `
-                KRA sheet assigned to you for project “PMS”,
+                KRA sheet assigned to you for project ` + `"` + res[0].projectName + `"` + ` ,
                 you have worked on ` + res[0].quaterName + `  
                 ` + `
                 from` + " " + moment(res[0].startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(res[0].endDate).format("DD-MM-YYYY") + `
@@ -259,6 +258,7 @@ class AssignTemplate extends Component {
                     emailBody: emailBody,
                     toemailadress: "janmeshnayak1997@gmail.com"
                 }
+                // Prashant.Khanderia@prakashinfotech.com
                 this.sendMailAPI(body);
                 toast.success("" + Notification.EmailSent);
             }
@@ -325,7 +325,7 @@ class AssignTemplate extends Component {
                     targets: 5,
                     render: (data, type, row) => {
                         return (
-                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + "- " +
+                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + " - " +
                             `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
                         )
                     },
@@ -346,10 +346,10 @@ class AssignTemplate extends Component {
                             );
                         }
                         else {
+                            return (
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                            );
                         }
-                        return (
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
-                        )
                     },
                     "orderable": false
                 }

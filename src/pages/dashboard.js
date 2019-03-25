@@ -8,6 +8,14 @@ const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
 
 class Dashboard extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+           userId:props.match.params.userId
+        }
+    }
+
+
     componentWillMount() {
         $(document).ready(function () {
             $(".dataTables_length").css("padding-left", "0px");
@@ -25,7 +33,12 @@ class Dashboard extends Component {
                 type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": `SELECT TAM.assignId, PM.projectName,PM.startDate,PM.endDate,PM.status,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId  where TAM.userId='${localStorage.getItem('userId')}'`
+                    "query": `SELECT TAM.assignId, TAM.status, PM.projectName,PM.startDate,PM.endDate,PMM.quaterName 
+                    FROM template_master as TM 
+                    JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId
+                    JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
+                    JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
+                    where TAM.userId='${localStorage.getItem('userId')}' AND TAM.status IN('Assigned to Employee','Draft by Employee') `
                 },
 
             },

@@ -92,7 +92,6 @@ class AddKpi extends Component {
     }
     //#endregion
 
-
     getKpiDetailsApi(KpiId) {
         const endpointGET = environment.apiUrl + moduleUrls.Kpi + '/' + `${this.state.kpiId}`
         return $.ajax({
@@ -100,7 +99,6 @@ class AddKpi extends Component {
             type: Type.get,
         })
     }
-
 
     onChangeBlur() {
         if (this.state.kpiId !== undefined) {

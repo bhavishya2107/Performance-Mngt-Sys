@@ -136,6 +136,7 @@ class KPI extends Component {
     }
     //#endregion
 
+
     checkall(e) {
         $("#tblKpi input:checkbox").each((index, item) => {
             if ($(e.currentTarget).is(":checked") === true) {
@@ -249,9 +250,9 @@ class KPI extends Component {
                                         <i></i>
                                     </label>
                                 </th>
-                                <th  width="100" >Name</th>
-                                <th  width="100" >Weightage</th>
-                                <th  width="100">Target</th>
+                                <th width="100" >Name</th>
+                                <th width="100" >Weightage</th>
+                                <th width="100">Target</th>
                                 <th width="100" >Scale Set</th>
                                 <th width="100">Action</th>
                             </tr>

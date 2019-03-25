@@ -108,7 +108,6 @@ class AddComplexityMaster extends Component {
     }
     //#endregion
 
-
     //#region update fucntionality details
     updateDetailsApi(data) {
         const endpointPATCH = environment.apiUrl + moduleUrls.ComplexityMaster + '/' + `${this.state.complexityId}`
@@ -128,7 +127,7 @@ class AddComplexityMaster extends Component {
             data: JSON.stringify(body)
         });
     }
-    
+
     UpdateComplexityMasterDetails(data) {
         var isvalidate = window.formValidation("#ComplexityMasterForm");
         if (isvalidate) {
