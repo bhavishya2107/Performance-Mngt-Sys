@@ -15,40 +15,41 @@ class Dashboard extends Component {
             status: ""
         }
     }
-    
+
     handleChange = (e) => {
-       // this.statusUpdateAPI();
+        this.statusUpdateAPI();
         window.location.reload();
-              
-        if (this.statusUpdateAPI())
-        toast.save("Submit Succesfully");
-        else {
-            toast.info("Status not changed ");
-        }
+        // if (this.statusUpdateAPI()) {
+        //     toast.success("Submitted Succesfully", {
+        //         position: toast.POSITION.TOP_RIGHT
+        //     });
+        // }
+        // else {
+        //     toast.info("Status not changed ");
+        // }
     }
 
     statusUpdateAPI() {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-          query: `Update  template_assignment_master SET status='Submit by Reviewer' where status='Draft by Employee'`
+            query: `Update  template_assignment_master SET status='Submit by Employee' where status='Draft by Employee'`
         }
         return $.ajax({
-          url: statusUpdate,
-          type: Type.post,
-          data: JSON.stringify(statusUpdateQuery),
-          headers: {
-            "Content-Type": "application/json",
-          }
+            url: statusUpdate,
+            type: Type.post,
+            data: JSON.stringify(statusUpdateQuery),
+            headers: {
+                "Content-Type": "application/json",
+            }
         });
-      }
-
-
+    }
 
     componentWillMount() {
         $(document).ready(function () {
             $(".dataTables_length").css("padding-left", "0px");
         });
     }
+
     componentDidMount() {
 
         const myKRAUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
@@ -67,7 +68,8 @@ class Dashboard extends Component {
                     JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId
                     JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
                     JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
-                    where TAM.userId='${localStorage.getItem('userId')}' AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Reviewer')`
+                    where TAM.userId='${localStorage.getItem('userId')}' AND TAM.status IN('Assigned to Employee','Draft by Employee')`
+                   // ,'Submit by Employee'
                 },
             },
             columns: [
