@@ -11,10 +11,25 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           userId:props.match.params.userId
+            userId: props.match.params.userId,
+            status: ""
         }
     }
-
+    // handleChange() {
+    //     this.setState({ status: "Draft by Employee" });
+    
+    //     return <h1 onClick={this.changeStatus}>{this.state.status}</h1>
+    // }
+    // handleChange = (e) => {
+    //     console.log(this.state.status)
+    //     debugger;
+    //     if (this.state.status === 'Draft by Employee') {
+    //         this.setState({ 'Submit By Reviewer': this.state.status });
+    //     }
+    //     else {
+    //         toast.info("Status not changed ");
+    //     }
+    // }
 
     componentWillMount() {
         $(document).ready(function () {
@@ -22,6 +37,7 @@ class Dashboard extends Component {
         });
     }
     componentDidMount() {
+        // this.setState({ inputValue: this.props.inputValue });
         const myKRAUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -83,11 +99,24 @@ class Dashboard extends Component {
                         return (
                             '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            "</a>"
+                            "</a>" +
+                            '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope" aria-hidden="true""></i></a>'
+
                         )
                     }
-                } 
-            ]
+                }
+            ],
+            initComplete: (settings, json) => {
+            },
+            "drawCallback": (settings) => {
+                window.smallTable();
+                $(".btnSubmit").on("click", e => {
+                    this.handleChange(e.currentTarget.id);
+                   
+                    //  debugger;
+                     
+                });
+            }
         });
     }
     render() {
