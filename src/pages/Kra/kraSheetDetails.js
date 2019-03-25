@@ -85,16 +85,7 @@ class KraSheet extends Component {
     });
   }
 
-  //delete saved comment and selfrate on edit record
-  deleteData() {
-    return $.ajax({
-      url: environment.dynamicUrl + 'dynamic',
-      type: Type.post,
-      data: {
-        "query": "delete from template_assignment_detail where templateAssignId  = " + `${this.state.assignId}`
-      },
-    })
-  }
+
 
   //fetch details from api 
   getdetailsFromTAD() {
@@ -112,116 +103,95 @@ class KraSheet extends Component {
   //update and set comment
   updateApi(data) {
     debugger;
-    var kraData = []
+
     var kraSheetdata =
     {
       "kraId": data.kraId,
       "kpiId": data.kpiId,
-      "selfComment": data.comments,
+      "selfComment": data.selfComment,
       "selfRating": data.selfRating,
       "selfRatingBy": data.selfRatingBy,
       "templateAssignId": data.templateAssignId,
-      "assignDetailId": data.assignDetailId
     }
-    kraData.push(kraSheetdata)
 
-    return $.ajax({
+
+    $.ajax({
       url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
       type: "PATCH",
       headers: {
         "content-type": "application/json",
         "x-requested-with": "XMLHttpRequest"
-    },
+      },
       async: false,
-      data:JSON.stringify(kraData)
-
+      data: JSON.stringify(kraSheetdata),
+      success: function (resultData) {
+        console.log("ss")
+      }
     })
 
   }
   //comment,self-rating save if kpiID,KraId,assignId exist
   commentAndratingUpdate() {
-    this.commentAndratingSave();
     var kraData = new Array();
+    debugger;
+    var kraDataSaveRecords = new Array();
+    var kraDataUpdateRecords = new Array();
     $('#tblkraSheet tbody tr').each((index, item) => {
       if ($(item).find('.commentSaved').val() !== null) {
-
-        var kraSheetdata =
-        {
-          "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-          "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-          "selfComment": $(item).find('.commentSaved').val(),
-          "selfRating": $(item).find('.selfrate').val(),
-          "selfRatingBy": parseInt(localStorage.getItem('userId')),
-          "templateAssignId": this.state.assignId,
-          "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
-        }
-        kraData.push(kraSheetdata)
-      }
-    })
-    kraData.forEach(item => {
-      if (item.assignDetailId === null) {
-        //save
-        const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-        return $.ajax({
-          url: endpointPOST,
-          type: Type.post,
-          data: JSON.stringify(kraData),
-          headers: {
-            "Content-Type": "application/json",
-            "x-requested-with": "XMLHttpRequest"
-          },
-          success: function (resultData) {
+        if (isNaN(parseInt($(item).find('.commentSaved').attr('data-assigndetailId')))) {
+          var kraSheetdata =
+          {
+            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+            "selfComment": $(item).find('.commentSaved').val(),
+            "selfRating": $(item).find('.selfrate').val(),
+            "selfRatingBy": parseInt(localStorage.getItem('userId')),
+            "templateAssignId": this.state.assignId
           }
-        });
-      }
-      else {
-        //update
-        var temp = this.getdetailsFromTAD()
-        temp.done((data) => {
-          data.forEach(item => {
-            this.updateApi(item.assignDetailId)
-              // .done((res) => {
-               
-              // })
-          });
-        })
-      }
-    });
-
-  }
-
-  //comment and rating save 
-  commentAndratingSave = () => {
-    var kraData = new Array();
-    $('#tblkraSheet tbody tr').each((index, item) => {
-
-      var kraSheetdata =
-      {
-        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-        "selfComment": $(item).find('.commentSaved').val(),
-        "selfRating": $(item).find('.selfrate').val(),
-        "selfRatingBy": parseInt(localStorage.getItem('userId')),
-        "templateAssignId": this.state.assignId,
-        "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
-      }
-      kraData.push(kraSheetdata)
-    })
-    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-    return $.ajax({
-      url: endpointPOST,
-      type: Type.post,
-      data: JSON.stringify(kraData),
-      headers: {
-        "Content-Type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      success: function (resultData) {
+          kraDataSaveRecords.push(kraSheetdata)
+        }
+        else {
+          var kraSheetdata =
+          {
+            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+            "selfComment": $(item).find('.commentSaved').val(),
+            "selfRating": $(item).find('.selfrate').val(),
+            "selfRatingBy": parseInt(localStorage.getItem('userId')),
+            "templateAssignId": this.state.assignId,
+            "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
+          }
+          kraDataUpdateRecords.push(kraSheetdata)
+        }
       }
     });
 
-  }
+    if (kraDataSaveRecords.length > 0) {//SAVE Logic
 
+      const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+      $.ajax({
+        url: endpointPOST,
+        type: Type.post,
+        data: JSON.stringify(kraDataSaveRecords),
+        headers: {
+          "Content-Type": "application/json",
+          "x-requested-with": "XMLHttpRequest"
+        },
+        success: function (resultData) {
+
+          alert("success")
+        }
+      });
+
+    }
+    if (kraDataUpdateRecords.length > 0) {//Update
+      kraDataUpdateRecords.forEach(item => {
+        this.updateApi(item);
+      });
+      console.log("sslllll")
+      alert("all record updated")
+    }
+  }
 
   componentDidMount() {
     var result = this.getdetailsFromTAD();
