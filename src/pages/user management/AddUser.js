@@ -92,7 +92,7 @@ class AddUser extends Component {
 
             res.done((response) => {
                 if (response.length > 0) {
-                    $(".dataExist").show()
+                    $(".userExist").show()
                 }
                 else {
                     $(".userExist").hide()
@@ -148,7 +148,8 @@ class AddUser extends Component {
         })
     }
     isUserExistUpdateApi() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')' ;
+        var url = environment.apiUrl + moduleUrls.User + '/' + '?_where=(userName,eq,' + this.state.userName.trim() + ')'+ '~and(userId,ne,' + this.state.userId
+         + ')';
 
         return $.ajax({
             url: url,
@@ -300,7 +301,7 @@ class AddUser extends Component {
                     result.done((response) => {
                         var emailBody = `<html>
                         <body>
-                        <p>Hello `+ response[0].firstName.charAt(0).toUpperCase() + response[0].firstName.slice(1) + ` ` +  response[0].lastName.charAt(0).toUpperCase() + response[0].lastName.slice(1) + `,</p>
+                        <p>Hello `+ response[0].firstName.charAt(0).toUpperCase() + response[0].firstName.slice(1) + ` ` + response[0].lastName.charAt(0).toUpperCase() + response[0].lastName.slice(1) + `,</p>
                         <p>Employee removed from your team.<span>`;
                         if (this.state.gender === "Male") {
                             emailBody += `His`
@@ -309,7 +310,7 @@ class AddUser extends Component {
                             emailBody += `Her`
                         }
                         emailBody += `
-                        name is <b>` +response[0].firstName.charAt(0).toUpperCase() +  response[0].firstName.slice(1) + ` ` +  response[0].lastName.charAt(0).toUpperCase() +response[0].lastName.slice(1) + `</b></span>
+                        name is <b>` + response[0].firstName.charAt(0).toUpperCase() + response[0].firstName.slice(1) + ` ` + response[0].lastName.charAt(0).toUpperCase() + response[0].lastName.slice(1) + `</b></span>
                         </p>                        
                         <p>Thanks,</p>
                         <p>PSSPL ADMIN</p>
@@ -320,8 +321,8 @@ class AddUser extends Component {
                         {
                             emailSubject: "Employee removed from your team",
                             emailBody: emailBody,
-                            toemailadress: "janmeshnayak1997@gmail.com"
-                            //response[0].emailAddress
+                            toemailadress: response[0].emailAddress
+
                         }
                         this.sendMailAPI(body);
 
@@ -343,7 +344,7 @@ class AddUser extends Component {
                         emailBody += `Her`
                     }
                     emailBody += `
-                        name is <b>` +  this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1) + ` ` +  this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1) +`</b></span>
+                        name is <b>` + this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1) + ` ` + this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1) + `</b></span>
                         </p>                        
                         <p>Thanks,</p>
                         <p>PSSPL ADMIN</p>
@@ -354,7 +355,7 @@ class AddUser extends Component {
                     {
                         emailSubject: "Employee added in your team",
                         emailBody: emailBody,
-                        toemailadress: "janmeshnayak1997@gmail.com"
+                        toemailadress: res[0].emailAddress
                     }
                     this.sendMailAPI(body);
 
@@ -385,15 +386,16 @@ class AddUser extends Component {
         })
     }
     UpdateUserDetails(data) {
-        
+        // debugger
         var result = window.formValidation("#createUser");
+        debugger
         if (result) {
             var res = this.isUserExistUpdateApi();
             res.done((response) => {
-        
+      
                 if (response.length > 0) {
                     $(".userExist").show()
-                
+
                 }
                 else {
                     var result = this.isUserExistEmailUpdateApi();
@@ -409,12 +411,10 @@ class AddUser extends Component {
                     })
                 }
             });
-            res.fail((error) => {
-                $(".userExist").hide()
-            })
+          
         }
         else {
-            $(".dataExist").hide()
+            $(".userExist").hide()
             return false
         }
     }
@@ -451,7 +451,7 @@ class AddUser extends Component {
                 /* START - SEND EMAIL */
                 var emailBody = `<html>
                     <body>
-                    <p>Hello `+  res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ` ` +  res[0].lastName.charAt(0).toUpperCase()  + res[0].lastName.slice(1) + `,</p>
+                    <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ` ` + res[0].lastName.charAt(0).toUpperCase() + res[0].lastName.slice(1) + `,</p>
                     <p>New Employee added in your team.<span>`;
                 if (this.state.gender === "Male") {
                     emailBody += `His`
@@ -460,7 +460,7 @@ class AddUser extends Component {
                     emailBody += `Her`
                 }
                 emailBody += `
-                    name is <b>` + this.state.firstName.charAt(0).toUpperCase() +  this.state.firstName.slice(1) + ` ` +   this.state.lastName.charAt(0).toUpperCase()  + this.state.lastName.slice(1) +  `</b></span>
+                    name is <b>` + this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1) + ` ` + this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1) + `</b></span>
                     </p>                        
                     <p>Thanks,</p>
                     <p>PSSPL ADMIN</p>
@@ -471,8 +471,8 @@ class AddUser extends Component {
                 {
                     emailSubject: "Employee added in your team",
                     emailBody: emailBody,
-                    toemailadress: "janmeshnayak1997@gmail.com"
-                  //  res[0].emailAddress
+                    toemailadress: res[0].emailAddress
+
                 }
                 this.sendMailAPI(body);
 
@@ -498,14 +498,13 @@ class AddUser extends Component {
             })
         }
     }
-
     sendMailWhenUserCreated() {
         /* START - GET TL NAME AND EMAIL */
         // User Name Is : <b>` + this.state.userName + `</b></span>
         {
             /* START - SEND EMAIL */
             var emailBody = `
-                <p>Hello `+ this.state.firstName.charAt(0).toUpperCase() +  this.state.firstName.slice(1) + ` ` +   this.state.lastName.charAt(0).toUpperCase()  + this.state.lastName.slice(1) + `,</p>
+                <p>Hello `+ this.state.firstName.charAt(0).toUpperCase() + this.state.firstName.slice(1) + ` ` + this.state.lastName.charAt(0).toUpperCase() + this.state.lastName.slice(1) + `,</p>
                     </p> 
                     
                     <p>Welcome to Prakash Software. Below are the credentials to access PMS system:</p>
@@ -524,8 +523,8 @@ class AddUser extends Component {
             {
                 emailSubject: "Welcome to Prakash Software",
                 emailBody: emailBody,
-                toemailadress: "janmeshnayak1997@gmail.com"
-                //this.state.emailAddress
+                toemailadress: this.state.emailAddress
+
             }
             this.sendMailWhenUserCreatedApi(body);
 
@@ -739,8 +738,8 @@ class AddUser extends Component {
                                                         onBlur={() => { this.isExistUserNameOnChange() }}
 
                                                         onChange={(event) => {
-                                                           // $(".dataExist").hide()
-                                                             $(".userExist").hide()
+                                                            // $(".dataExist").hide()
+                                                            $(".userExist").hide()
                                                             this.setState({
                                                                 userName: event.target.value
                                                             })
@@ -768,7 +767,7 @@ class AddUser extends Component {
                                             <div className="col-md-6">
                                                 <div className="form-group">
                                                     <label htmlFor="mobileNo" className="required">Mobile No</label>
-                                                    <input type="text" pattern="[0-9]*" class="form-control" name="mobileNo" onInput={this.handleChange.bind(this)} value={this.state.mobileNo} autoComplete="off" id="mobileNo" maxlength="10"
+                                                    <input type="text" pattern="[0-9]*" className="form-control" name="mobileNo" onInput={this.handleChange.bind(this)} value={this.state.mobileNo} autoComplete="off" id="mobileNo" maxLength="10"
                                                         required />
                                                 </div>
                                             </div>
