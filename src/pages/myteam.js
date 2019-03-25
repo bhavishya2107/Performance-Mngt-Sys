@@ -189,7 +189,7 @@ class Myteam extends Component {
                         <tr>
                             <th width="100">KRA Sheet</th>
                             <th width="100">Employee Name</th>
-                            <th width="100">Start Data</th>
+                            <th width="100">Start Date</th>
                             <th width="100">End Date</th>
                             <th width="100">Status</th>
                             <th width="50">Action</th>
