@@ -85,16 +85,7 @@ class KraSheet extends Component {
     });
   }
 
-  //delete saved comment and selfrate on edit record
-  deleteData() {
-    return $.ajax({
-      url: environment.dynamicUrl + 'dynamic',
-      type: Type.post,
-      data: {
-        "query": "delete from template_assignment_detail where templateAssignId  = " + `${this.state.assignId}`
-      },
-    })
-  }
+
 
   //fetch details from api 
   getdetailsFromTAD() {
@@ -134,7 +125,7 @@ class KraSheet extends Component {
       async: false,
       data: JSON.stringify(kraSheetdata),
       success: function (resultData) {
-      console.log("ss")
+        console.log("ss")
       }
     })
 
@@ -201,39 +192,6 @@ class KraSheet extends Component {
       alert("all record updated")
     }
   }
-
-  //comment and rating save 
-  commentAndratingSave = () => {
-    var kraData = new Array();
-    $('#tblkraSheet tbody tr').each((index, item) => {
-
-      var kraSheetdata =
-      {
-        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-        "selfComment": $(item).find('.commentSaved').val(),
-        "selfRating": $(item).find('.selfrate').val(),
-        "selfRatingBy": parseInt(localStorage.getItem('userId')),
-        "templateAssignId": this.state.assignId,
-        "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
-      }
-      kraData.push(kraSheetdata)
-    })
-    const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-    return $.ajax({
-      url: endpointPOST,
-      type: Type.post,
-      data: JSON.stringify(kraData),
-      headers: {
-        "Content-Type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      success: function (resultData) {
-      }
-    });
-
-  }
-
 
   componentDidMount() {
     var result = this.getdetailsFromTAD();
