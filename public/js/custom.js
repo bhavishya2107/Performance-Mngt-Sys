@@ -63,7 +63,6 @@ function formValidation(form) {
                 },
                 ConfirmPWemail: {
                     required: true,
-                    // equalTo:"#ChangePWemail"
                 },
                 CurrentPWemail: {
                     required: true
@@ -74,8 +73,6 @@ function formValidation(form) {
                 },
                 ConfirmNewPWRequired: {
                     required: true,
-                    // passwordMatch:true
-                    // equalTo:'#ResetNewPWRequired'
                 },
                 optionKra: {
                     required: true,
@@ -84,8 +81,6 @@ function formValidation(form) {
                     required: true,
                 },
                 messages: {
-                    // ChangePWemail:{required: " Enter Password"},
-                    // ConfirmPWemail: {equalTo:" Enter Confirm Password Same as Password"},
                     jobtitlename: {
                         required: 'maximum 50 characters'
                     },
