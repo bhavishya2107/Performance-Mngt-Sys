@@ -23,7 +23,6 @@ class TLKraSheet extends Component {
             assignId: props.match.params.assignId,
             templateid: "",
             table: "",
-
         }
     }
 
@@ -82,75 +81,95 @@ class TLKraSheet extends Component {
         });
     }
 
-    //delete saved comment and selfrate on edit record
-    deleteData() {
-        return $.ajax({
-            url: environment.dynamicUrl + 'dynamic',
-            type: Type.post,
-            data: {
-                "query": "delete from template_assignment_detail where templateAssignId  = " + `${this.state.assignId}`
-            },
-        })
-    }
-
-    commentAndratingUpdate() {
-        var response = this.deleteData()
-        response.done((result) => {
-            this.commentAndratingSave();
-            var kraData = new Array();
-            $('#tblkraSheet tbody tr').each((index, item) => {
-                if ($(item).find('.commentSaved').val() !== null) {
-                    var kraSheetdata =
-                    {
-                        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-                        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-                        "selfComment": $(item).find('.commentSaved').val(),
-                        "selfRating": $(item).find('.selfrate').val(),
-                        "selfRatingBy": parseInt(localStorage.getItem('userId')),
-                        "templateAssignId": this.state.assignId
-                    }
-                    kraData.push(kraSheetdata)
-                }
-            })
-        })
-        response.fail((error) => {
-
-        })
-    }
-
-    commentAndratingSave = () => {
-        var kraData = new Array();
-        $('#tblkraSheet tbody tr').each((index, item) => {
-            var kraSheetdata =
-            {
-                "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-                "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-                "selfComment": $(item).find('.commentSaved').val(),
-                "selfRating": $(item).find('.selfrate').val(),
-                "selfRatingBy": parseInt(localStorage.getItem('userId')),
-                "templateAssignId": this.state.assignId
-            }
-            kraData.push(kraSheetdata)
-        })
-        const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-        return $.ajax({
-            url: endpointPOST,
-            type: Type.post,
-            data: JSON.stringify(kraData),
-            headers: {
-                "Content-Type": "application/json",
-                "x-requested-with": "XMLHttpRequest"
-            },
-            success: function (resultData) {
-            }
-        });
+ //update and set comment
+ updateApi(data) {
+    var kraSheetdata =
+    {
+      "kraId": data.kraId,
+      "kpiId": data.kpiId,
+      "reviewerComment": data.reviewerComment,
+      "reviewerRating": data.reviewerRating,
+      "reviwerRatingBy": data.reviwerRatingBy,
+      "templateAssignId": data.templateAssignId,
     }
 
 
+    return $.ajax({
+      url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
+      type: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        "x-requested-with": "XMLHttpRequest"
+      },
+      async: false,
+      data: JSON.stringify(kraSheetdata)
+    })
+  }
+
+  //comment,self-rating save if kpiID,KraId,assignId exist
+  commentAndratingUpdate() {
+    var kraData = new Array();
+    var kraDataSaveRecords = new Array();
+    var kraDataUpdateRecords = new Array();
+    $('#tblkraSheet tbody tr').each((index, item) => {
+      if ($(item).find('.commentSaved').val() !== null) {
+        if (isNaN(parseInt($(item).find('.commentSaved').attr('data-assigndetailId')))) {
+          var kraSheetdata =
+          {
+            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+            "reviewerComment": $(item).find('.commentSaved').val(),
+            "reviewerRating": $(item).find('.TLrating').val(),
+            "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
+            "templateAssignId": this.state.assignId
+          }
+          kraDataSaveRecords.push(kraSheetdata)
+        }
+        else {
+          var kraSheetdata =
+          {
+            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+            "reviewerComment": $(item).find('.commentSaved').val(),
+            "reviewerRating": $(item).find('.TLrating').val(),
+            "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
+            "templateAssignId": this.state.assignId,
+            "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
+          }
+          kraDataUpdateRecords.push(kraSheetdata)
+        }
+      }
+    });
+
+    if (kraDataSaveRecords.length > 0) {//SAVE Logic
+      const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+      $.ajax({
+        url: endpointPOST,
+        type: Type.post,
+        data: JSON.stringify(kraDataSaveRecords),
+        headers: {
+          "Content-Type": "application/json",
+          "x-requested-with": "XMLHttpRequest"
+        },
+        success: function (resultData) {
+            // toast.success("Comment and Rating Saved", + {
+            //     position: toast.POSITION.TOP_RIGHT
+            //   });
+        }
+      });
+    }
+    if (kraDataUpdateRecords.length > 0) {//Update
+      kraDataUpdateRecords.forEach(item => {
+        this.updateApi(item);
+      });
+    //   toast.success("Comment and Rating Updated", + {
+    //     position: toast.POSITION.TOP_RIGHT
+    //   });
+    }
+  }
     componentDidMount() {
         var res = this.getUserDetailsApi();
         res.done(response => {
-            console.log('response', response);
             this.setState({
                 firstName: response[0].firstname,
                 lastName: response[0].lastname,
@@ -181,22 +200,22 @@ class TLKraSheet extends Component {
                     dataSrc: "",
                     data: {
                         query:
-                            ` 
-              SELECT DISTINCT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target,tad.selfRating,tad.selfComment,tad.assignDetailId FROM template_detail td 
-              LEFT JOIN kra_master km ON km.kraId = td.kraId
-              LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId 
-              LEFT JOIN template_assignment_master tam ON tam.templateId = td.templateId
-              LEFT JOIN template_assignment_detail tad ON tad.templateAssignId = tam.assignId
-              WHERE td.templateId =  ${temp[0].templateId}`
-                        //`SELECT km.kraId,km.kraName,kpi.kpiId, kpi.kpiTitle,kpi.weightage,kpi.target FROM template_detail td LEFT JOIN kra_master km ON km.kraId = td.kraId LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId WHERE td.templateId = ${temp[0].templateId}`
+                        ` 
+                        SELECT tad.assignDetailId,tad.templateAssignId, td.kraId, td.kpiId, kra.kraName, kpi.kpiTitle,kpi.weightage,kpi.target, tad.selfRating,tad.reviewerComment,tad.reviewerRating,tad.reviwerRatingBy
+                        FROM template_assignment_master tam
+                        LEFT JOIN template_detail td ON tam.templateId = td.templateId
+                        LEFT JOIN kra_master kra ON kra.kraId = td.kraId
+                        LEFT JOIN kpi_master kpi ON kpi.kpiId = td.kpiId
+                        LEFT JOIN template_assignment_detail tad ON tad.kpiId = td.kpiId AND tad.kraId = td.kraId
+                        WHERE  tam.assignId =  ${this.state.assignId}`
                     },
-                  
                 },
                 columns: [
                     {
                         data: "kraName",
                         targets: 0,
                         render: (data, type, row) => {
+                     
                             return (
                                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
                             )
@@ -220,8 +239,6 @@ class TLKraSheet extends Component {
                             )
                         }
                     },
-
-
                     {
                         data: "target",
                         targets: 3,
@@ -237,26 +254,34 @@ class TLKraSheet extends Component {
                         targets: 4,
                         render: (data, type, row) => {
                             return (
-                                `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
+                                `<label class="selfRating" value="${row.selfRating}">` + row.selfRating + `</label>`
                             )
                         },
                     },
                     {
-                        data: "selfRating",
+                        data: "reviewerRating",
                         targets: 4,
                         render: (data, type, row) => {
                             return (
-                                `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
+                                `<input   class="TLrating" type="number" name="reviewerRating" min="0" max="5" width="100px"  value="${row.reviewerRating}" />`
                             )
                         },
                     },
                     {
-                        data: "selfComment",
+                        data: "reviewerComment",
                         targets: 5,
                         render: (data, type, row) => {
-                            return (
-                                `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" value="${row.selfComment}">${row.selfComment}</textarea>`
-                            )
+                            debugger;
+                            if(row.reviewerComment != "null" && row.reviewerComment != null ){
+                                return (
+                                    `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}">${row.reviewerComment}</textarea>`
+                                )
+                            }else{
+                                return (
+                                    `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}"></textarea>`
+                                )
+                            }
+                          
                         },
                     },
                 ],
@@ -280,6 +305,7 @@ class TLKraSheet extends Component {
                 <div className="clearfix  align-items-center row page-title">
                     <div className="col text-right" />
                 </div>
+                <div className="mb-3 clearfix">
                 <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
                     <div className="col-md-12 order-md-first">
                         <div className="row">
@@ -386,8 +412,9 @@ class TLKraSheet extends Component {
                         </div>
                     </div>
                 </form>
-                <br />
-                <div className="clearfix d-flex align-items-center row page-title">
+                </div>
+              
+                <div className="clearfix">
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblkraSheet"
                         ref={el => (this.el = el)}>
@@ -398,7 +425,7 @@ class TLKraSheet extends Component {
                                 <th width="50px">Weightage</th>
                                 <th >Target</th>
                                 <th width="50px">Employee Rating</th>
-                                <th>Self Rating</th>
+                                <th>Reviewer Rating</th>
                                 <th>Comments</th>
                             </tr>
                         </thead>
@@ -406,12 +433,9 @@ class TLKraSheet extends Component {
                     </table>
                 </div>
                 <button className="btn btn-success " type="button" onClick={() => {
-                    this.commentAndratingSave();
-                }}>Save </button>
-                &nbsp;
-           <button className="btn btn-success " type="button" onClick={() => {
                     this.commentAndratingUpdate();
-                }}>Update</button>
+                }}>Save </button>
+             {/* <ToastContainer /> */}
             </div>
             //dataTable
         )

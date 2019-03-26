@@ -178,9 +178,9 @@ class KraSheet extends Component {
           "x-requested-with": "XMLHttpRequest"
         },
         success: function (resultData) {
-          toast.success("Comment and Rating Saved", + {
-            position: toast.POSITION.TOP_RIGHT
-          });
+          // toast.success("Comment and Rating Saved", + {
+          //   position: toast.POSITION.TOP_RIGHT
+          // });
         }
       });
     }
@@ -188,9 +188,9 @@ class KraSheet extends Component {
       kraDataUpdateRecords.forEach(item => {
         this.updateApi(item);
       });
-      toast.success("Comment and Rating Updated", +  {
-        position: toast.POSITION.TOP_RIGHT
-      });
+      // toast.success("Comment and Rating Updated", +  {
+      //   position: toast.POSITION.TOP_RIGHT
+      // });
     }
   }
 
@@ -304,14 +304,15 @@ class KraSheet extends Component {
             data: "selfComment",
             targets: 5,
             render: (data, type, row) => {
-              if (row != null) {
+              debugger
+              if (row.selfComment !== "null" && row.selfComment !== null && row.assignDetailId != null) {
                 return (
                   `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}">${row.selfComment}</textarea>`
                 )
               }
               else {
                 return (
-                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}"></textarea>`
+                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}"/>`
                 )
               }
             },
@@ -338,6 +339,7 @@ class KraSheet extends Component {
         <div className="clearfix  align-items-center row page-title">
           <div className="col text-right" />
         </div>
+        <div className="mb-3 clearfix">
         <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
           <div className="col-md-12 order-md-first">
             <div className="row">
@@ -444,8 +446,9 @@ class KraSheet extends Component {
             </div>
           </div>
         </form>
-        <br />
-        <div className="clearfix d-flex align-items-center row page-title">
+        </div>
+        
+        <div className="clearfix">
           <table className="table table-striped table-bordered table-hover customDataTable"
             id="tblkraSheet"
             ref={el => (this.el = el)}>
