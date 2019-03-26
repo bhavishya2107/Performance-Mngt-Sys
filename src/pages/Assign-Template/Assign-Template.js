@@ -6,7 +6,7 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 import bootbox from 'bootbox'
 $.DataTable = require('datatables.net-bs4');
 var moment = require('moment');
-
+var _datatableControl;
 class AssignTemplate extends Component {
     constructor(props) {
         super(props);
@@ -55,20 +55,129 @@ class AssignTemplate extends Component {
             status: ""
         })
     }
+
     searchUser() {
-        this.$el.DataTable().ajax.reload();
-        $("#tblTemplateAssigned").keypress(function(e) {
-      var dynamicQuery="";
-            if (this.state.userId == this.state.first) {
-            dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.userId=1  ORDER BY TAM.assignId DESC"
+          const url = environment.dynamicUrl + 'dynamic';
+
+        var dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId where 1=1";
+        
+        if(this.state.userId != ''){
+            dynamicQuery += " and TAM.userId = " + this.state.userId;
         }
-        else if (this.state.projectId == this.state.displayProjectData) {
-            dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=98  ORDER BY TAM.assignId DESC"
+
+        if(this.state.projectId != ''){
+            dynamicQuery += " and TAM.projectId = " + this.state.projectId;
         }
-        else {
-            alert("1")
+
+        if(this.state.status != ''){
+            dynamicQuery += " and TAM.status = " + this.state.status;
         }
-    })
+
+        dynamicQuery += " ORDER BY TAM.assignId DESC";
+
+
+        $("#tblTemplateAssigned").dataTable().fnDestroy();
+        $("#tblTemplateAssigned").dataTable({
+
+            ajax: {
+                url: url,
+                type: Type.post,
+                data: {
+                    "query": dynamicQuery
+                },
+                dataSrc: "",
+                error: function (xhr, status, error) {
+                },
+            },
+            columns: [
+                {
+                    data: "assignId",
+                    targets: 0,
+                    render: function (data, type, row) {
+                        return (
+                            '<label class="checkbox">' +
+                            '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
+                            '<i></i> ' +
+                            '</label>'
+                        )
+                    },
+                    orderable: false
+                },
+                {
+                    data: "quaterName",
+                    targets: 1,
+                },
+                {
+                    data: "templateName",
+                    targets: 2,
+                },
+                {
+                    data: "firstName",
+                    targets: 3,
+                    render: (data, type, row) => {
+                        this.setState({
+                            first: row.firstName
+                        })
+                        return (
+
+                            `<label className="getUserName" id="firstName" value=>${row.firstName}` + " " +
+                            `<label className="getUserName" id="lastName" value=>${row.lastName}`
+                        )
+                    }
+                },
+                {
+                    data: "projectName",
+                    targets: 4,
+
+                },
+                {
+                    data: "startDate" + "endDate",
+                    targets: 5,
+                    render: (data, type, row) => {
+                        return (
+                            `<label id="startDate" value=>${moment(row.startDate).format('DD-MM-YYYY')}</label>` + " - " +
+                            `<label id="endDate" value=>${moment(row.endDate).format("DD-MM-YYYY")}</label>`
+                        )
+                    },
+                },
+                {
+                    data: "status",
+                    targets: 6,
+                },
+                {
+                    data: "assignId",
+                    targets: 7,
+                    render: function (data, type, row) {
+                        if ({ status: "Created by HR" }) {
+                            return (
+                                '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a href="#"  class="btn mr-2 btnMail btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope" aria-hidden="true""></i></a>'
+                            );
+                        }
+                        else {
+                            return (
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                            );
+                        }
+                    },
+                    "orderable": false,
+                    "bDestroy": true
+                }
+            ],
+            initComplete: (settings, json) => {
+            },
+            //#region drawcallback function
+            "drawCallback": (settings) => {
+                window.smallTable();
+                $(".btnDelete").on("click", e => {
+                    this.singleDeleteTemplateConfirm(e.currentTarget.id);
+                });
+                $(".btnMail").on("click", e => {
+                    this.sendAssignTemplateMail(e.currentTarget.id);
+                });
+            }
+        });
     }
     getProjectData() {
         var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
@@ -85,7 +194,7 @@ class AssignTemplate extends Component {
             })
     }
     getUserData() {
-        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}`
+        var url = environment.apiUrl + moduleUrls.User + '/' + `${this.state.userId}` 
         this.getDropDownValues(url).done(
             (tempUser) => {
                 var displayUserDataReturn = tempUser.map(function (i) {
@@ -249,7 +358,6 @@ class AssignTemplate extends Component {
                 query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
             },
             success: (res) => {
-                console.log(res, "")
                 var emailBody =
                     `<html>
                     <body>
@@ -281,21 +389,12 @@ class AssignTemplate extends Component {
         this.getProjectData()
         this.getUserData()
         const url = environment.dynamicUrl + 'dynamic';
-        debugger
-        var dynamicQuery = "";
+        
+        var dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId ORDER BY TAM.assignId DESC";
 
-        if (this.state.userId == this.state.first) {
-            dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.userId=1  ORDER BY TAM.assignId DESC"
-        }
-        else if (this.state.projectId == this.state.displayProjectData) {
-            dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=98  ORDER BY TAM.assignId DESC"
-        }
-        else {
-            alert("1")
-        }
-        debugger
         this.$el = $(this.el);
-        this.$el.DataTable({
+        _datatableControl = this.$el.DataTable({
+
             "autoWidth": false,
             ajax: {
                 url: url,
@@ -337,7 +436,6 @@ class AssignTemplate extends Component {
                             first: row.firstName
                         })
                         return (
-
                             `<label className="getUserName" id="firstName" value=>${row.firstName}` + " " +
                             `<label className="getUserName" id="lastName" value=>${row.lastName}`
                         )
@@ -395,9 +493,7 @@ class AssignTemplate extends Component {
                 });
             }
         });
-
     }
-
     render() {
         return (
             <div>
