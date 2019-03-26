@@ -125,7 +125,7 @@ class KraSheet extends Component {
       async: false,
       data: JSON.stringify(kraSheetdata),
       success: function (resultData) {
-        console.log("ss")
+
       }
     })
 
@@ -178,18 +178,19 @@ class KraSheet extends Component {
           "x-requested-with": "XMLHttpRequest"
         },
         success: function (resultData) {
-
-          alert("success")
+          toast.success("Comment and Rating Saved", + {
+            position: toast.POSITION.TOP_RIGHT
+          });
         }
       });
-
     }
     if (kraDataUpdateRecords.length > 0) {//Update
       kraDataUpdateRecords.forEach(item => {
         this.updateApi(item);
       });
-      console.log("sslllll")
-      alert("all record updated")
+      toast.success("Comment and Rating Updated", +  {
+        position: toast.POSITION.TOP_RIGHT
+      });
     }
   }
 
@@ -294,7 +295,6 @@ class KraSheet extends Component {
             data: "selfRating",
             targets: 4,
             render: (data, type, row) => {
-
               return (
                 `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
               )
@@ -304,9 +304,16 @@ class KraSheet extends Component {
             data: "selfComment",
             targets: 5,
             render: (data, type, row) => {
-              return (
-                `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}">${row.selfComment}</textarea>`
-              )
+              if (row != null) {
+                return (
+                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}">${row.selfComment}</textarea>`
+                )
+              }
+              else {
+                return (
+                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}"></textarea>`
+                )
+              }
             },
           },
         ],
@@ -454,13 +461,11 @@ class KraSheet extends Component {
             </thead>
             <tbody></tbody>
           </table>
+          {/* <ToastContainer /> */}
         </div>
-
         <button className="btn btn-success " type="button" onClick={() => {
           this.commentAndratingUpdate();
         }}>Save</button>
-
-
       </div>
       //dataTable
     )
