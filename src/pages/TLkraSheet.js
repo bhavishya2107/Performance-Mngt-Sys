@@ -271,7 +271,6 @@ class TLKraSheet extends Component {
                         data: "reviewerComment",
                         targets: 5,
                         render: (data, type, row) => {
-                            debugger;
                             if(row.reviewerComment != "null" && row.reviewerComment != null ){
                                 return (
                                     `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}">${row.reviewerComment}</textarea>`
