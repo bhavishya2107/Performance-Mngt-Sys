@@ -13,12 +13,14 @@ class Dashboard extends Component {
         this.state = {
             userId: props.match.params.userId,
             status: "",
-            assignId:""
+            assignId: "",
         }
     }
 
-    onChangeStatus = (e) => {
-        this.statusUpdateAPI();
+    onChangeStatus = (assignId) => {
+        this.tpmstatusUpdateAPI(assignId);
+        this.hrstatusUpdateAPI(assignId);
+        this.empstatusUpdateAPI(assignId);
         window.location.reload();
         // if (this.statusUpdateAPI()) {
         //     toast.success("Submitted Succesfully", {
@@ -30,15 +32,11 @@ class Dashboard extends Component {
         // }
     }
 
-    statusUpdateAPI() {
+    hrstatusUpdateAPI(assignId) {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-             query: `Update template_assignment_master tam SET status='Assigned to Employee'
-              where status='Created by HR'and assignId=191`
-        
-
-        // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
-        // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
+            query: `Update template_assignment_master tam SET status='Assigned to Employee'
+              where status='Created by HR'and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -50,10 +48,58 @@ class Dashboard extends Component {
         });
     }
 
-    componentWillMount() {
-        $(document).ready(function () {
-            $(".dataTables_length").css("padding-left", "0px");
+    tpmstatusUpdateAPI(assignId) {
+
+        var statusUpdate = environment.dynamicUrl + 'dynamic';
+        var statusUpdateQuery = {
+            query: `Update template_assignment_master tam SET status='Submit by Employee'
+              where status='Submit by Reviewer'and assignId=${assignId}`
+
+            // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
+            // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
+        }
+        return $.ajax({
+            url: statusUpdate,
+            type: Type.post,
+            data: JSON.stringify(statusUpdateQuery),
+            headers: {
+                "Content-Type": "application/json",
+            }
         });
+    }
+
+    empstatusUpdateAPI(assignId) {
+     
+        var statusUpdate = environment.dynamicUrl + 'dynamic';
+        var statusUpdateQuery = {
+            query: `Update template_assignment_master tam SET status='Submit by Employee'
+              where status='Created by HR'and assignId=${assignId}`
+
+
+            // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
+            // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
+        }
+        return $.ajax({
+            url: statusUpdate,
+            type: Type.post,
+            data: JSON.stringify(statusUpdateQuery),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+    }
+    componentWillMount() {
+
+        if (localStorage.getItem('roleName') == "HR") {
+
+            this.hrstatusUpdateAPI()
+        }
+        else if (localStorage.getItem('roleName') == "TPM") {
+            this.tpmstatusUpdateAPI()
+        }
+        else {
+            this.empstatusUpdateAPI()
+        }
     }
 
     componentDidMount() {
@@ -85,7 +131,7 @@ class Dashboard extends Component {
                     data: "quaterName" + "projectName",
                     targets: 0,
                     render: (data, type, row) => {
-                        debugger
+
                         this.setState({
                             assignId: row.assignId
                         })
@@ -116,7 +162,7 @@ class Dashboard extends Component {
                     data: "status",
                     targets: 3,
                     render: (data, type, row) => {
-                        debugger
+
                         return (
                             `<label id="status" class="statusRow" value="${row.status}">${row.status}</label>`
                         )
@@ -128,31 +174,42 @@ class Dashboard extends Component {
                     targets: 4,
                     "orderable": false,
                     render: function (data, type, row) {
+
                         return (
                             '<a href="/kraSheetDetails/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-save" aria-hidden="true""></i></a>'
-
+                            '<a href="#" id="' + row.assignId + '"class="btn btnSubmit btn-info btn-sm";"">' +
+                            '<i class="fa fa-save" aria-hidden="true"></i>' +
+                            "</a>"
                         )
                     }
                 }
             ],
-            
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnSubmit").on("click", e => {
                     this.onChangeStatus(e.currentTarget.id);
                 });
+                $(document).ready(function () {
+                    $(".dataTables_length").css("padding-left", "0px");
+                });
             }
+
         });
     }
+    // componentDidMount() {
+
+    //     if (localStorage.getItem('roleName') == "HR") {
+    //         this.hrstatusUpdateAPI()
+    //     }
+    //     else {
+    //         this.empstatusUpdateAPI()
+    //     }
+    // }
     render() {
         return (
-
             <div>
-
-
                 <div className="clearfix d-flex align-items-center row page-title">
                     <h2 className="col">My KRA</h2>
                 </div>
