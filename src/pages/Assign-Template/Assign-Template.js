@@ -250,7 +250,7 @@ class AssignTemplate extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'ok',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
@@ -299,7 +299,9 @@ class AssignTemplate extends Component {
         });
 
         res.fail(error => {
-
+            toast.success("Template " + Notification.deleteError, {
+                position: toast.POSITION.TOP_RIGHT
+            });
         });
     }
     checkall(e) {

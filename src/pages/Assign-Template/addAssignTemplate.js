@@ -69,7 +69,7 @@ class addAssignTemplate extends Component {
             })
     }
     getProjectData() {
-        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`+`?_where=(status,ne,Not Started)`
         this.getDropDownValues(url).done(
             (tempProject) => {
                 var displayProjectDataReturn = tempProject.map(function (i) {
@@ -229,15 +229,10 @@ class addAssignTemplate extends Component {
         var dataUser = this.getUserData(event.target.value)
         dataUser.done((response) => 
         {
-            var existingUserId = this.state.userId;
-            var displayUserDataReturn= response.map(function (i) {
-            return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
-                    : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
-          
+           
             this.setState({
                 displayUserData: response,
                 projectId: selectedProjectId,
-                displayUserDataOptions:displayUserDataReturn
             })
         })
     }
@@ -301,7 +296,11 @@ class addAssignTemplate extends Component {
     }
     //#endregion  
     render() {
-       
+        var existingUserId = this.state.userId;
+        var displayUserDataReturn= this.state.displayUserData.map(function (i) {
+        return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
+                : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
+
        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
@@ -367,7 +366,7 @@ class addAssignTemplate extends Component {
                                             multiple={this.state.assignId === undefined ? true : false} >
                                                 <option value="0">--</option>
                                                 {this.state.displayUserDataOptions}
-                                               
+                                               {displayUserDataReturn}
                                             </select>
                                         </div>
                                     </div>

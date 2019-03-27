@@ -101,11 +101,11 @@ class UserManagement extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'Cancel',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
-                        label: 'ok',
+                        label: 'Cancel',
                         className: 'btn-danger'
                     }
                 },
