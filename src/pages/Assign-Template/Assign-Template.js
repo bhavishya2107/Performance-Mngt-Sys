@@ -46,14 +46,10 @@ class AssignTemplate extends Component {
         })
     }
 
-    //#endregion
+    //#endregion   
     //#region methods
     clear() {
-        this.setState({
-            userId: "",
-            projectId: "",
-            status: ""
-        })
+        window.location.reload();
     }
 
     searchUser() {
@@ -78,7 +74,6 @@ class AssignTemplate extends Component {
 
         $("#tblTemplateAssigned").dataTable().fnDestroy();
         $("#tblTemplateAssigned").dataTable({
-
             ajax: {
                 url: url,
                 type: Type.post,
@@ -255,7 +250,7 @@ class AssignTemplate extends Component {
                 message: Notification.deleteConfirm,
                 buttons: {
                     confirm: {
-                        label: 'ok',
+                        label: 'Ok',
                         className: 'btn-success'
                     },
                     cancel: {
@@ -304,7 +299,9 @@ class AssignTemplate extends Component {
         });
 
         res.fail(error => {
-
+            toast.success("Template " + Notification.deleteError, {
+                position: toast.POSITION.TOP_RIGHT
+            });
         });
     }
     checkall(e) {
