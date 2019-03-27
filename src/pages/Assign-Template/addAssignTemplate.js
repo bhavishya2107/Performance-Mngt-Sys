@@ -301,11 +301,7 @@ class addAssignTemplate extends Component {
     }
     //#endregion  
     render() {
-        var existingUserId = this.state.userId;
-        var displayUserDataReturn= this.state.displayUserData.map(function (i) {
-        return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
-                : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
-      
+       
        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
@@ -371,7 +367,7 @@ class addAssignTemplate extends Component {
                                             multiple={this.state.assignId === undefined ? true : false} >
                                                 <option value="0">--</option>
                                                 {this.state.displayUserDataOptions}
-                                                {displayUserDataReturn}
+                                               
                                             </select>
                                         </div>
                                     </div>

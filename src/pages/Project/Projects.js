@@ -165,7 +165,7 @@ class Projects extends Component {
                 type: "POST",
                 dataSrc: "",
                 data: {
-                    query: "select project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId order by projectId desc"
+                    query: "select project_master.status,project_master.projectId, project_master.projectName,project_master.startDate, project_master.endDate, project_master.complexityId, complexity_master.complexityName FROM project_master left join complexity_master On project_master.complexityId = complexity_master.complexityId order by projectId desc"
                 },
             },
             columns: [
@@ -209,8 +209,12 @@ class Projects extends Component {
                     targets: 4,
                 },
                 {
+                    data:"status",
+                    targets:5
+                },
+                {
                     data: "projectId",
-                    targets: 5,
+                    targets: 6,
                     className: "text-center",
                     render: function (data, type, row) {
                         return (
@@ -274,6 +278,7 @@ class Projects extends Component {
                                 <th>Start Date</th>
                                 <th >End Date</th>
                                 <th>Complexity</th>
+                                <th>Status</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>
