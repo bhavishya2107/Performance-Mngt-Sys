@@ -23,6 +23,7 @@ class TLKraSheet extends Component {
             assignId: props.match.params.assignId,
             templateid: "",
             table: "",
+            redirectToMyteam:false
         }
     }
 
@@ -83,6 +84,7 @@ class TLKraSheet extends Component {
 
  //update and set comment
  updateApi(data) {
+    var _this = this;
     var kraSheetdata =
     {
       "kraId": data.kraId,
@@ -102,7 +104,13 @@ class TLKraSheet extends Component {
         "x-requested-with": "XMLHttpRequest"
       },
       async: false,
-      data: JSON.stringify(kraSheetdata)
+      data: JSON.stringify(kraSheetdata),
+      success: function (resultData) {
+        // toast.success("Comment and Rating Saved", + {
+        //     position: toast.POSITION.TOP_RIGHT
+        //   });
+        _this.setState({ redirectToMyteam: true })
+    }
     })
   }
 
@@ -142,6 +150,7 @@ class TLKraSheet extends Component {
     });
 
     if (kraDataSaveRecords.length > 0) {//SAVE Logic
+        var _this = this;
       const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
       $.ajax({
         url: endpointPOST,
@@ -155,6 +164,7 @@ class TLKraSheet extends Component {
             // toast.success("Comment and Rating Saved", + {
             //     position: toast.POSITION.TOP_RIGHT
             //   });
+            _this.setState({ redirectToMyteam: true })
         }
       });
     }
@@ -178,7 +188,7 @@ class TLKraSheet extends Component {
                 kraName: response[0].kraname,
                 startDate: response[0].startDate,
                 endDate: response[0].endDate,
-                quaterName: response[0].quatername
+                quaterName: response[0].quaterName
             });
         });
         res.fail(error => { });
@@ -201,7 +211,7 @@ class TLKraSheet extends Component {
                     data: {
                         query:
                         ` 
-                        SELECT tad.assignDetailId,tad.templateAssignId, td.kraId, td.kpiId, kra.kraName, kpi.kpiTitle,kpi.weightage,kpi.target, tad.selfRating,tad.reviewerComment,tad.reviewerRating,tad.reviwerRatingBy
+                        SELECT tad.assignDetailId,tad.templateAssignId, td.kraId, td.kpiId, kra.kraName, kpi.kpiTitle,kpi.weightage,kpi.target, tad.selfRating,tad.reviewerComment,tad.selfComment,tad.reviewerRating,tad.reviwerRatingBy
                         FROM template_assignment_master tam
                         LEFT JOIN template_detail td ON tam.templateId = td.templateId
                         LEFT JOIN kra_master kra ON kra.kraId = td.kraId
@@ -259,6 +269,15 @@ class TLKraSheet extends Component {
                         },
                     },
                     {
+                        data: "selfComment",
+                        targets: 4,
+                        render: (data, type, row) => {
+                            return (
+                                `<label class="selfComment" value="${row.selfComment}">` + row.selfComment + `</label>`
+                            )
+                        },
+                    },
+                    {
                         data: "reviewerRating",
                         targets: 4,
                         render: (data, type, row) => {
@@ -298,6 +317,10 @@ class TLKraSheet extends Component {
     }
 
     render() {
+        if (this.state.redirectToMyteam === true) {
+            return <Redirect to={{ pathname: "/myteam" }} />;
+          }
+      
         return (
             <div className="container-fluid " >
                 <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
@@ -424,6 +447,7 @@ class TLKraSheet extends Component {
                                 <th width="50px">Weightage</th>
                                 <th >Target</th>
                                 <th width="50px">Employee Rating</th>
+                                <th width="100px">Employee Comment</th>
                                 <th>Reviewer Rating</th>
                                 <th>Comments</th>
                             </tr>

@@ -26,6 +26,7 @@ class KraSheet extends Component {
       templateAssignId: "",
       kraId: "",
       kpiId: "",
+      redirectToMykra:false
     }
     filterData = []
   }
@@ -102,6 +103,7 @@ class KraSheet extends Component {
 
   //update and set comment
   updateApi(data) {
+    var _this = this;
     var kraSheetdata =
     {
       "kraId": data.kraId,
@@ -123,8 +125,11 @@ class KraSheet extends Component {
       async: false,
       data: JSON.stringify(kraSheetdata),
       success: function (resultData) {
-
-      }
+        // toast.success("Comment and Rating Saved", + {
+        //     position: toast.POSITION.TOP_RIGHT
+        //   });
+        _this.setState({ redirectToMykra: true })
+    }
     })
 
   }
@@ -164,7 +169,7 @@ class KraSheet extends Component {
     });
 
     if (kraDataSaveRecords.length > 0) {//SAVE Logic
-
+      var _this = this;
       const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
       $.ajax({
         url: endpointPOST,
@@ -178,6 +183,7 @@ class KraSheet extends Component {
           // toast.success("Comment and Rating Saved", + {
           //   position: toast.POSITION.TOP_RIGHT
           // });
+          _this.setState({ redirectToMykra: true })
         }
       });
     }
@@ -204,7 +210,7 @@ class KraSheet extends Component {
         kraName: response[0].kraname,
         startDate: response[0].startDate,
         endDate: response[0].endDate,
-        quaterName: response[0].quatername
+        quaterName: response[0].quaterName
       });
     });
     res.fail(error => { });
@@ -329,8 +335,12 @@ class KraSheet extends Component {
   }
 
   render() {
+    if (this.state.redirectToMykra === true) {
+      return <Redirect to={{ pathname: "/dashboard" }} />;
+    }
     return (
       <div className="container-fluid " >
+      
         <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
         <div className="clearfix  align-items-center row page-title">
           <div className="col text-right" />
@@ -465,7 +475,7 @@ class KraSheet extends Component {
         <button className="btn btn-success" type="button" onClick={() => {
           this.commentAndratingUpdate();
         }}>Save</button>
-     </div>
+      </div>
     )
   }
 }
