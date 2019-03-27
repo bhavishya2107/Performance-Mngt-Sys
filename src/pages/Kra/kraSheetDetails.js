@@ -102,8 +102,6 @@ class KraSheet extends Component {
 
   //update and set comment
   updateApi(data) {
-    debugger;
-
     var kraSheetdata =
     {
       "kraId": data.kraId,
@@ -125,7 +123,7 @@ class KraSheet extends Component {
       async: false,
       data: JSON.stringify(kraSheetdata),
       success: function (resultData) {
-        console.log("ss")
+
       }
     })
 
@@ -133,7 +131,6 @@ class KraSheet extends Component {
   //comment,self-rating save if kpiID,KraId,assignId exist
   commentAndratingUpdate() {
     var kraData = new Array();
-    debugger;
     var kraDataSaveRecords = new Array();
     var kraDataUpdateRecords = new Array();
     $('#tblkraSheet tbody tr').each((index, item) => {
@@ -178,18 +175,19 @@ class KraSheet extends Component {
           "x-requested-with": "XMLHttpRequest"
         },
         success: function (resultData) {
-
-          alert("success")
+          // toast.success("Comment and Rating Saved", + {
+          //   position: toast.POSITION.TOP_RIGHT
+          // });
         }
       });
-
     }
     if (kraDataUpdateRecords.length > 0) {//Update
       kraDataUpdateRecords.forEach(item => {
         this.updateApi(item);
       });
-      console.log("sslllll")
-      alert("all record updated")
+      // toast.success("Comment and Rating Updated", +  {
+      //   position: toast.POSITION.TOP_RIGHT
+      // });
     }
   }
 
@@ -294,7 +292,6 @@ class KraSheet extends Component {
             data: "selfRating",
             targets: 4,
             render: (data, type, row) => {
-
               return (
                 `<input   class="selfrate" type="number" name="selfRating" min="0" max="5" width="100px"  value="${row.selfRating}" />`
               )
@@ -304,9 +301,16 @@ class KraSheet extends Component {
             data: "selfComment",
             targets: 5,
             render: (data, type, row) => {
-              return (
-                `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}">${row.selfComment}</textarea>`
-              )
+              if (row.selfComment !== "null" && row.selfComment !== null && row.assignDetailId != null) {
+                return (
+                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}">${row.selfComment}</textarea>`
+                )
+              }
+              else {
+                return (
+                  `<textarea type="text" name="comment" class="commentSaved" rows="4" cols="75"  placeholder="Enter your comment" data-assigndetailId="${row.assignDetailId}" value="${row.selfComment}"/>`
+                )
+              }
             },
           },
         ],
@@ -331,114 +335,116 @@ class KraSheet extends Component {
         <div className="clearfix  align-items-center row page-title">
           <div className="col text-right" />
         </div>
-        <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
-          <div className="col-md-12 order-md-first">
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="Name">
-                    <b>Name</b>
-                  </label>
-                  <div>
-                    <input
-                      id="userName"
-                      type="text"
-                      className="form-control"
-                      readOnly
-                      value={this.state.firstName + ' ' + this.state.lastName}
-                    />
+        <div className="mb-3 clearfix">
+          <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
+            <div className="col-md-12 order-md-first">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="Name">
+                      <b>Name</b>
+                    </label>
+                    <div>
+                      <input
+                        id="userName"
+                        type="text"
+                        className="form-control"
+                        readOnly
+                        value={this.state.firstName + ' ' + this.state.lastName}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="kraName">
+                      <b>KRA Name</b>
+                    </label>
+                    <div>
+                      <input
+                        id="kraName"
+                        type="text"
+                        className="form-control "
+                        readOnly
+                        value={this.state.kraName}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="kraName">
-                    <b>KRA Name</b>
-                  </label>
-                  <div>
-                    <input
-                      id="kraName"
-                      type="text"
-                      className="form-control "
-                      readOnly
-                      value={this.state.kraName}
-                    />
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="projectName">
+                      <b>Project Name</b>
+                    </label>
+                    <div>
+                      <input
+                        id="projectName"
+                        type="text"
+                        className="form-control "
+                        readOnly
+                        value={this.state.projectName}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="userEmail">
+                      <b> Start Date</b>
+                    </label>
+                    <div>
+                      <input
+                        id="userEmail"
+                        type="email"
+                        className="form-control"
+                        readOnly
+                        value={moment(this.state.startDate).format("DD-MM-YYYY")}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="userAddress">
+                      <b> End Date</b>
+                    </label>
+                    <div>
+                      <input
+                        id="userAddress"
+                        type="text"
+                        className="form-control"
+                        readOnly
+                        value={moment(this.state.endDate).format("DD-MM-YYYY")}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label className="" htmlFor="userImage">
+                      <b> Department Name</b>
+                    </label>
+                    <div>
+                      <input
+                        id="userLastName"
+                        type="text"
+                        className="form-control "
+                        readOnly
+                        value={this.state.departmentName}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="projectName">
-                    <b>Project Name</b>
-                  </label>
-                  <div>
-                    <input
-                      id="projectName"
-                      type="text"
-                      className="form-control "
-                      readOnly
-                      value={this.state.projectName}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="userEmail">
-                    <b> Start Date</b>
-                  </label>
-                  <div>
-                    <input
-                      id="userEmail"
-                      type="email"
-                      className="form-control"
-                      readOnly
-                      value={moment(this.state.startDate).format("DD-MM-YYYY")}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="userAddress">
-                    <b> End Date</b>
-                  </label>
-                  <div>
-                    <input
-                      id="userAddress"
-                      type="text"
-                      className="form-control"
-                      readOnly
-                      value={moment(this.state.endDate).format("DD-MM-YYYY")}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label className="" htmlFor="userImage">
-                    <b> Department Name</b>
-                  </label>
-                  <div>
-                    <input
-                      id="userLastName"
-                      type="text"
-                      className="form-control "
-                      readOnly
-                      value={this.state.departmentName}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-        <br />
-        <div className="clearfix d-flex align-items-center row page-title">
+          </form>
+        </div>
+
+        <div className="clearfix">
           <table className="table table-striped table-bordered table-hover customDataTable"
             id="tblkraSheet"
             ref={el => (this.el = el)}>
@@ -454,15 +460,12 @@ class KraSheet extends Component {
             </thead>
             <tbody></tbody>
           </table>
+          {/* <ToastContainer /> */}
         </div>
-
-        <button className="btn btn-success " type="button" onClick={() => {
+        <button className="btn btn-success" type="button" onClick={() => {
           this.commentAndratingUpdate();
         }}>Save</button>
-
-
-      </div>
-      //dataTable
+     </div>
     )
   }
 }

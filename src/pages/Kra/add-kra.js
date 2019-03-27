@@ -216,13 +216,13 @@ class kraHome extends Component {
                     <div className="row">
                         <div className="col-md-6">
                             <div className="form-group">
-                                <label className="required" htmlFor="target">Description</label>
+                                <label  htmlFor="target">Description</label>
                                 <textarea className="form-control" rows="4" name="description" type="text" value={this.state.description}
                                     onChange={(event) => {
                                         this.setState({
                                             description: event.target.value
                                         })
-                                    }} required></textarea>
+                                    }} ></textarea>
                             </div>
                         </div>
                     </div>
