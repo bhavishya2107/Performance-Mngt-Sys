@@ -12,11 +12,12 @@ class Dashboard extends Component {
         super(props);
         this.state = {
             userId: props.match.params.userId,
-            status: ""
+            status: "",
+            assignId:""
         }
     }
 
-    handleChange = (e) => {
+    onChangeStatus = (e) => {
         this.statusUpdateAPI();
         window.location.reload();
         // if (this.statusUpdateAPI()) {
@@ -32,7 +33,12 @@ class Dashboard extends Component {
     statusUpdateAPI() {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update  template_assignment_master SET status='Submit by Employee' where status='Draft by Employee'`
+             query: `Update template_assignment_master tam SET status='Assigned to Employee'
+              where status='Created by HR'and assignId=191`
+        
+
+        // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
+        // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
         }
         return $.ajax({
             url: statusUpdate,
@@ -51,7 +57,6 @@ class Dashboard extends Component {
     }
 
     componentDidMount() {
-
         const myKRAUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -68,8 +73,11 @@ class Dashboard extends Component {
                     JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId
                     JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
                     JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
-                    where TAM.userId='${localStorage.getItem('userId')}' AND TAM.status IN('Assigned to Employee','Draft by Employee')`
-                   // ,'Submit by Employee'
+                    where TAM.userId='${localStorage.getItem('userId')}' 
+                    AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Employee','Created by HR','Submit by Reviewer',
+                    'Reverted to employee by HR','Reverted to reviewer by HR')`
+
+                    // 'Assigned to Employee','Draft by Employee' ,'Submit by Employee','Created by HR'
                 },
             },
             columns: [
@@ -77,6 +85,10 @@ class Dashboard extends Component {
                     data: "quaterName" + "projectName",
                     targets: 0,
                     render: (data, type, row) => {
+                        debugger
+                        this.setState({
+                            assignId: row.assignId
+                        })
                         return (
                             `<div>${(row.quaterName + " " + "-" + " " + row.projectName)}</div>`
                         )
@@ -126,15 +138,11 @@ class Dashboard extends Component {
                     }
                 }
             ],
-            initComplete: (settings, json) => {
-            },
+            
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnSubmit").on("click", e => {
-                    this.handleChange(e.currentTarget.id);
-
-                    //  debugger;
-
+                    this.onChangeStatus(e.currentTarget.id);
                 });
             }
         });
