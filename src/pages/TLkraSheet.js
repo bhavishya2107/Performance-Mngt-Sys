@@ -23,7 +23,7 @@ class TLKraSheet extends Component {
             assignId: props.match.params.assignId,
             templateid: "",
             table: "",
-            redirectToMyteam:false
+            redirectToMyteam: false
         }
     }
 
@@ -82,101 +82,101 @@ class TLKraSheet extends Component {
         });
     }
 
- //update and set comment
- updateApi(data) {
-    var _this = this;
-    var kraSheetdata =
-    {
-      "kraId": data.kraId,
-      "kpiId": data.kpiId,
-      "reviewerComment": data.reviewerComment,
-      "reviewerRating": data.reviewerRating,
-      "reviwerRatingBy": data.reviwerRatingBy,
-      "templateAssignId": data.templateAssignId,
-    }
-
-
-    return $.ajax({
-      url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
-      type: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        "x-requested-with": "XMLHttpRequest"
-      },
-      async: false,
-      data: JSON.stringify(kraSheetdata),
-      success: function (resultData) {
-        // toast.success("Comment and Rating Saved", + {
-        //     position: toast.POSITION.TOP_RIGHT
-        //   });
-        _this.setState({ redirectToMyteam: true })
-    }
-    })
-  }
-
-  //comment,self-rating save if kpiID,KraId,assignId exist
-  commentAndratingUpdate() {
-    var kraData = new Array();
-    var kraDataSaveRecords = new Array();
-    var kraDataUpdateRecords = new Array();
-    $('#tblkraSheet tbody tr').each((index, item) => {
-      if ($(item).find('.commentSaved').val() !== null) {
-        if (isNaN(parseInt($(item).find('.commentSaved').attr('data-assigndetailId')))) {
-          var kraSheetdata =
-          {
-            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-            "reviewerComment": $(item).find('.commentSaved').val(),
-            "reviewerRating": $(item).find('.TLrating').val(),
-            "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
-            "templateAssignId": this.state.assignId
-          }
-          kraDataSaveRecords.push(kraSheetdata)
-        }
-        else {
-          var kraSheetdata =
-          {
-            "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
-            "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
-            "reviewerComment": $(item).find('.commentSaved').val(),
-            "reviewerRating": $(item).find('.TLrating').val(),
-            "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
-            "templateAssignId": this.state.assignId,
-            "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
-          }
-          kraDataUpdateRecords.push(kraSheetdata)
-        }
-      }
-    });
-
-    if (kraDataSaveRecords.length > 0) {//SAVE Logic
+    //update and set comment
+    updateApi(data) {
         var _this = this;
-      const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
-      $.ajax({
-        url: endpointPOST,
-        type: Type.post,
-        data: JSON.stringify(kraDataSaveRecords),
-        headers: {
-          "Content-Type": "application/json",
-          "x-requested-with": "XMLHttpRequest"
-        },
-        success: function (resultData) {
-            // toast.success("Comment and Rating Saved", + {
+        var kraSheetdata =
+        {
+            "kraId": data.kraId,
+            "kpiId": data.kpiId,
+            "reviewerComment": data.reviewerComment,
+            "reviewerRating": data.reviewerRating,
+            "reviwerRatingBy": data.reviwerRatingBy,
+            "templateAssignId": data.templateAssignId,
+        }
+
+
+        return $.ajax({
+            url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
+            type: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest"
+            },
+            async: false,
+            data: JSON.stringify(kraSheetdata),
+            success: function (resultData) {
+                // toast.success("Comment and Rating Saved", + {
+                //     position: toast.POSITION.TOP_RIGHT
+                //   });
+                _this.setState({ redirectToMyteam: true })
+            }
+        })
+    }
+
+    //comment,self-rating save if kpiID,KraId,assignId exist
+    commentAndratingUpdate() {
+        var kraData = new Array();
+        var kraDataSaveRecords = new Array();
+        var kraDataUpdateRecords = new Array();
+        $('#tblkraSheet tbody tr').each((index, item) => {
+            if ($(item).find('.commentSaved').val() !== null) {
+                if (isNaN(parseInt($(item).find('.commentSaved').attr('data-assigndetailId')))) {
+                    var kraSheetdata =
+                    {
+                        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+                        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+                        "reviewerComment": $(item).find('.commentSaved').val(),
+                        "reviewerRating": $(item).find('.TLrating').val(),
+                        "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
+                        "templateAssignId": this.state.assignId
+                    }
+                    kraDataSaveRecords.push(kraSheetdata)
+                }
+                else {
+                    var kraSheetdata =
+                    {
+                        "kraId": parseInt($(item).find('.kraNameRow').attr('value')),
+                        "kpiId": parseInt($(item).find('.kpiRow').attr('value')),
+                        "reviewerComment": $(item).find('.commentSaved').val(),
+                        "reviewerRating": $(item).find('.TLrating').val(),
+                        "reviwerRatingBy": parseInt(localStorage.getItem('userId')),
+                        "templateAssignId": this.state.assignId,
+                        "assignDetailId": parseInt($(item).find('.commentSaved').attr('data-assigndetailId'))
+                    }
+                    kraDataUpdateRecords.push(kraSheetdata)
+                }
+            }
+        });
+
+        if (kraDataSaveRecords.length > 0) {//SAVE Logic
+            var _this = this;
+            const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
+            $.ajax({
+                url: endpointPOST,
+                type: Type.post,
+                data: JSON.stringify(kraDataSaveRecords),
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-requested-with": "XMLHttpRequest"
+                },
+                success: function (resultData) {
+                    // toast.success("Comment and Rating Saved", + {
+                    //     position: toast.POSITION.TOP_RIGHT
+                    //   });
+                    _this.setState({ redirectToMyteam: true })
+                }
+            });
+        }
+        if (kraDataUpdateRecords.length > 0) {//Update
+            kraDataUpdateRecords.forEach(item => {
+                this.updateApi(item);
+            });
+            //   toast.success("Comment and Rating Updated", + {
             //     position: toast.POSITION.TOP_RIGHT
             //   });
-            _this.setState({ redirectToMyteam: true })
         }
-      });
     }
-    if (kraDataUpdateRecords.length > 0) {//Update
-      kraDataUpdateRecords.forEach(item => {
-        this.updateApi(item);
-      });
-    //   toast.success("Comment and Rating Updated", + {
-    //     position: toast.POSITION.TOP_RIGHT
-    //   });
-    }
-  }
     componentDidMount() {
         var res = this.getUserDetailsApi();
         res.done(response => {
@@ -210,7 +210,7 @@ class TLKraSheet extends Component {
                     dataSrc: "",
                     data: {
                         query:
-                        ` 
+                            ` 
                         SELECT tad.assignDetailId,tad.templateAssignId, td.kraId, td.kpiId, kra.kraName, kpi.kpiTitle,kpi.weightage,kpi.target, tad.selfRating,tad.reviewerComment,tad.selfComment,tad.reviewerRating,tad.reviwerRatingBy
                         FROM template_assignment_master tam
                         LEFT JOIN template_detail td ON tam.templateId = td.templateId
@@ -225,7 +225,7 @@ class TLKraSheet extends Component {
                         data: "kraName",
                         targets: 0,
                         render: (data, type, row) => {
-                     
+
                             return (
                                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
                             )
@@ -253,7 +253,7 @@ class TLKraSheet extends Component {
                         data: "target",
                         targets: 3,
                         render: (data, type, row) => {
-                        
+
                             return (
                                 `<label class="targetRow" value="${row.target}">` + row.target + `</label>`
                             )
@@ -290,16 +290,16 @@ class TLKraSheet extends Component {
                         data: "reviewerComment",
                         targets: 5,
                         render: (data, type, row) => {
-                            if(row.reviewerComment != "null" && row.reviewerComment != null ){
+                            if (row.reviewerComment != "null" && row.reviewerComment != null) {
                                 return (
                                     `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}">${row.reviewerComment}</textarea>`
                                 )
-                            }else{
+                            } else {
                                 return (
                                     `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}"></textarea>`
                                 )
                             }
-                          
+
                         },
                     },
                 ],
@@ -319,8 +319,8 @@ class TLKraSheet extends Component {
     render() {
         if (this.state.redirectToMyteam === true) {
             return <Redirect to={{ pathname: "/myteam" }} />;
-          }
-      
+        }
+
         return (
             <div className="container-fluid " >
                 <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
@@ -328,114 +328,114 @@ class TLKraSheet extends Component {
                     <div className="col text-right" />
                 </div>
                 <div className="mb-3 clearfix">
-                <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
-                    <div className="col-md-12 order-md-first">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="Name">
-                                        <b>Name</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="userName"
-                                            type="text"
-                                            className="form-control"
-                                            readOnly
-                                            value={this.state.firstName + ' ' + this.state.lastName}
-                                        />
+                    <form action="" style={{ margin: "auto", border: "black 1px solid" }}>
+                        <div className="col-md-12 order-md-first">
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="Name">
+                                            <b>Name</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="userName"
+                                                type="text"
+                                                className="form-control"
+                                                readOnly
+                                                value={this.state.firstName + ' ' + this.state.lastName}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="kraName">
+                                            <b>KRA Name</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="kraName"
+                                                type="text"
+                                                className="form-control "
+                                                readOnly
+                                                value={this.state.kraName}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="kraName">
-                                        <b>KRA Name</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="kraName"
-                                            type="text"
-                                            className="form-control "
-                                            readOnly
-                                            value={this.state.kraName}
-                                        />
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="projectName">
+                                            <b>Project Name</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="projectName"
+                                                type="text"
+                                                className="form-control "
+                                                readOnly
+                                                value={this.state.projectName}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="userEmail">
+                                            <b> Start Date</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="userEmail"
+                                                type="email"
+                                                className="form-control"
+                                                readOnly
+                                                value={moment(this.state.startDate).format("DD-MM-YYYY")}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="userAddress">
+                                            <b> End Date</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="userAddress"
+                                                type="text"
+                                                className="form-control"
+                                                readOnly
+                                                value={moment(this.state.endDate).format("DD-MM-YYYY")}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="form-group">
+                                        <label className="" htmlFor="userImage">
+                                            <b> Department Name</b>
+                                        </label>
+                                        <div>
+                                            <input
+                                                id="userLastName"
+                                                type="text"
+                                                className="form-control "
+                                                readOnly
+                                                value={this.state.departmentName}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="projectName">
-                                        <b>Project Name</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="projectName"
-                                            type="text"
-                                            className="form-control "
-                                            readOnly
-                                            value={this.state.projectName}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="userEmail">
-                                        <b> Start Date</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="userEmail"
-                                            type="email"
-                                            className="form-control"
-                                            readOnly
-                                            value={moment(this.state.startDate).format("DD-MM-YYYY")}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="userAddress">
-                                        <b> End Date</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="userAddress"
-                                            type="text"
-                                            className="form-control"
-                                            readOnly
-                                            value={moment(this.state.endDate).format("DD-MM-YYYY")}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="form-group">
-                                    <label className="" htmlFor="userImage">
-                                        <b> Department Name</b>
-                                    </label>
-                                    <div>
-                                        <input
-                                            id="userLastName"
-                                            type="text"
-                                            className="form-control "
-                                            readOnly
-                                            value={this.state.departmentName}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                    </form>
                 </div>
-              
+
                 <div className="clearfix">
                     <table className="table table-striped table-bordered table-hover customDataTable"
                         id="tblkraSheet"
@@ -455,12 +455,14 @@ class TLKraSheet extends Component {
                         <tbody></tbody>
                     </table>
                 </div>
-                <button className="btn btn-success " type="button" onClick={() => {
+                &nbsp;
+                <div className="form-group">
+                <button className="btn btn-success" type="button" onClick={() => {
                     this.commentAndratingUpdate();
-                }}>Save </button>
-             {/* <ToastContainer /> */}
+                }}>Save</button>
+                </div>
+                {/* <ToastContainer /> */}
             </div>
-            //dataTable
         )
     }
 }

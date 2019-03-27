@@ -26,7 +26,7 @@ class KraSheet extends Component {
       templateAssignId: "",
       kraId: "",
       kpiId: "",
-      redirectToMykra:false
+      redirectToMykra: false
     }
     filterData = []
   }
@@ -85,9 +85,6 @@ class KraSheet extends Component {
       data: JSON.stringify(kraSheet),
     });
   }
-
-
-
   //fetch details from api 
   getdetailsFromTAD() {
     return $.ajax({
@@ -113,8 +110,6 @@ class KraSheet extends Component {
       "selfRatingBy": data.selfRatingBy,
       "templateAssignId": data.templateAssignId,
     }
-
-
     $.ajax({
       url: environment.apiUrl + moduleUrls.TAD + '/' + `${data.assignDetailId}`,
       type: "PATCH",
@@ -129,9 +124,8 @@ class KraSheet extends Component {
         //     position: toast.POSITION.TOP_RIGHT
         //   });
         _this.setState({ redirectToMykra: true })
-    }
+      }
     })
-
   }
   //comment,self-rating save if kpiID,KraId,assignId exist
   commentAndratingUpdate() {
@@ -340,7 +334,7 @@ class KraSheet extends Component {
     }
     return (
       <div className="container-fluid " >
-      
+
         <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
         <div className="clearfix  align-items-center row page-title">
           <div className="col text-right" />
@@ -472,9 +466,12 @@ class KraSheet extends Component {
           </table>
           {/* <ToastContainer /> */}
         </div>
+        &nbsp;
+        <div className="form-group">
         <button className="btn btn-success" type="button" onClick={() => {
           this.commentAndratingUpdate();
         }}>Save</button>
+        </div>
       </div>
     )
   }
