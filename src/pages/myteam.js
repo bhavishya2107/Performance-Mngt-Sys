@@ -43,8 +43,8 @@ class Myteam extends Component {
     hrstatusUpdateAPI() {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Assigned to Employee' 
-            where status='Created by HR' and assignid=195 `
+            query: `Update template_assignment_master tam SET status='Created by HR' 
+            where status='Assigned to Employee' and assignid=195 `
 
             // query: `Update template_assignment_master tam SET status='Created by HR' 
             // where status='Assigned to Employee' `
@@ -160,7 +160,7 @@ class Myteam extends Component {
                     JOIN user_master um ON um.userId = tam.userId
                     JOIN quater_master as qm ON qm.quaterId = TAM.quaterId
                      WHERE pm.manageBy = ${localStorage.getItem('userId')}
-                    AND TAM.status IN('Submit by Employee','Submit by Reviewer','Reverted to reviewer by HR','Approved by HR')`
+                    AND TAM.status IN('Submit by Employee','Reverted to reviewer by HR','Approved by HR')`
         }
         // "query": `SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,tam.status,tam.assignId,um.firstName,um.lastName,qm.quaterName
         // FROM template_assignment_master tam
