@@ -19,23 +19,16 @@ class Dashboard extends Component {
 
     onChangeStatus = (assignId) => {
         this.tpmstatusUpdateAPI(assignId);
-        this.hrstatusUpdateAPI(assignId);
-        this.empstatusUpdateAPI(assignId);
-        window.location.reload();
-        // if (this.statusUpdateAPI()) {
-        //     toast.success("Submitted Succesfully", {
-        //         position: toast.POSITION.TOP_RIGHT
-        //     });
-        // }
-        // else {
-        //     toast.info("Status not changed ");
-        // }
+        // this.hrstatusUpdateAPI(assignId);
+        this.developerStatusUpdateAPI(assignId);
+         window.location.reload();
+       
     }
 
     hrstatusUpdateAPI(assignId) {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Created by HR'
+            query: `Update template_assignment_master tam SET status='Submit by Employee'
               where status='Assigned to Employee'and assignId=${assignId}`
         }
         return $.ajax({
@@ -64,15 +57,13 @@ class Dashboard extends Component {
         });
     }
 
-    empstatusUpdateAPI(assignId) {
-     
+    developerStatusUpdateAPI(assignId) {
+     debugger
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Submit by Employee'
-              where status='Created by HR'and assignId=${assignId}`
+            query: `Update template_assignment_master tam SET TAM.status='Submit by Employee'
+              where status In('Assigned to Employee','Draft by Employee','Reverted to employee by HR ')and assignId=${assignId}`
 
-            // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
-            // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
         }
         return $.ajax({
             url: statusUpdate,
@@ -93,7 +84,7 @@ class Dashboard extends Component {
             this.tpmstatusUpdateAPI()
         }
         else {
-            this.empstatusUpdateAPI()
+            this.developerStatusUpdateAPI()
         }
     }
 
@@ -109,17 +100,9 @@ class Dashboard extends Component {
                 type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": `SELECT TAM.assignId, TAM.status, PM.projectName,PM.startDate,PM.endDate,PMM.quaterName 
-                    FROM template_master as TM 
-                    JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId
-                    JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
-                    JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
-                    where TAM.userId='${localStorage.getItem('userId')}' 
-                    AND TAM.status IN('Assigned to Employee','Draft by Employee',
-                    'Reverted to employee by HR','Approved by HR')`
-
-                    // 'Assigned to Employee','Draft by Employee' ,'Submit by Employee','Created by HR'
-                },
+                    "query": `SELECT TAM.assignId, TAM.status, PM.projectName,PM.startDate,PM.endDate,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where TAM.status In('Assigned to Employee','Reverted to employee','Draft by Employee',Submit by Employee)`
+                }
+            
             },
             columns: [
                 {
@@ -175,7 +158,7 @@ class Dashboard extends Component {
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
                             '<a href="#" id="' + row.assignId + '"class="btn btnSubmit btn-info btn-sm";"">' +
-                            '<i class="fa fa-save" aria-hidden="true"></i>' +
+                            '<i class="fa fa-retweet" aria-hidden="true"></i>' +
                             "</a>"
                         )
                     }
@@ -199,7 +182,7 @@ class Dashboard extends Component {
     //         this.hrstatusUpdateAPI()
     //     }
     //     else {
-    //         this.empstatusUpdateAPI()
+    //         this.developerStatusUpdateAPI()
     //     }
     // }
     render() {
