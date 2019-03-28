@@ -35,8 +35,8 @@ class Dashboard extends Component {
     hrstatusUpdateAPI(assignId) {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Assigned to Employee'
-              where status='Created by HR'and assignId=${assignId}`
+            query: `Update template_assignment_master tam SET status='Created by HR'
+              where status='Assigned to Employee'and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -49,14 +49,10 @@ class Dashboard extends Component {
     }
 
     tpmstatusUpdateAPI(assignId) {
-
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET status='Submit by Employee'
-              where status='Submit by Reviewer'and assignId=${assignId}`
-
-            // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
-            // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
+              where status='Assigned to Employee'and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -74,7 +70,6 @@ class Dashboard extends Component {
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET status='Submit by Employee'
               where status='Created by HR'and assignId=${assignId}`
-
 
             // query: `Update template_assignment_master tam SET status='Assigned to Employee' where status='Created by HR'and assignId=130`
             // query: `Update template_assignment_master tam SET status='Created by HR' where status='Assigned to Employee'and assignId=133 `
@@ -120,8 +115,8 @@ class Dashboard extends Component {
                     JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
                     JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
                     where TAM.userId='${localStorage.getItem('userId')}' 
-                    AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Employee','Created by HR','Submit by Reviewer',
-                    'Reverted to employee by HR','Reverted to reviewer by HR')`
+                    AND TAM.status IN('Assigned to Employee','Draft by Employee',
+                    'Reverted to employee by HR','Approved by HR')`
 
                     // 'Assigned to Employee','Draft by Employee' ,'Submit by Employee','Created by HR'
                 },
