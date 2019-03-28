@@ -51,7 +51,7 @@ import addAssignTemplate from './pages/Assign-Template/addAssignTemplate';
 import Myteam from './pages/myteam';
 import KraSheet from './pages/Kra/kraSheetDetails';
 import TLKraSheet from './pages/TLkraSheet';
-
+import Hrkrasheet from './pages/hrkrasheet';
 
 class App extends Component {
   constructor(props) {
@@ -166,6 +166,7 @@ class App extends Component {
                           <Route exact path="/designation/edit/id=:id" component={Designation} />
                           <Route exact path="/template/edit/id=:id" component={Addtemplate} />
                           <Route exact path="/myteam" component={Myteam}></Route>
+                          <Route exact path="/hrkrasheet/id=:assignId" component={Hrkrasheet} />
                         </Switch>
                       </div>
                     </div>
@@ -217,7 +218,7 @@ class App extends Component {
               <Route exact path="/assign-template/add" component={addAssignTemplate} />
               <Route exact path="/assign-template/edit/id=:assignId" component={addAssignTemplate} />
 
-              <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
+          <Route path="/kraSheetDetails/id=:assignId" component={KraSheet}></Route>
 
               <Route exact path="/role" component={UserRolePMS}></Route>
               <Route exact path="/role/add" component={UserRoleForm}></Route>
@@ -237,6 +238,7 @@ class App extends Component {
               <Route exact path="/designation" component={Designationlist} />
               <Route exact path="/designation/add" component={Designation} />
               <Route exact path="/designation/edit/id=:id" component={Designation} />
+              <Route exact path="/hrkrasheet/id=:assignId" component={Hrkrasheet} />
 
             </Switch>
           </Router>

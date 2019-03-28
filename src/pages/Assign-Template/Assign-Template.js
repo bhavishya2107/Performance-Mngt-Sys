@@ -58,7 +58,6 @@ class AssignTemplate extends Component {
 
     }
     onChangestatusUpdateAPI(assignId) {
-        debugger
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET status='Assigned to Employee'
@@ -169,19 +168,21 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 7,
                     render: function (data, type, row) {
-                        // if ({ status: "Created by HR" }) {
-                        return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
-                            '<a href="#"  class="btn mr-2 btnMail btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-envelope" aria-hidden="true""></i></a>'
-                        );
-                        // }
-                        // else {
-                        //     return (
-                        //         '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
-                        //     );
-                        // }
-                    },
+                        if (row.status== "Created by HR" ) {
+                            return (
+                                '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="assign-template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
+                                '<i class="fa fa-retweet" aria-hidden="true"></i>' +
+                                "</a>"  
+                            );
+                             }
+                             else if ( row.status== "Submit by Employee" || "Assigned to Employee" ) {
+                            return (
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                            );
+                            }
+                        },
                     "orderable": false,
                     "bDestroy": true
                 }
@@ -487,20 +488,19 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 7,
                     render: function (data, type, row) {
-                        if (row.status === "Created by HR") {
-                            return (
-                                '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
-                                '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
-                                '<i class="fa fa-save" aria-hidden="true"></i>' +
-                                "</a>"
-
-                            );
-                        }
-                        else if ({ status: "Submit by Employee" }) {
-                            return (
-                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
-                            );
+                         if (row.status== "Created by HR" ) {
+                        return (
+                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="assign-template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
+                            '<i class="fa fa-retweet" aria-hidden="true"></i>' +
+                            "</a>"  
+                        );
+                         }
+                         else if ( row.status== "Submit by Employee" || "Assigned to Employee" ) {
+                        return (
+                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                        );
                         }
                     },
                     "orderable": false

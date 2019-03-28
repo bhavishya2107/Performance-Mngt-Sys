@@ -58,7 +58,6 @@ class Dashboard extends Component {
     }
 
     developerStatusUpdateAPI(assignId) {
-     debugger
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET TAM.status='Submit by Employee'
