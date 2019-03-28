@@ -214,7 +214,6 @@ class Hrkrasheet extends Component {
                         render: (data, type, row) => {
                             return (
                                 `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerComment + `</label>`
-                                //`<input   class="TLrating" type="number" name="reviewerRating" min="0" max="5" width="100px"  value="${row.reviewerRating}" />`
                             )
                         },
                     },
@@ -225,7 +224,6 @@ class Hrkrasheet extends Component {
 
                             return (
                                 `<label class="commentSaved" value="${row.reviewerComment}">` + row.reviewerComment + `</label>`
-                                // `<textarea type="text" name="reviewerComment" class="commentSaved" rows="4" cols="75" data-assigndetailId="${row.assignDetailId}" placeholder="Enter your comment" value="${row.reviewerComment}">${row.reviewerComment}</textarea>`
                             )
 
 
@@ -245,13 +243,15 @@ class Hrkrasheet extends Component {
         })
     }
 
-    onClickApproved(data) {
-        var _this = this;
+
+    //Save hr comment Api
+
+    saveAndEditHrComment(data) {
         var formData = {
             "hrComment": data.hrcomment,
         }
         const saveHrcomment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + data.assignId
-        $.ajax({
+       return $.ajax({
             url: saveHrcomment,
             type: Type.patch,
             data: JSON.stringify(formData),
@@ -259,11 +259,19 @@ class Hrkrasheet extends Component {
                 "content-type": "application/json",
                 "x-requested-with": "XMLHttpRequest",
             },
-            success: function (resultData) {
+        })
+    }
+
+    //onclick function for approved
+
+    onClickApproved(data) {
+        var _this = this
+        this.saveAndEditHrComment(data)
+            .done(() => {
                 var statusUpdate = environment.dynamicUrl + 'dynamic';
                 var statusUpdateQuery = {
                     query: `Update template_assignment_master tam SET status='Approved by HR'
-                      where  assignId=${data.assignId}`
+              where  assignId=${data.assignId}`
                 }
                 return $.ajax({
                     url: statusUpdate,
@@ -271,34 +279,27 @@ class Hrkrasheet extends Component {
                     data: JSON.stringify(statusUpdateQuery),
                     headers: {
                         "Content-Type": "application/json",
+                    },
+                    success: function () {
+                        _this.setState({ redirectToMyteam: true });
+                        // toast.success("Scaleset " + Notification.saved, {
+                        //     position: toast.POSITION.TOP_RIGHT
+                        // });
                     }
                 });
-                // _this.setState({ redirectToList: true });
-                // toast.success("Scaleset " + Notification.saved, {
-                //     position: toast.POSITION.TOP_RIGHT
-                // });
-            }
-        });
+            })
     }
+
+     //onclick function for RevertedToReviewer
+
     onClickRevertedToReviewer(data) {
-        var _this = this;
-        var formData = {
-            "hrComment": data.hrcomment,
-        }
-        const saveHrcomment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + data.assignId
-        $.ajax({
-            url: saveHrcomment,
-            type: Type.patch,
-            data: JSON.stringify(formData),
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest",
-            },
-            success: function (resultData) {
+        var _this = this
+        this.saveAndEditHrComment(data)
+            .done(() => {
                 var statusUpdate = environment.dynamicUrl + 'dynamic';
                 var statusUpdateQuery = {
                     query: `Update template_assignment_master tam SET status='Reverted to reviewer by HR'
-                      where assignId=${data.assignId}`
+              where  assignId=${data.assignId}`
                 }
                 return $.ajax({
                     url: statusUpdate,
@@ -306,34 +307,28 @@ class Hrkrasheet extends Component {
                     data: JSON.stringify(statusUpdateQuery),
                     headers: {
                         "Content-Type": "application/json",
+                    },
+                    success: function () {
+                        _this.setState({ redirectToMyteam: true });
+                        // toast.success("Scaleset " + Notification.saved, {
+                        //     position: toast.POSITION.TOP_RIGHT
+                        // });
                     }
                 });
-                // _this.setState({ redirectToList: true });
-                // toast.success("Scaleset " + Notification.saved, {
-                //     position: toast.POSITION.TOP_RIGHT
-                // });
-            }
-        });
+            })
+       
     }
+
+     //onclick function for RevertedToEmployee
+
     onClickRevertedToEmployee(data) {
-        var _this = this;
-        var formData = {
-            "hrComment": data.hrcomment,
-        }
-        const saveHrcomment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + data.assignId
-        $.ajax({
-            url: saveHrcomment,
-            type: Type.patch,
-            data: JSON.stringify(formData),
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest",
-            },
-            success: function (resultData) {
+        var _this = this
+        this.saveAndEditHrComment(data)
+            .done(() => {
                 var statusUpdate = environment.dynamicUrl + 'dynamic';
                 var statusUpdateQuery = {
                     query: `Update template_assignment_master tam SET status='Reverted to employee by HR'
-                      where assignId=${data.assignId}`
+              where  assignId=${data.assignId}`
                 }
                 return $.ajax({
                     url: statusUpdate,
@@ -341,14 +336,16 @@ class Hrkrasheet extends Component {
                     data: JSON.stringify(statusUpdateQuery),
                     headers: {
                         "Content-Type": "application/json",
+                    },
+                    success: function () {
+                        _this.setState({ redirectToMyteam: true });
+                        // toast.success("Scaleset " + Notification.saved, {
+                        //     position: toast.POSITION.TOP_RIGHT
+                        // });
                     }
                 });
-                // _this.setState({ redirectToList: true });
-                // toast.success("Scaleset " + Notification.saved, {
-                //     position: toast.POSITION.TOP_RIGHT
-                // });
-            }
-        });
+            })
+      
     }
 
     render() {
@@ -516,9 +513,7 @@ class Hrkrasheet extends Component {
                     }}>Reverted to employee</button>
 
                 </div>
-                {/* <ToastContainer /> */}
             </div>
-            //dataTable
         )
     }
 }
