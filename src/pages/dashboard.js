@@ -19,7 +19,7 @@ class Dashboard extends Component {
 
     onChangeStatus = (assignId) => {
         this.tpmstatusUpdateAPI(assignId);
-        // this.hrstatusUpdateAPI(assignId);
+        this.hrstatusUpdateAPI(assignId);
         this.developerStatusUpdateAPI(assignId);
          window.location.reload();
        
@@ -45,7 +45,7 @@ class Dashboard extends Component {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET status='Submit by Employee'
-              where status='Assigned to Employee'and assignId=${assignId}`
+              where status In('Assigned to Employee','Draft by Employee','Reverted to employee by HR ')and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -100,11 +100,17 @@ class Dashboard extends Component {
                 type: Type.post,
                 dataSrc: "",
                 data: {
-                    "query": `SELECT TAM.assignId, TAM.status, PM.projectName,PM.startDate,PM.endDate,PMM.quaterName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId where TAM.status In('Assigned to Employee','Reverted to employee','Draft by Employee',Submit by Employee)`
-                }
+                    "query": `SELECT TAM.assignId, TAM.status, PM.projectName,PM.startDate,PM.endDate,PMM.quaterName 
+                    FROM template_master as TM 
+                    JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId
+                    JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = PM.manageBy 
+                    JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
+                    where TAM.userId='${localStorage.getItem('userId')}' 
+                    AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Employee',
+                    'Reverted to employee by HR')` }
             
             },
-            columns: [
+            columns: [ 
                 {
                     data: "quaterName" + "projectName",
                     targets: 0,

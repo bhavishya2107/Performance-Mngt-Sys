@@ -40,11 +40,11 @@ class AssignTemplate extends Component {
             userId: event.target.value,
         })
     }
-    // onChangeStatus(e) {
-    //     this.setState({
-    //         status: e.currentTarget.value
-    //     })
-    // }
+    onChangeStatusDdl(e) {
+        this.setState({
+            status: e.currentTarget.value
+        })
+    }
     onChangeStatus = (assignId) => {
         this.onChangestatusUpdateAPI(assignId);
         // if (this.state.status == "Submit by Employee") {
@@ -116,10 +116,7 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 0,
                     render: function (data, type, row) {
-                        this.setState({
-                            assignId: row.assignId
-                        })
-                        return (
+                         return (
                             '<label class="checkbox">' +
                             '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
                             '<i></i> ' +
@@ -550,10 +547,10 @@ class AssignTemplate extends Component {
                     </div>
                     <div className="col-md-3 col-sm-6 mb-2">
                         <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
-                            onChange={(e) => { this.onChangeStatus(e) }} value={this.state.status}  >
+                            onChange={(e) => { this.onChangeStatusDdl(e) }} value={this.state.status}  >
                             <option value="">Select Status </option>
                             <option value="1"> Created by Hr</option>
-                            <option value="2">Assigned Employee</option>
+                            <option value="2">Assigned to Employee</option>
                             <option value="3"> Draft by Employee</option>
                             <option value="4">Submit by Employee</option>
                             <option value="5">Draft by Reviewer</option>
