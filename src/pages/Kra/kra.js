@@ -18,6 +18,7 @@ class kraListPage extends Component {
 
   //#region delete kra on click delete icon
   SingleKraDelete(kraId) {
+    debugger
     var res = this.DeleteKraApi(kraId);
     res.done(response => {
       if (response.affectedRows > 0) {

@@ -269,9 +269,9 @@ class UserRolePMS extends Component {
                                  <i></i>
                                 </label>
                             </th>
-                            <th  >Name</th>
+                            <th>Name</th>
                             <th>Description</th>
-                            <th  >Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -280,7 +280,5 @@ class UserRolePMS extends Component {
             </div>
         )
     }
-
-
 }
 export default UserRolePMS;
