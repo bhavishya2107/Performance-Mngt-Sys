@@ -114,7 +114,7 @@ class UserManagement extends Component {
                         this.multiDelete(userId);
                     }
                     else {
-                    }
+                     }
                 },
             });
         }
@@ -136,7 +136,7 @@ class UserManagement extends Component {
         });
 
         res.fail(error => {
-
+            toast.info(Notification.deleteError)
         });
     }
 
@@ -156,7 +156,6 @@ class UserManagement extends Component {
         this.$el = $(this.el);
         this.$el.DataTable({
             "sorting": [[0, 'asc']],
-
             "autoWidth": false,
             ajax: {
                 url: url,
@@ -165,9 +164,7 @@ class UserManagement extends Component {
                 error: function (xhr, status, error) {
 
                 },
-
             },
-
             columns: [
                 {
                     data: "userId",
@@ -181,12 +178,10 @@ class UserManagement extends Component {
                         )
                     },
                     orderable: false
-                },
-               
+                },           
                 {
                     data: "firstName",
                     targets: 1,
-
                 },
                 {
                     data: "lastName",
@@ -200,7 +195,6 @@ class UserManagement extends Component {
                     data: "emailAddress",
                     targets: 4,
                 },
-
                 {
                     data: "mobileNo",
                     targets: 5,
@@ -212,7 +206,6 @@ class UserManagement extends Component {
                         return (
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="/user-management/edit/userId=' + row.userId + '">' + '<i class="fa fa-pencil" aria-hidden="true"></i>' + "</a>" + " " +
                             '<a href="#" id="' + row.userId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" href="javascript:void(0);" ">' + '<i class="fa fa-trash" aria-hidden="true">' + '</a>'
-
                         )
                     },
                     "orderable": false
@@ -231,12 +224,9 @@ class UserManagement extends Component {
                 $(".btnDelete").on("click", e => {
                     this.singleDeleteUserConfirm(e.currentTarget.id);
                 });
-
             }
         });
     }
-
-
     render() {
         return (
             <div>

@@ -6,7 +6,8 @@ import { environment, moduleUrls, Type, Notification, ModuleNames } from '../Env
 import bootbox from 'bootbox'
 $.DataTable = require('datatables.net-bs4');
 var moment = require('moment');
-var _datatableControl;
+// var _datatableControl;
+
 class AssignTemplate extends Component {
     constructor(props) {
         super(props);
@@ -72,27 +73,25 @@ class AssignTemplate extends Component {
             }
         });
     }
-
     //#endregion   
-    //#region methods
+    //#region methods 
     clear() {
         window.location.reload();
     }
-
     searchUser() {
         const url = environment.dynamicUrl + 'dynamic';
 
         var dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId where 1=1";
 
-        if (this.state.userId != '') {
+        if (this.state.userId !== '') {
             dynamicQuery += " and TAM.userId = " + this.state.userId;
         }
 
-        if (this.state.projectId != '') {
+        if (this.state.projectId !== '') {
             dynamicQuery += " and TAM.projectId = " + this.state.projectId;
         }
 
-        if (this.state.status != '') {
+        if (this.state.status !== '') {
             dynamicQuery += " and TAM.status = " + this.state.status;
         }
 
@@ -116,7 +115,7 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 0,
                     render: function (data, type, row) {
-                         return (
+                        return (
                             '<label class="checkbox">' +
                             '<input type="checkbox" name="assignId" value="' + row.assignId + '">' +
                             '<i></i> ' +
@@ -229,7 +228,6 @@ class AssignTemplate extends Component {
                 })
             })
     }
-
     getDropDownValues(url) {
         return $.ajax({
             url: url,
@@ -342,6 +340,7 @@ class AssignTemplate extends Component {
     }
     //#endregion
     //#region   Ajax call
+  
     DeleteTemplateApi(assignId) {
         var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${assignId}`
         return $.ajax({
@@ -404,7 +403,7 @@ class AssignTemplate extends Component {
                 }
                 // Prashant.Khanderia@prakashinfotech.com
                 this.sendMailAPI(body);
-               // toast.success("" + Notification.EmailSent);
+                // toast.success("" + Notification.EmailSent);
             }
         })
     }
@@ -417,7 +416,7 @@ class AssignTemplate extends Component {
         var dynamicQuery = "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId ORDER BY TAM.assignId DESC";
 
         this.$el = $(this.el);
-        _datatableControl = this.$el.DataTable({
+        this.$el.DataTable({
 
             "autoWidth": false,
             ajax: {
@@ -488,20 +487,20 @@ class AssignTemplate extends Component {
                     data: "assignId",
                     targets: 7,
                     render: function (data, type, row) {
-                         if (row.status== "Created by HR" ) {
-                        return (
-                            '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
-                            '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
-                            '<i class="fa fa-save" aria-hidden="true"></i>' +
-                            "</a>"
-                            
-                        );
-                         }
-                         else if ({ status: "Submit by Employee" }) {
-                        return (
-                            '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
-                        );
+                        if (row.status === "Created by HR") {
+                            return (
+                                '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                                '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
+                                '<i class="fa fa-save" aria-hidden="true"></i>' +
+                                "</a>"
+
+                            );
+                        }
+                        else if ({ status: "Submit by Employee" }) {
+                            return (
+                                '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
+                            );
                         }
                     },
                     "orderable": false

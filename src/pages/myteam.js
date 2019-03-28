@@ -8,7 +8,7 @@ class Myteam extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignId:""
+            assignId: ""
         }
     }
     onChangeTlStatus = (e) => {
@@ -48,7 +48,7 @@ class Myteam extends Component {
 
             // query: `Update template_assignment_master tam SET status='Created by HR' 
             // where status='Assigned to Employee' `
-            
+
         }
         return $.ajax({
             url: statusUpdate,

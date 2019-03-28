@@ -7,7 +7,6 @@ import { environment, Type, moduleUrls, Notification } from '../Environment'
 import DatePicker from "react-datepicker";
 var moment = require('moment');
 
-
 class addAssignTemplate extends Component {
     constructor(props) {
         super(props);
@@ -24,22 +23,70 @@ class addAssignTemplate extends Component {
             endDate: null,
             options: "",
             tempUser: "",
-            displayUserDataOptions:""
+            displayUserDataOptions: ""
         };
         this.onChangeProject = this.onChangeProject.bind(this);
     }
-    
+    //#region AJax Calls
     componentDidMount() {
         this.getQuaterData();
         this.getTemplateData();
         this.getProjectData();
         this.getProjectResourcesData();
-       
+
         //On Edit mode
         if (this.state.assignId !== undefined) {
             this.getTemplateAssignDetails();
         }
     }
+    saveTemplateAssignDetailsApi(data) {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + "/bulk?_ids=" + `${this.state.assignId}`;
+        return $.ajax({
+            url: url,
+            type: Type.post,
+            dataSrc: "",
+            data: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    }
+    getTemplateAssignDetailsApi() {
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+        return $.ajax({
+            url: url,
+            type: Type.get,
+        })
+    }
+    getDropDownValues(url) {
+        return $.ajax({
+            url: url,
+            type: Type.get
+        })
+    }
+    updateTemplateAssignAjaxCall(data) {
+        var TempList =
+        {
+            "userId": data.userId,
+            "startDate": moment(data.startDate).format('YYYY-MM-DD'),
+            "endDate": moment(data.endDate).format('YYYY-MM-DD')
+        }
+        this.setState({
+            RedirectToTemplate: true
+        })
+        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
+        return $.ajax({
+            url: url,
+            type: Type.patch,
+            headers: {
+                "content-type": "application/json",
+                "x-requested-with": "XMLHttpRequest",
+                "Access-Control-Allow-Origin": "*"
+            },
+            data: JSON.stringify(TempList),
+        });
+    }
+    //#endregion
     //#region Bind Dropdown Lists.
     getQuaterData() {
         var url = environment.apiUrl + moduleUrls.Quater;
@@ -69,7 +116,7 @@ class addAssignTemplate extends Component {
             })
     }
     getProjectData() {
-        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}`+`?_where=(status,ne,Not Started)`
+        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}` + `?_where=(status,ne,Not Started)`
         this.getDropDownValues(url).done(
             (tempProject) => {
                 var displayProjectDataReturn = tempProject.map(function (i) {
@@ -105,7 +152,7 @@ class addAssignTemplate extends Component {
             res.done((response) => {
                 if (response !== undefined) {
                     var res = response[0];
-                        this.setState({
+                    this.setState({
                         quaterId: res.quaterId,
                         templateId: res.templateId,
                         projectId: res.projectId,
@@ -133,58 +180,6 @@ class addAssignTemplate extends Component {
         }
     }
     //#endregion
-    //#region AJax Calls
-    saveTemplateAssignDetailsApi(data) {
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + "/bulk?_ids=" + `${this.state.assignId}`;
-        return $.ajax({
-            url: url,
-            type: Type.post,
-            dataSrc: "",
-            data: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-    }
-    getTemplateAssignDetailsApi() {
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
-        return $.ajax({
-            url: url,
-            type: Type.get,
-        })
-    }
-    getDropDownValues(url) {
-        return $.ajax({
-            url: url,
-            type: Type.get
-        })
-
-    }
-   
-    updateTemplateAssignAjaxCall(data) {
-        var TempList =
-        {
-            "userId": data.userId,
-            "startDate": moment(data.startDate).format('YYYY-MM-DD'),
-            "endDate": moment(data.endDate).format('YYYY-MM-DD')
-        }
-       
-        this.setState({
-            RedirectToTemplate: true
-        })
-        var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
-        return $.ajax({
-            url: url,
-            type: Type.patch,
-            headers: {
-                "content-type": "application/json",
-                "x-requested-with": "XMLHttpRequest",
-                "Access-Control-Allow-Origin": "*"
-            },
-            data: JSON.stringify(TempList),
-        });
-    }
-    //#endregion
     //#region Methods
     reset() {
         window.location.reload();
@@ -198,17 +193,17 @@ class addAssignTemplate extends Component {
             data: {
                 "query": `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId =${projectId}`
             },
-       })
-    }    
+        })
+    }
 
     getUserData(selectedProjectId) {
         var url = environment.dynamicUrl + "dynamic"
         return $.ajax({
             url: url,
-            type: Type.post,           
+            type: Type.post,
             data: {
                 query: `select u.userid,u.firstName,u.lastName from user_master u left join project_resources p on p.userId = u.userId where p.projectId=${selectedProjectId}`
-            }           
+            }
         });
     }
     //#endregion
@@ -224,12 +219,9 @@ class addAssignTemplate extends Component {
         })
     }
     onChangeProject(event) {
-       
-        var selectedProjectId= event.target.value;
+        var selectedProjectId = event.target.value;
         var dataUser = this.getUserData(event.target.value)
-        dataUser.done((response) => 
-        {
-           
+        dataUser.done((response) => {
             this.setState({
                 displayUserData: response,
                 projectId: selectedProjectId,
@@ -297,11 +289,12 @@ class addAssignTemplate extends Component {
     //#endregion  
     render() {
         var existingUserId = this.state.userId;
-        var displayUserDataReturn= this.state.displayUserData.map(function (i) {
-        return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
-                : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))});
+        var displayUserDataReturn = this.state.displayUserData.map(function (i) {
+            return (existingUserId === i.userid ? (<option key={i.userid} value={i.userid} selected="selected" >{i.firstName + " " + i.lastName}</option>)
+                : (<option key={i.userid} value={i.userid} >{i.firstName + " " + i.lastName}</option>))
+        });
 
-       if (this.state.RedirectToTemplate) {
+        if (this.state.RedirectToTemplate) {
             return <Redirect to={{ pathname: "/Assign-Template" }} />
         }
         return (
@@ -341,12 +334,12 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label className="required">Project</label>
-                                            <select name="projectDropDown" 
-                                            //onChange={(e) => { this.onChangeProject(e) }} 
-                                            onChange={(e) => { this.onChangeProject(e) }}
-                                            disabled={this.state.assignId !== undefined ? true : false} 
-                                            value={this.state.projectId} 
-                                            className="form-control" required>
+                                            <select name="projectDropDown"
+                                                //onChange={(e) => { this.onChangeProject(e) }} 
+                                                onChange={(e) => { this.onChangeProject(e) }}
+                                                disabled={this.state.assignId !== undefined ? true : false}
+                                                value={this.state.projectId}
+                                                className="form-control" required>
                                                 <option value="">Select Project</option>
                                                 {this.state.displayProjectData}
                                             </select>
@@ -357,16 +350,16 @@ class addAssignTemplate extends Component {
                                     <div className="col-md-6">
                                         <div className="form-group">
                                             <label>User</label>
-                                            <select required 
-                                            id="multiSelect" 
-                                            name="user"                                                                          
-                                            onChange={(e) => { this.onChangeUser(e) }} 
-                                            disabled={this.state.assignId !== undefined ? true : false} 
-                                            className="form-control" 
-                                            multiple={this.state.assignId === undefined ? true : false} >
+                                            <select required
+                                                id="multiSelect"
+                                                name="user"
+                                                onChange={(e) => { this.onChangeUser(e) }}
+                                                disabled={this.state.assignId !== undefined ? true : false}
+                                                className="form-control"
+                                                multiple={this.state.assignId === undefined ? true : false} >
                                                 <option value="0">--</option>
                                                 {this.state.displayUserDataOptions}
-                                               {displayUserDataReturn}
+                                                {displayUserDataReturn}
                                             </select>
                                         </div>
                                     </div>
@@ -384,7 +377,7 @@ class addAssignTemplate extends Component {
                                                             startDate: moment(e).format("YYYY-MM-DD") === "Invalid date" ? null : moment(e).format("YYYY-MM-DD")
 
                                                         })
-                                                    }}/>
+                                                    }} />
                                                 <i className="fa fa-calendar"></i>
                                             </div>
                                         </div>
@@ -401,7 +394,7 @@ class addAssignTemplate extends Component {
 
                                                     })
                                                 }}
-                                                 />
+                                            />
                                             <i className="fa fa-calendar"></i>
                                         </div>
                                     </div>
