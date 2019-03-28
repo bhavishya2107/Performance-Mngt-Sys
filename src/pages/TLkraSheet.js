@@ -456,6 +456,12 @@ class TLKraSheet extends Component {
                     </table>
                 </div>
                 &nbsp;
+                <div>
+        <label style={{"padding":"auto"}}><b>Reviewer Comment:</b></label>
+        </div>
+        <div >
+        <textarea style={{"border":"1px solid"}} rows="10" cols="198"></textarea>
+        </div>
                 <div className="form-group">
                 <button className="btn btn-success" type="button" onClick={() => {
                     this.commentAndratingUpdate();
