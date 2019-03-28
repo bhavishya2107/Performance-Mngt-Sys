@@ -18,6 +18,7 @@ class TLKraSheet extends Component {
             endDate: "",
             departmentName: "",
             comments: "",
+            reviewerComment:"",
             selfRating: "",
             quaterName: "",
             assignId: props.match.params.assignId,
@@ -44,6 +45,41 @@ class TLKraSheet extends Component {
             }
         });
     }
+
+     //add Employee Comment
+  saveReviewerComment(data) {
+    debugger
+            var employeeComment =
+            {
+                "reviewerComment": data.reviewerComment,
+            };
+            const apiTAMsaveEmpComment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+            $.ajax({
+                url: apiTAMsaveEmpComment,
+                type: Type.patch,
+                data: JSON.stringify(employeeComment),
+                headers: {
+                  "content-type": "application/json",
+                  "x-requested-with": "XMLHttpRequest",
+              },
+                success: function (resultData) {
+
+                }
+            });
+  }
+
+   //get reviewerComment for update 
+   apiForGetReviewerComment() {
+    debugger
+          const apiForGetrevComment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+          return $.ajax({
+              url: apiForGetrevComment,
+              type: Type.get,
+              success:(res)=>{
+                console.log(res)
+              }
+          })
+      }
 
     //getting form details 
     getUserDetailsApi = () => {
@@ -116,6 +152,7 @@ class TLKraSheet extends Component {
 
     //comment,self-rating save if kpiID,KraId,assignId exist
     commentAndratingUpdate() {
+        this.saveReviewerComment(this.state);
         var kraData = new Array();
         var kraDataSaveRecords = new Array();
         var kraDataUpdateRecords = new Array();
@@ -150,6 +187,7 @@ class TLKraSheet extends Component {
         });
 
         if (kraDataSaveRecords.length > 0) {//SAVE Logic
+           
             var _this = this;
             const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
             $.ajax({
@@ -161,23 +199,29 @@ class TLKraSheet extends Component {
                     "x-requested-with": "XMLHttpRequest"
                 },
                 success: function (resultData) {
-                    // toast.success("Comment and Rating Saved", + {
-                    //     position: toast.POSITION.TOP_RIGHT
-                    //   });
+              
                     _this.setState({ redirectToMyteam: true })
                 }
             });
         }
         if (kraDataUpdateRecords.length > 0) {//Update
+        
             kraDataUpdateRecords.forEach(item => {
                 this.updateApi(item);
             });
-            //   toast.success("Comment and Rating Updated", + {
-            //     position: toast.POSITION.TOP_RIGHT
-            //   });
+      
         }
     }
     componentDidMount() {
+        var employeeComment=this.apiForGetReviewerComment()
+        employeeComment.done((res)=>{
+          this.setState({
+            reviewerComment:res[0].reviewerComment
+          })
+        })
+        employeeComment.fail((error)=>{
+          
+        })
         var res = this.getUserDetailsApi();
         res.done(response => {
             this.setState({
@@ -457,10 +501,16 @@ class TLKraSheet extends Component {
                 </div>
                 &nbsp;
                 <div>
-        <label style={{"padding":"auto"}}><b>Reviewer Comment:</b></label>
+        <label><b>Reviewer Comment:</b></label>
         </div>
         <div >
-        <textarea style={{"border":"1px solid"}} rows="10" cols="198"></textarea>
+        <textarea style={{"border":"1px solid"}} rows="10" cols="198" value={this.state.reviewerComment}
+           onChange={(event) => {
+            this.setState({
+                reviewerComment: event.target.value
+            })
+        }}
+        ></textarea>
         </div>
                 <div className="form-group">
                 <button className="btn btn-success" type="button" onClick={() => {

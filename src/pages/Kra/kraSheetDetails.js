@@ -18,6 +18,7 @@ class KraSheet extends Component {
       endDate: "",
       departmentName: "",
       comments: "",
+      empComment:"",
       selfRating: "",
       quaterName: "",
       assignId: props.match.params.assignId,
@@ -99,6 +100,39 @@ class KraSheet extends Component {
   }
 
   //add Employee Comment
+  saveEmpComment(data) {
+    debugger
+            var employeeComment =
+            {
+                "selfComment": data.empComment,
+            };
+            const apiTAMsaveEmpComment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+            $.ajax({
+                url: apiTAMsaveEmpComment,
+                type: Type.patch,
+                data: JSON.stringify(employeeComment),
+                headers: {
+                  "content-type": "application/json",
+                  "x-requested-with": "XMLHttpRequest",
+              },
+                success: function (resultData) {
+
+                }
+            });
+  }
+
+  //get selfcomment for update 
+  apiForGetselfComment() {
+  debugger
+        const apiForGetselfComment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
+        return $.ajax({
+            url: apiForGetselfComment,
+            type: Type.get,
+            success:(res)=>{
+              console.log(res)
+            }
+        })
+    }
 
 
   //update and set comment
@@ -132,6 +166,7 @@ class KraSheet extends Component {
   }
   //comment,self-rating save if kpiID,KraId,assignId exist
   commentAndratingUpdate() {
+    this.saveEmpComment(this.state);
     var kraData = new Array();
     var kraDataSaveRecords = new Array();
     var kraDataUpdateRecords = new Array();
@@ -165,7 +200,9 @@ class KraSheet extends Component {
       }
     });
 
-    if (kraDataSaveRecords.length > 0) {//SAVE Logic
+    if (kraDataSaveRecords.length > 0)
+   {//SAVE Logic
+    
       var _this = this;
       const endpointPOST = environment.apiUrl + moduleUrls.TAD + '/bulk'
       $.ajax({
@@ -195,6 +232,15 @@ class KraSheet extends Component {
   }
 
   componentDidMount() {
+    var employeeComment=this.apiForGetselfComment()
+    employeeComment.done((res)=>{
+      this.setState({
+        empComment:res[0].selfComment
+      })
+    })
+    employeeComment.fail((error)=>{
+      
+    })
     var result = this.getdetailsFromTAD();
     var res = this.getUserDetailsApi();
     res.done(response => {
@@ -471,14 +517,22 @@ class KraSheet extends Component {
         </div>
         &nbsp;
         <div>
-        <label style={{"padding":"auto"}}><b>Employee Comment:</b></label>
+        <label>
+          <b>Employee Comment:</b>
+        </label>
         </div>
         <div >
-        <textarea style={{"border":"1px solid"}} rows="10" cols="198"></textarea>
+        <textarea style={{"border":"1px solid"}} rows="10" cols="198" value={this.state.empComment}
+           onChange={(event) => {
+            this.setState({
+                empComment: event.target.value
+            })
+        }}
+        >{this.state.empComment}</textarea>
         </div>
         <div className="form-group">
         <button className="btn btn-success" type="button" onClick={() => {
-          this.commentAndratingUpdate();
+         this.commentAndratingUpdate()
         }}>Save</button>
         </div>
       </div>
