@@ -496,12 +496,11 @@ class AssignTemplate extends Component {
                             '<a  class="btn mr-2 btn-edit btn-info btn-sm" href="Assign-Template/edit/id=' + row.assignId + '"><i class="fa fa-pencil" aria-hidden="true"></i></a>' +
                             '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                             '<a href="#" id="' + row.assignId + '"class="btn btnMail btn-info btn-sm";"">' +
-                            '<i class="fa fa-save" aria-hidden="true"></i>' +
-                            "</a>"
-                            
+                            '<i class="fa fa-retweet" aria-hidden="true"></i>' +
+                            "</a>"  
                         );
                          }
-                         else if ({ status: "Submit by Employee" }) {
+                         else if ( row.status== "Submit by Employee" || "Assigned to Employee" ) {
                         return (
                             '<a href="#" id="' + row.assignId + '" class="btn mr-2 delete btn-danger btn-sm btnDelete" ><i class="fa fa-trash" aria-hidden="true"></i></a>'
                         );
