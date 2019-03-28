@@ -230,7 +230,7 @@ class AddDept extends Component {
                                         this.setState({
                                             description: event.target.value
                                         })
-                                    }} required></textarea>
+                                    }}  required></textarea>
                             </div>
                             <div className="form-group">
                                 {this.state.departmentId !== undefined ?
