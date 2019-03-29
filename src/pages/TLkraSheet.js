@@ -129,9 +129,6 @@ class TLKraSheet extends Component {
             async: false,
             data: JSON.stringify(kraSheetdata),
             success: function (resultData) {
-                // toast.success("Comment and Rating Saved", + {
-                //     position: toast.POSITION.TOP_RIGHT
-                //   });
                 _this.setState({ redirectToMyteam: true })
             }
         })

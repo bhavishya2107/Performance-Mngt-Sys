@@ -269,9 +269,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
@@ -297,9 +294,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
@@ -326,9 +320,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
