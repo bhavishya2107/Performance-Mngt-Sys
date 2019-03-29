@@ -491,8 +491,7 @@ class KraSheet extends Component {
 					<textarea
 						className="form-control"
 						style={{ border: '1px solid' }}
-						rows="10"
-						cols="198"
+						rows="8" cols="180"
 						value={this.state.empComment}
 						onChange={(event) => {
 							this.setState({
