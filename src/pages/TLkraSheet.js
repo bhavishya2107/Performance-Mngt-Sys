@@ -486,7 +486,7 @@ class TLKraSheet extends Component {
         <label><b>Reviewer Comment:</b></label>
         </div>
         <div >
-        <textarea style={{"border":"1px solid"}} rows="10" cols="198" value={this.state.reviewerComment}
+        <textarea className="form-control" style={{"border":"1px solid"}} rows="8" cols="180" value={this.state.reviewerComment}
            onChange={(event) => {
             this.setState({
                 reviewerComment: event.target.value
@@ -494,6 +494,7 @@ class TLKraSheet extends Component {
         }}
         ></textarea>
         </div>
+        &nbsp;
                 <div className="form-group">
                 <button className="btn btn-success" type="button" onClick={() => {
                     this.commentAndratingUpdate();
