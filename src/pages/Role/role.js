@@ -175,7 +175,7 @@ class UserRolePMS extends Component {
             },
 
             columnDefs: [
-                { width: '5%', targets: 0 },
+                { width: '1%', targets: 0 },
                 { width: '20%', targets: 1 },
                 { width: '65%', targets: 2 },
                 { width: '10%', targets: 3 },

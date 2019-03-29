@@ -18,7 +18,6 @@ class kraListPage extends Component {
 
   //#region delete kra on click delete icon
   SingleKraDelete(kraId) {
-    debugger
     var res = this.DeleteKraApi(kraId);
     res.done(response => {
       if (response.affectedRows > 0) {
@@ -159,7 +158,7 @@ class kraListPage extends Component {
         error: function (xhr, status, error) { }
       },
       columnDefs: [
-        { width: '5%', targets: 0 },
+        { width: '1%', targets: 0 },
         { width: '20%', targets: 1 },
         { width: '65%', targets: 2 },
         { width: '10%', targets: 3 },
