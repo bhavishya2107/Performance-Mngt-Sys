@@ -11,35 +11,13 @@ class Myteam extends Component {
             assignId: ""
         }
     }
-    // onchangeStatusUpdate(){
-    //     this.onChangeTlStatus();
-    //     this.onChangeHrStatus()
-    // }
+
     onChangeTlStatus = (assignId) => {
-        debugger
         this.tlstatusUpdateAPI(assignId);
         window.location.reload();
     }
 
-    // tlstatusUpdateAPI(assignId) {
-    //     debugger
-    //     var statusUpdate = environment.dynamicUrl + 'dynamic';
-    //     var statusUpdateQuery = {
-    //         query: ` assignId=${assignId}`
-
-    //     }
-    //     return $.ajax({
-    //         url: statusUpdate,
-    //         type: Type.post,
-    //         data: JSON.stringify(statusUpdateQuery),
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         }
-    //     });
-    // }
-
     tlstatusUpdateAPI(assignId) {
-        debugger
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
             query: `Update template_assignment_master tam SET TAM.status='Submit by Reviewer'
@@ -72,7 +50,6 @@ class Myteam extends Component {
                     AND TAM.status IN('Submit by Employee','Draft by Reviewer','Draft by Reviewer',
                     'Approved by HR','Reverted to reviewer by HR')`
         }
-        //'Submit by Employee','Draft by Reviewer',Reverted to reviewer by HR','Approved by HR','Assigned to Employee',
         const myTeamUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
