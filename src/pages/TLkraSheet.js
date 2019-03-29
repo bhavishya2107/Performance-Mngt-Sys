@@ -86,27 +86,14 @@ class TLKraSheet extends Component {
         var endpoint = environment.dynamicUrl + 'dynamic';
         var kraSheet = {
             query: `
-          SELECT 
-            k.kraname,
-            TAM.assignId, 
-            PM.projectName,
-            PM.startDate,
-            PM.endDate,
-            q.quaterName,
-            UM.firstname,
-            UM.lastname,
-            d.departmentname 
-          FROM 
-            template_assignment_master as TAM           
-            JOIN template_master as TM ON TAM.templateId = TM.templateId 
-            JOIN project_master as PM ON PM.projectId = TAM.projectId 
-            JOIN user_master as UM ON UM.userId = TAM.userId 
-            JOIN quater_master as q ON q.quaterId = TAM.quaterId 
-            JOIN department_master d ON d.departmentid = UM.departmentid 
+            SELECT k.kraname,k.kraName,TAM.assignId,PM.projectName,PM.startDate,PM.endDate,q.quaterName,UM.firstname,UM.firstName,UM.lastname,UM.lastName,d.departmentname,d.departmentName
+            FROM 
+            template_assignment_master as TAM JOIN template_master as TM ON TAM.templateId = TM.templateId 
+            JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userId 
+            JOIN quater_master as q ON q.quaterId = TAM.quaterId JOIN department_master d ON d.departmentid = UM.departmentid 
             JOIN template_detail as td ON td.templateid = TAM.templateid 
-            JOIN kra_master k ON k.kraid = td.kraid  
-          where 
-            TAM.assignId=${this.state.assignId}`
+            JOIN kra_master k ON k.kraid = td.kraid 
+            where TAM.assignId=${this.state.assignId}`
         }
         return $.ajax({
             url: endpoint,
