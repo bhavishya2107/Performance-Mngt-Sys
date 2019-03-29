@@ -388,7 +388,7 @@ class AssignTemplate extends Component {
                     <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) + ' ' + res[0].lastName.charAt(0).toUpperCase() + res[0].lastName.slice(1) + `,  </p>`;
                 emailBody += `
                 KRA sheet assigned to you for project ` + `"` + res[0].projectName + `"` + ` ,
-                you have worked on ` + res[0].quaterName + `  
+                you have to work on ` + res[0].quaterName + `  
                 ` + `
                 from` + " " + moment(res[0].startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(res[0].endDate).format("DD-MM-YYYY") + `
                     </p>Please fill your sheets as soon as possible.        

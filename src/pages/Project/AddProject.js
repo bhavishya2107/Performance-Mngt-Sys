@@ -153,7 +153,6 @@ class AddProject extends Component {
 
 
     sendProjectMail() {
-        debugger
         var resourceName = '';
         $(this.state.selectedOption).each((e, item) => {
             resourceName += item.label + ",";
@@ -163,12 +162,11 @@ class AddProject extends Component {
             url: url,
             type: Type.get,
             success: (res) => {
-                console.log(res[0])
                 var emailBody =
                     `<html>
                     <body>
                     <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) +' ' +  res[0].lastName.charAt(0).toUpperCase() +res[0].lastName.slice(1)+  `, </p>
-                    <p>New Project Assigned to you. Below are the details of project:</p>`;
+                    <p>New Project Assigned to you. Below are the details of Project:</p>`;
                 emailBody += `
                        project name is <b>` + this.state.projectName.charAt(0).toUpperCase()+ this.state.projectName.slice(1) + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` </b><br>
