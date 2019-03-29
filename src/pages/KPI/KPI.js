@@ -183,15 +183,15 @@ class KPI extends Component {
                     targets: 1
                 },
                 {
-                    data: "weightage",
+                    data: "target",
                     targets: 2
                 },
                 {
-                    data: "target",
+                    data: "scalesetName",
                     targets: 3
                 },
                 {
-                    data: "scalesetName",
+                    data: "weightage",
                     targets: 4
                 },
                 {
@@ -250,10 +250,10 @@ class KPI extends Component {
                                         <i></i>
                                     </label>
                                 </th>
-                                <th width="100" >Name</th>
+                                <th width="240" >Name</th>
+                                <th width="240" >Scale Set</th>
+                                <th >Target</th>
                                 <th width="100" >Weightage</th>
-                                <th width="100">Target</th>
-                                <th width="100" >Scale Set</th>
                                 <th width="100">Action</th>
                             </tr>
                         </thead>

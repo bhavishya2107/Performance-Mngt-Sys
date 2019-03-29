@@ -31,7 +31,6 @@ class Department extends Component {
     singleDeleteDeptConfirm(id) {
 
         if (id !== undefined) {
-            if (id !== 259) {
                 bootbox.confirm({
                     message: Notification.deleteConfirm,
                     buttons: {
@@ -53,9 +52,7 @@ class Department extends Component {
                         }
                     }
                 });
-            } else {
-                alert("you cannot delete system department")
-            }
+            
         }
     }
     DeleteDepApi(departmentId) {
@@ -151,7 +148,7 @@ class Department extends Component {
 
             },
             columnDefs: [
-                { width: '5%', targets: 0 },
+                { width: '1%', targets: 0 },
                 { width: '20%', targets: 1 },
                 { width: '65%', targets: 2 },
                 { width: '10%', targets: 3 },

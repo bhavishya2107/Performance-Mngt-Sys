@@ -175,7 +175,7 @@ class UserRolePMS extends Component {
             },
 
             columnDefs: [
-                { width: '5%', targets: 0 },
+                { width: '1%', targets: 0 },
                 { width: '20%', targets: 1 },
                 { width: '65%', targets: 2 },
                 { width: '10%', targets: 3 },
@@ -269,9 +269,9 @@ class UserRolePMS extends Component {
                                  <i></i>
                                 </label>
                             </th>
-                            <th  >Name</th>
+                            <th>Name</th>
                             <th>Description</th>
-                            <th  >Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -280,7 +280,5 @@ class UserRolePMS extends Component {
             </div>
         )
     }
-
-
 }
 export default UserRolePMS;

@@ -234,7 +234,7 @@ class UserRoleForm extends Component {
                                         this.setState({
                                             description: event.target.value
                                         })
-                                    }} required></textarea>
+                                    }}></textarea>
                             </div>
                         </div>
                     </div>

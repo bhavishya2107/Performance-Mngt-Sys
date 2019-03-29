@@ -213,7 +213,7 @@ class Hrkrasheet extends Component {
                         targets: 4,
                         render: (data, type, row) => {
                             return (
-                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerComment + `</label>`
+                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerRating + `</label>`
                             )
                         },
                     },
@@ -282,9 +282,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
@@ -310,9 +307,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
@@ -339,9 +333,6 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
