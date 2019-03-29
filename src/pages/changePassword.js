@@ -47,7 +47,6 @@ class ChangePW extends Component {
     
     //main function and validate function
     userCurrentpwCheck = () => {
-        debugger;
         var isvalidate = window.formValidation("#CPWform")
         if (isvalidate) {
             var res = this.matchCurrentPasswordAPI()

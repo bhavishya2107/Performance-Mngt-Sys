@@ -11,19 +11,39 @@ class Myteam extends Component {
             assignId: ""
         }
     }
-    onChangeTlStatus = (e) => {
-        this.tlstatusUpdateAPI();
+    // onchangeStatusUpdate(){
+    //     this.onChangeTlStatus();
+    //     this.onChangeHrStatus()
+    // }
+    onChangeTlStatus = (assignId) => {
+        debugger
+        this.tlstatusUpdateAPI(assignId);
         window.location.reload();
     }
 
-    tlstatusUpdateAPI() {
+    // tlstatusUpdateAPI(assignId) {
+    //     debugger
+    //     var statusUpdate = environment.dynamicUrl + 'dynamic';
+    //     var statusUpdateQuery = {
+    //         query: ` assignId=${assignId}`
+
+    //     }
+    //     return $.ajax({
+    //         url: statusUpdate,
+    //         type: Type.post,
+    //         data: JSON.stringify(statusUpdateQuery),
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         }
+    //     });
+    // }
+
+    tlstatusUpdateAPI(assignId) {
+        debugger
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Submit by Reviewer' 
-            where status='Submit by Employee' and assignid=206 `
-
-            // query: `Update template_assignment_master tam SET status='Submit by Employee' 
-            // where status='Submit by Reviewer'  `
+            query: `Update template_assignment_master tam SET TAM.status='Submit by Reviewer'
+            where status In('Submit by Employee','Draft by Reviewer','Reverted to reviewer by HR','Approved by HR')and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -35,49 +55,24 @@ class Myteam extends Component {
         });
     }
 
-    onChangeHrStatus = (e) => {
-        this.hrstatusUpdateAPI();
-        window.location.reload();
-    }
 
-    hrstatusUpdateAPI() {
-        var statusUpdate = environment.dynamicUrl + 'dynamic';
-        var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Created by HR' 
-            where status='Assigned to Employee' and assignid=195 `
-
-            // query: `Update template_assignment_master tam SET status='Created by HR' 
-            // where status='Assigned to Employee' `
-
-        }
-        return $.ajax({
-            url: statusUpdate,
-            type: Type.post,
-            data: JSON.stringify(statusUpdateQuery),
-            headers: {
-                "Content-Type": "application/json",
-            }
-        });
-    }
-
-
-  
 
     ApiDatatable() {
         var TPM =
             "SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,tam.status,tam.assignId,um.firstName,um.lastName,qm.quaterName FROM template_assignment_master tam JOIN project_master pm ON tam.projectId = pm.projectId JOIN user_master um ON um.userId = tam.userId JOIN quater_master as qm ON qm.quaterId = TAM.quaterId ";
 
         if (localStorage.getItem('roleName') == "HR") {
-            TPM += `and TAM.status IN('Assigned to Employee','Submit by Employee','Created by HR','Submit by Reviewer',
-            'Reverted to employee by HR','Reverted to reviewer by HR','Approved by HR') `
+            TPM += `and TAM.status IN('Created by HR','Submit by Reviewer',
+          'Approved by HR') `
         }
 
         if (localStorage.getItem('roleName') == "TPM") {
             TPM +=
                 `and pm.manageBy = ${localStorage.getItem('userId')}
-                    AND TAM.status IN('Submit by Employee','Reverted to reviewer by HR','Approved by HR')`
+                    AND TAM.status IN('Submit by Employee','Draft by Reviewer','Draft by Reviewer',
+                    'Approved by HR','Reverted to reviewer by HR')`
         }
-       
+        //'Submit by Employee','Draft by Reviewer',Reverted to reviewer by HR','Approved by HR','Assigned to Employee',
         const myTeamUrl = environment.dynamicUrl + 'dynamic' + '/?_size=1000'
         this.$el = $(this.el);
         this.$el.DataTable({
@@ -140,20 +135,20 @@ class Myteam extends Component {
                     "orderable": false,
                     render: function (data, type, row) {
                         if (localStorage.getItem('roleName') == "HR") {
-                        return (
-                            '<a href="/hrkrasheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
-                            '<i class="fa fa-pencil" aria-hidden="true"></i>' +
-                            "</a>" +
-                            '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-retweet" aria-hidden="true""></i></a>'
-
-                        )
-                        }else{
+                            return (
+                                '<a href="/hrkrasheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
+                                '<i class="fa fa-pencil" aria-hidden="true"></i>' +
+                                "</a>"
+                            )
+                        } else {
                             return (
                                 '<a href="/TLkrasheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                                 '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                                 "</a>" +
-                                '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-retweet" aria-hidden="true""></i></a>'
-    
+                                '<a href="#" id="' + row.assignId + '"class="btn btnSubmit btn-info btn-sm";"">' +
+                                '<i class="fa fa-retweet" aria-hidden="true"></i>' +
+                                "</a>"
+
                             )
                         }
 
@@ -163,13 +158,13 @@ class Myteam extends Component {
             "drawCallback": (settings) => {
                 window.smallTable();
                 $(".btnSubmit").on("click", e => {
-                    this.onChangeHrStatus(e.currentTarget.id);
+                    this.onChangeTlStatus(e.currentTarget.id);
                 });
             }
         });
     }
 
-  
+
     componentWillMount() {
         $(document).ready(function () {
             $(".dataTables_length").css("padding-left", "0px");
@@ -177,7 +172,7 @@ class Myteam extends Component {
     }
     componentDidMount() {
         this.ApiDatatable()
-      
+
     }
     render() {
         return (

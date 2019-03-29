@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../pages/Environment';
@@ -96,8 +95,6 @@ class Hrkrasheet extends Component {
                 "Content-Type": "application/json",
             },
             success: function (resultData) {
-                console.log(resultData)
-
             }
         })
     }
@@ -156,7 +153,6 @@ class Hrkrasheet extends Component {
                         data: "kraName",
                         targets: 0,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
                             )
@@ -184,7 +180,6 @@ class Hrkrasheet extends Component {
                         data: "target",
                         targets: 3,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="targetRow" value="${row.target}">` + row.target + `</label>`
                             )
@@ -221,12 +216,9 @@ class Hrkrasheet extends Component {
                         data: "reviewerComment",
                         targets: 5,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="commentSaved" value="${row.reviewerComment}">` + row.reviewerComment + `</label>`
                             )
-
-
                         },
                     },
                 ],
@@ -243,7 +235,6 @@ class Hrkrasheet extends Component {
         })
     }
 
-
     //Save hr comment Api
 
     saveAndEditHrComment(data) {
@@ -251,7 +242,7 @@ class Hrkrasheet extends Component {
             "hrComment": data.hrcomment,
         }
         const saveHrcomment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + data.assignId
-       return $.ajax({
+        return $.ajax({
             url: saveHrcomment,
             type: Type.patch,
             data: JSON.stringify(formData),
@@ -287,7 +278,7 @@ class Hrkrasheet extends Component {
             })
     }
 
-     //onclick function for RevertedToReviewer
+    //onclick function for RevertedToReviewer
 
     onClickRevertedToReviewer(data) {
         var _this = this
@@ -310,10 +301,10 @@ class Hrkrasheet extends Component {
                     }
                 });
             })
-       
+
     }
 
-     //onclick function for RevertedToEmployee
+    //onclick function for RevertedToEmployee
 
     onClickRevertedToEmployee(data) {
         var _this = this
@@ -336,14 +327,13 @@ class Hrkrasheet extends Component {
                     }
                 });
             })
-      
+
     }
 
     render() {
         if (this.state.redirectToMyteam === true) {
             return <Redirect to={{ pathname: "/myteam" }} />;
         }
-
         return (
             <div className="container-fluid " >
                 <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
@@ -502,7 +492,6 @@ class Hrkrasheet extends Component {
                     <button className="btn btn-success " type="button" onClick={() => {
                         this.onClickRevertedToEmployee(this.state);
                     }}>Reverted to employee</button>
-
                 </div>
             </div>
         )

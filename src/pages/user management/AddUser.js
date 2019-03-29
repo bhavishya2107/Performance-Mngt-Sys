@@ -387,7 +387,7 @@ class AddUser extends Component {
     }
     UpdateUserDetails(data) {
         var result = window.formValidation("#createUser");
-         if (result) {
+        if (result) {
             var res = this.isUserExistUpdateApi();
             res.done((response) => {
       
