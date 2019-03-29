@@ -119,7 +119,7 @@ class UserManagement extends Component {
             });
         }
         else {
-            toast.error(Notification.deleteError)
+            toast.info(Notification.deleteInfo)
         }
     }
     multiDelete(userId) {
