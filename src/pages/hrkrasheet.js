@@ -213,7 +213,7 @@ class Hrkrasheet extends Component {
                         targets: 4,
                         render: (data, type, row) => {
                             return (
-                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerComment + `</label>`
+                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerRating + `</label>`
                             )
                         },
                     },
