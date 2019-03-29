@@ -481,15 +481,13 @@ class Hrkrasheet extends Component {
                 </div>
                 &nbsp;
                 <div className="form-group">
-                    <button className="btn btn-success " type="button" onClick={() => {
+                    <button className="btn btn-success mr-2" type="button" onClick={() => {
                         this.onClickApproved(this.state);
                     }}>Approved</button>
-                    &nbsp;
-                     <button className="btn btn-success " type="button" onClick={() => {
+                     <button className="btn btn-success mr-2" type="button" onClick={() => {
                         this.onClickRevertedToReviewer(this.state);
                     }}>Reverted to reviewer</button>
-                    &nbsp;
-                    <button className="btn btn-success " type="button" onClick={() => {
+                    <button className="btn btn-success" type="button" onClick={() => {
                         this.onClickRevertedToEmployee(this.state);
                     }}>Reverted to employee</button>
                 </div>
