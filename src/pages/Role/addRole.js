@@ -138,7 +138,6 @@ class UserRoleForm extends Component {
         var isvalidate = window.formValidation("#userRoleForm");
         if (isvalidate) {
             var res = this.updateroleEditExistApi();
-            debugger;
             res.done((response) => {
                 if (response.length > 0) {
                     $(".hiderole").show()

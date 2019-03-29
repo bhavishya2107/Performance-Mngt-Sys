@@ -18,7 +18,7 @@ class Dashboard extends Component {
     }
 
     onChangeStatus = (assignId) => {
-        this.tpmstatusUpdateAPI(assignId);
+        this.tpmStatusUpdateAPI(assignId);
         this.hrstatusUpdateAPI(assignId);
         this.developerStatusUpdateAPI(assignId);
          window.location.reload();
@@ -41,11 +41,11 @@ class Dashboard extends Component {
         });
     }
 
-    tpmstatusUpdateAPI(assignId) {
+    tpmStatusUpdateAPI(assignId) {
         var statusUpdate = environment.dynamicUrl + 'dynamic';
         var statusUpdateQuery = {
-            query: `Update template_assignment_master tam SET status='Submit by Employee'
-              where status In('Assigned to Employee','Draft by Employee','Reverted to employee by HR ')and assignId=${assignId}`
+            query: `Update template_assignment_master tam SET status='Approved by HR'
+              where status In('Draft by Reviewer','Submit by Employee','Reverted to reviewer by HR')and assignId=${assignId}`
         }
         return $.ajax({
             url: statusUpdate,
@@ -76,11 +76,10 @@ class Dashboard extends Component {
     componentWillMount() {
 
         if (localStorage.getItem('roleName') == "HR") {
-
             this.hrstatusUpdateAPI()
         }
         else if (localStorage.getItem('roleName') == "TPM") {
-            this.tpmstatusUpdateAPI()
+            this.tpmStatusUpdateAPI()
         }
         else {
             this.developerStatusUpdateAPI()
@@ -107,7 +106,6 @@ class Dashboard extends Component {
                     where TAM.userId='${localStorage.getItem('userId')}' 
                     AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Employee',
                     'Reverted to employee by HR')` }
-            
             },
             columns: [ 
                 {
@@ -145,7 +143,6 @@ class Dashboard extends Component {
                     data: "status",
                     targets: 3,
                     render: (data, type, row) => {
-
                         return (
                             `<label id="status" class="statusRow" value="${row.status}">${row.status}</label>`
                         )

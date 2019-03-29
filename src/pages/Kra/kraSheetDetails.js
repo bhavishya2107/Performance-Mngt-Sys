@@ -195,9 +195,7 @@ class KraSheet extends Component {
 					'x-requested-with': 'XMLHttpRequest'
 				},
 				success: function(resultData) {
-					// toast.success("Comment and Rating Saved", + {
-					//   position: toast.POSITION.TOP_RIGHT
-					// });
+				
 					_this.setState({ redirectToMykra: true });
 				}
 			});
@@ -207,9 +205,7 @@ class KraSheet extends Component {
 			kraDataUpdateRecords.forEach((item) => {
 				this.updateApi(item);
 			});
-			// toast.success("Comment and Rating Updated", +  {
-			//   position: toast.POSITION.TOP_RIGHT
-			// });
+
 		}
 	}
 
@@ -227,11 +223,16 @@ class KraSheet extends Component {
 			console.log(response);
 
 			this.setState({
+				
 				firstName: response[0].firstname,
+				firstName:response[0].firstName,
 				lastName: response[0].lastname,
+				lastName: response[0].lastName,
 				projectName: response[0].projectName,
 				departmentName: response[0].departmentname,
+				departmentName: response[0].departmentName,
 				kraName: response[0].kraname,
+				kraName: response[0].kraName,
 				startDate: response[0].startDate,
 				endDate: response[0].endDate,
 				quaterName: response[0].quaterName
@@ -478,7 +479,7 @@ class KraSheet extends Component {
 						</thead>
 						<tbody />
 					</table>
-					{/* <ToastContainer /> */}
+				
 				</div>
 				&nbsp;
 				<div>

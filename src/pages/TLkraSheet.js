@@ -48,7 +48,6 @@ class TLKraSheet extends Component {
 
      //add Employee Comment
   saveReviewerComment(data) {
-    debugger
             var employeeComment =
             {
                 "reviewerComment": data.reviewerComment,
@@ -70,7 +69,6 @@ class TLKraSheet extends Component {
 
    //get reviewerComment for update 
    apiForGetReviewerComment() {
-    debugger
           const apiForGetrevComment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${this.state.assignId}`
           return $.ajax({
               url: apiForGetrevComment,
@@ -129,9 +127,6 @@ class TLKraSheet extends Component {
             async: false,
             data: JSON.stringify(kraSheetdata),
             success: function (resultData) {
-                // toast.success("Comment and Rating Saved", + {
-                //     position: toast.POSITION.TOP_RIGHT
-                //   });
                 _this.setState({ redirectToMyteam: true })
             }
         })

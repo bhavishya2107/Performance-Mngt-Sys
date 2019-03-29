@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../pages/Environment';
@@ -51,14 +50,27 @@ class Hrkrasheet extends Component {
         var endpoint = environment.dynamicUrl + 'dynamic';
         var kraSheet = {
             query: `
-            SELECT k.kraname,k.kraName,TAM.assignId,PM.projectName,PM.startDate,PM.endDate,q.quaterName,UM.firstname,UM.firstName,UM.lastname,UM.lastName,d.departmentname,d.departmentName
-            FROM 
-            template_assignment_master as TAM JOIN template_master as TM ON TAM.templateId = TM.templateId 
-            JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userId 
-            JOIN quater_master as q ON q.quaterId = TAM.quaterId JOIN department_master d ON d.departmentid = UM.departmentid 
+          SELECT 
+            k.kraname,
+            TAM.assignId, 
+            PM.projectName,
+            PM.startDate,
+            PM.endDate,
+            q.quaterName,
+            UM.firstname,
+            UM.lastname,
+            d.departmentname 
+          FROM 
+            template_assignment_master as TAM           
+            JOIN template_master as TM ON TAM.templateId = TM.templateId 
+            JOIN project_master as PM ON PM.projectId = TAM.projectId 
+            JOIN user_master as UM ON UM.userId = TAM.userId 
+            JOIN quater_master as q ON q.quaterId = TAM.quaterId 
+            JOIN department_master d ON d.departmentid = UM.departmentid 
             JOIN template_detail as td ON td.templateid = TAM.templateid 
-            JOIN kra_master k ON k.kraid = td.kraid 
-            where TAM.assignId=${this.state.assignId}`
+            JOIN kra_master k ON k.kraid = td.kraid  
+          where 
+            TAM.assignId=${this.state.assignId}`
         }
         return $.ajax({
             url: endpoint,
@@ -83,8 +95,6 @@ class Hrkrasheet extends Component {
                 "Content-Type": "application/json",
             },
             success: function (resultData) {
-                console.log(resultData)
-
             }
         })
     }
@@ -143,7 +153,6 @@ class Hrkrasheet extends Component {
                         data: "kraName",
                         targets: 0,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="kraNameRow" value="${row.kraId}">` + row.kraName + `</label>`
                             )
@@ -171,7 +180,6 @@ class Hrkrasheet extends Component {
                         data: "target",
                         targets: 3,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="targetRow" value="${row.target}">` + row.target + `</label>`
                             )
@@ -200,7 +208,7 @@ class Hrkrasheet extends Component {
                         targets: 4,
                         render: (data, type, row) => {
                             return (
-                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerComment + `</label>`
+                                `<label class="TLrating" value="${row.reviewerRating}">` + row.reviewerRating + `</label>`
                             )
                         },
                     },
@@ -208,12 +216,9 @@ class Hrkrasheet extends Component {
                         data: "reviewerComment",
                         targets: 5,
                         render: (data, type, row) => {
-
                             return (
                                 `<label class="commentSaved" value="${row.reviewerComment}">` + row.reviewerComment + `</label>`
                             )
-
-
                         },
                     },
                 ],
@@ -230,7 +235,6 @@ class Hrkrasheet extends Component {
         })
     }
 
-
     //Save hr comment Api
 
     saveAndEditHrComment(data) {
@@ -238,7 +242,7 @@ class Hrkrasheet extends Component {
             "hrComment": data.hrcomment,
         }
         const saveHrcomment = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + data.assignId
-       return $.ajax({
+        return $.ajax({
             url: saveHrcomment,
             type: Type.patch,
             data: JSON.stringify(formData),
@@ -269,15 +273,12 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
     }
 
-     //onclick function for RevertedToReviewer
+    //onclick function for RevertedToReviewer
 
     onClickRevertedToReviewer(data) {
         var _this = this
@@ -297,16 +298,13 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
-       
+
     }
 
-     //onclick function for RevertedToEmployee
+    //onclick function for RevertedToEmployee
 
     onClickRevertedToEmployee(data) {
         var _this = this
@@ -326,20 +324,16 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
-                        // toast.success("Scaleset " + Notification.saved, {
-                        //     position: toast.POSITION.TOP_RIGHT
-                        // });
                     }
                 });
             })
-      
+
     }
 
     render() {
         if (this.state.redirectToMyteam === true) {
             return <Redirect to={{ pathname: "/myteam" }} />;
         }
-
         return (
             <div className="container-fluid " >
                 <h5 style={{ textAlign: "center", marginTop: "10px" }}>KRA-{this.state.quaterName}-{this.state.kraName}-{moment(this.state.startDate).format("DD-MM-YYYY")} TO {moment(this.state.endDate).format("DD-MM-YYYY")}_{this.state.projectName}_{this.state.firstName} </h5>
@@ -498,7 +492,6 @@ class Hrkrasheet extends Component {
                     <button className="btn btn-success " type="button" onClick={() => {
                         this.onClickRevertedToEmployee(this.state);
                     }}>Reverted to employee</button>
-
                 </div>
             </div>
         )
