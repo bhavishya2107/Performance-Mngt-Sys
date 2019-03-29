@@ -144,7 +144,7 @@ class Myteam extends Component {
                             '<a href="/hrkrasheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                             '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                             "</a>" +
-                            '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-save" aria-hidden="true""></i></a>'
+                            '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-retweet" aria-hidden="true""></i></a>'
 
                         )
                         }else{
@@ -152,7 +152,7 @@ class Myteam extends Component {
                                 '<a href="/TLkrasheet/id=' + row.assignId + '"class="btn  btn-edit btn-info btn-sm mr-2">' +
                                 '<i class="fa fa-pencil" aria-hidden="true"></i>' +
                                 "</a>" +
-                                '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-save" aria-hidden="true""></i></a>'
+                                '<a href="#"  class="btn mr-2 btnSubmit btn-info btn-sm" ' + row.assignId + '" ><i  class="fa fa-retweet" aria-hidden="true""></i></a>'
     
                             )
                         }
