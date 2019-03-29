@@ -153,6 +153,7 @@ class AddProject extends Component {
 
 
     sendProjectMail() {
+        debugger
         var resourceName = '';
         $(this.state.selectedOption).each((e, item) => {
             resourceName += item.label + ",";
@@ -162,6 +163,7 @@ class AddProject extends Component {
             url: url,
             type: Type.get,
             success: (res) => {
+                console.log(res[0])
                 var emailBody =
                     `<html>
                     <body>
@@ -181,7 +183,7 @@ class AddProject extends Component {
                 {
                     emailSubject: "New Project assigned",
                     emailBody: emailBody,
-                    toemailadress: "janmeshnayak1997@gmail.com"
+                    toemailadress: res[0].emailAddress
                 }
                 this.sendMailAPI(body);
             }
@@ -476,7 +478,7 @@ class AddProject extends Component {
                 var temp = temp.responseJSON;
                 var displayDataReturn = temp.map((i) => {
                     return (
-                        <option key={i.userId} value={i.userId}>{i.firstName.charAt(0).toUpperCase() + i.firstName.slice(1) } {i.lastName.charAt(0).toUpperCase() + i.firstName.slice(1) }</option>
+                        <option key={i.userId} value={i.userId}>{i.firstName.charAt(0).toUpperCase() + i.firstName.slice(1) } {i.lastName.charAt(0).toUpperCase() + i.lastName.slice(1) }</option>
                     )
                 });
                 this.setState({
