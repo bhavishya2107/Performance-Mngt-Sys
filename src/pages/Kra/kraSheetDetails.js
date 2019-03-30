@@ -505,7 +505,7 @@ class KraSheet extends Component {
         &nbsp;
 				<div className="form-group">
 					<button
-						className="btn btn-success"
+						className="btn btn-success mr-2"
 						type="button"
 						onClick={() => {
 							this.commentAndratingUpdate();
@@ -513,6 +513,7 @@ class KraSheet extends Component {
 					>
 						Save
 					</button>
+					<Link to="/dashboard" className="btn btn-danger ">Cancel</Link>
 				</div>
 			</div>
 		);

@@ -496,11 +496,12 @@ class TLKraSheet extends Component {
         </div>
         &nbsp;
                 <div className="form-group">
-                <button className="btn btn-success" type="button" onClick={() => {
+                <button className="btn btn-success mr-2" type="button" onClick={() => {
                     this.commentAndratingUpdate();
                 }}>Save</button>
+                <Link to="/myteam" className="btn btn-danger ">Cancel</Link>
                 </div>
-                {/* <ToastContainer /> */}
+         
             </div>
         )
     }
