@@ -128,6 +128,7 @@ class TLKraSheet extends Component {
             data: JSON.stringify(kraSheetdata),
             success: function (resultData) {
                 _this.setState({ redirectToMyteam: true })
+               
             }
         })
     }
@@ -183,6 +184,9 @@ class TLKraSheet extends Component {
                 success: function (resultData) {
               
                     _this.setState({ redirectToMyteam: true })
+                    toast.success("Comment " + Notification.saved, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
                 }
             });
         }
@@ -190,8 +194,11 @@ class TLKraSheet extends Component {
         
             kraDataUpdateRecords.forEach(item => {
                 this.updateApi(item);
+
             });
-      
+       toast.success("Comment " + Notification.saved, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
         }
     }
     componentDidMount() {
@@ -500,7 +507,6 @@ class TLKraSheet extends Component {
                     this.commentAndratingUpdate();
                 }}>Save</button>
                 </div>
-                {/* <ToastContainer /> */}
             </div>
         )
     }

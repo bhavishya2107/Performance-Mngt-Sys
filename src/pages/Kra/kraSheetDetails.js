@@ -141,9 +141,6 @@ class KraSheet extends Component {
 			async: false,
 			data: JSON.stringify(kraSheetdata),
 			success: function(resultData) {
-				// toast.success("Comment and Rating Saved", + {
-				//     position: toast.POSITION.TOP_RIGHT
-				//   });
 				_this.setState({ redirectToMykra: true });
 			}
 		});
@@ -197,6 +194,9 @@ class KraSheet extends Component {
 				success: function(resultData) {
 				
 					_this.setState({ redirectToMykra: true });
+					toast.success("Comment " + Notification.saved, {
+                        position: toast.POSITION.TOP_RIGHT
+                    });
 				}
 			});
 		}
@@ -205,7 +205,9 @@ class KraSheet extends Component {
 			kraDataUpdateRecords.forEach((item) => {
 				this.updateApi(item);
 			});
-
+			toast.success("Comment " + Notification.saved, {
+				position: toast.POSITION.TOP_RIGHT
+			});
 		}
 	}
 

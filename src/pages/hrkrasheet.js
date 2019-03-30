@@ -274,6 +274,9 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
+                        toast.success("Comment " + Notification.saved, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     }
                 });
             })
@@ -299,6 +302,9 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
+                        toast.success("Comment " + Notification.saved, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     }
                 });
             })
@@ -325,6 +331,9 @@ class Hrkrasheet extends Component {
                     },
                     success: function () {
                         _this.setState({ redirectToMyteam: true });
+                        toast.success("Comment " + Notification.saved, {
+                            position: toast.POSITION.TOP_RIGHT
+                        });
                     }
                 });
             })
