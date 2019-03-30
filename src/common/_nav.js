@@ -24,7 +24,7 @@ if (localStorage.getItem('roleName') == "HR") {
         },
         {
             name: 'Quarter',
-            url: '/quater',
+            url: '/quarter',
             icon: 'fa fab fa-quora',
         },
 
