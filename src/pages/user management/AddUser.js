@@ -626,12 +626,12 @@ class AddUser extends Component {
             type: Type.get,
             success: (res) => {
                 var displayDataReturn = res.map(function (item) {
-                    if (item.roleId === 1) {
+                    //if (item.roleId === 1) {
                         return (
                             <option key={item.userName} value={item.userId}>{item.userName}</option>
 
                         )
-                    }
+                    //}
                 });
                 this.setState({
                     displayTeamLeaderData: displayDataReturn
