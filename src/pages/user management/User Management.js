@@ -18,8 +18,6 @@ class UserManagement extends Component {
             emailAddress: "",
             mobileNo: "",
             selectedIds: []
-
-
         }
     }
     //#region  Delete single element

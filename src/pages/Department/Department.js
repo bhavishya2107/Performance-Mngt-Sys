@@ -118,6 +118,9 @@ class Department extends Component {
             this.$el.DataTable().ajax.reload()
         });
         res.fail(error => {
+            toast.error("Department " + Notification.notdeleted, {
+                position: toast.POSITION.TOP_RIGHT
+              });
 
         });
 
