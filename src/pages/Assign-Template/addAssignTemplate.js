@@ -297,7 +297,7 @@ class addAssignTemplate extends Component {
         });
 
         if (this.state.RedirectToTemplate) {
-            return <Redirect to={{ pathname: "/Assign-Template" }} />
+            return <Redirect to={{ pathname: "/assign-template" }} />
         }
         return (
             <div>
@@ -412,7 +412,7 @@ class addAssignTemplate extends Component {
                                                     this.saveTemplateAssignDetails(this.state)
                                                 }}>Save</button>}
                                             <button type="button" className="btn btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
-                                            <Link to='/Assign-Template' className="btn btn-danger mr-2">Cancel</Link>
+                                            <Link to='/assign-template' className="btn btn-danger mr-2">Cancel</Link>
                                         </div>
                                     </div>
                                 </div>
