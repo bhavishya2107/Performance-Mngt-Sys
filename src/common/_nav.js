@@ -35,7 +35,7 @@ if (localStorage.getItem('roleName') == "HR") {
         },
         {
             name: "Department",
-            url: '/Department',
+            url: '/department',
             icon: 'fa fa-building-o'
         },
         {
@@ -70,7 +70,7 @@ if (localStorage.getItem('roleName') == "HR") {
         },
         {
             name: 'Assign-Template',
-            url: '/Assign-Template',
+            url: '/assign-template',
             icon: 'fa fa-tasks',
         }
 
