@@ -39,12 +39,10 @@ class Myteam extends Component {
     ApiDatatable() {
         var TPM =
             "SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,tam.status,tam.assignId,um.firstName,um.lastName,qm.quaterName FROM template_assignment_master tam JOIN project_master pm ON tam.projectId = pm.projectId JOIN user_master um ON um.userId = tam.userId JOIN quater_master as qm ON qm.quaterId = TAM.quaterId ";
-
-        if (localStorage.getItem('roleName') == "HR") {
-            TPM += `and TAM.status IN('Created by HR','Submit by Reviewer',
-          'Approved by HR') `
-        }
-
+        // if (localStorage.getItem('roleName') == "HR") {
+        //     TPM += `and TAM.status IN('Created by HR','Submit by Reviewer','Draft by Employee',
+        //   'Approved by HR','Assigned to Employee',	) `
+        // }
         if (localStorage.getItem('roleName') == "TPM") {
             TPM +=
                 `and pm.manageBy = ${localStorage.getItem('userId')}

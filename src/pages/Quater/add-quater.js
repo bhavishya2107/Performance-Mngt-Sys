@@ -199,7 +199,7 @@ class ADDQuater extends Component {
 
     render() {
         if (this.state.Redirect) {
-            return <Redirect to={{ pathname: "/quater", state: "2222" }} />
+            return <Redirect to={{ pathname: "/quarter", state: "2222" }} />
         }
         return (
             <div className="container-fluid">
@@ -241,7 +241,7 @@ class ADDQuater extends Component {
                             this.submitDataFromRoleform(this.state);
                         }}>Save</button>}&nbsp;
                     <button type="button" className="btn btn-info" onClick={() => { this.myFunction() }}>Reset</button>&nbsp;
-                    <Link to="/quater" className="btn btn-danger">Cancel</Link>
+                    <Link to="/quarter" className="btn btn-danger">Cancel</Link>
                     <br />
                 </form>
                 <ToastContainer />

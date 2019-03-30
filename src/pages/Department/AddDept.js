@@ -191,10 +191,10 @@ class AddDept extends Component {
     render() {
         if (this.state.RedirectToDept) {
 
-            return <Redirect to={{ pathname: "/Department", state: "2" }} />
+            return <Redirect to={{ pathname: "/department", state: "2" }} />
         }
         if (this.state.isUpdate === true) {
-            return <Redirect to="/Department" />
+            return <Redirect to="/department" />
         }
 
         return (
@@ -242,7 +242,7 @@ class AddDept extends Component {
                                     }}>Save</button>}
 
                                 <button type="button" value="reset" className="btn  btn-info mr-2" onClick={() => { this.reset(); }}>Reset</button>
-                                <Link to='/Department' className="btn btn-danger mr-2">Cancel</Link>
+                                <Link to='/department' className="btn btn-danger mr-2">Cancel</Link>
                             </div>
                         </form>
                     </div>
