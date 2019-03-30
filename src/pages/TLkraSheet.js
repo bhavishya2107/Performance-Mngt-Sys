@@ -508,10 +508,7 @@ class TLKraSheet extends Component {
                 }}>Save</button>
                 <Link to="/myteam" className="btn btn-danger ">Cancel</Link>
                 </div>
-<<<<<<< HEAD
-=======
          
->>>>>>> aac76c07f25ac4830c569cfd3d5c0f3c5580136e
             </div>
         )
     }
