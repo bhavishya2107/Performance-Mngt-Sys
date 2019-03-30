@@ -188,6 +188,7 @@ class AssignTemplate extends Component {
                 }
             ],
             initComplete: (settings, json) => {
+            
             },
             //#region drawcallback function
             "drawCallback": (settings) => {

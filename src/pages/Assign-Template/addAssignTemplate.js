@@ -146,7 +146,6 @@ class addAssignTemplate extends Component {
     getTemplateAssignDetails() {
         //update api
         if (this.state.assignId !== undefined) {
-            debugger
             var res = this.getTemplateAssignDetailsApi();
 
             res.done((response) => {
