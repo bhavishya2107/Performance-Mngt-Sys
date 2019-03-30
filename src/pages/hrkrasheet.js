@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { environment, moduleUrls, Type, Notification, ModuleNames } from '../pages/Environment';
@@ -487,9 +488,12 @@ class Hrkrasheet extends Component {
                      <button className="btn btn-success mr-2" type="button" onClick={() => {
                         this.onClickRevertedToReviewer(this.state);
                     }}>Reverted to reviewer</button>
-                    <button className="btn btn-success" type="button" onClick={() => {
+                    <button className="btn btn-success mr-2" type="button" onClick={() => {
                         this.onClickRevertedToEmployee(this.state);
                     }}>Reverted to employee</button>
+
+                    <Link to="/myteam" className="btn btn-danger ">Cancel</Link>
+
                 </div>
             </div>
         )
