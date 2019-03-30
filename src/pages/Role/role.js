@@ -90,6 +90,9 @@ class UserRolePMS extends Component {
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
+            toast.error("Role " + Notification.notdeleted, {
+                position: toast.POSITION.TOP_RIGHT
+              });
         });
     }
 

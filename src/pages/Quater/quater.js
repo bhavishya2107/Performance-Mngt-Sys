@@ -15,7 +15,7 @@ class Quater extends Component{
         };
     }
     SingleRoleDelete(quaterId) {
-        if (quaterId != 134) {
+    
             var res = this.DeleteRoleApi(quaterId);
 
             res.done(response => {
@@ -31,9 +31,7 @@ class Quater extends Component{
                     position: toast.POSITION.TOP_RIGHT
                 });
             });
-        } else {
-            alert('system role cannot be deleted !')
-        }
+       
     }
     DeleteRoleApi(quaterId) {
 
@@ -84,6 +82,9 @@ class Quater extends Component{
             this.$el.DataTable().ajax.reload();
         });
         res.fail(error => {
+            toast.error("Quarter " + Notification.notdeleted, {
+                position: toast.POSITION.TOP_RIGHT
+              });
         });
     }
 
