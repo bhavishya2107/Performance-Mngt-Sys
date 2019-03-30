@@ -71,9 +71,7 @@ class addAssignTemplate extends Component {
             "startDate": moment(data.startDate).format('YYYY-MM-DD'),
             "endDate": moment(data.endDate).format('YYYY-MM-DD')
         }
-        this.setState({
-            RedirectToTemplate: true
-        })
+       
         var url = environment.apiUrl + moduleUrls.Template_assignment_master + '/' + `${data.assignId}`
         return $.ajax({
             url: url,
@@ -84,6 +82,7 @@ class addAssignTemplate extends Component {
                 "Access-Control-Allow-Origin": "*"
             },
             data: JSON.stringify(TempList),
+            
         });
     }
     //#endregion
@@ -256,7 +255,7 @@ class addAssignTemplate extends Component {
             res.done((response) => {
                 this.setState({
                     RedirectToTemplate: true
-                })
+                });
                 toast.success("Template " + Notification.saved, {
                     position: toast.POSITION.TOP_RIGHT
                 });
@@ -277,6 +276,10 @@ class addAssignTemplate extends Component {
                 toast.success("Template " + Notification.updated, {
                     position: toast.POSITION.TOP_RIGHT
                 });
+                this.setState({
+                    RedirectToTemplate: true
+                })
+
             });
             res.fail((error) => {
             })

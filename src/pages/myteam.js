@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { environment, Type } from './Environment';
+import { ToastContainer } from 'react-toastify';
 var moment = require('moment');
 const $ = require('jquery');
 $.DataTable = require('datatables.net-bs4');
@@ -171,6 +172,7 @@ class Myteam extends Component {
                         </tr>
                     </thead>
                 </table>
+                <ToastContainer/>
             </div>
         )
     }

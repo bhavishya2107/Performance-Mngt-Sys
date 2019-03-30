@@ -178,15 +178,7 @@ class Dashboard extends Component {
 
         });
     }
-    // componentDidMount() {
-
-    //     if (localStorage.getItem('roleName') == "HR") {
-    //         this.hrstatusUpdateAPI()
-    //     }
-    //     else {
-    //         this.developerStatusUpdateAPI()
-    //     }
-    // }
+ 
     render() {
         return (
             <div>
