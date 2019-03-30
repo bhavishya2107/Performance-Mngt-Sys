@@ -2,8 +2,9 @@ export const environment = {
   production: false,
   // apiUrl: "http://180.211.103.189:3000/api/",
   //  dynamicUrl: "http://180.211.103.189:3000/",
-   apiUrl: 'http://192.168.10.110:3000/api/',
-  dynamicUrl: "http://192.168.10.110:3000/",
+  apiUrl: 'http://localhost:3000/api/',
+  dynamicUrl: "http://localhost:3000/",
+
   publicUrl: "http://180.211.103.189:3000/api/",
   emailToSend:"https://prod-17.centralindia.logic.azure.com:443/workflows/ecb28aa6326c46d2b632dbe5a34f76af/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qK3dMqlg6f1nEjlqWvG-KtxyVrAXqb3Zn1Oy5pJJrXs"
 };

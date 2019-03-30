@@ -619,16 +619,20 @@ class AddUser extends Component {
         });
     }
 
-    getTeamLeader() {
-        var url = environment.apiUrl + moduleUrls.User
+    getTeamLeader(userId) {
+        const url = environment.dynamicUrl + 'dynamic'
+       
         $.ajax({
             url: url,
-            type: Type.get,
+            type: Type.post,
+            data: {
+                "query": `SELECT um.userId, um.firstName, um.lastName, rm.roleName FROM user_master um LEFT JOIN role_master rm ON um.roleId  = rm.roleId WHERE rm.roleName = 'TPM' `
+            },
             success: (res) => {
                 var displayDataReturn = res.map(function (item) {
                     //if (item.roleId === 1) {
                         return (
-                            <option key={item.userName} value={item.userId}>{item.userName}</option>
+                            <option key={item.userId} value={item.userId}>{item.firstName} {item.lastName}</option>
 
                         )
                     //}
