@@ -168,7 +168,7 @@ class AddProject extends Component {
                     <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() + res[0].firstName.slice(1) +' ' +  res[0].lastName.charAt(0).toUpperCase() +res[0].lastName.slice(1)+  `, </p>
                     <p>New Project Assigned to you. Below are the details of Project:</p>`;
                 emailBody += `
-                       project name is <b>` + this.state.projectName.charAt(0).toUpperCase()+ this.state.projectName.slice(1) + `</b><br>
+                       Project name is <b>` + this.state.projectName.charAt(0).toUpperCase()+ this.state.projectName.slice(1) + `</b><br>
                        Date:<b>` + moment(this.state.startDate).format("DD-MM-YYYY") + ' ' + `to` + ' ' + moment(this.state.endDate).format("DD-MM-YYYY") + ` </b><br>
                        Resources:<b>` + resourceName.charAt(0).toUpperCase()+ resourceName.slice(1) + `</b><br>
                        Description:<b>` + this.state.description + `</b>
@@ -179,7 +179,7 @@ class AddProject extends Component {
                 </html>`;
                 var body =
                 {
-                    emailSubject: "New Project assigned",
+                    emailSubject: "New Project Assigned",
                     emailBody: emailBody,
                     toemailadress: res[0].emailAddress
                 }

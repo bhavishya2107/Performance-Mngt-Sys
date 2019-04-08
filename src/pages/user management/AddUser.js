@@ -335,8 +335,8 @@ class AddUser extends Component {
                     })
                     var emailBody = `<html>
                         <body>
-                        <p>Hello `+ res[0].firstName + ` ` + res[0].lastName + `,</p>
-                        <p>Employee added in your team.<span>`;
+                        <p>Hello `+ res[0].firstName.charAt(0).toUpperCase() +res[0].firstName.slice(1) + ` ` + res[0].lastName.charAt(0).toUpperCase() +res[0].lastName.slice(1) + `,</p>
+                        <p>Employee added in your team. <span>`;
                     if (this.state.gender === "Male") {
                         emailBody += `His`
                     }

@@ -380,7 +380,7 @@ class AssignTemplate extends Component {
             url: url,
             type: Type.post,
             data: {
-                query: "SELECT TAM.assignId,q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
+                query: "SELECT TAM.assignId, um.emailAddress , q.quaterName,UM.firstName,Um.lastName, PM.projectName,TAM.startDate,TAM.endDate,TAM.status, TM.templateName FROM template_master as TM JOIN template_assignment_master as TAM ON TAM.templateId = TM.templateId JOIN project_master as PM ON PM.projectId = TAM.projectId JOIN user_master as UM ON UM.userId = TAM.userid JOIN quater_master as q on q.quaterId=TAM.quaterId  where TAM.projectId=TAM.projectid and TAM.userid=TAM.userId and TAM.status=TAM.status ORDER BY TAM.assignId DESC"
             },
             success: (res) => {
                 var emailBody =
@@ -401,7 +401,7 @@ class AssignTemplate extends Component {
                 {
                     emailSubject: "KRA sheet for" + ' ' + res[0].quaterName + '-' + `PMS`,
                     emailBody: emailBody,
-                    toemailadress: "janmeshnayak1997@gmail.com"
+                    toemailadress: res[0].emailAddress
                 }
                 // Prashant.Khanderia@prakashinfotech.com
                 this.sendMailAPI(body);
