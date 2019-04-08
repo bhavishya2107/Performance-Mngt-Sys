@@ -115,7 +115,7 @@ class addAssignTemplate extends Component {
             })
     }
     getProjectData() {
-        var url = environment.apiUrl + moduleUrls.Project + '/' + `${this.state.projectId}` + `?_where=(status,ne,Not Started)`
+        var url = environment.apiUrl + moduleUrls.Project + '/?_size=1000' + `${this.state.projectId}` + `?_where=(status,ne,Not Started)`
         this.getDropDownValues(url).done(
             (tempProject) => {
                 var displayProjectDataReturn = tempProject.map(function (i) {
@@ -337,7 +337,6 @@ class addAssignTemplate extends Component {
                                         <div className="form-group">
                                             <label className="required">Project</label>
                                             <select name="projectDropDown"
-                                                //onChange={(e) => { this.onChangeProject(e) }} 
                                                 onChange={(e) => { this.onChangeProject(e) }}
                                                 disabled={this.state.assignId !== undefined ? true : false}
                                                 value={this.state.projectId}
