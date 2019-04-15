@@ -222,7 +222,7 @@ class AssignTemplate extends Component {
             (tempUser) => {
                 var displayUserDataReturn = tempUser.map(function (i) {
                     return (
-                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                        <option key={i.userId} value={i.userId}>{i.firstName.charAt(0).toUpperCase() + i.firstName.slice(1) } {i.lastName.charAt(0).toUpperCase() + i.lastName.slice(1) } </option>
                     )
                 });
                 this.setState({
@@ -536,7 +536,7 @@ class AssignTemplate extends Component {
 
                     <div className="col-md-3 col-sm-6 mb-2">
                         <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
-                            <option value="">Select user</option>
+                            <option value="">Select User</option>
                             {this.state.displayUserData}
                         </select>
                     </div>
@@ -586,7 +586,7 @@ class AssignTemplate extends Component {
                                     <i></i>
                                 </label>
                             </th>
-                            <th width="100">Quater</th>
+                            <th width="100">Quarter</th>
                             <th width="100">Template Name</th>
                             <th width="100">Assigned Users</th>
                             <th width="100" >Project</th>
