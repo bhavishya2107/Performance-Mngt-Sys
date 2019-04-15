@@ -13,7 +13,9 @@ class Myteam extends Component {
             projectId: "",
             userId: "",
             quaterId: "",
-            status:""
+            status:"",
+            firstName:"",
+            lastName:""
         }
     }
 
@@ -42,7 +44,7 @@ class Myteam extends Component {
     }
 
 
-    onChangeQuater(event) {
+    onChangeQuarter(event) {
         this.setState({
             quaterId: event.target.value,
         })
@@ -53,6 +55,10 @@ class Myteam extends Component {
     }
 
     searchUser() {
+        $(document).ready(function () {
+            $(".dataTables_length").css("padding-left", "0px");
+        });
+
         const myTeamUrl = environment.dynamicUrl + 'dynamic';
 
         var dynamicQuery = "SELECT um.userId, pm.projectName,pm.startDate,pm.endDate,tam.status,tam.assignId,um.firstName,um.lastName,qm.quaterName FROM template_assignment_master tam JOIN project_master pm ON tam.projectId = pm.projectId JOIN user_master um ON um.userId = tam.userId JOIN quater_master as qm ON qm.quaterId = tam.quaterId  where 1=1";
@@ -324,7 +330,7 @@ class Myteam extends Component {
             (tempUser) => {
                 var displayUserDataReturn = tempUser.map(function (i) {
                     return (
-                        <option key={i.userId} value={i.userId}>{i.userName}</option>
+                        <option key={i.userId} value={i.userId}>{i.firstName.charAt(0).toUpperCase() + i.firstName.slice(1) } {i.lastName.charAt(0).toUpperCase() + i.lastName.slice(1) } </option>
                     )
                 });
                 this.setState({
@@ -356,8 +362,8 @@ class Myteam extends Component {
                 <div className="clearfix mt-3 mb-2 row filter-delete">
 
                     <div className="col-md-3 col-sm-6 mb-2">
-                        <select required name="quaterDropDown" onChange={(e) => { this.onChangeQuater(e) }} value={this.state.quaterId} className="form-control" >
-                            <option value="">Select Quater</option>
+                        <select required name="quaterDropDown" onChange={(e) => { this.onChangeQuarter(e) }} value={this.state.quaterId} className="form-control" >
+                            <option value="">Select Quarter</option>
                             {this.state.displayQuaterData}
                         </select>
                     </div>
@@ -371,7 +377,7 @@ class Myteam extends Component {
                     </div>
                     <div className="col-md-3 col-sm-6 mb-2">
                         <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
-                            <option value="">Select user</option>
+                            <option value="">Select User</option>
                             {this.state.displayUserData}
                         </select>
                     </div>
