@@ -361,7 +361,7 @@ class Myteam extends Component {
 
                 <div className="clearfix mt-3 mb-2 row filter-delete">
 
-                    <div className="col-md-3 col-sm-6 mb-2">
+                    <div className="col-md-2 col-sm-6 mb-2">
                         <select required name="quaterDropDown" onChange={(e) => { this.onChangeQuarter(e) }} value={this.state.quaterId} className="form-control" >
                             <option value="">Select Quarter</option>
                             {this.state.displayQuaterData}
@@ -369,13 +369,13 @@ class Myteam extends Component {
                     </div>
 
 
-                    <div className="col-md-3 col-sm-6 mb-2">
+                    <div className="col-md-2 col-sm-6 mb-2">
                         <select required name="projectDropDown" onChange={(e) => { this.onChangeProject(e) }} value={this.state.projectId} className="form-control" >
                             <option value="">Select Project</option>
                             {this.state.displayProjectData}
                         </select>
                     </div>
-                    <div className="col-md-3 col-sm-6 mb-2">
+                    <div className="col-md-2 col-sm-6 mb-2">
                         <select required name="userDropDown" onChange={(e) => { this.onChangeUser(e) }} value={this.state.userId} className="form-control" >
                             <option value="">Select User</option>
                             {this.state.displayUserData}
@@ -383,7 +383,7 @@ class Myteam extends Component {
                     </div>
 
 
-                    <div className="col-md-3 col-sm-6 mb-2">
+                    <div className="col-md-2 col-sm-6 mb-2">
                         <select required name="projectStatusdropdown" className="form-control" value={this.state.status}
                             onChange={(e) => { this.onChangeStatusDdl(e) }} value={this.state.status}  >
                             <option value="">Select Status </option>
