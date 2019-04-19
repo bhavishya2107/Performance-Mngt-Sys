@@ -183,11 +183,11 @@ class KPI extends Component {
                     targets: 1
                 },
                 {
-                    data: "target",
+                    data: "scalesetName",
                     targets: 2
                 },
                 {
-                    data: "scalesetName",
+                    data: "target",
                     targets: 3
                 },
                 {
