@@ -23,7 +23,7 @@ class ForgotPW extends Component {
             emailBody: `<html>
                 <body>
                 <p>Click the Below Link to Reset Your Password</p>
-                <a href="http://localhost:3000/resetPassword?token=${this.state.resetToken}"><i>Reset Password</i></a>
+                <a href="http://localhost:3006/resetPassword?token=${this.state.resetToken}"><i>Reset Password</i></a>
                 </body>
                 </html>`,
             toemailadress: `${this.state.emailForFPW}`

@@ -105,7 +105,7 @@ class Dashboard extends Component {
                     JOIN quater_master as PMM ON PMM.quaterId = TAM.quaterId 
                     where TAM.userId='${localStorage.getItem('userId')}' 
                     AND TAM.status IN('Assigned to Employee','Draft by Employee','Submit by Employee',
-                    'Reverted to employee by HR')` }
+                    'Reverted to employee by HR','Approved by HR')` }
             },
             columns: [ 
                 {
