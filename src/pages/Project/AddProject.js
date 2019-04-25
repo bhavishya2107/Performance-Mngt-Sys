@@ -703,7 +703,7 @@ class AddProject extends Component {
                             <div className="row">
                                 <div className="col-md-8">
                                     <div className="form-group">
-                                        <label>Description</label> <textarea className="form-control" name="description" rows="4" value={this.state.description}
+                                        <label >Description</label> <textarea  required className="form-control" name="description" rows="4" value={this.state.description}
                                             onChange={(event) => {
                                                 this.setState({
                                                     description: event.target.value
