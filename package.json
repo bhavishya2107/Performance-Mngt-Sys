@@ -12,7 +12,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "material-icons": "^0.3.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "rand-token": "^0.4.0",
     "multi-select-react": "^0.1.8",
     "react": "^16.7.0",
